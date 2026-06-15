@@ -7,19 +7,18 @@ import { cn } from '@/lib/utils'
 interface Props {
   article: Article
   selected: boolean
-  anySelected: boolean
+  anySelected?: boolean
   onSelect: (id: string) => void
 }
 
-export default function ArticleListItem({ article, selected, anySelected, onSelect }: Props) {
+export default function ArticleListItem({ article, selected, onSelect }: Props) {
   return (
     <div className={cn('flex gap-4 py-4 border-b border-gray-100 group', selected && 'bg-gray-50')}>
       {/* Checkbox */}
       <div
         className={cn(
-          'flex-shrink-0 self-start mt-1 w-5 h-5 border border-gray-300 flex items-center justify-center cursor-pointer transition-opacity',
-          (anySelected || selected) ? 'opacity-100' : 'opacity-0 group-hover:opacity-100',
-          selected && 'bg-black border-black'
+          'flex-shrink-0 self-start mt-1 w-5 h-5 border flex items-center justify-center cursor-pointer',
+          selected ? 'bg-black border-black' : 'border-gray-300'
         )}
         onClick={() => onSelect(article.id)}
       >
@@ -49,7 +48,7 @@ export default function ArticleListItem({ article, selected, anySelected, onSele
           <p className="text-sm text-gray-500 line-clamp-2">{article.excerpt}</p>
         )}
         <a href={article.url} target="_blank" rel="noopener noreferrer" className="text-xs text-black hover:underline mt-1">
-          ↳ Read Here
+          ↳ Saiba Mais
         </a>
       </div>
     </div>

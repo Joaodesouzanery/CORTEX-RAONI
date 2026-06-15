@@ -7,11 +7,11 @@ import { cn } from '@/lib/utils'
 interface Props {
   article: Article
   selected: boolean
-  anySelected: boolean
+  anySelected?: boolean
   onSelect: (id: string) => void
 }
 
-export default function ArticleCard({ article, selected, anySelected, onSelect }: Props) {
+export default function ArticleCard({ article, selected, onSelect }: Props) {
   return (
     <div className={cn('group flex flex-col', selected && 'ring-2 ring-black')}>
       {/* Source + Date header */}
@@ -22,9 +22,8 @@ export default function ArticleCard({ article, selected, anySelected, onSelect }
         {/* Checkbox */}
         <div
           className={cn(
-            'w-5 h-5 border border-gray-300 flex items-center justify-center cursor-pointer transition-opacity',
-            (anySelected || selected) ? 'opacity-100' : 'opacity-0 group-hover:opacity-100',
-            selected && 'bg-black border-black'
+            'w-5 h-5 border flex items-center justify-center cursor-pointer',
+            selected ? 'bg-black border-black' : 'border-gray-300'
           )}
           onClick={() => onSelect(article.id)}
         >
@@ -70,7 +69,7 @@ export default function ArticleCard({ article, selected, anySelected, onSelect }
         rel="noopener noreferrer"
         className="text-sm text-black hover:underline mt-auto"
       >
-        ↳ Read Here
+        ↳ Saiba Mais
       </a>
     </div>
   )

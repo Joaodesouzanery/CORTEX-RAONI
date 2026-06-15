@@ -1,9 +1,10 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useViewMode } from '@/hooks/useViewMode'
 import { useArticleSelection } from '@/hooks/useArticleSelection'
 import ViewToggle from './ViewToggle'
 import SelectAllBar from './SelectAllBar'
+import SourceFilterBar from './SourceFilterBar'
 import ArticleCardGrid from './ArticleCardGrid'
 import ArticleListView from './ArticleListView'
 import ReportBuilder from '@/components/report/ReportBuilder'
@@ -18,6 +19,13 @@ export default function NewsPage() {
   const [loading, setLoading] = useState(true)
   const [fetching, setFetching] = useState(false)
   const [reportOpen, setReportOpen] = useState(false)
+  const [activeSource, setActiveSource] = useState<string | null>(null)
+
+  const sources = useMemo(
+    () => [...new Set(articles.map((a) => a.sources?.name).filter(Boolean))] as string[],
+    [articles]
+  )
+  const filtered = activeSource ? articles.filter((a) => a.sources?.name === activeSource) : articles
 
   useEffect(() => { loadArticles() }, [])
 
@@ -46,7 +54,10 @@ export default function NewsPage() {
     <div className="max-w-screen-2xl mx-auto px-6 py-8">
       {/* Header */}
       <div className="flex items-start justify-between mb-8">
-        <h1 className="text-5xl font-light tracking-tight">The Latest</h1>
+        <div>
+          <h1 className="text-5xl font-light tracking-tight">The Latest</h1>
+          <p className="text-xs text-gray-400 mt-1">Marque os checkboxes para selecionar notícias e gerar um relatório</p>
+        </div>
         <div className="flex items-center gap-3">
           <Button variant="outline" size="sm" onClick={fetchNews} disabled={fetching}>
             <RefreshCw className={`w-4 h-4 mr-2 ${fetching ? 'animate-spin' : ''}`} />
@@ -59,10 +70,13 @@ export default function NewsPage() {
       {/* Selection bar */}
       <SelectAllBar
         selectedCount={selected.size}
-        totalCount={articles.length}
-        onSelectAll={() => selectAll(articles.map((a) => a.id))}
+        totalCount={filtered.length}
+        onSelectAll={() => selectAll(filtered.map((a) => a.id))}
         onClear={clearAll}
       />
+
+      {/* Source filter */}
+      <SourceFilterBar sources={sources} active={activeSource} onChange={setActiveSource} />
 
       {/* Content */}
       {loading ? (
@@ -77,15 +91,15 @@ export default function NewsPage() {
             </div>
           ))}
         </div>
-      ) : articles.length === 0 ? (
+      ) : filtered.length === 0 ? (
         <div className="text-center py-24 text-gray-400">
           <p className="text-lg">Nenhuma notícia ainda.</p>
           <p className="text-sm mt-2">Adicione fontes em <a href="/sources" className="underline">Fontes</a> e clique em &quot;Buscar Notícias&quot;.</p>
         </div>
       ) : mode === 'card' ? (
-        <ArticleCardGrid articles={articles} selected={selected} onSelect={toggleSelect} />
+        <ArticleCardGrid articles={filtered} selected={selected} onSelect={toggleSelect} />
       ) : (
-        <ArticleListView articles={articles} selected={selected} onSelect={toggleSelect} />
+        <ArticleListView articles={filtered} selected={selected} onSelect={toggleSelect} />
       )}
 
       {/* Floating Report Button */}

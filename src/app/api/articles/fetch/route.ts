@@ -25,7 +25,7 @@ async function runFetch() {
         articles.map((article) =>
           supabase.from('articles').upsert(
             { ...article, source_id: source.id },
-            { onConflict: 'url', ignoreDuplicates: true }
+            { onConflict: 'url', ignoreDuplicates: false }
           )
         )
       )
