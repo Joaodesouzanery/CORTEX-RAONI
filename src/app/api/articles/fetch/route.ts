@@ -5,6 +5,13 @@ import { fetchFromSource } from '@/lib/fetcher'
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
 
+async function fetchWithTimeout(url: string, type: 'rss' | 'scrape', timeoutMs = 8000) {
+  const timeoutPromise = new Promise<never>((_, reject) =>
+    setTimeout(() => reject(new Error(`Timeout after ${timeoutMs}ms`)), timeoutMs)
+  )
+  return Promise.race([fetchFromSource(url, type), timeoutPromise])
+}
+
 async function runFetch() {
   const supabase = createClient()
   const { data: sources } = await supabase.from('sources').select('*').eq('active', true)
@@ -15,7 +22,7 @@ async function runFetch() {
 
   for (const source of sources) {
     try {
-      const articles = await fetchFromSource(source.url, source.type)
+      const articles = await fetchWithTimeout(source.url, source.type)
       let count = 0
       for (const article of articles) {
         const { error } = await supabase.from('articles').upsert(
