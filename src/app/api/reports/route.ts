@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient as createClient } from '@/lib/supabase/server'
 import { generateReport, type ReportMetadata } from '@/lib/ai/claude'
 
 export const dynamic = 'force-dynamic'
