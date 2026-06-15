@@ -20,12 +20,22 @@ export default function NewsPage() {
   const [fetching, setFetching] = useState(false)
   const [reportOpen, setReportOpen] = useState(false)
   const [activeSource, setActiveSource] = useState<string | null>(null)
+  const [activePeriod, setActivePeriod] = useState<number | null>(null)
 
   const sources = useMemo(
     () => Array.from(new Set(articles.map((a) => a.sources?.name).filter(Boolean))) as string[],
     [articles]
   )
-  const filtered = activeSource ? articles.filter((a) => a.sources?.name === activeSource) : articles
+
+  const periodFiltered = useMemo(() => {
+    if (!activePeriod) return articles
+    const cutoff = Date.now() - activePeriod * 24 * 60 * 60 * 1000
+    return articles.filter((a) => a.published_at && new Date(a.published_at).getTime() >= cutoff)
+  }, [articles, activePeriod])
+
+  const filtered = activeSource
+    ? periodFiltered.filter((a) => a.sources?.name === activeSource)
+    : periodFiltered
 
   useEffect(() => { loadArticles() }, [])
 
@@ -55,7 +65,7 @@ export default function NewsPage() {
       {/* Header */}
       <div className="flex items-start justify-between mb-8">
         <div>
-          <h1 className="text-5xl font-light tracking-tight">The Latest</h1>
+          <h1 className="text-5xl font-light tracking-tight">As últimas notícias</h1>
           <p className="text-xs text-gray-400 mt-1">Marque os checkboxes para selecionar notícias e gerar um relatório</p>
         </div>
         <div className="flex items-center gap-3">
@@ -74,6 +84,23 @@ export default function NewsPage() {
         onSelectAll={() => selectAll(filtered.map((a) => a.id))}
         onClear={clearAll}
       />
+
+      {/* Period filter */}
+      <div className="flex flex-wrap gap-2 mb-4">
+        {([null, 1, 7, 15, 30] as (number | null)[]).map((days) => (
+          <button
+            key={days ?? 'all'}
+            onClick={() => setActivePeriod(days)}
+            className={`px-3 py-1 text-xs uppercase tracking-widest border transition-colors ${
+              activePeriod === days
+                ? 'bg-black text-white border-black'
+                : 'border-gray-300 text-gray-600 hover:border-black hover:text-black'
+            }`}
+          >
+            {days === null ? 'Todos' : days === 1 ? '1 Dia' : `${days} Dias`}
+          </button>
+        ))}
+      </div>
 
       {/* Source filter */}
       <SourceFilterBar sources={sources} active={activeSource} onChange={setActiveSource} />
