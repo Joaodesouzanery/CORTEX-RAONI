@@ -6,6 +6,8 @@ const parser = new Parser({
       ['media:content', 'media:content'],
       ['media:thumbnail', 'media:thumbnail'],
       ['content:encoded', 'content:encoded'],
+      // Some feeds (Folha, Poder360) embed HTML with images in <description>
+      ['description', 'rawDescription'],
     ],
   },
 })
@@ -19,18 +21,20 @@ export interface FetchedArticle {
   published_at: string | null
 }
 
-// Fetch RSS feed as raw bytes, detect charset from XML declaration, decode correctly.
-// This fixes ISO-8859-1 feeds (Folha, etc.) that parseURL() misinterprets as UTF-8.
+// Fetch RSS as raw bytes, detect charset from XML declaration, decode correctly,
+// then replace the encoding declaration so xml2js doesn't attempt to re-decode.
 async function fetchFeedString(url: string): Promise<string> {
   const res = await fetch(url, {
     headers: { 'User-Agent': 'Mozilla/5.0 (compatible; RSS reader)' },
   })
   const buffer = await res.arrayBuffer()
-  // Sniff the first 200 bytes as UTF-8 to read the XML declaration charset
-  const sniff = new TextDecoder('utf-8', { fatal: false }).decode(new Uint8Array(buffer).slice(0, 200))
+  // Sniff first 300 bytes (UTF-8 safe for ASCII XML declaration)
+  const sniff = new TextDecoder('utf-8', { fatal: false }).decode(new Uint8Array(buffer).slice(0, 300))
   const charsetMatch = sniff.match(/encoding=["']([^"']+)["']/i)
-  const charset = charsetMatch?.[1] || 'utf-8'
-  return new TextDecoder(charset, { fatal: false }).decode(buffer)
+  const charset = charsetMatch?.[1]?.toLowerCase() || 'utf-8'
+  const decoded = new TextDecoder(charset, { fatal: false }).decode(buffer)
+  // Replace encoding declaration to prevent xml2js from re-interpreting the string
+  return decoded.replace(/(<\?xml[^?>]*?)encoding=["'][^"']*["']/i, '$1encoding="utf-8"')
 }
 
 function decodeHtmlEntities(text: string): string {
@@ -67,20 +71,30 @@ function extractFirstImage(html: string | null | undefined): string | null {
   return src
 }
 
+// Handles both single-object and array forms of media:content / media:thumbnail
+function getMediaUrl(field: any): string | null {
+  if (!field) return null
+  const item = Array.isArray(field) ? field[0] : field
+  return item?.$?.url || item?.url || item?._ || null
+}
+
 async function fetchOgImage(articleUrl: string): Promise<string | null> {
   try {
     const res = await fetch(articleUrl, {
-      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; RSS reader)' },
-      signal: AbortSignal.timeout(5000),
+      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)' },
+      signal: AbortSignal.timeout(8000),
     })
     const html = await res.text()
     const { load } = await import('cheerio')
     const $ = load(html)
-    return (
+    const og =
       $('meta[property="og:image"]').attr('content') ||
-      $('meta[name="twitter:image"]').attr('content') ||
-      null
-    )
+      $('meta[name="twitter:image"]').attr('content')
+    if (!og) return null
+    if (og.startsWith('http')) return og
+    // Resolve relative URLs
+    const base = new URL(articleUrl)
+    return new URL(og, base.origin).href
   } catch {
     return null
   }
@@ -94,14 +108,14 @@ export async function fetchRSS(feedUrl: string): Promise<FetchedArticle[]> {
     const mediaContent = (item as any)['media:content']
     const mediaThumbnail = (item as any)['media:thumbnail']
     const contentEncoded = (item as any)['content:encoded'] as string | undefined
+    const rawDescription = (item as any)['rawDescription'] as string | undefined
 
     const imageUrl =
-      mediaContent?.$.url ||
-      mediaContent?.url ||
-      mediaThumbnail?.$.url ||
-      mediaThumbnail?.url ||
+      getMediaUrl(mediaContent) ||
+      getMediaUrl(mediaThumbnail) ||
       item.enclosure?.url ||
       extractFirstImage(contentEncoded) ||
+      extractFirstImage(rawDescription) ||
       extractFirstImage(item.content) ||
       null
 
@@ -118,11 +132,11 @@ export async function fetchRSS(feedUrl: string): Promise<FetchedArticle[]> {
     }
   }).filter((a) => a.title && a.url)
 
-  // Fetch OG images for articles that have none (limit to 5 parallel requests per feed)
+  // OG image fallback for articles without any image from RSS (up to 10 per feed)
   const missing = articles.filter((a) => !a.image_url)
   if (missing.length > 0) {
     await Promise.allSettled(
-      missing.slice(0, 5).map(async (a) => {
+      missing.slice(0, 10).map(async (a) => {
         a.image_url = await fetchOgImage(a.url)
       })
     )
