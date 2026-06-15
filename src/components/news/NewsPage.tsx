@@ -22,7 +22,7 @@ export default function NewsPage() {
   const [activeSource, setActiveSource] = useState<string | null>(null)
 
   const sources = useMemo(
-    () => [...new Set(articles.map((a) => a.sources?.name).filter(Boolean))] as string[],
+    () => Array.from(new Set(articles.map((a) => a.sources?.name).filter(Boolean))) as string[],
     [articles]
   )
   const filtered = activeSource ? articles.filter((a) => a.sources?.name === activeSource) : articles
