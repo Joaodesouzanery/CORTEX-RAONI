@@ -5,9 +5,9 @@ import { fetchFromSource } from '@/lib/fetcher'
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
 
-async function fetchWithTimeout(url: string, type: 'rss' | 'scrape', timeoutMs = 8000) {
+async function fetchWithTimeout(url: string, type: 'rss' | 'scrape', timeoutMs = 10000) {
   const timeoutPromise = new Promise<never>((_, reject) =>
-    setTimeout(() => reject(new Error(`Timeout after ${timeoutMs}ms`)), timeoutMs)
+    setTimeout(() => reject(new Error(`Timeout`)), timeoutMs)
   )
   return Promise.race([fetchFromSource(url, type), timeoutPromise])
 }
@@ -17,27 +17,30 @@ async function runFetch() {
   const { data: sources } = await supabase.from('sources').select('*').eq('active', true)
   if (!sources?.length) return NextResponse.json({ fetched: 0, sources: [] })
 
-  let totalFetched = 0
-  const results = []
-
-  for (const source of sources) {
-    try {
+  // Fetch all sources in parallel — total time = slowest source, not sum of all
+  const sourceResults = await Promise.allSettled(
+    sources.map(async (source) => {
       const articles = await fetchWithTimeout(source.url, source.type)
-      let count = 0
-      for (const article of articles) {
-        const { error } = await supabase.from('articles').upsert(
-          { ...article, source_id: source.id },
-          { onConflict: 'url', ignoreDuplicates: true }
+      const upserts = await Promise.allSettled(
+        articles.map((article) =>
+          supabase.from('articles').upsert(
+            { ...article, source_id: source.id },
+            { onConflict: 'url', ignoreDuplicates: true }
+          )
         )
-        if (!error) count++
-      }
-      totalFetched += count
-      results.push({ source: source.name, fetched: count })
-    } catch (err) {
-      results.push({ source: source.name, error: String(err) })
-    }
-  }
+      )
+      const count = upserts.filter((r) => r.status === 'fulfilled').length
+      return { source: source.name, fetched: count }
+    })
+  )
 
+  const results = sourceResults.map((r, i) =>
+    r.status === 'fulfilled'
+      ? r.value
+      : { source: sources[i].name, error: r.reason?.message || 'Erro' }
+  )
+
+  const totalFetched = results.reduce((sum, r) => sum + (('fetched' in r ? r.fetched : 0)), 0)
   return NextResponse.json({ fetched: totalFetched, sources: results })
 }
 
