@@ -26,4 +26,16 @@ export interface Report {
   article_ids: string[]
   content: string
   created_at: string
+  client_id?: string | null
+  clients?: { name: string; logo_url: string | null } | null
+  metadata?: Record<string, unknown> | null
+}
+
+export interface Client {
+  id: string
+  name: string
+  context: string | null
+  keywords: string[] | null
+  logo_url: string | null
+  created_at: string
 }

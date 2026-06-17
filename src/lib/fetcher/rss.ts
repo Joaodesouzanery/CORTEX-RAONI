@@ -26,7 +26,7 @@ export interface FetchedArticle {
 async function fetchFeedString(url: string): Promise<string> {
   const res = await fetch(url, {
     headers: {
-      'User-Agent': 'Mozilla/5.0 (compatible; RSS reader)',
+      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
       Accept: 'application/rss+xml, application/xml, text/xml, */*',
     },
     redirect: 'follow',

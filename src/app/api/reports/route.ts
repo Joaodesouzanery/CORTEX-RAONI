@@ -9,7 +9,7 @@ export async function GET() {
   const supabase = createClient()
   const { data, error } = await supabase
     .from('reports')
-    .select('id, prompt, article_ids, created_at, metadata')
+    .select('id, prompt, article_ids, created_at, metadata, client_id, clients(name, logo_url)')
     .order('created_at', { ascending: false })
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
   return NextResponse.json(data)
@@ -17,10 +17,11 @@ export async function GET() {
 
 export async function POST(req: Request) {
   const supabase = createClient()
-  const { prompt, article_ids, metadata } = await req.json() as {
+  const { prompt, article_ids, metadata, client_id } = await req.json() as {
     prompt: string
     article_ids: string[]
     metadata?: ReportMetadata
+    client_id?: string | null
   }
 
   const { data: articles } = await supabase
@@ -30,11 +31,17 @@ export async function POST(req: Request) {
 
   if (!articles?.length) return NextResponse.json({ error: 'No articles found' }, { status: 400 })
 
-  const content = await generateReport(articles as any, prompt, metadata)
+  let client = null
+  if (client_id) {
+    const { data: clientData } = await supabase.from('clients').select('name, context').eq('id', client_id).single()
+    client = clientData
+  }
+
+  const content = await generateReport(articles as any, prompt, metadata, client)
 
   const { data, error } = await supabase
     .from('reports')
-    .insert({ prompt, article_ids, content, metadata: metadata || null })
+    .insert({ prompt, article_ids, content, metadata: metadata || null, client_id: client_id || null })
     .select()
     .single()
 

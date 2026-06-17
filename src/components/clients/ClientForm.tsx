@@ -1,0 +1,134 @@
+'use client'
+import { useState, useRef } from 'react'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { Label } from '@/components/ui/label'
+import type { Client } from '@/types'
+
+interface Props {
+  client?: Client | null
+  open: boolean
+  onClose: () => void
+  onSaved: (client: Client) => void
+}
+
+export default function ClientForm({ client, open, onClose, onSaved }: Props) {
+  const [name, setName] = useState(client?.name || '')
+  const [context, setContext] = useState(client?.context || '')
+  const [keywords, setKeywords] = useState<string[]>(client?.keywords || [])
+  const [kwInput, setKwInput] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+  const fileRef = useRef<HTMLInputElement>(null)
+
+  const isEdit = !!client
+
+  function addKeyword() {
+    const kw = kwInput.trim()
+    if (kw && !keywords.includes(kw)) setKeywords([...keywords, kw])
+    setKwInput('')
+  }
+
+  function removeKeyword(kw: string) {
+    setKeywords(keywords.filter((k) => k !== kw))
+  }
+
+  async function save() {
+    if (!name.trim()) { setError('Nome é obrigatório'); return }
+    setLoading(true)
+    setError('')
+    try {
+      const url = isEdit ? `/api/clients/${client.id}` : '/api/clients'
+      const method = isEdit ? 'PUT' : 'POST'
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: name.trim(), context: context.trim() || null, keywords: keywords.length ? keywords : null }),
+      })
+      const data = await res.json()
+      if (!res.ok) { setError(data.error || 'Erro ao salvar'); return }
+
+      // Upload logo if selected
+      if (fileRef.current?.files?.[0]) {
+        const formData = new FormData()
+        formData.append('logo', fileRef.current.files[0])
+        const logoRes = await fetch(`/api/clients/${data.id}/logo`, { method: 'POST', body: formData })
+        const logoData = await logoRes.json()
+        if (logoData.logo_url) data.logo_url = logoData.logo_url
+      }
+
+      onSaved(data)
+      onClose()
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={onClose}>
+      <DialogContent className="sm:max-w-lg">
+        <DialogHeader>
+          <DialogTitle>{isEdit ? 'Editar Cliente' : 'Novo Cliente'}</DialogTitle>
+        </DialogHeader>
+        <div className="flex flex-col gap-4 mt-2">
+          <div>
+            <Label htmlFor="cname">Nome *</Label>
+            <Input id="cname" value={name} onChange={(e) => setName(e.target.value)} placeholder="Ex: ONS" className="mt-1" />
+          </div>
+
+          <div>
+            <Label htmlFor="ctx">Contexto (injetado no prompt da IA)</Label>
+            <Textarea
+              id="ctx"
+              value={context}
+              onChange={(e) => setContext(e.target.value)}
+              placeholder="Descreva o cliente, seu setor, sensibilidades reputacionais, temas prioritários..."
+              rows={4}
+              className="mt-1 resize-none"
+            />
+          </div>
+
+          <div>
+            <Label>Palavras-chave para filtrar notícias</Label>
+            <p className="text-xs text-gray-500 mb-1">Pressione Enter ou clique + para adicionar</p>
+            <div className="flex gap-2">
+              <Input
+                value={kwInput}
+                onChange={(e) => setKwInput(e.target.value)}
+                onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addKeyword() } }}
+                placeholder="Ex: energia, ONS, setor elétrico"
+              />
+              <Button type="button" variant="outline" onClick={addKeyword}>+</Button>
+            </div>
+            {keywords.length > 0 && (
+              <div className="flex flex-wrap gap-1 mt-2">
+                {keywords.map((kw) => (
+                  <span key={kw} className="inline-flex items-center gap-1 bg-gray-100 text-xs px-2 py-1 border border-gray-200">
+                    {kw}
+                    <button onClick={() => removeKeyword(kw)} className="text-gray-400 hover:text-black">×</button>
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div>
+            <Label htmlFor="logo">Logo (PNG/JPG)</Label>
+            {client?.logo_url && (
+              <img src={client.logo_url} alt="logo" className="h-10 mb-2 object-contain" />
+            )}
+            <Input id="logo" type="file" accept="image/*" ref={fileRef} className="mt-1" />
+          </div>
+
+          {error && <p className="text-red-600 text-sm">{error}</p>}
+
+          <Button onClick={save} disabled={loading} className="w-full">
+            {loading ? 'Salvando...' : isEdit ? 'Salvar Alterações' : 'Criar Cliente'}
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  )
+}

@@ -344,12 +344,14 @@ ${evidencias}
 export async function generateReport(
   articles: Article[],
   userPrompt: string,
-  metadata?: ReportMetadata
+  metadata?: ReportMetadata,
+  client?: { name: string; context: string | null } | null
 ): Promise<string> {
   const anthropic = await getAnthropicClient()
   if (!anthropic) {
     return generateMockReport(articles, metadata)
   }
+
 
   const mes = metadata?.mes || 'Mês de referência não informado'
   const reunioes_presenciais = metadata?.reunioes_presenciais ?? 0
@@ -375,7 +377,7 @@ Reuniões virtuais: ${reunioes_virtuais}
 Orientações estratégicas: ${orientacoes}
 Ações de relacionamento com a imprensa: ${acoes_imprensa}
 
-${userPrompt ? `CONTEXTO ADICIONAL DO CONSULTOR:\n${userPrompt}\n\n` : ''}ARTIGOS MONITORADOS NO MÊS (${articles.length} itens):
+${client?.context ? `CONTEXTO DO CLIENTE (${client.name}):\n${client.context}\n\n` : ''}${userPrompt ? `CONTEXTO ADICIONAL DO CONSULTOR:\n${userPrompt}\n\n` : ''}ARTIGOS MONITORADOS NO MÊS (${articles.length} itens):
 
 ${articlesSummary}`
 

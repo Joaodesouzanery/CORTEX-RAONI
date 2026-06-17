@@ -8,7 +8,7 @@ import SourceFilterBar from './SourceFilterBar'
 import ArticleCardGrid from './ArticleCardGrid'
 import ArticleListView from './ArticleListView'
 import ReportBuilder from '@/components/report/ReportBuilder'
-import type { Article } from '@/types'
+import type { Article, Client } from '@/types'
 import { RefreshCw, FileText, CheckSquare } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
@@ -31,6 +31,8 @@ export default function NewsPage() {
   const [dateTo, setDateTo] = useState<string>('')
   const [fetchResults, setFetchResults] = useState<FetchSourceResult[] | null>(null)
   const [showDiagnostics, setShowDiagnostics] = useState(false)
+  const [clients, setClients] = useState<Client[]>([])
+  const [activeClient, setActiveClient] = useState<Client | null>(null)
 
   const sources = useMemo(
     () => Array.from(new Set(articles.map((a) => a.sources?.name).filter(Boolean))) as string[],
@@ -57,11 +59,23 @@ export default function NewsPage() {
     return result
   }, [periodFiltered, dateFrom, dateTo])
 
-  const filtered = activeSource
-    ? dateFiltered.filter((a) => a.sources?.name === activeSource)
-    : dateFiltered
+  const clientFiltered = useMemo(() => {
+    if (!activeClient?.keywords?.length) return dateFiltered
+    const kws = activeClient.keywords.map((k) => k.toLowerCase())
+    return dateFiltered.filter((a) => {
+      const text = `${a.title} ${a.excerpt || ''}`.toLowerCase()
+      return kws.some((k) => text.includes(k))
+    })
+  }, [dateFiltered, activeClient])
 
-  useEffect(() => { loadArticles() }, [])
+  const filtered = activeSource
+    ? clientFiltered.filter((a) => a.sources?.name === activeSource)
+    : clientFiltered
+
+  useEffect(() => {
+    loadArticles()
+    fetch('/api/clients').then(r => r.json()).then(d => setClients(Array.isArray(d) ? d : []))
+  }, [])
 
   async function loadArticles() {
     setLoading(true)
@@ -201,6 +215,31 @@ export default function NewsPage() {
         </div>
       </div>
 
+      {/* Client filter */}
+      {clients.length > 0 && (
+        <div className="flex items-center gap-2 mb-3">
+          <span className="text-xs uppercase tracking-widest text-gray-500">Cliente:</span>
+          <select
+            value={activeClient?.id || ''}
+            onChange={(e) => {
+              const c = clients.find((c) => c.id === e.target.value) || null
+              setActiveClient(c)
+            }}
+            className="border border-gray-300 text-xs px-2 py-1 focus:border-black outline-none bg-white"
+          >
+            <option value="">Todos</option>
+            {clients.map((c) => (
+              <option key={c.id} value={c.id}>{c.name}</option>
+            ))}
+          </select>
+          {activeClient && (
+            <span className="text-xs text-gray-500">
+              Filtrando por: <strong>{activeClient.keywords?.join(', ')}</strong>
+            </span>
+          )}
+        </div>
+      )}
+
       {/* Source filter */}
       <SourceFilterBar sources={sources} active={activeSource} onChange={setActiveSource} />
 
@@ -245,6 +284,8 @@ export default function NewsPage() {
         onClose={() => setReportOpen(false)}
         articles={selectedArticles}
         onReportGenerated={() => {}}
+        clientId={activeClient?.id}
+        clientName={activeClient?.name}
       />
     </div>
   )

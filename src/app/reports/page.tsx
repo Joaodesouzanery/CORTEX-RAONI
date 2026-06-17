@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { formatDate } from '@/lib/utils'
 import type { Report } from '@/types'
+import { Trash2 } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
 export default function ReportsPage() {
   const [reports, setReports] = useState<Report[]>([])
@@ -10,6 +12,12 @@ export default function ReportsPage() {
   useEffect(() => {
     fetch('/api/reports').then(r => r.json()).then(d => setReports(Array.isArray(d) ? d : []))
   }, [])
+
+  async function deleteReport(id: string) {
+    if (!confirm('Excluir este relatório permanentemente?')) return
+    await fetch(`/api/reports/${id}`, { method: 'DELETE' })
+    setReports((prev) => prev.filter((r) => r.id !== id))
+  }
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-8">
@@ -19,12 +27,41 @@ export default function ReportsPage() {
       ) : (
         <div className="divide-y border border-gray-200">
           {reports.map((report) => (
-            <Link key={report.id} href={`/reports/${report.id}`} className="block p-4 hover:bg-gray-50">
-              <p className="font-medium line-clamp-1">{report.prompt}</p>
-              <p className="text-sm text-gray-500 mt-1">
-                {report.article_ids.length} artigos · {formatDate(report.created_at)}
-              </p>
-            </Link>
+            <div key={report.id} className="flex items-center gap-3 p-4 hover:bg-gray-50">
+              {/* Client logo */}
+              {report.clients?.logo_url && (
+                <img
+                  src={report.clients.logo_url}
+                  alt={report.clients.name}
+                  className="h-8 w-16 object-contain flex-shrink-0"
+                />
+              )}
+
+              {/* Main content */}
+              <Link href={`/reports/${report.id}`} className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 flex-wrap">
+                  {report.clients?.name && (
+                    <span className="text-xs uppercase tracking-wider bg-black text-white px-2 py-0.5">
+                      {report.clients.name}
+                    </span>
+                  )}
+                  <p className="font-medium line-clamp-1">{report.prompt || 'Relatório'}</p>
+                </div>
+                <p className="text-sm text-gray-500 mt-1">
+                  {report.article_ids.length} artigos · {formatDate(report.created_at)}
+                </p>
+              </Link>
+
+              {/* Delete button */}
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-gray-400 hover:text-red-600 flex-shrink-0"
+                onClick={() => deleteReport(report.id)}
+              >
+                <Trash2 className="w-4 h-4" />
+              </Button>
+            </div>
           ))}
         </div>
       )}

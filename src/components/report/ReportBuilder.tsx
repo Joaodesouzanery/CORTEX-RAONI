@@ -13,9 +13,11 @@ interface Props {
   onClose: () => void
   articles: Article[]
   onReportGenerated: () => void
+  clientId?: string | null
+  clientName?: string | null
 }
 
-export default function ReportBuilder({ open, onClose, articles, onReportGenerated }: Props) {
+export default function ReportBuilder({ open, onClose, articles, onReportGenerated, clientId, clientName }: Props) {
   const [mes, setMes] = useState('')
   const [reunioesPres, setReunioesPres] = useState('')
   const [reunioesVirt, setReunioesVirt] = useState('')
@@ -45,6 +47,7 @@ export default function ReportBuilder({ open, onClose, articles, onReportGenerat
         body: JSON.stringify({
           prompt,
           article_ids: articles.map((a) => a.id),
+          client_id: clientId || null,
           metadata: {
             mes: mes.trim(),
             reunioes_presenciais: parseInt(reunioesPres) || 0,
@@ -68,7 +71,7 @@ export default function ReportBuilder({ open, onClose, articles, onReportGenerat
     <Sheet open={open} onOpenChange={onClose}>
       <SheetContent className="w-full sm:max-w-3xl overflow-y-auto">
         <SheetHeader>
-          <SheetTitle>Gerar Relatório Mensal ({articles.length} artigos)</SheetTitle>
+          <SheetTitle>Gerar Relatório Mensal ({articles.length} artigos){clientName ? ` — ${clientName}` : ''}</SheetTitle>
         </SheetHeader>
 
         {!report ? (

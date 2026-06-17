@@ -8,6 +8,7 @@ export default function Navbar() {
   const links = [
     { href: '/news', label: 'Notícias' },
     { href: '/sources', label: 'Fontes' },
+    { href: '/clients', label: 'Clientes' },
     { href: '/reports', label: 'Relatórios' },
   ]
 
