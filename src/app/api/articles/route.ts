@@ -8,7 +8,7 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
   const sourceId = searchParams.get('source_id')
   const search = searchParams.get('search')
-  const limit = parseInt(searchParams.get('limit') || '100')
+  const limit = parseInt(searchParams.get('limit') || '500')
 
   let query = supabase
     .from('articles')

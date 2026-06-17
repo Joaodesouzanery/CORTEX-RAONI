@@ -9,8 +9,14 @@ import ArticleCardGrid from './ArticleCardGrid'
 import ArticleListView from './ArticleListView'
 import ReportBuilder from '@/components/report/ReportBuilder'
 import type { Article } from '@/types'
-import { RefreshCw, FileText } from 'lucide-react'
+import { RefreshCw, FileText, CheckSquare } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+
+interface FetchSourceResult {
+  source: string
+  fetched?: number
+  error?: string
+}
 
 export default function NewsPage() {
   const { mode, toggle } = useViewMode()
@@ -21,6 +27,10 @@ export default function NewsPage() {
   const [reportOpen, setReportOpen] = useState(false)
   const [activeSource, setActiveSource] = useState<string | null>(null)
   const [activePeriod, setActivePeriod] = useState<number | null>(null)
+  const [dateFrom, setDateFrom] = useState<string>('')
+  const [dateTo, setDateTo] = useState<string>('')
+  const [fetchResults, setFetchResults] = useState<FetchSourceResult[] | null>(null)
+  const [showDiagnostics, setShowDiagnostics] = useState(false)
 
   const sources = useMemo(
     () => Array.from(new Set(articles.map((a) => a.sources?.name).filter(Boolean))) as string[],
@@ -33,15 +43,29 @@ export default function NewsPage() {
     return articles.filter((a) => a.published_at && new Date(a.published_at).getTime() >= cutoff)
   }, [articles, activePeriod])
 
+  const dateFiltered = useMemo(() => {
+    let result = periodFiltered
+    if (dateFrom) {
+      const start = new Date(dateFrom).getTime()
+      result = result.filter((a) => a.published_at && new Date(a.published_at).getTime() >= start)
+    }
+    if (dateTo) {
+      const end = new Date(dateTo)
+      end.setHours(23, 59, 59, 999)
+      result = result.filter((a) => a.published_at && new Date(a.published_at).getTime() <= end.getTime())
+    }
+    return result
+  }, [periodFiltered, dateFrom, dateTo])
+
   const filtered = activeSource
-    ? periodFiltered.filter((a) => a.sources?.name === activeSource)
-    : periodFiltered
+    ? dateFiltered.filter((a) => a.sources?.name === activeSource)
+    : dateFiltered
 
   useEffect(() => { loadArticles() }, [])
 
   async function loadArticles() {
     setLoading(true)
-    const res = await fetch('/api/articles')
+    const res = await fetch('/api/articles?limit=1000')
     const data = await res.json()
     setArticles(Array.isArray(data) ? data : [])
     setLoading(false)
@@ -49,16 +73,25 @@ export default function NewsPage() {
 
   async function fetchNews() {
     setFetching(true)
-    await fetch('/api/articles/fetch', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ manual: true }),
-    })
-    await loadArticles()
-    setFetching(false)
+    try {
+      const res = await fetch('/api/articles/fetch', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ manual: true }),
+      })
+      const data = await res.json().catch(() => null)
+      if (data?.sources) {
+        setFetchResults(data.sources)
+        setShowDiagnostics(true)
+      }
+    } finally {
+      await loadArticles()
+      setFetching(false)
+    }
   }
 
   const selectedArticles = articles.filter((a) => selected.has(a.id))
+  const allFilteredSelected = filtered.length > 0 && filtered.every((a) => selected.has(a.id))
 
   return (
     <div className="max-w-screen-2xl mx-auto px-6 py-8">
@@ -69,6 +102,15 @@ export default function NewsPage() {
           <p className="text-xs text-gray-400 mt-1">Marque os checkboxes para selecionar notícias e gerar um relatório</p>
         </div>
         <div className="flex items-center gap-3">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => (allFilteredSelected ? clearAll() : selectAll(filtered.map((a) => a.id)))}
+            disabled={filtered.length === 0}
+          >
+            <CheckSquare className="w-4 h-4 mr-2" />
+            {allFilteredSelected ? 'Limpar seleção' : `Selecionar todas (${filtered.length})`}
+          </Button>
           <Button variant="outline" size="sm" onClick={fetchNews} disabled={fetching}>
             <RefreshCw className={`w-4 h-4 mr-2 ${fetching ? 'animate-spin' : ''}`} />
             {fetching ? 'Buscando...' : 'Buscar Notícias'}
@@ -76,6 +118,37 @@ export default function NewsPage() {
           <ViewToggle mode={mode} onToggle={toggle} />
         </div>
       </div>
+
+      {/* Fetch diagnostics */}
+      {fetchResults && (
+        <div className="mb-4 border border-gray-200 text-sm">
+          <button
+            onClick={() => setShowDiagnostics((v) => !v)}
+            className="w-full flex items-center justify-between px-4 py-2 bg-gray-50 hover:bg-gray-100"
+          >
+            <span>
+              Resultado da busca:{' '}
+              {fetchResults.filter((r) => r.error).length} fonte(s) com erro,{' '}
+              {fetchResults.filter((r) => !r.error).length} ok
+            </span>
+            <span className="text-gray-400">{showDiagnostics ? '▲' : '▼'}</span>
+          </button>
+          {showDiagnostics && (
+            <ul className="divide-y divide-gray-100">
+              {fetchResults.map((r) => (
+                <li key={r.source} className="flex items-center justify-between px-4 py-1.5">
+                  <span>{r.source}</span>
+                  {r.error ? (
+                    <span className="text-red-600">✗ {r.error}</span>
+                  ) : (
+                    <span className="text-green-600">✓ {r.fetched ?? 0} artigos</span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
 
       {/* Selection bar */}
       <SelectAllBar
@@ -86,7 +159,7 @@ export default function NewsPage() {
       />
 
       {/* Period filter */}
-      <div className="flex flex-wrap gap-2 mb-4">
+      <div className="flex flex-wrap items-center gap-2 mb-4">
         {([null, 1, 7, 15, 30] as (number | null)[]).map((days) => (
           <button
             key={days ?? 'all'}
@@ -100,6 +173,32 @@ export default function NewsPage() {
             {days === null ? 'Todos' : days === 1 ? '1 Dia' : `${days} Dias`}
           </button>
         ))}
+
+        {/* Custom date range */}
+        <div className="flex items-center gap-2 ml-2 text-xs text-gray-600">
+          <span className="uppercase tracking-widest">De</span>
+          <input
+            type="date"
+            value={dateFrom}
+            onChange={(e) => setDateFrom(e.target.value)}
+            className="border border-gray-300 px-2 py-1 focus:border-black outline-none"
+          />
+          <span className="uppercase tracking-widest">Até</span>
+          <input
+            type="date"
+            value={dateTo}
+            onChange={(e) => setDateTo(e.target.value)}
+            className="border border-gray-300 px-2 py-1 focus:border-black outline-none"
+          />
+          {(dateFrom || dateTo) && (
+            <button
+              onClick={() => { setDateFrom(''); setDateTo('') }}
+              className="underline hover:no-underline"
+            >
+              Limpar datas
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Source filter */}

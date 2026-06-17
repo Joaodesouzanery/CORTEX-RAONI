@@ -25,8 +25,13 @@ export interface FetchedArticle {
 // then replace the encoding declaration so xml2js doesn't attempt to re-decode.
 async function fetchFeedString(url: string): Promise<string> {
   const res = await fetch(url, {
-    headers: { 'User-Agent': 'Mozilla/5.0 (compatible; RSS reader)' },
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (compatible; RSS reader)',
+      Accept: 'application/rss+xml, application/xml, text/xml, */*',
+    },
+    redirect: 'follow',
   })
+  if (!res.ok) throw new Error(`HTTP ${res.status}`)
   const buffer = await res.arrayBuffer()
   // Sniff first 300 bytes (UTF-8 safe for ASCII XML declaration)
   const sniff = new TextDecoder('utf-8', { fatal: false }).decode(new Uint8Array(buffer).slice(0, 300))
@@ -136,7 +141,7 @@ export async function fetchRSS(feedUrl: string): Promise<FetchedArticle[]> {
   const missing = articles.filter((a) => !a.image_url)
   if (missing.length > 0) {
     await Promise.allSettled(
-      missing.slice(0, 10).map(async (a) => {
+      missing.slice(0, 15).map(async (a) => {
         a.image_url = await fetchOgImage(a.url)
       })
     )
