@@ -14,21 +14,24 @@ export interface ReportMetadata {
   acoes_imprensa: number
 }
 
-const MASTER_SYSTEM_PROMPT = `Assuma o papel de um consultor sênior de comunicação corporativa, assessor de imprensa de alta liderança, especialista em gestão de reputação institucional, gerenciamento de crises, relações institucionais, inteligência de mídia e análise estratégica do setor elétrico brasileiro.
+const MASTER_SYSTEM_PROMPT = `Assuma o papel de um consultor sênior de comunicação corporativa, assessor de imprensa de alta liderança, especialista em gestão de reputação institucional, gerenciamento de crises, relações institucionais, inteligência de mídia e análise estratégica do setor de atuação do cliente ({cliente_setor}).
 
-Sua persona consolida o papel anterior, mas ainda agregando a experiência e visão de um Sócio-Diretor (Partner) e Head de Estratégia de Assuntos Corporativos de uma consultoria global de assessoria estratégica (Tier 1). Você é o conselheiro de confiança (Trusted Advisor) da Alta Administração do Operador Nacional do Sistema Elétrico (ONS).
+Sua persona consolida o papel anterior, mas ainda agregando a experiência e visão de um Sócio-Diretor (Partner) e Head de Estratégia de Assuntos Corporativos de uma consultoria global de assessoria estratégica (Tier 1). Você é o conselheiro de confiança (Trusted Advisor) da Alta Administração do {cliente_nome}.
 
-O cliente é o Operador Nacional do Sistema Elétrico (ONS).
-A contratada responsável pela prestação dos serviços é a CRTIVE LAB DE INOVAÇÃO E TECNOLOGIA LTDA.
+O cliente é o {cliente_nome}, atuante em {cliente_setor}.
+A contratada responsável pela prestação dos serviços é a {contratante}.
 
 DIRETRIZ METODOLÓGICA FUNDAMENTAL:
-Atue como uma célula de inteligência reputacional do setor elétrico, não como um sistema de clipping. Identifique movimentos emergentes, detecte mudanças de narrativa, antecipe riscos futuros, identifique oportunidades de posicionamento e apoie a tomada de decisão da alta gestão.
+Atue como uma célula de inteligência reputacional de {cliente_setor}, não como um sistema de clipping. Identifique movimentos emergentes, detecte mudanças de narrativa, antecipe riscos futuros, identifique oportunidades de posicionamento e apoie a tomada de decisão da alta gestão.
+
+DIRECIONAMENTO ESPECÍFICO DESTE CLIENTE:
+{direcionamento_cliente}
 
 Produza o relatório EXATAMENTE nesta estrutura de seções, em markdown, com profundidade analítica e linguagem executiva:
 
 # RELATÓRIO MENSAL DE COMUNICAÇÃO ESTRATÉGICA E GESTÃO DE IMAGEM
-**Operador Nacional do Sistema Elétrico (ONS)**
-**CRTIVE LAB DE INOVAÇÃO E TECNOLOGIA LTDA**
+**{cliente_nome}**
+**{contratante}**
 **{mês de referência}**
 **CONFIDENCIAL**
 
@@ -45,14 +48,14 @@ Produza o relatório EXATAMENTE nesta estrutura de seções, em markdown, com pr
 
 ## 2. TEMAS ESTRATÉGICOS DO MÊS
 
-[Identificar entre 5 e 10 temas-matriz. Para cada tema: subtítulo em negrito numerado (ex: **2.1. Nome do tema**), análise de 2-3 parágrafos explicando o tema, sua evolução no período e impacto potencial para o ONS.]
+[Identificar entre 5 e 10 temas-matriz. Para cada tema: subtítulo em negrito numerado (ex: **2.1. Nome do tema**), análise de 2-3 parágrafos explicando o tema, sua evolução no período e impacto potencial para {cliente_nome}.]
 
 ---
 
 ## 3. LEITURA REPUTACIONAL DO AMBIENTE EXTERNO
 
-### 3.1. Narrativa Predominante sobre o ONS
-[Análise das imagens simultâneas que o ONS projeta no período]
+### 3.1. Narrativa Predominante sobre {cliente_nome}
+[Análise das imagens simultâneas que {cliente_nome} projeta no período]
 
 ### 3.2. Risco Reputacional Dominante
 [O maior risco reputacional do período e sua natureza]
@@ -82,7 +85,7 @@ Sinal do mês: [evidência concreta observada]]
 
 [Para cada oportunidade (mínimo 3):
 **Oportunidade N - [Nome da oportunidade]**
-[Descrição estratégica de como o ONS pode capitalizar esta oportunidade]]
+[Descrição estratégica de como {cliente_nome} pode capitalizar esta oportunidade]]
 
 ---
 
@@ -108,9 +111,9 @@ Sinal do mês: [evidência concreta observada]]
 
 ---
 
-## 9. DEMONSTRAÇÃO DOS SERVIÇOS — CRTIVE LAB
+## 9. DEMONSTRAÇÃO DOS SERVIÇOS — {contratante}
 
-[Narrativa executiva de 3-4 parágrafos descrevendo a atuação da CRTIVE no período, demonstrando: inteligência estratégica, suporte à alta administração, assessoria operacional, análise de cenário e apoio ao posicionamento institucional. NÃO listar atividades individualmente.]
+[Narrativa executiva de 3-4 parágrafos descrevendo a atuação da {contratante} no período, demonstrando: inteligência estratégica, suporte à alta administração, assessoria operacional, análise de cenário e apoio ao posicionamento institucional. NÃO listar atividades individualmente.]
 
 ### Resumo das Atividades Realizadas
 
@@ -132,19 +135,21 @@ N. **Veículo** — Título da matéria]
 
 ---
 
-*[Cidade/SP], [data]. Suporte Estratégico Prestado por: CRTIVE LAB DE INOVAÇÃO E TECNOLOGIA LTDA*
+*[Cidade/SP], [data]. Suporte Estratégico Prestado por: {contratante}*
 
 ---
 
 VALIDAÇÃO FINAL OBRIGATÓRIA:
 O resultado final deve ter qualidade compatível com entregas de consultorias especializadas em comunicação estratégica para organizações de infraestrutura crítica, com mínimo de 20 páginas de análise.`
 
-function generateMockReport(articles: Article[], metadata?: ReportMetadata): string {
+function generateMockReport(articles: Article[], metadata?: ReportMetadata, client?: ReportClient | null): string {
   const mes = metadata?.mes || 'Mês de Referência'
   const rp = metadata?.reunioes_presenciais ?? 0
   const rv = metadata?.reunioes_virtuais ?? 0
   const oe = metadata?.orientacoes ?? 0
   const ai = metadata?.acoes_imprensa ?? 0
+  const clienteNome = client?.name || 'Operador Nacional do Sistema Elétrico (ONS)'
+  const contratante = client?.contratante?.trim() || 'CRTIVE LAB DE INOVAÇÃO E TECNOLOGIA LTDA'
   const today = new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })
 
   const evidencias = articles.map((a, i) =>
@@ -153,8 +158,8 @@ function generateMockReport(articles: Article[], metadata?: ReportMetadata): str
 
   return `# RELATÓRIO MENSAL DE COMUNICAÇÃO ESTRATÉGICA E GESTÃO DE IMAGEM
 
-**Operador Nacional do Sistema Elétrico (ONS)**
-**CRTIVE LAB DE INOVAÇÃO E TECNOLOGIA LTDA**
+**${clienteNome}**
+**${contratante}**
 **${mes}**
 **CONFIDENCIAL**
 
@@ -338,20 +343,29 @@ ${evidencias}
 
 ---
 
-*${today}. Suporte Estratégico Prestado por: CRTIVE LAB DE INOVAÇÃO E TECNOLOGIA LTDA*`
+*${today}. Suporte Estratégico Prestado por: ${contratante}*`
 }
+
+export interface ReportClient {
+  name: string
+  context: string | null
+  report_prompt?: string | null
+  sector?: string | null
+  contratante?: string | null
+}
+
+const DEFAULT_CONTRATANTE = 'CRTIVE LAB DE INOVAÇÃO E TECNOLOGIA LTDA'
 
 export async function generateReport(
   articles: Article[],
   userPrompt: string,
   metadata?: ReportMetadata,
-  client?: { name: string; context: string | null } | null
+  client?: ReportClient | null
 ): Promise<string> {
   const anthropic = await getAnthropicClient()
   if (!anthropic) {
-    return generateMockReport(articles, metadata)
+    return generateMockReport(articles, metadata, client)
   }
-
 
   const mes = metadata?.mes || 'Mês de referência não informado'
   const reunioes_presenciais = metadata?.reunioes_presenciais ?? 0
@@ -359,7 +373,18 @@ export async function generateReport(
   const orientacoes = metadata?.orientacoes ?? 0
   const acoes_imprensa = metadata?.acoes_imprensa ?? 0
 
+  // Generic defaults when no client is selected — avoids forcing the ONS framing.
+  const clienteNome = client?.name || 'a organização cliente'
+  const clienteSetor = client?.sector?.trim() || 'seu setor de atuação'
+  const contratante = client?.contratante?.trim() || DEFAULT_CONTRATANTE
+  const direcionamento =
+    client?.report_prompt?.trim() || 'Seguir a metodologia padrão de inteligência reputacional, sem ênfase setorial pré-definida.'
+
   const systemPrompt = MASTER_SYSTEM_PROMPT
+    .replace(/\{cliente_nome\}/g, clienteNome)
+    .replace(/\{cliente_setor\}/g, clienteSetor)
+    .replace(/\{contratante\}/g, contratante)
+    .replace('{direcionamento_cliente}', direcionamento)
     .replace('{mês de referência}', mes)
     .replace('{reunioes_presenciais}', String(reunioes_presenciais))
     .replace('{reunioes_virtuais}', String(reunioes_virtuais))

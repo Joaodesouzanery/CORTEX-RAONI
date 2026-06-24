@@ -1,0 +1,153 @@
+// Robust keyword relevance matching for client filtering.
+//
+// Pure module (no React/Supabase deps) so it can run in the browser, in API
+// routes, and in Vitest. Replaces the naive `text.includes(keyword)` matching,
+// which produced false positives (acronym "ONS" matching inside "responsável")
+// and false negatives (accents: "térmica" vs "termica").
+//
+// Strategy: normalize text (strip accents, lowercase, punctuation→space) then
+// match on whole tokens (words/acronyms) or contiguous token subsequences
+// (phrases), tolerating a simple plural "s". Favors recall — a client matches
+// an article if ANY keyword matches (OR), like the previous behavior.
+
+export type KeywordKind = 'word' | 'phrase' | 'acronym'
+
+export interface ParsedKeyword {
+  /** Original term as typed by the curator. */
+  raw: string
+  /** Normalized term (no accents, lowercase, collapsed spaces). */
+  normalized: string
+  /** Normalized term split into tokens. */
+  tokens: string[]
+  kind: KeywordKind
+}
+
+/**
+ * Normalize text for comparison: NFD + strip diacritics, lowercase, turn any
+ * non-alphanumeric run into a single space, trim. Deterministic, no stemming.
+ * "Térmica, à BR-101!" -> "termica a br 101"
+ */
+export function normalizeText(input: string | null | undefined): string {
+  if (!input) return ''
+  return input
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '') // strip combining diacritics (accents become ASCII)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ') // punctuation/symbols -> space (text is ASCII post-normalize)
+    .trim()
+    .replace(/\s+/g, ' ')
+}
+
+function tokenize(normalized: string): string[] {
+  return normalized ? normalized.split(' ').filter(Boolean) : []
+}
+
+/**
+ * Classify a keyword to decide how it should match:
+ *  - contains whitespace          -> 'phrase'
+ *  - <= 4 chars AND all-uppercase  -> 'acronym' (ONS, CCEE, DNIT)
+ *  - otherwise                    -> 'word'
+ */
+export function classifyKeyword(raw: string): KeywordKind {
+  const trimmed = raw.trim()
+  if (/\s/.test(trimmed)) return 'phrase'
+  // Acronyms in this domain are ASCII (ONS, CCEE, DNIT); ASCII check avoids the
+  // unicode `u` regex flag, which needs a newer tsconfig target.
+  const letters = trimmed.replace(/[^a-zA-Z]/g, '')
+  if (letters.length > 0 && letters.length <= 4 && letters === letters.toUpperCase()) {
+    return 'acronym'
+  }
+  return 'word'
+}
+
+/** Convert the client's raw keywords (TEXT[]) into ParsedKeyword[]. Drops empties. */
+export function parseKeywords(raw: string[] | null | undefined): ParsedKeyword[] {
+  if (!raw?.length) return []
+  const out: ParsedKeyword[] = []
+  for (const term of raw) {
+    if (typeof term !== 'string') continue
+    const normalized = normalizeText(term)
+    if (!normalized) continue
+    out.push({
+      raw: term,
+      normalized,
+      tokens: tokenize(normalized),
+      kind: classifyKeyword(term),
+    })
+  }
+  return out
+}
+
+/** Two tokens match if equal, or differ only by a trailing 's' (simple plural). */
+function tokensEqual(a: string, b: string): boolean {
+  if (a === b) return true
+  if (a.length > 1 && a === b + 's') return true
+  if (b.length > 1 && b === a + 's') return true
+  return false
+}
+
+/** Find a contiguous run of `needle` tokens inside `haystack` tokens. */
+function containsTokenSequence(haystack: string[], needle: string[]): boolean {
+  if (needle.length === 0) return false
+  if (needle.length === 1) return haystack.some((t) => tokensEqual(t, needle[0]))
+  const last = needle.length - 1
+  for (let i = 0; i + last < haystack.length; i++) {
+    let ok = true
+    for (let j = 0; j < needle.length; j++) {
+      // Exact match on inner tokens; tolerate plural only on the final token.
+      const equal = j === last ? tokensEqual(haystack[i + j], needle[j]) : haystack[i + j] === needle[j]
+      if (!equal) {
+        ok = false
+        break
+      }
+    }
+    if (ok) return true
+  }
+  return false
+}
+
+/** Match a single parsed keyword against already-normalized text. */
+export function matchKeyword(parsed: ParsedKeyword, normalizedText: string): boolean {
+  if (!parsed.tokens.length || !normalizedText) return false
+  const haystack = tokenize(normalizedText)
+  return containsTokenSequence(haystack, parsed.tokens)
+}
+
+interface Fields {
+  title?: string | null
+  excerpt?: string | null
+  content?: string | null
+}
+
+function normalizedFieldText(fields: Fields): string {
+  // content is optional and usually absent in list views; included for reuse.
+  return normalizeText([fields.title, fields.excerpt, fields.content].filter(Boolean).join(' '))
+}
+
+/**
+ * True if ANY keyword matches (OR semantics — preserves recall). Returns false
+ * when there are no keywords (callers decide that "no keywords = don't filter").
+ */
+export function isRelevant(parsed: ParsedKeyword[], fields: Fields): boolean {
+  if (!parsed.length) return false
+  const text = normalizedFieldText(fields)
+  if (!text) return false
+  return parsed.some((kw) => matchKeyword(kw, text))
+}
+
+/**
+ * Relevance score = number of distinct keywords that match, weighting title
+ * matches above excerpt/content. For optional ranking/badges; the filter itself
+ * uses the boolean isRelevant.
+ */
+export function relevanceScore(parsed: ParsedKeyword[], fields: Fields): number {
+  if (!parsed.length) return 0
+  const titleText = normalizeText(fields.title)
+  const bodyText = normalizeText([fields.excerpt, fields.content].filter(Boolean).join(' '))
+  let score = 0
+  for (const kw of parsed) {
+    if (matchKeyword(kw, titleText)) score += 2
+    else if (matchKeyword(kw, bodyText)) score += 1
+  }
+  return score
+}

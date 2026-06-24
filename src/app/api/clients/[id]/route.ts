@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createAdminClient as createClient } from '@/lib/supabase/server'
+import { clientUpdateSchema, formatZodError } from '@/lib/validation'
 
 export const dynamic = 'force-dynamic'
 
@@ -12,12 +13,24 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
 
 export async function PUT(req: Request, { params }: { params: { id: string } }) {
   const supabase = createClient()
-  const body = await req.json()
-  const { name, context, keywords, logo_url } = body
+  const body = await req.json().catch(() => null)
+  const parsed = clientUpdateSchema.safeParse(body)
+  if (!parsed.success) {
+    return NextResponse.json({ error: formatZodError(parsed.error) }, { status: 400 })
+  }
+  const { name, context, report_prompt, sector, contratante, keywords, logo_url } = parsed.data
 
   const { data, error } = await supabase
     .from('clients')
-    .update({ name: name?.trim(), context: context || null, keywords: keywords || null, logo_url: logo_url || null })
+    .update({
+      name: name.trim(),
+      context: context || null,
+      report_prompt: report_prompt || null,
+      sector: sector || null,
+      contratante: contratante || null,
+      keywords: keywords || null,
+      logo_url: logo_url || null,
+    })
     .eq('id', params.id)
     .select()
     .single()

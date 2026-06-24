@@ -8,6 +8,7 @@ import SourceFilterBar from './SourceFilterBar'
 import ArticleCardGrid from './ArticleCardGrid'
 import ArticleListView from './ArticleListView'
 import ReportBuilder from '@/components/report/ReportBuilder'
+import { parseKeywords, isRelevant } from '@/lib/relevance'
 import type { Article, Client } from '@/types'
 import { RefreshCw, FileText, CheckSquare } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -59,14 +60,12 @@ export default function NewsPage() {
     return result
   }, [periodFiltered, dateFrom, dateTo])
 
+  const parsedKws = useMemo(() => parseKeywords(activeClient?.keywords), [activeClient])
+
   const clientFiltered = useMemo(() => {
-    if (!activeClient?.keywords?.length) return dateFiltered
-    const kws = activeClient.keywords.map((k) => k.toLowerCase())
-    return dateFiltered.filter((a) => {
-      const text = `${a.title} ${a.excerpt || ''}`.toLowerCase()
-      return kws.some((k) => text.includes(k))
-    })
-  }, [dateFiltered, activeClient])
+    if (!parsedKws.length) return dateFiltered
+    return dateFiltered.filter((a) => isRelevant(parsedKws, { title: a.title, excerpt: a.excerpt }))
+  }, [dateFiltered, parsedKws])
 
   const filtered = activeSource
     ? clientFiltered.filter((a) => a.sources?.name === activeSource)

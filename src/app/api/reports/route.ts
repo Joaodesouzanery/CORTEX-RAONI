@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server'
 import { createAdminClient as createClient } from '@/lib/supabase/server'
-import { generateReport, type ReportMetadata } from '@/lib/ai/claude'
+import { generateReport } from '@/lib/ai/claude'
+import { reportCreateSchema, formatZodError } from '@/lib/validation'
+import type { Article } from '@/types'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 300
@@ -17,12 +19,12 @@ export async function GET() {
 
 export async function POST(req: Request) {
   const supabase = createClient()
-  const { prompt, article_ids, metadata, client_id } = await req.json() as {
-    prompt: string
-    article_ids: string[]
-    metadata?: ReportMetadata
-    client_id?: string | null
+  const body = await req.json().catch(() => null)
+  const parsed = reportCreateSchema.safeParse(body)
+  if (!parsed.success) {
+    return NextResponse.json({ error: formatZodError(parsed.error) }, { status: 400 })
   }
+  const { prompt, article_ids, metadata, client_id } = parsed.data
 
   const { data: articles } = await supabase
     .from('articles')
@@ -33,11 +35,15 @@ export async function POST(req: Request) {
 
   let client = null
   if (client_id) {
-    const { data: clientData } = await supabase.from('clients').select('name, context').eq('id', client_id).single()
+    const { data: clientData } = await supabase
+      .from('clients')
+      .select('name, context, report_prompt, sector, contratante')
+      .eq('id', client_id)
+      .single()
     client = clientData
   }
 
-  const content = await generateReport(articles as any, prompt, metadata, client)
+  const content = await generateReport(articles as Article[], prompt, metadata, client)
 
   const { data, error } = await supabase
     .from('reports')

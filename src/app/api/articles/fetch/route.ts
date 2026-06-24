@@ -34,11 +34,13 @@ async function runFetch() {
     })
   )
 
-  const results = sourceResults.map((r, i) =>
-    r.status === 'fulfilled'
-      ? r.value
-      : { source: sources[i].name, error: r.reason?.message || 'Erro' }
-  )
+  const results = sourceResults.map((r, i) => {
+    if (r.status === 'fulfilled') return r.value
+    const message = r.reason?.message || 'Erro'
+    // Surface per-source failures in server logs (not just the UI diagnostics).
+    console.error(`[fetch] fonte "${sources[i].name}" (${sources[i].url}) falhou: ${message}`)
+    return { source: sources[i].name, error: message }
+  })
 
   const totalFetched = results.reduce((sum, r) => sum + (('fetched' in r ? r.fetched : 0)), 0)
   return NextResponse.json({ fetched: totalFetched, sources: results })

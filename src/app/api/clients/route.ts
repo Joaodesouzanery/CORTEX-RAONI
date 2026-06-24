@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createAdminClient as createClient } from '@/lib/supabase/server'
+import { clientCreateSchema, formatZodError } from '@/lib/validation'
 
 export const dynamic = 'force-dynamic'
 
@@ -15,14 +16,24 @@ export async function GET() {
 
 export async function POST(req: Request) {
   const supabase = createClient()
-  const body = await req.json()
-  const { name, context, keywords, logo_url } = body
-
-  if (!name?.trim()) return NextResponse.json({ error: 'Nome é obrigatório' }, { status: 400 })
+  const body = await req.json().catch(() => null)
+  const parsed = clientCreateSchema.safeParse(body)
+  if (!parsed.success) {
+    return NextResponse.json({ error: formatZodError(parsed.error) }, { status: 400 })
+  }
+  const { name, context, report_prompt, sector, contratante, keywords, logo_url } = parsed.data
 
   const { data, error } = await supabase
     .from('clients')
-    .insert({ name: name.trim(), context: context || null, keywords: keywords || null, logo_url: logo_url || null })
+    .insert({
+      name: name.trim(),
+      context: context || null,
+      report_prompt: report_prompt || null,
+      sector: sector || null,
+      contratante: contratante || null,
+      keywords: keywords || null,
+      logo_url: logo_url || null,
+    })
     .select()
     .single()
 

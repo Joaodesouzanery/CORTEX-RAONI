@@ -1,4 +1,5 @@
 import Parser from 'rss-parser'
+import { BROWSER_USER_AGENT, CRAWLER_USER_AGENT, FETCH_TIMEOUTS } from './constants'
 
 const parser = new Parser({
   customFields: {
@@ -26,7 +27,7 @@ export interface FetchedArticle {
 async function fetchFeedString(url: string): Promise<string> {
   const res = await fetch(url, {
     headers: {
-      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      'User-Agent': BROWSER_USER_AGENT,
       Accept: 'application/rss+xml, application/xml, text/xml, */*',
     },
     redirect: 'follow',
@@ -42,7 +43,7 @@ async function fetchFeedString(url: string): Promise<string> {
   return decoded.replace(/(<\?xml[^?>]*?)encoding=["'][^"']*["']/i, '$1encoding="utf-8"')
 }
 
-function decodeHtmlEntities(text: string): string {
+export function decodeHtmlEntities(text: string): string {
   return text
     .replace(/&amp;/g, '&')
     .replace(/&lt;/g, '<')
@@ -64,7 +65,7 @@ function decodeHtmlEntities(text: string): string {
     .replace(/&#x([0-9a-f]+);/gi, (_, h) => String.fromCharCode(parseInt(h, 16)))
 }
 
-function extractFirstImage(html: string | null | undefined): string | null {
+export function extractFirstImage(html: string | null | undefined): string | null {
   if (!html) return null
   const match =
     html.match(/<img[^>]+data-src=["']([^"']+\.(jpg|jpeg|png|webp)[^"']*)["']/i) ||
@@ -77,7 +78,7 @@ function extractFirstImage(html: string | null | undefined): string | null {
 }
 
 // Handles both single-object and array forms of media:content / media:thumbnail
-function getMediaUrl(field: any): string | null {
+export function getMediaUrl(field: any): string | null {
   if (!field) return null
   const item = Array.isArray(field) ? field[0] : field
   return item?.$?.url || item?.url || item?._ || null
@@ -86,8 +87,8 @@ function getMediaUrl(field: any): string | null {
 async function fetchOgImage(articleUrl: string): Promise<string | null> {
   try {
     const res = await fetch(articleUrl, {
-      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)' },
-      signal: AbortSignal.timeout(8000),
+      headers: { 'User-Agent': CRAWLER_USER_AGENT },
+      signal: AbortSignal.timeout(FETCH_TIMEOUTS.ogImage),
     })
     const html = await res.text()
     const { load } = await import('cheerio')

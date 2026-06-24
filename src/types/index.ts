@@ -14,7 +14,7 @@ export interface Article {
   url: string
   image_url: string | null
   excerpt: string | null
-  content: string | null
+  content?: string | null
   published_at: string | null
   fetched_at: string
   sources?: { name: string }
@@ -35,6 +35,9 @@ export interface Client {
   id: string
   name: string
   context: string | null
+  report_prompt: string | null
+  sector: string | null
+  contratante: string | null
   keywords: string[] | null
   logo_url: string | null
   created_at: string

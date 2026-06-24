@@ -16,7 +16,10 @@ interface Props {
 
 export default function ClientForm({ client, open, onClose, onSaved }: Props) {
   const [name, setName] = useState(client?.name || '')
+  const [sector, setSector] = useState(client?.sector || '')
+  const [contratante, setContratante] = useState(client?.contratante || '')
   const [context, setContext] = useState(client?.context || '')
+  const [reportPrompt, setReportPrompt] = useState(client?.report_prompt || '')
   const [keywords, setKeywords] = useState<string[]>(client?.keywords || [])
   const [kwInput, setKwInput] = useState('')
   const [loading, setLoading] = useState(false)
@@ -45,7 +48,14 @@ export default function ClientForm({ client, open, onClose, onSaved }: Props) {
       const res = await fetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: name.trim(), context: context.trim() || null, keywords: keywords.length ? keywords : null }),
+        body: JSON.stringify({
+          name: name.trim(),
+          sector: sector.trim() || null,
+          contratante: contratante.trim() || null,
+          context: context.trim() || null,
+          report_prompt: reportPrompt.trim() || null,
+          keywords: keywords.length ? keywords : null,
+        }),
       })
       const data = await res.json()
       if (!res.ok) { setError(data.error || 'Erro ao salvar'); return }
@@ -78,14 +88,52 @@ export default function ClientForm({ client, open, onClose, onSaved }: Props) {
             <Input id="cname" value={name} onChange={(e) => setName(e.target.value)} placeholder="Ex: ONS" className="mt-1" />
           </div>
 
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <Label htmlFor="csector">Setor / Segmento</Label>
+              <Input
+                id="csector"
+                value={sector}
+                onChange={(e) => setSector(e.target.value)}
+                placeholder="Ex: Setor elétrico"
+                className="mt-1"
+              />
+            </div>
+            <div>
+              <Label htmlFor="ccontratante">Contratante</Label>
+              <Input
+                id="ccontratante"
+                value={contratante}
+                onChange={(e) => setContratante(e.target.value)}
+                placeholder="CRTIVE LAB..."
+                className="mt-1"
+              />
+            </div>
+          </div>
+
           <div>
-            <Label htmlFor="ctx">Contexto (injetado no prompt da IA)</Label>
+            <Label htmlFor="ctx">Contexto (background do cliente)</Label>
             <Textarea
               id="ctx"
               value={context}
               onChange={(e) => setContext(e.target.value)}
               placeholder="Descreva o cliente, seu setor, sensibilidades reputacionais, temas prioritários..."
               rows={4}
+              className="mt-1 resize-none"
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="rprompt">Direcionamento do Relatório</Label>
+            <p className="text-xs text-gray-500 mb-1">
+              Instruções persistentes de foco, ênfases e ângulos prioritários para todo relatório deste cliente (vai no prompt da IA).
+            </p>
+            <Textarea
+              id="rprompt"
+              value={reportPrompt}
+              onChange={(e) => setReportPrompt(e.target.value)}
+              placeholder="Ex: Priorize segurança energética, transição e modernização do setor. Trate riscos de apagão como tema-âncora."
+              rows={5}
               className="mt-1 resize-none"
             />
           </div>

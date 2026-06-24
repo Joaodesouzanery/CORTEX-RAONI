@@ -1,11 +1,12 @@
 import * as cheerio from 'cheerio'
 import type { FetchedArticle } from './rss'
+import { BROWSER_USER_AGENT, FETCH_TIMEOUTS } from './constants'
 
 export async function scrapeOpenGraph(pageUrl: string): Promise<FetchedArticle | null> {
   try {
     const res = await fetch(pageUrl, {
-      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; CORTEXBot/1.0)' },
-      signal: AbortSignal.timeout(10000),
+      headers: { 'User-Agent': BROWSER_USER_AGENT },
+      signal: AbortSignal.timeout(FETCH_TIMEOUTS.scrapePage),
     })
     const html = await res.text()
     const $ = cheerio.load(html)
@@ -31,8 +32,8 @@ export async function scrapeOpenGraph(pageUrl: string): Promise<FetchedArticle |
 export async function scrapeSite(siteUrl: string): Promise<FetchedArticle[]> {
   try {
     const res = await fetch(siteUrl, {
-      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; CORTEXBot/1.0)' },
-      signal: AbortSignal.timeout(15000),
+      headers: { 'User-Agent': BROWSER_USER_AGENT },
+      signal: AbortSignal.timeout(FETCH_TIMEOUTS.scrapeSite),
     })
     const html = await res.text()
     const $ = cheerio.load(html)

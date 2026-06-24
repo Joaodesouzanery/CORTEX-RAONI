@@ -10,9 +10,11 @@ export async function GET(req: Request) {
   const search = searchParams.get('search')
   const limit = parseInt(searchParams.get('limit') || '500')
 
+  // List view never reads `content` (full HTML). Excluding it keeps the payload
+  // small — the report flow re-fetches content by id in /api/reports.
   let query = supabase
     .from('articles')
-    .select('*, sources(name)')
+    .select('id, source_id, title, url, image_url, excerpt, published_at, fetched_at, sources(name)')
     .order('published_at', { ascending: false })
     .limit(limit)
 
