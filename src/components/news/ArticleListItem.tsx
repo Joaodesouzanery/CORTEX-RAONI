@@ -9,9 +9,10 @@ interface Props {
   selected: boolean
   anySelected?: boolean
   onSelect: (id: string) => void
+  score?: number
 }
 
-export default function ArticleListItem({ article, selected, onSelect }: Props) {
+export default function ArticleListItem({ article, selected, onSelect, score }: Props) {
   return (
     <div className={cn('flex gap-4 py-4 border-b border-gray-100 group', selected && 'bg-gray-50')}>
       {/* Checkbox */}
@@ -40,7 +41,12 @@ export default function ArticleListItem({ article, selected, onSelect }: Props) 
 
       {/* Content */}
       <div className="flex flex-col flex-1 min-w-0">
-        <span className="text-xs uppercase tracking-widest text-gray-500 mb-1">
+        <span className="text-xs uppercase tracking-widest text-gray-500 mb-1 flex items-center gap-2">
+          {score != null && score > 0 && (
+            <span className="bg-black text-white px-1.5 py-0.5 text-[10px] tracking-normal" title="Relevância para o cliente">
+              ★ {score}
+            </span>
+          )}
           {article.sources?.name}{article.published_at ? `, ${formatDate(article.published_at)}` : ''}
         </span>
         <h3 className="font-bold text-sm leading-snug line-clamp-2 mb-1">{article.title}</h3>

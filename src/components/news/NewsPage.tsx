@@ -8,7 +8,7 @@ import SourceFilterBar from './SourceFilterBar'
 import ArticleCardGrid from './ArticleCardGrid'
 import ArticleListView from './ArticleListView'
 import ReportBuilder from '@/components/report/ReportBuilder'
-import { parseKeywords, isRelevant } from '@/lib/relevance'
+import { parseKeywords, isRelevant, relevanceScore } from '@/lib/relevance'
 import type { Article, Client } from '@/types'
 import { RefreshCw, FileText, CheckSquare } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -67,9 +67,19 @@ export default function NewsPage() {
     return dateFiltered.filter((a) => isRelevant(parsedKws, { title: a.title, excerpt: a.excerpt }))
   }, [dateFiltered, parsedKws])
 
-  const filtered = activeSource
-    ? clientFiltered.filter((a) => a.sources?.name === activeSource)
-    : clientFiltered
+  // Apply the source filter, then — when a client is active — rank by relevance
+  // (score desc, date desc) and expose a score map for the relevance badge.
+  const { filtered, scores } = useMemo(() => {
+    const base = activeSource
+      ? clientFiltered.filter((a) => a.sources?.name === activeSource)
+      : clientFiltered
+    if (!parsedKws.length) return { filtered: base, scores: null as Map<string, number> | null }
+    const m = new Map<string, number>()
+    for (const a of base) m.set(a.id, relevanceScore(parsedKws, { title: a.title, excerpt: a.excerpt }))
+    const dateOf = (x: Article) => (x.published_at ? new Date(x.published_at).getTime() : 0)
+    const ranked = [...base].sort((a, b) => (m.get(b.id)! - m.get(a.id)!) || (dateOf(b) - dateOf(a)))
+    return { filtered: ranked, scores: m }
+  }, [clientFiltered, activeSource, parsedKws])
 
   useEffect(() => {
     loadArticles()
@@ -122,7 +132,9 @@ export default function NewsPage() {
             disabled={filtered.length === 0}
           >
             <CheckSquare className="w-4 h-4 mr-2" />
-            {allFilteredSelected ? 'Limpar seleção' : `Selecionar todas (${filtered.length})`}
+            {allFilteredSelected
+              ? 'Limpar seleção'
+              : `${activeClient ? 'Selecionar relevantes' : 'Selecionar todas'} (${filtered.length})`}
           </Button>
           <Button variant="outline" size="sm" onClick={fetchNews} disabled={fetching}>
             <RefreshCw className={`w-4 h-4 mr-2 ${fetching ? 'animate-spin' : ''}`} />
@@ -261,9 +273,9 @@ export default function NewsPage() {
           <p className="text-sm mt-2">Adicione fontes em <a href="/sources" className="underline">Fontes</a> e clique em &quot;Buscar Notícias&quot;.</p>
         </div>
       ) : mode === 'card' ? (
-        <ArticleCardGrid articles={filtered} selected={selected} onSelect={toggleSelect} />
+        <ArticleCardGrid articles={filtered} selected={selected} onSelect={toggleSelect} scores={scores} />
       ) : (
-        <ArticleListView articles={filtered} selected={selected} onSelect={toggleSelect} />
+        <ArticleListView articles={filtered} selected={selected} onSelect={toggleSelect} scores={scores} />
       )}
 
       {/* Floating Report Button */}

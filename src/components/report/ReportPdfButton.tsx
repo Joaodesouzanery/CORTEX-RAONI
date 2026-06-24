@@ -9,17 +9,54 @@ interface Props {
   createdAt: string
 }
 
-// Parse simple markdown into PDF-friendly blocks
-function parseBlocks(content: string) {
-  return content.split('\n').map((line) => {
-    if (line.startsWith('### ')) return { type: 'h3', text: line.slice(4) }
-    if (line.startsWith('## ')) return { type: 'h2', text: line.slice(3) }
-    if (line.startsWith('# ')) return { type: 'h1', text: line.slice(2) }
-    if (line.startsWith('- ') || line.startsWith('* ')) return { type: 'li', text: line.slice(2) }
-    if (line.startsWith('---')) return { type: 'hr', text: '' }
-    if (line.trim() === '') return { type: 'space', text: '' }
-    return { type: 'p', text: line }
-  })
+interface Block {
+  type: 'h1' | 'h2' | 'h3' | 'li' | 'hr' | 'space' | 'p' | 'table'
+  text?: string
+  rows?: string[][]
+}
+
+// @react-pdf has no markdown parser, so strip inline markers it can't render.
+function stripInline(s: string): string {
+  return s
+    .replace(/\*\*(.+?)\*\*/g, '$1')
+    .replace(/__(.+?)__/g, '$1')
+    .replace(/`([^`]+)`/g, '$1')
+}
+
+// Parse markdown into PDF-friendly blocks, grouping consecutive `| ... |` lines
+// into table blocks (used by the "Demonstração dos serviços" section).
+function parseBlocks(content: string): Block[] {
+  const lines = content.split('\n')
+  const blocks: Block[] = []
+  const isTableRow = (l: string) => l.trim().startsWith('|') && l.includes('|')
+  const isSeparatorRow = (cells: string[]) =>
+    cells.length > 0 && cells.every((c) => /^:?-{2,}:?$/.test(c.trim()))
+
+  let i = 0
+  while (i < lines.length) {
+    const line = lines[i]
+    if (isTableRow(line)) {
+      const rows: string[][] = []
+      while (i < lines.length && isTableRow(lines[i])) {
+        const cells = lines[i].split('|').map((c) => c.trim())
+        if (cells.length && cells[0] === '') cells.shift()
+        if (cells.length && cells[cells.length - 1] === '') cells.pop()
+        if (!isSeparatorRow(cells)) rows.push(cells.map(stripInline))
+        i++
+      }
+      if (rows.length) blocks.push({ type: 'table', rows })
+      continue
+    }
+    if (line.startsWith('### ')) blocks.push({ type: 'h3', text: stripInline(line.slice(4)) })
+    else if (line.startsWith('## ')) blocks.push({ type: 'h2', text: stripInline(line.slice(3)) })
+    else if (line.startsWith('# ')) blocks.push({ type: 'h1', text: stripInline(line.slice(2)) })
+    else if (line.startsWith('- ') || line.startsWith('* ')) blocks.push({ type: 'li', text: stripInline(line.slice(2)) })
+    else if (line.startsWith('---')) blocks.push({ type: 'hr' })
+    else if (line.trim() === '') blocks.push({ type: 'space' })
+    else blocks.push({ type: 'p', text: stripInline(line) })
+    i++
+  }
+  return blocks
 }
 
 export default function ReportPdfButton({ prompt, content, createdAt }: Props) {
@@ -41,6 +78,10 @@ export default function ReportPdfButton({ prompt, content, createdAt }: Props) {
         li: { marginBottom: 4, marginLeft: 12 },
         hr: { borderBottom: '1px solid #ccc', marginVertical: 8 },
         space: { height: 6 },
+        table: { marginVertical: 8, borderTop: '1px solid #ccc', borderLeft: '1px solid #ccc' },
+        tr: { flexDirection: 'row' },
+        th: { flex: 1, padding: 4, fontSize: 10, fontFamily: 'Helvetica-Bold', backgroundColor: '#f3f3f3', borderRight: '1px solid #ccc', borderBottom: '1px solid #ccc' },
+        td: { flex: 1, padding: 4, fontSize: 10, borderRight: '1px solid #ccc', borderBottom: '1px solid #ccc' },
       })
 
       const blocks = parseBlocks(content)
@@ -57,6 +98,17 @@ export default function ReportPdfButton({ prompt, content, createdAt }: Props) {
               if (b.type === 'h2') return <Text key={i} style={styles.h2}>{b.text}</Text>
               if (b.type === 'h3') return <Text key={i} style={styles.h3}>{b.text}</Text>
               if (b.type === 'li') return <Text key={i} style={styles.li}>• {b.text}</Text>
+              if (b.type === 'table' && b.rows) return (
+                <View key={i} style={styles.table}>
+                  {b.rows.map((row, r) => (
+                    <View key={r} style={styles.tr}>
+                      {row.map((cell, c) => (
+                        <Text key={c} style={r === 0 ? styles.th : styles.td}>{cell}</Text>
+                      ))}
+                    </View>
+                  ))}
+                </View>
+              )
               return <Text key={i} style={styles.p}>{b.text}</Text>
             })}
           </Page>

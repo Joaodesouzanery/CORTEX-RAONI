@@ -9,14 +9,20 @@ interface Props {
   selected: boolean
   anySelected?: boolean
   onSelect: (id: string) => void
+  score?: number
 }
 
-export default function ArticleCard({ article, selected, onSelect }: Props) {
+export default function ArticleCard({ article, selected, onSelect, score }: Props) {
   return (
     <div className={cn('group flex flex-col', selected && 'ring-2 ring-black')}>
       {/* Source + Date header */}
       <div className="flex items-center justify-between mb-2">
-        <span className="text-xs uppercase tracking-widest text-gray-500">
+        <span className="text-xs uppercase tracking-widest text-gray-500 flex items-center gap-2">
+          {score != null && score > 0 && (
+            <span className="bg-black text-white px-1.5 py-0.5 text-[10px] tracking-normal" title="Relevância para o cliente">
+              ★ {score}
+            </span>
+          )}
           {article.sources?.name}{article.published_at ? `, ${formatDate(article.published_at)}` : ''}
         </span>
         {/* Checkbox */}

@@ -5,7 +5,10 @@ import { reportCreateSchema, formatZodError } from '@/lib/validation'
 import type { Article } from '@/types'
 
 export const dynamic = 'force-dynamic'
-export const maxDuration = 300
+// Hobby caps at 60s. The single-shot path below only runs for mock/local; the
+// production UI generates section-by-section via /api/reports/section and POSTs
+// the assembled `content` here (no AI call, fast save).
+export const maxDuration = 60
 
 export async function GET() {
   const supabase = createClient()
@@ -24,26 +27,33 @@ export async function POST(req: Request) {
   if (!parsed.success) {
     return NextResponse.json({ error: formatZodError(parsed.error) }, { status: 400 })
   }
-  const { prompt, article_ids, metadata, client_id } = parsed.data
+  const { prompt, article_ids, metadata, client_id, content: providedContent } = parsed.data
 
-  const { data: articles } = await supabase
-    .from('articles')
-    .select('*, sources(name)')
-    .in('id', article_ids)
+  // Preferred path: the client already generated the report section-by-section
+  // and sends the assembled markdown. Save it directly — no AI call here.
+  let content = providedContent
+  if (!content) {
+    // Fallback single-shot generation (used in mock/local; may exceed Hobby's
+    // 60s limit with a real API key — the UI avoids this path in production).
+    const { data: articles } = await supabase
+      .from('articles')
+      .select('*, sources(name)')
+      .in('id', article_ids)
 
-  if (!articles?.length) return NextResponse.json({ error: 'No articles found' }, { status: 400 })
+    if (!articles?.length) return NextResponse.json({ error: 'No articles found' }, { status: 400 })
 
-  let client = null
-  if (client_id) {
-    const { data: clientData } = await supabase
-      .from('clients')
-      .select('name, context, report_prompt, sector, contratante')
-      .eq('id', client_id)
-      .single()
-    client = clientData
+    let client = null
+    if (client_id) {
+      const { data: clientData } = await supabase
+        .from('clients')
+        .select('name, context, report_prompt, sector, contratante')
+        .eq('id', client_id)
+        .single()
+      client = clientData
+    }
+
+    content = await generateReport(articles as Article[], prompt, metadata, client)
   }
-
-  const content = await generateReport(articles as Article[], prompt, metadata, client)
 
   const { data, error } = await supabase
     .from('reports')

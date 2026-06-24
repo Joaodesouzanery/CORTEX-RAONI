@@ -62,6 +62,19 @@ export const reportCreateSchema = z.object({
   article_ids: z.array(z.string()).min(1, 'Selecione ao menos um artigo'),
   metadata: reportMetadataSchema.optional(),
   client_id: z.string().nullish(),
+  // When provided, the report was generated section-by-section on the client and
+  // is saved as-is (no server-side AI call).
+  content: z.string().optional(),
+})
+
+// One group of the sectioned report generation (Vercel Hobby 60s-safe flow).
+export const reportSectionSchema = z.object({
+  group: z.number().int().min(0),
+  prompt: z.string().default(''),
+  article_ids: z.array(z.string()).min(1, 'Selecione ao menos um artigo'),
+  metadata: reportMetadataSchema.optional(),
+  client_id: z.string().nullish(),
+  prior: z.string().nullish(),
 })
 
 /** Flattens Zod issues into a single human-readable message for API responses. */

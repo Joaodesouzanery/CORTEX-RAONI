@@ -5,9 +5,10 @@ interface Props {
   articles: Article[]
   selected: Set<string>
   onSelect: (id: string) => void
+  scores?: Map<string, number> | null
 }
 
-export default function ArticleListView({ articles, selected, onSelect }: Props) {
+export default function ArticleListView({ articles, selected, onSelect, scores }: Props) {
   const anySelected = selected.size > 0
   return (
     <div>
@@ -18,6 +19,7 @@ export default function ArticleListView({ articles, selected, onSelect }: Props)
           selected={selected.has(article.id)}
           anySelected={anySelected}
           onSelect={onSelect}
+          score={scores?.get(article.id)}
         />
       ))}
     </div>

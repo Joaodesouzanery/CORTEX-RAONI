@@ -1,4 +1,5 @@
 import type { Article } from '@/types'
+import { REPORT_SECTION_GROUPS, type ReportSectionGroup } from '@/lib/report-sections'
 
 async function getAnthropicClient() {
   if (!process.env.ANTHROPIC_API_KEY) return null
@@ -356,6 +357,54 @@ export interface ReportClient {
 
 const DEFAULT_CONTRATANTE = 'CRTIVE LAB DE INOVAÇÃO E TECNOLOGIA LTDA'
 
+const REPORT_MODEL = 'claude-opus-4-8'
+
+// Resolve the parametrized master prompt for a given client/metadata. Generic
+// defaults when no client is selected — avoids forcing the ONS framing.
+function buildSystemPrompt(metadata?: ReportMetadata, client?: ReportClient | null): string {
+  const clienteNome = client?.name || 'a organização cliente'
+  const clienteSetor = client?.sector?.trim() || 'seu setor de atuação'
+  const contratante = client?.contratante?.trim() || DEFAULT_CONTRATANTE
+  const direcionamento =
+    client?.report_prompt?.trim() || 'Seguir a metodologia padrão de inteligência reputacional, sem ênfase setorial pré-definida.'
+
+  return MASTER_SYSTEM_PROMPT
+    .replace(/\{cliente_nome\}/g, clienteNome)
+    .replace(/\{cliente_setor\}/g, clienteSetor)
+    .replace(/\{contratante\}/g, contratante)
+    .replace('{direcionamento_cliente}', direcionamento)
+    .replace('{mês de referência}', metadata?.mes || 'Mês de referência não informado')
+    .replace('{reunioes_presenciais}', String(metadata?.reunioes_presenciais ?? 0))
+    .replace('{reunioes_virtuais}', String(metadata?.reunioes_virtuais ?? 0))
+    .replace('{orientacoes}', String(metadata?.orientacoes ?? 0))
+    .replace('{acoes_imprensa}', String(metadata?.acoes_imprensa ?? 0))
+}
+
+// The shared user message: monthly inputs + client context + the monitored articles.
+function buildInputContext(
+  articles: Article[],
+  userPrompt: string,
+  metadata?: ReportMetadata,
+  client?: ReportClient | null
+): string {
+  const articlesSummary = articles.map((a, i) =>
+    `## Artigo ${i + 1}: ${a.title}\nFonte: ${a.sources?.name || 'Desconhecida'} | Data: ${a.published_at || 'N/A'} | URL: ${a.url}\n\n${a.excerpt || ''}`
+  ).join('\n\n---\n\n')
+
+  return `INPUT DO MÊS:
+Mês de referência: ${metadata?.mes || 'Mês de referência não informado'}
+Reuniões presenciais: ${metadata?.reunioes_presenciais ?? 0}
+Reuniões virtuais: ${metadata?.reunioes_virtuais ?? 0}
+Orientações estratégicas: ${metadata?.orientacoes ?? 0}
+Ações de relacionamento com a imprensa: ${metadata?.acoes_imprensa ?? 0}
+
+${client?.context ? `CONTEXTO DO CLIENTE (${client.name}):\n${client.context}\n\n` : ''}${userPrompt ? `CONTEXTO ADICIONAL DO CONSULTOR:\n${userPrompt}\n\n` : ''}ARTIGOS MONITORADOS NO MÊS (${articles.length} itens):
+
+${articlesSummary}`
+}
+
+// Single-shot generation. Kept for local/non-time-bounded use and mock mode.
+// In production on Vercel Hobby (60s limit) the UI uses generateReportSection.
 export async function generateReport(
   articles: Article[],
   userPrompt: string,
@@ -367,49 +416,56 @@ export async function generateReport(
     return generateMockReport(articles, metadata, client)
   }
 
-  const mes = metadata?.mes || 'Mês de referência não informado'
-  const reunioes_presenciais = metadata?.reunioes_presenciais ?? 0
-  const reunioes_virtuais = metadata?.reunioes_virtuais ?? 0
-  const orientacoes = metadata?.orientacoes ?? 0
-  const acoes_imprensa = metadata?.acoes_imprensa ?? 0
+  const message = await anthropic.messages.create({
+    model: REPORT_MODEL,
+    max_tokens: 16000,
+    system: buildSystemPrompt(metadata, client),
+    messages: [{ role: 'user', content: buildInputContext(articles, userPrompt, metadata, client) }],
+  })
 
-  // Generic defaults when no client is selected — avoids forcing the ONS framing.
-  const clienteNome = client?.name || 'a organização cliente'
-  const clienteSetor = client?.sector?.trim() || 'seu setor de atuação'
-  const contratante = client?.contratante?.trim() || DEFAULT_CONTRATANTE
-  const direcionamento =
-    client?.report_prompt?.trim() || 'Seguir a metodologia padrão de inteligência reputacional, sem ênfase setorial pré-definida.'
+  const textBlock = message.content.find((b) => b.type === 'text')
+  return textBlock && textBlock.type === 'text' ? textBlock.text : ''
+}
 
-  const systemPrompt = MASTER_SYSTEM_PROMPT
-    .replace(/\{cliente_nome\}/g, clienteNome)
-    .replace(/\{cliente_setor\}/g, clienteSetor)
-    .replace(/\{contratante\}/g, contratante)
-    .replace('{direcionamento_cliente}', direcionamento)
-    .replace('{mês de referência}', mes)
-    .replace('{reunioes_presenciais}', String(reunioes_presenciais))
-    .replace('{reunioes_virtuais}', String(reunioes_virtuais))
-    .replace('{orientacoes}', String(orientacoes))
-    .replace('{acoes_imprensa}', String(acoes_imprensa))
+function mockSection(group: ReportSectionGroup): string {
+  const header = group.includeHeader
+    ? '# RELATÓRIO MENSAL DE COMUNICAÇÃO ESTRATÉGICA E GESTÃO DE IMAGEM\n**MODO MOCK — configure ANTHROPIC_API_KEY para geração real**\n\n---\n\n'
+    : ''
+  return `${header}> ⚠️ Trecho de demonstração (MODO MOCK) — ${group.label}.`
+}
 
-  const articlesSummary = articles.map((a, i) =>
-    `## Artigo ${i + 1}: ${a.title}\nFonte: ${a.sources?.name || 'Desconhecida'} | Data: ${a.published_at || 'N/A'} | URL: ${a.url}\n\n${a.excerpt || ''}`
-  ).join('\n\n---\n\n')
+// Generates ONE group of sections. Each call is bounded (~max_tokens) so it fits
+// the serverless time limit; the client stitches the groups together.
+export async function generateReportSection(
+  groupId: number,
+  articles: Article[],
+  userPrompt: string,
+  metadata?: ReportMetadata,
+  client?: ReportClient | null,
+  prior?: string
+): Promise<string> {
+  const group = REPORT_SECTION_GROUPS[groupId]
+  if (!group) throw new Error(`Grupo de seção inválido: ${groupId}`)
 
-  const userMessage = `INPUT DO MÊS:
-Mês de referência: ${mes}
-Reuniões presenciais: ${reunioes_presenciais}
-Reuniões virtuais: ${reunioes_virtuais}
-Orientações estratégicas: ${orientacoes}
-Ações de relacionamento com a imprensa: ${acoes_imprensa}
+  const anthropic = await getAnthropicClient()
+  if (!anthropic) return mockSection(group)
 
-${client?.context ? `CONTEXTO DO CLIENTE (${client.name}):\n${client.context}\n\n` : ''}${userPrompt ? `CONTEXTO ADICIONAL DO CONSULTOR:\n${userPrompt}\n\n` : ''}ARTIGOS MONITORADOS NO MÊS (${articles.length} itens):
+  const headerNote = group.includeHeader
+    ? 'Inclua o título/cabeçalho do relatório (linha "# RELATÓRIO..." e as linhas em negrito) antes da primeira seção.'
+    : 'NÃO repita o título/cabeçalho nem seções anteriores; comece direto na primeira seção solicitada.'
+  const priorNote = prior
+    ? `\n\nRESUMO DAS SEÇÕES JÁ PRODUZIDAS (apenas para coerência; NÃO as repita):\n${prior}`
+    : ''
 
-${articlesSummary}`
+  const userMessage = `${buildInputContext(articles, userPrompt, metadata, client)}
+
+INSTRUÇÃO DE GERAÇÃO PARCIAL:
+Produza AGORA, em markdown, SOMENTE ${group.instruction}, seguindo exatamente a estrutura, profundidade e formatação definidas no system prompt. ${headerNote} Não produza nenhuma outra seção.${priorNote}`
 
   const message = await anthropic.messages.create({
-    model: 'claude-opus-4-8',
-    max_tokens: 16000,
-    system: systemPrompt,
+    model: REPORT_MODEL,
+    max_tokens: 3000,
+    system: buildSystemPrompt(metadata, client),
     messages: [{ role: 'user', content: userMessage }],
   })
 

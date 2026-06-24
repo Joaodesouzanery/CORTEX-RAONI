@@ -1,0 +1,30 @@
+name: Fetch news
+
+# Vercel Hobby crons run at most once/day, so we schedule from GitHub Actions
+# (free, arbitrary frequency) and call the protected fetch endpoint.
+on:
+  schedule:
+    - cron: '0 */6 * * *' # every 6 hours (UTC)
+  workflow_dispatch: {} # allow manual runs from the Actions tab
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger news fetch
+        run: |
+          if [ -z "${APP_URL}" ] || [ -z "${CRON_SECRET}" ]; then
+            echo "Missing APP_URL or CRON_SECRET repo secrets." >&2
+            exit 1
+          fi
+          code=$(curl -sS -o /tmp/out.json -w '%{http_code}' \
+            --max-time 120 \
+            -H "Authorization: Bearer ${CRON_SECRET}" \
+            "${APP_URL%/}/api/articles/fetch")
+          echo "HTTP ${code}"
+          cat /tmp/out.json || true
+          echo
+          test "${code}" = "200"
+        env:
+          APP_URL: ${{ secrets.APP_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}

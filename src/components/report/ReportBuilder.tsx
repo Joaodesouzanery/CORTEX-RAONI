@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import type { Article } from '@/types'
+import { REPORT_SECTION_GROUPS } from '@/lib/report-sections'
 import ReportViewer from './ReportViewer'
 
 interface Props {
@@ -25,6 +26,8 @@ export default function ReportBuilder({ open, onClose, articles, onReportGenerat
   const [acoesImprensa, setAcoesImprensa] = useState('')
   const [prompt, setPrompt] = useState('')
   const [loading, setLoading] = useState(false)
+  const [progress, setProgress] = useState<{ done: number; total: number; label: string } | null>(null)
+  const [error, setError] = useState('')
   const [report, setReport] = useState<{ id: string; content: string } | null>(null)
 
   function reset() {
@@ -35,33 +38,85 @@ export default function ReportBuilder({ open, onClose, articles, onReportGenerat
     setOrientacoes('')
     setAcoesImprensa('')
     setPrompt('')
+    setError('')
+    setProgress(null)
+  }
+
+  // Generate one section group, with a per-call timeout (Hobby caps at 60s) and
+  // one retry on failure/timeout.
+  async function postSection(
+    basePayload: Record<string, unknown>,
+    groupId: number,
+    prior: string | undefined,
+    attempt = 1
+  ): Promise<string> {
+    const controller = new AbortController()
+    const timer = setTimeout(() => controller.abort(), 75000)
+    try {
+      const res = await fetch('/api/reports/section', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...basePayload, group: groupId, prior: prior ?? null }),
+        signal: controller.signal,
+      })
+      const data = await res.json().catch(() => null)
+      if (!res.ok) throw new Error(data?.error || `Falha na seção ${groupId + 1}`)
+      if (typeof data?.markdown !== 'string') throw new Error(`Resposta inválida na seção ${groupId + 1}`)
+      return data.markdown
+    } catch (e) {
+      if (attempt < 2) return postSection(basePayload, groupId, prior, attempt + 1)
+      throw e
+    } finally {
+      clearTimeout(timer)
+    }
   }
 
   async function generate() {
     if (!mes.trim() || articles.length === 0) return
     setLoading(true)
+    setError('')
+
+    const basePayload = {
+      prompt,
+      article_ids: articles.map((a) => a.id),
+      client_id: clientId || null,
+      metadata: {
+        mes: mes.trim(),
+        reunioes_presenciais: parseInt(reunioesPres) || 0,
+        reunioes_virtuais: parseInt(reunioesVirt) || 0,
+        orientacoes: parseInt(orientacoes) || 0,
+        acoes_imprensa: parseInt(acoesImprensa) || 0,
+      },
+    }
+
     try {
+      // Generate the report section group by section group so each request fits
+      // the serverless time limit, showing real progress.
+      const parts: string[] = []
+      for (let i = 0; i < REPORT_SECTION_GROUPS.length; i++) {
+        const group = REPORT_SECTION_GROUPS[i]
+        setProgress({ done: i, total: REPORT_SECTION_GROUPS.length, label: group.label })
+        const prior = parts.join('\n\n').slice(-3000) || undefined
+        const md = await postSection(basePayload, group.id, prior)
+        parts.push(md.trim())
+      }
+
+      setProgress({ done: REPORT_SECTION_GROUPS.length, total: REPORT_SECTION_GROUPS.length, label: 'Salvando' })
+      const content = parts.join('\n\n')
       const res = await fetch('/api/reports', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          prompt,
-          article_ids: articles.map((a) => a.id),
-          client_id: clientId || null,
-          metadata: {
-            mes: mes.trim(),
-            reunioes_presenciais: parseInt(reunioesPres) || 0,
-            reunioes_virtuais: parseInt(reunioesVirt) || 0,
-            orientacoes: parseInt(orientacoes) || 0,
-            acoes_imprensa: parseInt(acoesImprensa) || 0,
-          },
-        }),
+        body: JSON.stringify({ ...basePayload, content }),
       })
-      const data = await res.json()
+      const data = await res.json().catch(() => null)
+      if (!res.ok) throw new Error(data?.error || 'Falha ao salvar o relatório')
       setReport(data)
       onReportGenerated()
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Erro ao gerar relatório')
     } finally {
       setLoading(false)
+      setProgress(null)
     }
   }
 
@@ -178,13 +233,26 @@ export default function ReportBuilder({ open, onClose, articles, onReportGenerat
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
                   </svg>
-                  Gerando relatório... (pode levar 1-3 minutos)
+                  {progress
+                    ? `Gerando ${Math.min(progress.done + 1, progress.total)}/${progress.total} — ${progress.label}…`
+                    : 'Gerando relatório…'}
                 </span>
               ) : (
                 'Gerar Relatório com IA'
               )}
             </Button>
-            {!mes.trim() && (
+            {loading && progress && (
+              <div className="h-1 w-full bg-gray-100 overflow-hidden -mt-2">
+                <div
+                  className="h-full bg-black transition-all"
+                  style={{ width: `${Math.round((progress.done / progress.total) * 100)}%` }}
+                />
+              </div>
+            )}
+            {error && (
+              <p className="text-xs text-red-600 text-center -mt-2">{error}</p>
+            )}
+            {!mes.trim() && !loading && (
               <p className="text-xs text-red-500 text-center -mt-3">* Mês de referência é obrigatório</p>
             )}
           </div>
