@@ -16,9 +16,24 @@ interface Props {
   onReportGenerated: () => void
   clientId?: string | null
   clientName?: string | null
+  contratante?: string | null
 }
 
-export default function ReportBuilder({ open, onClose, articles, onReportGenerated, clientId, clientName }: Props) {
+// Build section 10 (evidence base) deterministically from the selected articles
+// so every monitored article is always listed — no reliance on the model to
+// enumerate (which could truncate with many articles).
+function buildEvidenceSection(articles: Article[]): string {
+  const lines = articles
+    .map((a, i) => {
+      const veiculo = a.publisher || a.sources?.name || 'Desconhecida'
+      const data = a.published_at ? new Date(a.published_at).toLocaleDateString('pt-BR') : ''
+      return `${i + 1}. **${veiculo}** — ${a.title}${data ? ` (${data})` : ''}`
+    })
+    .join('\n')
+  return `## 10. BASE QUALIFICADA DE EVIDÊNCIAS MONITORADAS NO MÊS\n\n${lines}`
+}
+
+export default function ReportBuilder({ open, onClose, articles, onReportGenerated, clientId, clientName, contratante }: Props) {
   const [mes, setMes] = useState('')
   const [reunioesPres, setReunioesPres] = useState('')
   const [reunioesVirt, setReunioesVirt] = useState('')
@@ -102,7 +117,14 @@ export default function ReportBuilder({ open, onClose, articles, onReportGenerat
       }
 
       setProgress({ done: REPORT_SECTION_GROUPS.length, total: REPORT_SECTION_GROUPS.length, label: 'Salvando' })
-      const content = parts.join('\n\n')
+
+      // Append the deterministic evidence base (section 10) + closing footer.
+      const today = new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })
+      const footer = `*${today}. Suporte Estratégico Prestado por: ${contratante?.trim() || 'CRTIVE LAB DE INOVAÇÃO E TECNOLOGIA LTDA'}*`
+      const content = [...parts, buildEvidenceSection(articles), '---', footer]
+        .join('\n\n')
+        .replace(/\n{3,}/g, '\n\n')
+
       const res = await fetch('/api/reports', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -266,6 +288,11 @@ export default function ReportBuilder({ open, onClose, articles, onReportGenerat
                 <Button variant="outline" size="sm">Ver página completa ↗</Button>
               </a>
             </div>
+            {report.content.includes('MODO MOCK') && (
+              <div className="mb-4 border border-amber-300 bg-amber-50 text-amber-800 text-sm px-3 py-2">
+                ⚠️ Relatório de demonstração (modo mock). Configure a variável <strong>ANTHROPIC_API_KEY</strong> no ambiente para gerar com IA real.
+              </div>
+            )}
             <ReportViewer content={report.content} />
           </div>
         )}

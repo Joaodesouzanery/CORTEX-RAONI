@@ -357,7 +357,10 @@ export interface ReportClient {
 
 const DEFAULT_CONTRATANTE = 'CRTIVE LAB DE INOVAÇÃO E TECNOLOGIA LTDA'
 
+// Single-shot (mock/local) uses Opus. Sectioned generation uses the faster
+// Sonnet so each section finishes well under Vercel Hobby's 60s function limit.
 const REPORT_MODEL = 'claude-opus-4-8'
+const SECTION_MODEL = 'claude-sonnet-4-6'
 
 // Resolve the parametrized master prompt for a given client/metadata. Generic
 // defaults when no client is selected — avoids forcing the ONS framing.
@@ -388,7 +391,7 @@ function buildInputContext(
   client?: ReportClient | null
 ): string {
   const articlesSummary = articles.map((a, i) =>
-    `## Artigo ${i + 1}: ${a.title}\nFonte: ${a.sources?.name || 'Desconhecida'} | Data: ${a.published_at || 'N/A'} | URL: ${a.url}\n\n${a.excerpt || ''}`
+    `## Artigo ${i + 1}: ${a.title}\nFonte: ${a.publisher || a.sources?.name || 'Desconhecida'} | Data: ${a.published_at || 'N/A'} | URL: ${a.url}\n\n${a.excerpt || ''}`
   ).join('\n\n---\n\n')
 
   return `INPUT DO MÊS:
@@ -463,8 +466,8 @@ INSTRUÇÃO DE GERAÇÃO PARCIAL:
 Produza AGORA, em markdown, SOMENTE ${group.instruction}, seguindo exatamente a estrutura, profundidade e formatação definidas no system prompt. ${headerNote} Não produza nenhuma outra seção.${priorNote}`
 
   const message = await anthropic.messages.create({
-    model: REPORT_MODEL,
-    max_tokens: 3000,
+    model: SECTION_MODEL,
+    max_tokens: 4000,
     system: buildSystemPrompt(metadata, client),
     messages: [{ role: 'user', content: userMessage }],
   })

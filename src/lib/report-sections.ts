@@ -22,5 +22,5 @@ export const REPORT_SECTION_GROUPS: ReportSectionGroup[] = [
   { id: 3, label: 'Análise Temática', includeHeader: false, instruction: 'a seção "## 4. ANÁLISE TEMÁTICA APROFUNDADA"' },
   { id: 4, label: 'Riscos e Oportunidades', includeHeader: false, instruction: 'as seções "## 5. RISCOS REPUTACIONAIS PRIORITÁRIOS" e "## 6. OPORTUNIDADES DE POSICIONAMENTO INSTITUCIONAL"' },
   { id: 5, label: 'Recomendações e Cenários', includeHeader: false, instruction: 'as seções "## 7. RECOMENDAÇÕES EXECUTIVAS" e "## 8. CENÁRIOS PROSPECTIVOS"' },
-  { id: 6, label: 'Demonstração e Evidências', includeHeader: false, instruction: 'as seções "## 9. DEMONSTRAÇÃO DOS SERVIÇOS" e "## 10. BASE QUALIFICADA DE EVIDÊNCIAS MONITORADAS NO MÊS"' },
+  { id: 6, label: 'Demonstração dos Serviços', includeHeader: false, instruction: 'APENAS a seção "## 9. DEMONSTRAÇÃO DOS SERVIÇOS". NÃO produza a seção 10 (Base de Evidências) nem o rodapé final — eles são anexados automaticamente pelo sistema' },
 ]

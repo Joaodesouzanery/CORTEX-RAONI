@@ -23,7 +23,7 @@ export default function ArticleCard({ article, selected, onSelect, score }: Prop
               ★ {score}
             </span>
           )}
-          {article.sources?.name}{article.published_at ? `, ${formatDate(article.published_at)}` : ''}
+          {article.publisher || article.sources?.name}{article.published_at ? `, ${formatDate(article.published_at)}` : ''}
         </span>
         {/* Checkbox */}
         <div

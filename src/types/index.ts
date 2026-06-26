@@ -17,6 +17,7 @@ export interface Article {
   content?: string | null
   published_at: string | null
   fetched_at: string
+  publisher?: string | null
   sources?: { name: string }
 }
 

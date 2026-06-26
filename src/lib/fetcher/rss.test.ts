@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { decodeHtmlEntities, extractFirstImage, getMediaUrl } from './rss'
+import { decodeHtmlEntities, extractFirstImage, getMediaUrl, getPublisher, stripPublisherSuffix } from './rss'
 
 describe('decodeHtmlEntities', () => {
   it('decodes named PT-BR accent entities', () => {
@@ -52,6 +52,34 @@ describe('extractFirstImage', () => {
   it('falls back to a generic src when no known extension is present', () => {
     const html = '<img src="https://cdn.site.com/image?id=42">'
     expect(extractFirstImage(html)).toBe('https://cdn.site.com/image?id=42')
+  })
+})
+
+describe('getPublisher', () => {
+  it('reads the outlet from the <source> object form', () => {
+    expect(getPublisher({ sourceTag: { _: 'Folha de S.Paulo', $: { url: 'x' } } })).toBe('Folha de S.Paulo')
+  })
+  it('reads the outlet from the string form', () => {
+    expect(getPublisher({ sourceTag: 'Poder360' })).toBe('Poder360')
+  })
+  it('returns null when absent', () => {
+    expect(getPublisher({})).toBeNull()
+    expect(getPublisher({ sourceTag: '   ' })).toBeNull()
+  })
+})
+
+describe('stripPublisherSuffix', () => {
+  it('removes a trailing " - Outlet" matching the publisher', () => {
+    expect(stripPublisherSuffix('China veta terras raras - Folha de S.Paulo', 'Folha de S.Paulo')).toBe(
+      'China veta terras raras'
+    )
+  })
+  it('leaves the title untouched when there is no matching suffix', () => {
+    expect(stripPublisherSuffix('Título sem veículo', 'Folha de S.Paulo')).toBe('Título sem veículo')
+    expect(stripPublisherSuffix('Título - Outro', 'Folha de S.Paulo')).toBe('Título - Outro')
+  })
+  it('is a no-op without a publisher', () => {
+    expect(stripPublisherSuffix('Qualquer título - X', null)).toBe('Qualquer título - X')
   })
 })
 

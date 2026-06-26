@@ -23,6 +23,7 @@ export async function scrapeOpenGraph(pageUrl: string): Promise<FetchedArticle |
       excerpt: get('og:description'),
       content: null,
       published_at: get('article:published_time'),
+      publisher: get('og:site_name'),
     }
   } catch {
     return null

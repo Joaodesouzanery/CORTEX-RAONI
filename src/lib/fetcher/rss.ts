@@ -9,6 +9,8 @@ const parser = new Parser({
       ['content:encoded', 'content:encoded'],
       // Some feeds (Folha, Poder360) embed HTML with images in <description>
       ['description', 'rawDescription'],
+      // Google News exposes the real outlet in <source>
+      ['source', 'sourceTag'],
     ],
   },
 })
@@ -20,6 +22,22 @@ export interface FetchedArticle {
   excerpt: string | null
   content: string | null
   published_at: string | null
+  publisher: string | null
+}
+
+// Google News titles are "Headline - Outlet"; the outlet is also in <source>.
+// Returns the real outlet name (or null) for cleaner citations.
+export function getPublisher(item: any): string | null {
+  const src = item?.sourceTag
+  const name = (typeof src === 'string' ? src : src?._ || src?.name)?.trim()
+  return name || null
+}
+
+// Strip a trailing " - Outlet" suffix that Google News appends to titles.
+export function stripPublisherSuffix(title: string, publisher: string | null): string {
+  if (!publisher) return title
+  const suffix = ` - ${publisher}`
+  return title.endsWith(suffix) ? title.slice(0, -suffix.length).trim() : title
 }
 
 // Fetch RSS as raw bytes, detect charset from XML declaration, decode correctly,
@@ -128,24 +146,33 @@ export async function fetchRSS(feedUrl: string): Promise<FetchedArticle[]> {
     const rawExcerpt = item.contentSnippet?.replace(/<[^>]+>/g, '').trim().slice(0, 300) || null
     const excerpt = rawExcerpt ? decodeHtmlEntities(rawExcerpt) : null
 
+    const publisher = getPublisher(item)
+    const title = stripPublisherSuffix(decodeHtmlEntities(item.title?.trim() || ''), publisher)
+
     return {
-      title: decodeHtmlEntities(item.title?.trim() || ''),
+      title,
       url: item.link || '',
       image_url: imageUrl,
       excerpt,
       content: contentEncoded || item.content || null,
       published_at: item.isoDate || null,
+      publisher,
     }
   }).filter((a) => a.title && a.url)
 
-  // OG image fallback for articles without any image from RSS (up to 10 per feed)
-  const missing = articles.filter((a) => !a.image_url)
-  if (missing.length > 0) {
-    await Promise.allSettled(
-      missing.slice(0, 15).map(async (a) => {
-        a.image_url = await fetchOgImage(a.url)
-      })
-    )
+  // OG image fallback for articles without any image from RSS (up to 15 per feed).
+  // Skip Google News items: their links are redirects, so OG fetching is useless
+  // and just adds latency.
+  const isGoogleNews = feedUrl.includes('news.google.com')
+  if (!isGoogleNews) {
+    const missing = articles.filter((a) => !a.image_url)
+    if (missing.length > 0) {
+      await Promise.allSettled(
+        missing.slice(0, 15).map(async (a) => {
+          a.image_url = await fetchOgImage(a.url)
+        })
+      )
+    }
   }
 
   return articles

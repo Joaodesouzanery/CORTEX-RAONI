@@ -297,6 +297,7 @@ export default function NewsPage() {
         onReportGenerated={() => {}}
         clientId={activeClient?.id}
         clientName={activeClient?.name}
+        contratante={activeClient?.contratante}
       />
     </div>
   )

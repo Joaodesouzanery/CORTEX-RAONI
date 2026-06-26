@@ -47,7 +47,7 @@ export default function ArticleListItem({ article, selected, onSelect, score }: 
               ★ {score}
             </span>
           )}
-          {article.sources?.name}{article.published_at ? `, ${formatDate(article.published_at)}` : ''}
+          {article.publisher || article.sources?.name}{article.published_at ? `, ${formatDate(article.published_at)}` : ''}
         </span>
         <h3 className="font-bold text-sm leading-snug line-clamp-2 mb-1">{article.title}</h3>
         {article.excerpt && (
