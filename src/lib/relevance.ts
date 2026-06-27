@@ -60,6 +60,26 @@ export function classifyKeyword(raw: string): KeywordKind {
   return 'word'
 }
 
+/**
+ * Union a client's keywords with its synonym terms. `synonyms` is free text with
+ * one group per line, terms comma-separated (e.g. "apagão, blecaute"). Every term
+ * across all groups is added to the match set (OR matching), broadening recall
+ * beyond the morphological variations the matcher already handles.
+ */
+export function expandTerms(
+  keywords: string[] | null | undefined,
+  synonyms: string | null | undefined
+): string[] {
+  const terms = [...(keywords || [])]
+  if (synonyms) {
+    for (const part of synonyms.split(/[\n,;]+/)) {
+      const t = part.trim()
+      if (t) terms.push(t)
+    }
+  }
+  return terms
+}
+
 /** Convert the client's raw keywords (TEXT[]) into ParsedKeyword[]. Drops empties. */
 export function parseKeywords(raw: string[] | null | undefined): ParsedKeyword[] {
   if (!raw?.length) return []

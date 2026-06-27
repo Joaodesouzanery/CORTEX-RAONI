@@ -8,7 +8,7 @@ import SourceFilterBar from './SourceFilterBar'
 import ArticleCardGrid from './ArticleCardGrid'
 import ArticleListView from './ArticleListView'
 import ReportBuilder from '@/components/report/ReportBuilder'
-import { parseKeywords, isRelevant, relevanceScore } from '@/lib/relevance'
+import { parseKeywords, isRelevant, relevanceScore, expandTerms } from '@/lib/relevance'
 import type { Article, Client } from '@/types'
 import { RefreshCw, FileText, CheckSquare } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -60,7 +60,10 @@ export default function NewsPage() {
     return result
   }, [periodFiltered, dateFrom, dateTo])
 
-  const parsedKws = useMemo(() => parseKeywords(activeClient?.keywords), [activeClient])
+  const parsedKws = useMemo(
+    () => parseKeywords(expandTerms(activeClient?.keywords, activeClient?.synonyms)),
+    [activeClient]
+  )
 
   const clientFiltered = useMemo(() => {
     if (!parsedKws.length) return dateFiltered
@@ -83,8 +86,25 @@ export default function NewsPage() {
 
   useEffect(() => {
     loadArticles()
-    fetch('/api/clients').then(r => r.json()).then(d => setClients(Array.isArray(d) ? d : []))
+    fetch('/api/clients').then(r => r.json()).then(d => {
+      const list: Client[] = Array.isArray(d) ? d : []
+      setClients(list)
+      // Pre-select a client coming from the dashboard (/news?client=ID).
+      const cid = new URLSearchParams(window.location.search).get('client')
+      if (cid) {
+        const c = list.find((x) => x.id === cid)
+        if (c) setActiveClient(c)
+      }
+    })
   }, [])
+
+  // Auto-select the client's relevant articles when a client is picked, so the
+  // user can jump straight to generating a report.
+  useEffect(() => {
+    if (activeClient) selectAll(filtered.map((a) => a.id))
+    // Only react to the chosen client (not to every filter change).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeClient?.id])
 
   async function loadArticles() {
     setLoading(true)

@@ -6,6 +6,7 @@ import {
   matchKeyword,
   isRelevant,
   relevanceScore,
+  expandTerms,
 } from './relevance'
 
 describe('normalizeText', () => {
@@ -100,5 +101,23 @@ describe('relevanceScore', () => {
   })
   it('counts distinct matching keywords', () => {
     expect(relevanceScore(kws, { title: 'energia e transmissão', excerpt: null })).toBe(4)
+  })
+})
+
+describe('expandTerms', () => {
+  it('unions keywords with synonym terms (line + comma separated)', () => {
+    const out = expandTerms(['apagão'], 'apagão, blecaute, desligamento\ndragagem, desassoreamento')
+    expect(out).toContain('apagão')
+    expect(out).toContain('blecaute')
+    expect(out).toContain('desligamento')
+    expect(out).toContain('desassoreamento')
+  })
+  it('makes a synonym matchable as a keyword', () => {
+    const kws = parseKeywords(expandTerms(['apagão'], 'apagão, blecaute'))
+    expect(isRelevant(kws, { title: 'Houve um blecaute no Sul', excerpt: null })).toBe(true)
+  })
+  it('handles null/empty synonyms', () => {
+    expect(expandTerms(['energia'], null)).toEqual(['energia'])
+    expect(expandTerms(null, '  ')).toEqual([])
   })
 })

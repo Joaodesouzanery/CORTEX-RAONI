@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils'
 export default function Navbar() {
   const pathname = usePathname()
   const links = [
+    { href: '/dashboard', label: 'Painel' },
     { href: '/news', label: 'Notícias' },
     { href: '/sources', label: 'Fontes' },
     { href: '/clients', label: 'Clientes' },

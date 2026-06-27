@@ -42,6 +42,7 @@ export const clientCreateSchema = z.object({
   sector: z.string().nullish(),
   contratante: z.string().nullish(),
   keywords: z.array(z.string()).nullish(),
+  synonyms: z.string().nullish(),
   logo_url: z.string().nullish(),
 })
 

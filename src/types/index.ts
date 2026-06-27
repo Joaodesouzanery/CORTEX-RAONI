@@ -40,6 +40,7 @@ export interface Client {
   sector: string | null
   contratante: string | null
   keywords: string[] | null
+  synonyms: string | null
   logo_url: string | null
   created_at: string
 }

@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import type { Article } from '@/types'
-import { REPORT_SECTION_GROUPS } from '@/lib/report-sections'
+import { runSectionedReport } from '@/lib/report-runner'
 import ReportViewer from './ReportViewer'
 
 interface Props {
@@ -17,20 +17,6 @@ interface Props {
   clientId?: string | null
   clientName?: string | null
   contratante?: string | null
-}
-
-// Build section 10 (evidence base) deterministically from the selected articles
-// so every monitored article is always listed — no reliance on the model to
-// enumerate (which could truncate with many articles).
-function buildEvidenceSection(articles: Article[]): string {
-  const lines = articles
-    .map((a, i) => {
-      const veiculo = a.publisher || a.sources?.name || 'Desconhecida'
-      const data = a.published_at ? new Date(a.published_at).toLocaleDateString('pt-BR') : ''
-      return `${i + 1}. **${veiculo}** — ${a.title}${data ? ` (${data})` : ''}`
-    })
-    .join('\n')
-  return `## 10. BASE QUALIFICADA DE EVIDÊNCIAS MONITORADAS NO MÊS\n\n${lines}`
 }
 
 export default function ReportBuilder({ open, onClose, articles, onReportGenerated, clientId, clientName, contratante }: Props) {
@@ -57,35 +43,6 @@ export default function ReportBuilder({ open, onClose, articles, onReportGenerat
     setProgress(null)
   }
 
-  // Generate one section group, with a per-call timeout (Hobby caps at 60s) and
-  // one retry on failure/timeout.
-  async function postSection(
-    basePayload: Record<string, unknown>,
-    groupId: number,
-    prior: string | undefined,
-    attempt = 1
-  ): Promise<string> {
-    const controller = new AbortController()
-    const timer = setTimeout(() => controller.abort(), 75000)
-    try {
-      const res = await fetch('/api/reports/section', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...basePayload, group: groupId, prior: prior ?? null }),
-        signal: controller.signal,
-      })
-      const data = await res.json().catch(() => null)
-      if (!res.ok) throw new Error(data?.error || `Falha na seção ${groupId + 1}`)
-      if (typeof data?.markdown !== 'string') throw new Error(`Resposta inválida na seção ${groupId + 1}`)
-      return data.markdown
-    } catch (e) {
-      if (attempt < 2) return postSection(basePayload, groupId, prior, attempt + 1)
-      throw e
-    } finally {
-      clearTimeout(timer)
-    }
-  }
-
   async function generate() {
     if (!mes.trim() || articles.length === 0) return
     setLoading(true)
@@ -105,25 +62,12 @@ export default function ReportBuilder({ open, onClose, articles, onReportGenerat
     }
 
     try {
-      // Generate the report section group by section group so each request fits
-      // the serverless time limit, showing real progress.
-      const parts: string[] = []
-      for (let i = 0; i < REPORT_SECTION_GROUPS.length; i++) {
-        const group = REPORT_SECTION_GROUPS[i]
-        setProgress({ done: i, total: REPORT_SECTION_GROUPS.length, label: group.label })
-        const prior = parts.join('\n\n').slice(-3000) || undefined
-        const md = await postSection(basePayload, group.id, prior)
-        parts.push(md.trim())
-      }
-
-      setProgress({ done: REPORT_SECTION_GROUPS.length, total: REPORT_SECTION_GROUPS.length, label: 'Salvando' })
-
-      // Append the deterministic evidence base (section 10) + closing footer.
-      const today = new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })
-      const footer = `*${today}. Suporte Estratégico Prestado por: ${contratante?.trim() || 'CRTIVE LAB DE INOVAÇÃO E TECNOLOGIA LTDA'}*`
-      const content = [...parts, buildEvidenceSection(articles), '---', footer]
-        .join('\n\n')
-        .replace(/\n{3,}/g, '\n\n')
+      const content = await runSectionedReport({
+        basePayload,
+        articles,
+        contratante,
+        onProgress: (done, total, label) => setProgress({ done, total, label }),
+      })
 
       const res = await fetch('/api/reports', {
         method: 'POST',

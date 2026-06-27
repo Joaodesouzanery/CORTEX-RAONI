@@ -21,6 +21,7 @@ export default function ClientForm({ client, open, onClose, onSaved }: Props) {
   const [context, setContext] = useState(client?.context || '')
   const [reportPrompt, setReportPrompt] = useState(client?.report_prompt || '')
   const [keywords, setKeywords] = useState<string[]>(client?.keywords || [])
+  const [synonyms, setSynonyms] = useState(client?.synonyms || '')
   const [kwInput, setKwInput] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -55,6 +56,7 @@ export default function ClientForm({ client, open, onClose, onSaved }: Props) {
           context: context.trim() || null,
           report_prompt: reportPrompt.trim() || null,
           keywords: keywords.length ? keywords : null,
+          synonyms: synonyms.trim() || null,
         }),
       })
       const data = await res.json()
@@ -160,6 +162,21 @@ export default function ClientForm({ client, open, onClose, onSaved }: Props) {
                 ))}
               </div>
             )}
+          </div>
+
+          <div>
+            <Label htmlFor="synonyms">Termos equivalentes / sinônimos</Label>
+            <p className="text-xs text-gray-500 mb-1">
+              Um grupo por linha, separados por vírgula. Todos os termos também são usados para filtrar (ex: <em>apagão, blecaute, desligamento</em>).
+            </p>
+            <Textarea
+              id="synonyms"
+              value={synonyms}
+              onChange={(e) => setSynonyms(e.target.value)}
+              placeholder={'apagão, blecaute, desligamento\ndragagem, desassoreamento'}
+              rows={3}
+              className="mt-1 resize-none"
+            />
           </div>
 
           <div>
