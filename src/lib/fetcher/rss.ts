@@ -160,7 +160,7 @@ export async function fetchRSS(feedUrl: string): Promise<FetchedArticle[]> {
     }
   }).filter((a) => a.title?.trim() && a.url?.trim())
 
-  // OG image fallback for articles without any image from RSS (up to 15 per feed).
+  // OG image fallback for articles without any image from RSS (up to 30 per feed).
   // Skip Google News items: their links are redirects, so OG fetching is useless
   // and just adds latency.
   const isGoogleNews = feedUrl.includes('news.google.com')
@@ -168,7 +168,7 @@ export async function fetchRSS(feedUrl: string): Promise<FetchedArticle[]> {
     const missing = articles.filter((a) => !a.image_url)
     if (missing.length > 0) {
       await Promise.allSettled(
-        missing.slice(0, 15).map(async (a) => {
+        missing.slice(0, 30).map(async (a) => {
           a.image_url = await fetchOgImage(a.url)
         })
       )

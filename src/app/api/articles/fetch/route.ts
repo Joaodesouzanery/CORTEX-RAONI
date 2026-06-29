@@ -8,6 +8,9 @@ export const maxDuration = 60
 // Cap how many sources are fetched at once so the function fits the 60s limit
 // even with ~23 sources (each opening sub-connections).
 const FETCH_CONCURRENCY = 6
+// Only upsert the most recent N per feed (Google News returns 50-100) to bound
+// the work per run and stay under the 60s limit.
+const MAX_PER_FEED = 40
 // Drop articles older than this so the table stays bounded (runs every fetch).
 const RETENTION_DAYS = 90
 
@@ -24,7 +27,7 @@ async function runFetch() {
   if (!sources?.length) return NextResponse.json({ fetched: 0, sources: [] })
 
   const fetchOne = async (source: { id: string; name: string; url: string; type: 'rss' | 'scrape' }) => {
-    const articles = await fetchWithTimeout(source.url, source.type)
+    const articles = (await fetchWithTimeout(source.url, source.type)).slice(0, MAX_PER_FEED)
     const upserts = await Promise.allSettled(
       articles.map((article) =>
         supabase.from('articles').upsert(
@@ -35,11 +38,21 @@ async function runFetch() {
     )
     // Count only upserts that resolved without a Supabase error.
     const count = upserts.filter((r) => r.status === 'fulfilled' && !r.value?.error).length
-    return { source: source.name, fetched: count }
+    // Surface the real DB error when nothing was written (e.g. a missing column),
+    // so the UI diagnostic shows the cause instead of a silent "0 artigos".
+    let dbError: string | undefined
+    if (count === 0 && articles.length > 0) {
+      const firstFailed = upserts.find((r) => r.status === 'fulfilled' && r.value?.error)
+      dbError =
+        (firstFailed && firstFailed.status === 'fulfilled' ? firstFailed.value.error?.message : undefined) ||
+        (upserts.find((r) => r.status === 'rejected') as PromiseRejectedResult | undefined)?.reason?.message
+      if (dbError) console.error(`[fetch] upsert falhou em "${source.name}": ${dbError}`)
+    }
+    return { source: source.name, fetched: count, ...(dbError ? { error: dbError } : {}) }
   }
 
   // Fetch in batches to cap concurrency (total time ≈ slowest batch chain).
-  const sourceResults: PromiseSettledResult<{ source: string; fetched: number }>[] = []
+  const sourceResults: PromiseSettledResult<{ source: string; fetched: number; error?: string }>[] = []
   for (let i = 0; i < sources.length; i += FETCH_CONCURRENCY) {
     const batch = sources.slice(i, i + FETCH_CONCURRENCY)
     sourceResults.push(...(await Promise.allSettled(batch.map(fetchOne))))

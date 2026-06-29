@@ -13,13 +13,19 @@ jobs:
     steps:
       - name: Trigger news fetch
         run: |
-          if [ -z "${APP_URL}" ] || [ -z "${CRON_SECRET}" ]; then
-            echo "Missing APP_URL or CRON_SECRET repo secrets." >&2
+          if [ -z "${APP_URL}" ]; then
+            echo "Missing APP_URL repo secret (e.g. https://cortex-raoni.vercel.app)." >&2
             exit 1
+          fi
+          # Send the bearer header only if CRON_SECRET is configured (the endpoint
+          # is open otherwise).
+          auth=()
+          if [ -n "${CRON_SECRET}" ]; then
+            auth=(-H "Authorization: Bearer ${CRON_SECRET}")
           fi
           code=$(curl -sS -o /tmp/out.json -w '%{http_code}' \
             --max-time 120 \
-            -H "Authorization: Bearer ${CRON_SECRET}" \
+            "${auth[@]}" \
             "${APP_URL%/}/api/articles/fetch")
           echo "HTTP ${code}"
           cat /tmp/out.json || true
