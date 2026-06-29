@@ -1,5 +1,5 @@
 import Parser from 'rss-parser'
-import { BROWSER_USER_AGENT, CRAWLER_USER_AGENT, FETCH_TIMEOUTS } from './constants'
+import { BROWSER_USER_AGENT, FETCH_TIMEOUTS } from './constants'
 
 const parser = new Parser({
   customFields: {
@@ -102,23 +102,42 @@ export function getMediaUrl(field: any): string | null {
   return item?.$?.url || item?.url || item?._ || null
 }
 
-async function fetchOgImage(articleUrl: string): Promise<string | null> {
+// Fetch the article page and extract its lead image. Follows redirects (so it
+// works for Google News redirect links, landing on the real publisher page) and
+// tries several metadata tags before falling back to the first in-content image.
+export async function fetchOgImage(articleUrl: string): Promise<string | null> {
   try {
     const res = await fetch(articleUrl, {
-      headers: { 'User-Agent': CRAWLER_USER_AGENT },
+      headers: { 'User-Agent': BROWSER_USER_AGENT },
+      redirect: 'follow',
       signal: AbortSignal.timeout(FETCH_TIMEOUTS.ogImage),
     })
+    if (!res.ok) return null
+    const finalUrl = res.url || articleUrl // after any redirects (Google News → outlet)
     const html = await res.text()
     const { load } = await import('cheerio')
     const $ = load(html)
-    const og =
+
+    const candidate =
       $('meta[property="og:image"]').attr('content') ||
-      $('meta[name="twitter:image"]').attr('content')
-    if (!og) return null
-    if (og.startsWith('http')) return og
-    // Resolve relative URLs
-    const base = new URL(articleUrl)
-    return new URL(og, base.origin).href
+      $('meta[property="og:image:url"]').attr('content') ||
+      $('meta[property="og:image:secure_url"]').attr('content') ||
+      $('meta[name="twitter:image"]').attr('content') ||
+      $('meta[name="twitter:image:src"]').attr('content') ||
+      $('link[rel="image_src"]').attr('href') ||
+      $('meta[itemprop="image"]').attr('content') ||
+      extractFirstImage($.html()) ||
+      null
+    if (!candidate) return null
+
+    let img = candidate.trim()
+    if (img.startsWith('//')) img = 'https:' + img
+    if (img.startsWith('http')) return img
+    try {
+      return new URL(img, finalUrl).href
+    } catch {
+      return null
+    }
   } catch {
     return null
   }

@@ -19,6 +19,20 @@ interface FetchSourceResult {
   error?: string
 }
 
+// Generalist firehose feeds: their articles only show in the default "relevant"
+// view when they match a client's terms. Every other (thematic/specialized) feed
+// is on-topic by construction and always passes.
+const GENERAL_SOURCES = new Set([
+  'Carta Capital',
+  'Metrópoles',
+  'Poder360',
+  'Folha de S.Paulo',
+  'Brasil Journal',
+  'Exame',
+  'G1',
+  'Google News — Brasil (manchetes)',
+])
+
 export default function NewsPage() {
   const { mode, toggle } = useViewMode()
   const { selected, toggle: toggleSelect, selectAll, clearAll } = useArticleSelection()
@@ -34,6 +48,7 @@ export default function NewsPage() {
   const [showDiagnostics, setShowDiagnostics] = useState(false)
   const [clients, setClients] = useState<Client[]>([])
   const [activeClient, setActiveClient] = useState<Client | null>(null)
+  const [showAll, setShowAll] = useState(false)
 
   const sources = useMemo(
     () => Array.from(new Set(articles.map((a) => a.sources?.name).filter(Boolean))) as string[],
@@ -65,10 +80,30 @@ export default function NewsPage() {
     [activeClient]
   )
 
+  // Union of every client's terms — drives the default "relevant to the portfolio"
+  // view when no single client is selected.
+  const allClientsParsed = useMemo(() => {
+    const terms: string[] = []
+    for (const c of clients) terms.push(...expandTerms(c.keywords, c.synonyms))
+    return parseKeywords(terms)
+  }, [clients])
+
   const clientFiltered = useMemo(() => {
-    if (!parsedKws.length) return dateFiltered
-    return dateFiltered.filter((a) => isRelevant(parsedKws, { title: a.title, excerpt: a.excerpt }))
-  }, [dateFiltered, parsedKws])
+    if (activeClient) {
+      // A specific client is selected → strict relevance by its terms.
+      if (!parsedKws.length) return dateFiltered
+      return dateFiltered.filter((a) => isRelevant(parsedKws, { title: a.title, excerpt: a.excerpt }))
+    }
+    // No client selected → default to what's relevant to the whole portfolio:
+    // anything from a thematic/specialized feed, OR matching any client's terms.
+    // "Ver tudo" bypasses this to show the raw firehose.
+    if (showAll || !allClientsParsed.length) return dateFiltered
+    return dateFiltered.filter(
+      (a) =>
+        !GENERAL_SOURCES.has(a.sources?.name || '') ||
+        isRelevant(allClientsParsed, { title: a.title, excerpt: a.excerpt })
+    )
+  }, [dateFiltered, activeClient, parsedKws, allClientsParsed, showAll])
 
   // Apply the source filter, then — when a client is active — rank by relevance
   // (score desc, date desc) and expose a score map for the relevance badge.
@@ -263,10 +298,18 @@ export default function NewsPage() {
               <option key={c.id} value={c.id}>{c.name}</option>
             ))}
           </select>
-          {activeClient && (
+          {activeClient ? (
             <span className="text-xs text-gray-500">
               Filtrando por: <strong>{activeClient.keywords?.join(', ')}</strong>
             </span>
+          ) : (
+            <button
+              onClick={() => setShowAll((v) => !v)}
+              className="text-xs underline text-gray-500 hover:text-black"
+              title="Alternar entre só notícias relevantes aos clientes e o feed completo"
+            >
+              {showAll ? 'Ver só relevantes' : 'Ver tudo (sem filtro)'}
+            </button>
           )}
         </div>
       )}

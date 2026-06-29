@@ -34,3 +34,19 @@ jobs:
         env:
           APP_URL: ${{ secrets.APP_URL }}
           CRON_SECRET: ${{ secrets.CRON_SECRET }}
+
+      - name: Backfill article images
+        # Best-effort: fills missing images (incl. Google News) in batches.
+        continue-on-error: true
+        run: |
+          [ -z "${APP_URL}" ] && exit 0
+          auth=()
+          [ -n "${CRON_SECRET}" ] && auth=(-H "Authorization: Bearer ${CRON_SECRET}")
+          for n in 1 2 3; do
+            code=$(curl -sS -o /tmp/img.json -w '%{http_code}' --max-time 120 \
+              "${auth[@]}" "${APP_URL%/}/api/articles/backfill-images")
+            echo "backfill ${n}: HTTP ${code}"; cat /tmp/img.json || true; echo
+          done
+        env:
+          APP_URL: ${{ secrets.APP_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
