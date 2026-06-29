@@ -14,7 +14,7 @@ export default async function ReportPage({ params }: { params: { id: string } })
   return (
     <div className="max-w-3xl mx-auto px-6 py-8">
       <div className="flex items-start justify-between mb-2">
-        <p className="text-sm text-gray-500">{formatDate(report.created_at)} · {report.article_ids.length} artigos</p>
+        <p className="text-sm text-gray-500">{formatDate(report.created_at)} · {report.article_ids?.length ?? 0} artigos</p>
         <ReportPdfButton prompt={report.prompt} content={report.content} createdAt={formatDate(report.created_at)} />
       </div>
       <p className="text-lg text-gray-700 italic mb-8 border-l-4 border-black pl-4">{report.prompt}</p>

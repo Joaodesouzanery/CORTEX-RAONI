@@ -12,7 +12,8 @@ export async function GET(_: Request, { params }: { params: { id: string } }) {
 
 export async function PUT(req: Request, { params }: { params: { id: string } }) {
   const supabase = createClient()
-  const body = await req.json()
+  const body = await req.json().catch(() => null)
+  if (!body) return NextResponse.json({ error: 'Corpo inválido' }, { status: 400 })
   const { prompt, metadata, client_id } = body
 
   const { data, error } = await supabase
