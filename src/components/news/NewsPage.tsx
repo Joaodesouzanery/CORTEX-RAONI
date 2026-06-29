@@ -30,6 +30,10 @@ const GENERAL_SOURCES = new Set([
   'Brasil Journal',
   'Exame',
   'G1',
+  'O Globo',
+  'Estadão',
+  'Agência Estado / Broadcast',
+  'Brasil 247',
   'Google News — Brasil (manchetes)',
 ])
 

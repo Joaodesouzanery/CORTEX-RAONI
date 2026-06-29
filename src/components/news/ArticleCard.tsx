@@ -52,7 +52,11 @@ export default function ArticleCard({ article, selected, onSelect, score }: Prop
             unoptimized
           />
         ) : (
-          <div className="w-full h-full bg-gray-200" />
+          <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+            <span className="text-xs uppercase tracking-widest text-gray-400 px-3 text-center line-clamp-2">
+              {article.publisher || article.sources?.name || 'Sem imagem'}
+            </span>
+          </div>
         )}
       </div>
 

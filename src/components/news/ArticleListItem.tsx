@@ -35,7 +35,11 @@ export default function ArticleListItem({ article, selected, onSelect, score }: 
         {article.image_url ? (
           <Image src={article.image_url} alt={article.title} fill className="object-cover" unoptimized />
         ) : (
-          <div className="w-full h-full bg-gray-200" />
+          <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+            <span className="text-[9px] uppercase tracking-wider text-gray-400 px-1 text-center line-clamp-2">
+              {article.publisher || article.sources?.name || ''}
+            </span>
+          </div>
         )}
       </div>
 
