@@ -13,10 +13,12 @@ export async function GET(req: Request) {
 
   // List view never reads `content` (full HTML). Excluding it keeps the payload
   // small — the report flow re-fetches content by id in /api/reports.
+  // nullsFirst:false so undated articles (some feeds omit dates) sink to the
+  // bottom instead of burying the most recent news under the row limit.
   let query = supabase
     .from('articles')
     .select('id, source_id, title, url, image_url, excerpt, published_at, fetched_at, publisher, sources(name)')
-    .order('published_at', { ascending: false })
+    .order('published_at', { ascending: false, nullsFirst: false })
     .limit(limit)
 
   if (sourceId) query = query.eq('source_id', sourceId)
