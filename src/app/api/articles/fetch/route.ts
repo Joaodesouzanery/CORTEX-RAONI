@@ -33,7 +33,8 @@ async function runFetch() {
         )
       )
     )
-    const count = upserts.filter((r) => r.status === 'fulfilled').length
+    // Count only upserts that resolved without a Supabase error.
+    const count = upserts.filter((r) => r.status === 'fulfilled' && !r.value?.error).length
     return { source: source.name, fetched: count }
   }
 

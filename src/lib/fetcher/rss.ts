@@ -158,7 +158,7 @@ export async function fetchRSS(feedUrl: string): Promise<FetchedArticle[]> {
       published_at: item.isoDate || null,
       publisher,
     }
-  }).filter((a) => a.title && a.url)
+  }).filter((a) => a.title?.trim() && a.url?.trim())
 
   // OG image fallback for articles without any image from RSS (up to 15 per feed).
   // Skip Google News items: their links are redirects, so OG fetching is useless

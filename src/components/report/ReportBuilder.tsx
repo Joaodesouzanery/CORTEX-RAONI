@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import type { Article } from '@/types'
-import { runSectionedReport } from '@/lib/report-runner'
+import { runSectionedReport, buildReportPreview } from '@/lib/report-runner'
 import ReportViewer from './ReportViewer'
 
 interface Props {
@@ -30,8 +30,10 @@ export default function ReportBuilder({ open, onClose, articles, onReportGenerat
   const [progress, setProgress] = useState<{ done: number; total: number; label: string } | null>(null)
   const [error, setError] = useState('')
   const [report, setReport] = useState<{ id: string; content: string } | null>(null)
+  const [preview, setPreview] = useState<string | null>(null)
 
   function reset() {
+    setPreview(null)
     setReport(null)
     setMes('')
     setReunioesPres('')
@@ -191,6 +193,28 @@ export default function ReportBuilder({ open, onClose, articles, onReportGenerat
                 className="resize-none mt-1"
               />
             </div>
+
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setPreview(buildReportPreview({ clienteNome: clientName, contratante, mes, articles }))}
+              disabled={articles.length === 0 || loading}
+              className="w-full"
+            >
+              Pré-visualizar (sem gastar IA)
+            </Button>
+
+            {preview && (
+              <div className="border border-gray-200 -mt-2">
+                <div className="flex items-center justify-between px-3 py-2 bg-gray-50 text-sm">
+                  <span className="font-medium">Pré-visualização — estrutura + evidências</span>
+                  <button onClick={() => setPreview(null)} className="text-gray-400 hover:text-black">Fechar ×</button>
+                </div>
+                <div className="max-h-96 overflow-y-auto p-4">
+                  <ReportViewer content={preview} />
+                </div>
+              </div>
+            )}
 
             <Button onClick={generate} disabled={!canGenerate} className="w-full h-12 text-base">
               {loading ? (
