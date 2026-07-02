@@ -76,6 +76,32 @@ CI (GitHub Actions) roda lint → typecheck → test → build em cada push/PR (
 5. **/clients** — cadastre clientes com contexto + palavras-chave (filtro automático) + logo.
 6. **/reports** — histórico de relatórios gerados.
 
+## Ingestão contínua + curadoria mensal
+
+**Importante:** feeds RSS são efêmeros — cada um expõe apenas os ~100 itens mais
+recentes. Buscar notícias **só** 1×/mês captura ~1 semana por feed e **perde o
+resto do mês**. Por isso a ingestão precisa ser **contínua** e o banco **acumula**
+ao longo do tempo:
+
+- O **cron do GitHub Actions** (`.github/workflows/fetch-news.yml`) chama
+  `/api/articles/fetch` **a cada 6h**. Cada run grava até 100 artigos por fonte
+  (upsert em lote por `url`) e mantém a tabela limitada a **90 dias** (retenção).
+- Requer o **Secret `APP_URL`** no repositório (GitHub → Settings → Secrets and
+  variables → Actions), ex.: `https://cortex-raoni.vercel.app`. Sem ele o cron não
+  roda e não há acúmulo.
+
+O fluxo alvo (uso individual) é então:
+
+1. **Cron acumula** as notícias continuamente (24×7).
+2. **1–2×/mês**, abra **/news**, escolha o período (ex.: 30 dias) e o cliente —
+   a visão carrega toda a janela retida e separa por setor (palavras-chave +
+   sinônimos + feed temático do cliente).
+3. Selecione as matérias e clique em **Exportar dossiê** (matérias com texto
+   completo).
+4. No **Claude Code**, cole `prompts/<área>.md` (Prompt Mestre do setor) + o
+   dossiê → gere o relatório mensal → preencha `prompts/_template-relatorio.html`
+   (design fixo) → PDF. Ver `prompts/README.md`.
+
 ## Estrutura
 
 ```

@@ -53,7 +53,7 @@ export default function DashboardPage() {
   useEffect(() => {
     Promise.all([
       fetch('/api/clients').then((r) => r.json()).catch(() => []),
-      fetch('/api/articles?limit=1000').then((r) => r.json()).catch(() => []),
+      fetch('/api/articles?days=95&limit=10000').then((r) => r.json()).catch(() => []),
     ]).then(([c, a]) => {
       setClients(Array.isArray(c) ? c : [])
       setArticles(Array.isArray(a) ? a : [])

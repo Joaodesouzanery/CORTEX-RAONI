@@ -3,11 +3,10 @@ import { createAdminClient as createClient } from '@/lib/supabase/server'
 
 export const dynamic = 'force-dynamic'
 
-// Only feeds verified to return valid, recent RSS (QA migration 009 deactivated
-// the dead ones: Estadão, O Globo, G1, Brasil 247, Canal Energia, Brasil Energia,
-// MegaWhat). Thematic Google News feeds live in migration 006.
+// Only feeds verified to return valid, recent RSS. QA deactivated the dead ones
+// (Folha de S.Paulo, Brasil Energia, MegaWhat — HTTP 200 but ~0 items; see
+// migration 014). Thematic Google News feeds live in migration 006.
 const DEFAULT_SOURCES = [
-  { name: 'Folha de S.Paulo', url: 'https://feeds.folha.uol.com.br/emcimadahora/rss091.xml', type: 'rss' },
   { name: 'Exame', url: 'https://exame.com/feed/', type: 'rss' },
   { name: 'Poder360', url: 'https://www.poder360.com.br/feed/', type: 'rss' },
   { name: 'Metrópoles', url: 'https://www.metropoles.com/feed', type: 'rss' },

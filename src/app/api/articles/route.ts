@@ -9,6 +9,8 @@ export async function GET(req: Request) {
   const sourceId = searchParams.get('source_id')
   const search = searchParams.get('search')
   const limit = parseInt(searchParams.get('limit') || '500')
+  const daysParam = searchParams.get('days')
+  const publishedAfter = searchParams.get('published_after')
 
   // List view never reads `content` (full HTML). Excluding it keeps the payload
   // small — the report flow re-fetches content by id in /api/reports.
@@ -22,6 +24,23 @@ export async function GET(req: Request) {
 
   if (sourceId) query = query.eq('source_id', sourceId)
   if (search) query = query.ilike('title', `%${search}%`)
+
+  // Optional period window: bounds the payload to the retained window so the row
+  // limit doesn't bury older-but-in-period news. Undated articles are kept (some
+  // feeds omit dates) so the "Todos" view still shows them.
+  let cutoff: string | null = null
+  if (daysParam) {
+    const days = parseInt(daysParam)
+    if (Number.isFinite(days) && days > 0) cutoff = new Date(Date.now() - days * 86400000).toISOString()
+  } else if (publishedAfter) {
+    cutoff = publishedAfter
+  }
+  if (cutoff) {
+    // Strip milliseconds: PostgREST .or() parses each branch as field.op.value on
+    // dots, so an internal "." (the ".000Z") would corrupt the value.
+    const safe = cutoff.replace(/\.\d{3}Z$/, 'Z')
+    query = query.or(`published_at.gte.${safe},published_at.is.null`)
+  }
 
   const { data, error } = await query
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })

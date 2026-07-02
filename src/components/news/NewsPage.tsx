@@ -160,7 +160,9 @@ export default function NewsPage() {
 
   async function loadArticles() {
     setLoading(true)
-    const res = await fetch('/api/articles?limit=1000')
+    // Load the whole retained window (retention is 90d) so the period buttons can
+    // filter client-side without the row limit truncating the month.
+    const res = await fetch('/api/articles?days=95&limit=10000')
     const data = await res.json()
     setArticles(Array.isArray(data) ? data : [])
     setLoading(false)
