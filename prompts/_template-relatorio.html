@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Relatório Mensal de Comunicação Estratégica</title>
+
+<!--
+  ============================================================================
+  TEMPLATE DE RELATÓRIO — DESIGN FIXO, CONTEÚDO VARIÁVEL
+  ============================================================================
+  COMO USAR (no Claude Code):
+    1. Cole o prompt da área (ex.: prompts/ons.md) + as matérias do mês.
+    2. Peça: "Gere o relatório e preencha os slots {{...}} deste template,
+       sem alterar o CSS nem a estrutura."
+    3. Salve o HTML preenchido e abra no navegador → Imprimir → Salvar em PDF
+       (ou exporte para Adobe Express / Canva a partir do HTML).
+
+  O DESIGN (cores, fontes, capa, rodapé) fica NESTE arquivo e não muda.
+  Só o texto entre {{ }} é substituído a cada mês.
+
+  VARIÁVEIS DE CABEÇALHO:
+    {{CLIENTE}}      — ex.: ONS
+    {{SUBTITULO}}    — ex.: Operador Nacional do Sistema Elétrico
+    {{MES}}          — ex.: Junho de 2026
+    {{CONTRATANTE}}  — ex.: CRTIVE LAB
+    {{LOGO_URL}}     — URL/caminho do logo (opcional; remova a <img> se não usar)
+  ============================================================================
+-->
+
+<style>
+  :root {
+    --tinta: #0a0a0a;
+    --cinza: #6b6b6b;
+    --cinza-claro: #9a9a9a;
+    --linha: #e2e2e2;
+    --destaque: #111111;   /* troque por uma cor da marca, ex.: #b8860b */
+    --papel: #ffffff;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  @page {
+    size: A4;
+    margin: 22mm 18mm 20mm 18mm;
+  }
+
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  body {
+    font-family: "Georgia", "Times New Roman", serif;
+    color: var(--tinta);
+    background: var(--papel);
+    line-height: 1.6;
+    font-size: 11pt;
+  }
+
+  /* ---------- CAPA ---------- */
+  .cover {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 30mm 4mm;
+    page-break-after: always;
+  }
+  .cover .top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .cover .logo { max-height: 46px; max-width: 200px; object-fit: contain; }
+  .cover .selo {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 8.5pt;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--cinza);
+    border: 1px solid var(--linha);
+    padding: 6px 12px;
+  }
+  .cover .center { }
+  .cover .kicker {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 9pt;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--cinza);
+    margin-bottom: 18px;
+  }
+  .cover h1 {
+    font-size: 40pt;
+    font-weight: 400;
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+  }
+  .cover .cliente {
+    font-size: 15pt;
+    color: var(--cinza);
+    margin-top: 14px;
+    font-style: italic;
+  }
+  .cover .rule { height: 1px; background: var(--tinta); margin: 26px 0; width: 90px; }
+  .cover .meta {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 10pt;
+    color: var(--cinza);
+    letter-spacing: 0.04em;
+  }
+  .cover .meta strong { color: var(--tinta); font-weight: 600; }
+  .cover .foot {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 8pt;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--cinza-claro);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* ---------- SEÇÕES ---------- */
+  section { page-break-inside: avoid; margin-bottom: 26px; }
+  .sec-num {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 8.5pt;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--cinza-claro);
+  }
+  h2 {
+    font-size: 17pt;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    margin: 4px 0 6px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--linha);
+  }
+  h3 {
+    font-size: 12pt;
+    font-weight: 700;
+    margin: 16px 0 4px;
+  }
+  p { margin: 8px 0; text-align: justify; }
+  strong { font-weight: 700; }
+  em { font-style: italic; }
+
+  ul, ol { margin: 8px 0 8px 20px; }
+  li { margin: 4px 0; }
+
+  /* caixas de destaque (risco/oportunidade/recomendação) */
+  .box {
+    border-left: 3px solid var(--destaque);
+    background: #fafafa;
+    padding: 10px 16px;
+    margin: 12px 0;
+    page-break-inside: avoid;
+  }
+  .box .tag {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 8pt;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--cinza);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  /* tabelas */
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 9.5pt; }
+  th {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    text-align: left;
+    font-size: 8pt;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--cinza);
+    border-bottom: 1.5px solid var(--tinta);
+    padding: 8px 6px;
+  }
+  td { border-bottom: 1px solid var(--linha); padding: 8px 6px; vertical-align: top; }
+
+  .fontes { font-size: 9pt; color: var(--cinza); }
+  .fontes li { margin: 3px 0; }
+
+  .doc-foot {
+    margin-top: 30px;
+    border-top: 1px solid var(--linha);
+    padding-top: 10px;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 8pt;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--cinza-claro);
+    display: flex;
+    justify-content: space-between;
+  }
+</style>
+</head>
+<body>
+
+  <!-- ======================= CAPA ======================= -->
+  <div class="cover">
+    <div class="top">
+      <img class="logo" src="{{LOGO_URL}}" alt="logo" />
+      <span class="selo">Confidencial</span>
+    </div>
+
+    <div class="center">
+      <div class="kicker">Relatório Mensal · Inteligência Reputacional</div>
+      <h1>Comunicação Estratégica<br />e Gestão de Imagem</h1>
+      <div class="cliente">{{CLIENTE}} — {{SUBTITULO}}</div>
+      <div class="rule"></div>
+      <div class="meta">Mês de referência: <strong>{{MES}}</strong></div>
+    </div>
+
+    <div class="foot">
+      <span>{{CONTRATANTE}}</span>
+      <span>Documento de circulação restrita</span>
+    </div>
+  </div>
+
+  <!-- ======================= CORPO ======================= -->
+
+  <section>
+    <div class="sec-num">01 · Panorama</div>
+    <h2>Sumário Executivo</h2>
+    {{SUMARIO_EXECUTIVO}}
+    <!-- 5 a 7 bullets de leitura estratégica do mês. -->
+  </section>
+
+  <section>
+    <div class="sec-num">02 · Agenda</div>
+    <h2>Temas Estratégicos do Mês</h2>
+    {{TEMAS_ESTRATEGICOS}}
+  </section>
+
+  <section>
+    <div class="sec-num">03 · Ambiente</div>
+    <h2>Leitura Reputacional do Ambiente Externo</h2>
+    {{LEITURA_AMBIENTE}}
+  </section>
+
+  <section>
+    <div class="sec-num">04 · Análise</div>
+    <h2>Análise Temática Aprofundada</h2>
+    {{ANALISE_TEMATICA}}
+  </section>
+
+  <section>
+    <div class="sec-num">05 · Riscos</div>
+    <h2>Riscos Reputacionais Prioritários</h2>
+    {{RISCOS}}
+    <!-- Use blocos .box para cada risco:
+      <div class="box"><span class="tag">Risco · Alta</span>
+        <p><strong>Título.</strong> Descrição, vetor, próximo capítulo e mitigação.</p>
+      </div>
+    -->
+  </section>
+
+  <section>
+    <div class="sec-num">06 · Oportunidades</div>
+    <h2>Oportunidades de Posicionamento Institucional</h2>
+    {{OPORTUNIDADES}}
+  </section>
+
+  <section>
+    <div class="sec-num">07 · Ação</div>
+    <h2>Recomendações Executivas</h2>
+    {{RECOMENDACOES}}
+  </section>
+
+  <section>
+    <div class="sec-num">08 · Prospecção</div>
+    <h2>Cenários Prospectivos</h2>
+    {{CENARIOS}}
+  </section>
+
+  <section>
+    <div class="sec-num">09 · Entrega</div>
+    <h2>Demonstração dos Serviços — {{CONTRATANTE}}</h2>
+    {{DEMONSTRACAO_SERVICOS}}
+    <!-- Narrativa do valor entregue + tabela de atividades do mês:
+      <table>
+        <thead><tr><th>Atividade</th><th>Descrição</th><th>Volume</th><th>Entregável</th></tr></thead>
+        <tbody>{{TABELA_ATIVIDADES}}</tbody>
+      </table>
+    -->
+  </section>
+
+  <section>
+    <div class="sec-num">10 · Evidências</div>
+    <h2>Base Qualificada de Evidências Monitoradas</h2>
+    <ol class="fontes">
+      {{BASE_EVIDENCIAS}}
+      <!-- <li><strong>Veículo</strong> — Título (data)</li> -->
+    </ol>
+  </section>
+
+  <div class="doc-foot">
+    <span>{{CLIENTE}} · {{MES}}</span>
+    <span>{{CONTRATANTE}} · Confidencial</span>
+  </div>
+
+</body>
+</html>
