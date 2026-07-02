@@ -14,6 +14,13 @@ const DEFAULT_SOURCES = [
   { name: 'Agência Infra', url: 'https://www.agenciainfra.com/blog/feed/', type: 'rss' },
   { name: 'Eixos', url: 'https://eixos.com.br/feed/', type: 'rss' },
   { name: 'Brasil Journal', url: 'https://braziljournal.com/feed/', type: 'rss' },
+  // Direct sector feeds (full text + images) added in QA to cut Google News
+  // dependence — see migration 015.
+  { name: 'Diário do Transporte', url: 'https://diariodotransporte.com.br/feed/', type: 'rss' },
+  { name: 'Mineração Brasil', url: 'https://mineracaobrasil.com/feed/', type: 'rss' },
+  { name: 'TI Inside', url: 'https://tiinside.com.br/feed/', type: 'rss' },
+  { name: 'Startups', url: 'https://startups.com.br/feed/', type: 'rss' },
+  { name: 'Convergência Digital', url: 'https://www.convergenciadigital.com.br/feed/', type: 'rss' },
   { name: 'Google News — Brasil (manchetes)', url: 'https://news.google.com/rss?hl=pt-BR&gl=BR&ceid=BR:pt-419', type: 'rss' },
 ]
 
