@@ -3,6 +3,7 @@ import { useState, useEffect, useMemo } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { parseKeywords, isRelevant, expandTerms, dedupeByTitle } from '@/lib/relevance'
+import { fetchArticlesWindow } from '@/lib/articles'
 import { runSectionedReport } from '@/lib/report-runner'
 import type { Article, Client } from '@/types'
 import { FileText } from 'lucide-react'
@@ -53,7 +54,7 @@ export default function DashboardPage() {
   useEffect(() => {
     Promise.all([
       fetch('/api/clients').then((r) => r.json()).catch(() => []),
-      fetch('/api/articles?days=95&limit=10000').then((r) => r.json()).catch(() => []),
+      fetchArticlesWindow(35).catch(() => [] as Article[]),
     ]).then(([c, a]) => {
       setClients(Array.isArray(c) ? c : [])
       setArticles(Array.isArray(a) ? a : [])

@@ -10,6 +10,7 @@ import ArticleListView from './ArticleListView'
 import ReportBuilder from '@/components/report/ReportBuilder'
 import DossierExporter from '@/components/report/DossierExporter'
 import { parseKeywords, isRelevant, relevanceScore, expandTerms, dedupeByTitle } from '@/lib/relevance'
+import { fetchArticlesWindow } from '@/lib/articles'
 import type { Article, Client } from '@/types'
 import { RefreshCw, FileText, FileDown, CheckSquare } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -160,11 +161,10 @@ export default function NewsPage() {
 
   async function loadArticles() {
     setLoading(true)
-    // Load the whole retained window (retention is 90d) so the period buttons can
-    // filter client-side without the row limit truncating the month.
-    const res = await fetch('/api/articles?days=95&limit=10000')
-    const data = await res.json()
-    setArticles(Array.isArray(data) ? data : [])
+    // Page through the window so the period buttons filter over ALL articles, not
+    // just the newest 1000 (which the high-volume general feeds would monopolize).
+    const data = await fetchArticlesWindow(45)
+    setArticles(data)
     setLoading(false)
   }
 

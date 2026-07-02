@@ -9,6 +9,7 @@ export async function GET(req: Request) {
   const sourceId = searchParams.get('source_id')
   const search = searchParams.get('search')
   const limit = parseInt(searchParams.get('limit') || '500')
+  const offsetParam = searchParams.get('offset')
   const daysParam = searchParams.get('days')
   const publishedAfter = searchParams.get('published_after')
 
@@ -20,7 +21,6 @@ export async function GET(req: Request) {
     .from('articles')
     .select('id, source_id, title, url, image_url, excerpt, published_at, fetched_at, publisher, sources(name)')
     .order('published_at', { ascending: false, nullsFirst: false })
-    .limit(limit)
 
   if (sourceId) query = query.eq('source_id', sourceId)
   if (search) query = query.ilike('title', `%${search}%`)
@@ -41,6 +41,12 @@ export async function GET(req: Request) {
     const safe = cutoff.replace(/\.\d{3}Z$/, 'Z')
     query = query.or(`published_at.gte.${safe},published_at.is.null`)
   }
+
+  // Pagination: PostgREST caps a response at ~1000 rows (db-max-rows), so the
+  // clients page through with `offset` (via .range) to load a full period window
+  // instead of only the 1000 most-recent rows. Without offset, keep .limit.
+  const offset = offsetParam ? parseInt(offsetParam) : NaN
+  query = Number.isFinite(offset) && offset >= 0 ? query.range(offset, offset + limit - 1) : query.limit(limit)
 
   const { data, error } = await query
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
