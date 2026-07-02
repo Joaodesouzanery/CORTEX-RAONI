@@ -2,7 +2,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { parseKeywords, isRelevant, expandTerms } from '@/lib/relevance'
+import { parseKeywords, isRelevant, expandTerms, dedupeByTitle } from '@/lib/relevance'
 import { runSectionedReport } from '@/lib/report-runner'
 import type { Article, Client } from '@/types'
 import { FileText } from 'lucide-react'
@@ -19,8 +19,14 @@ function relevantArticles(client: Client, articles: Article[], cutoffMs: number 
     ? articles.filter((a) => a.published_at && new Date(a.published_at).getTime() >= cutoffMs)
     : articles
   const kws = parseKeywords(expandTerms(client.keywords, client.synonyms))
-  if (!kws.length) return []
-  return inPeriod.filter((a) => isRelevant(kws, { title: a.title, excerpt: a.excerpt }))
+  const feeds = client.feed_names || []
+  if (!kws.length && !feeds.length) return []
+  // Relevant = matches the client's terms OR comes from one of its thematic feeds.
+  return inPeriod.filter(
+    (a) =>
+      (kws.length > 0 && isRelevant(kws, { title: a.title, excerpt: a.excerpt })) ||
+      feeds.includes(a.sources?.name || '')
+  )
 }
 
 interface BatchResult {
@@ -57,12 +63,15 @@ export default function DashboardPage() {
 
   const cutoffMs = periodDays ? Date.now() - periodDays * 86400000 : null
 
+  // Collapse duplicate stories before counting so the numbers aren't inflated.
+  const uniqueArticles = useMemo(() => dedupeByTitle(articles), [articles])
+
   const rows = useMemo(
     () =>
       clients
-        .map((c) => ({ client: c, relevant: relevantArticles(c, articles, cutoffMs) }))
+        .map((c) => ({ client: c, relevant: relevantArticles(c, uniqueArticles, cutoffMs) }))
         .sort((a, b) => b.relevant.length - a.relevant.length),
-    [clients, articles, cutoffMs]
+    [clients, uniqueArticles, cutoffMs]
   )
 
   function openBatch() {

@@ -171,3 +171,21 @@ export function relevanceScore(parsed: ParsedKeyword[], fields: Fields): number 
   }
   return score
 }
+
+/**
+ * Collapse the same story arriving from different feeds (same normalized title).
+ * Keeps the first occurrence (input should be pre-ordered, e.g. by date desc) and
+ * backfills a missing image from a later duplicate. Untitled rows are kept as-is.
+ */
+export function dedupeByTitle<T extends { id: string; title: string; image_url?: string | null }>(
+  articles: T[]
+): T[] {
+  const byTitle = new Map<string, T>()
+  for (const a of articles) {
+    const key = normalizeText(a.title) || a.id
+    const existing = byTitle.get(key)
+    if (!existing) byTitle.set(key, a)
+    else if (!existing.image_url && a.image_url) existing.image_url = a.image_url
+  }
+  return Array.from(byTitle.values())
+}

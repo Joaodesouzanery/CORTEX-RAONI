@@ -1,11 +1,11 @@
 'use client'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
-import type { Client } from '@/types'
+import type { Client, Source } from '@/types'
 
 interface Props {
   client?: Client | null
@@ -22,10 +22,25 @@ export default function ClientForm({ client, open, onClose, onSaved }: Props) {
   const [reportPrompt, setReportPrompt] = useState(client?.report_prompt || '')
   const [keywords, setKeywords] = useState<string[]>(client?.keywords || [])
   const [synonyms, setSynonyms] = useState(client?.synonyms || '')
+  const [feedNames, setFeedNames] = useState<string[]>(client?.feed_names || [])
+  const [sources, setSources] = useState<Source[]>([])
   const [kwInput, setKwInput] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const fileRef = useRef<HTMLInputElement>(null)
+
+  // Load available sources so the user can mark which feeds belong to this client.
+  useEffect(() => {
+    if (!open) return
+    fetch('/api/sources')
+      .then((r) => r.json())
+      .then((d) => setSources(Array.isArray(d) ? d : []))
+      .catch(() => setSources([]))
+  }, [open])
+
+  function toggleFeed(name: string) {
+    setFeedNames((prev) => (prev.includes(name) ? prev.filter((n) => n !== name) : [...prev, name]))
+  }
 
   const isEdit = !!client
 
@@ -57,6 +72,7 @@ export default function ClientForm({ client, open, onClose, onSaved }: Props) {
           report_prompt: reportPrompt.trim() || null,
           keywords: keywords.length ? keywords : null,
           synonyms: synonyms.trim() || null,
+          feed_names: feedNames.length ? feedNames : null,
         }),
       })
       const data = await res.json()
@@ -177,6 +193,25 @@ export default function ClientForm({ client, open, onClose, onSaved }: Props) {
               rows={3}
               className="mt-1 resize-none"
             />
+          </div>
+
+          <div>
+            <Label>Feeds temáticos deste cliente</Label>
+            <p className="text-xs text-gray-500 mb-2">
+              Toda notícia vinda dos feeds marcados conta como relevante para este cliente (além das palavras-chave).
+            </p>
+            <div className="max-h-40 overflow-y-auto border border-gray-100 p-2 flex flex-col gap-1">
+              {sources.length === 0 ? (
+                <span className="text-xs text-gray-400">Carregando fontes…</span>
+              ) : (
+                sources.map((s) => (
+                  <label key={s.id} className="flex items-center gap-2 text-sm">
+                    <input type="checkbox" checked={feedNames.includes(s.name)} onChange={() => toggleFeed(s.name)} />
+                    <span className="truncate">{s.name}</span>
+                  </label>
+                ))
+              )}
+            </div>
           </div>
 
           <div>

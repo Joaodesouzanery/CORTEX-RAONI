@@ -41,6 +41,7 @@ export interface Client {
   contratante: string | null
   keywords: string[] | null
   synonyms: string | null
+  feed_names: string[] | null
   logo_url: string | null
   created_at: string
 }

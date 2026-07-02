@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server'
 import { createAdminClient as createClient } from '@/lib/supabase/server'
-import { normalizeText } from '@/lib/relevance'
 
 export const dynamic = 'force-dynamic'
 
@@ -27,15 +26,7 @@ export async function GET(req: Request) {
   const { data, error } = await query
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
 
-  // Collapse the same story arriving from a direct feed and from Google News
-  // (different URLs, same headline). Keep the first (most recent) and backfill an
-  // image from a duplicate if the kept one has none.
-  const byTitle = new Map<string, (typeof data)[number]>()
-  for (const row of data || []) {
-    const key = normalizeText(row.title) || row.id
-    const existing = byTitle.get(key)
-    if (!existing) byTitle.set(key, row)
-    else if (!existing.image_url && row.image_url) existing.image_url = row.image_url
-  }
-  return NextResponse.json(Array.from(byTitle.values()))
+  // Return raw (no title-dedup here). Dedup is applied client-side only in the
+  // general/portfolio view, so filtering by a specific source shows all of it.
+  return NextResponse.json(data)
 }

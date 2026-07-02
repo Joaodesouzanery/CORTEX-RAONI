@@ -21,7 +21,7 @@ export async function POST(req: Request) {
   if (!parsed.success) {
     return NextResponse.json({ error: formatZodError(parsed.error) }, { status: 400 })
   }
-  const { name, context, report_prompt, sector, contratante, keywords, synonyms, logo_url } = parsed.data
+  const { name, context, report_prompt, sector, contratante, keywords, synonyms, feed_names, logo_url } = parsed.data
 
   const { data, error } = await supabase
     .from('clients')
@@ -33,6 +33,7 @@ export async function POST(req: Request) {
       contratante: contratante || null,
       keywords: keywords || null,
       synonyms: synonyms || null,
+      feed_names: feed_names || null,
       logo_url: logo_url || null,
     })
     .select()

@@ -9,7 +9,7 @@ import ArticleCardGrid from './ArticleCardGrid'
 import ArticleListView from './ArticleListView'
 import ReportBuilder from '@/components/report/ReportBuilder'
 import DossierExporter from '@/components/report/DossierExporter'
-import { parseKeywords, isRelevant, relevanceScore, expandTerms } from '@/lib/relevance'
+import { parseKeywords, isRelevant, relevanceScore, expandTerms, dedupeByTitle } from '@/lib/relevance'
 import type { Article, Client } from '@/types'
 import { RefreshCw, FileText, FileDown, CheckSquare } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -96,9 +96,15 @@ export default function NewsPage() {
 
   const clientFiltered = useMemo(() => {
     if (activeClient) {
-      // A specific client is selected → strict relevance by its terms.
-      if (!parsedKws.length) return dateFiltered
-      return dateFiltered.filter((a) => isRelevant(parsedKws, { title: a.title, excerpt: a.excerpt }))
+      // A specific client is selected → relevant = matches its terms OR comes from
+      // one of its thematic feeds (the feed IS the client's curated stream).
+      const feeds = activeClient.feed_names || []
+      if (!parsedKws.length && !feeds.length) return dateFiltered
+      return dateFiltered.filter(
+        (a) =>
+          (parsedKws.length > 0 && isRelevant(parsedKws, { title: a.title, excerpt: a.excerpt })) ||
+          feeds.includes(a.sources?.name || '')
+      )
     }
     // No client selected → default to what's relevant to the whole portfolio:
     // anything from a thematic/specialized feed, OR matching any client's terms.
@@ -111,19 +117,24 @@ export default function NewsPage() {
     )
   }, [dateFiltered, activeClient, parsedKws, allClientsParsed, showAll])
 
-  // Apply the source filter, then — when a client is active — rank by relevance
-  // (score desc, date desc) and expose a score map for the relevance badge.
+  // Source selected → show ALL from that source (no dedup). Otherwise → the
+  // general/client view, with duplicates collapsed. When a client is active, rank
+  // by relevance (score desc, date desc) and expose a score map for the badge.
   const { filtered, scores } = useMemo(() => {
-    const base = activeSource
-      ? clientFiltered.filter((a) => a.sources?.name === activeSource)
-      : clientFiltered
+    let base: Article[]
+    if (activeSource) {
+      const src = activeClient ? clientFiltered : dateFiltered
+      base = src.filter((a) => a.sources?.name === activeSource)
+    } else {
+      base = dedupeByTitle(clientFiltered)
+    }
     if (!parsedKws.length) return { filtered: base, scores: null as Map<string, number> | null }
     const m = new Map<string, number>()
     for (const a of base) m.set(a.id, relevanceScore(parsedKws, { title: a.title, excerpt: a.excerpt }))
     const dateOf = (x: Article) => (x.published_at ? new Date(x.published_at).getTime() : 0)
     const ranked = [...base].sort((a, b) => (m.get(b.id)! - m.get(a.id)!) || (dateOf(b) - dateOf(a)))
     return { filtered: ranked, scores: m }
-  }, [clientFiltered, activeSource, parsedKws])
+  }, [clientFiltered, dateFiltered, activeSource, activeClient, parsedKws])
 
   useEffect(() => {
     loadArticles()
