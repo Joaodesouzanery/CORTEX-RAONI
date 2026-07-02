@@ -70,7 +70,8 @@ async function runFetch() {
   const cutoff = new Date(Date.now() - RETENTION_DAYS * 86400000).toISOString()
   const { error: retErr } = await supabase.from('articles').delete().lt('published_at', cutoff)
   if (retErr) console.error(`[fetch] retenção falhou: ${retErr.message}`)
-  await supabase.from('articles').delete().is('published_at', null).lt('fetched_at', cutoff)
+  const { error: retErr2 } = await supabase.from('articles').delete().is('published_at', null).lt('fetched_at', cutoff)
+  if (retErr2) console.error(`[fetch] retenção (sem data) falhou: ${retErr2.message}`)
 
   const totalFetched = results.reduce((sum, r) => sum + (('fetched' in r ? r.fetched : 0)), 0)
   return NextResponse.json({ fetched: totalFetched, sources: results })

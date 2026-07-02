@@ -8,9 +8,10 @@ import SourceFilterBar from './SourceFilterBar'
 import ArticleCardGrid from './ArticleCardGrid'
 import ArticleListView from './ArticleListView'
 import ReportBuilder from '@/components/report/ReportBuilder'
+import DossierExporter from '@/components/report/DossierExporter'
 import { parseKeywords, isRelevant, relevanceScore, expandTerms } from '@/lib/relevance'
 import type { Article, Client } from '@/types'
-import { RefreshCw, FileText, CheckSquare } from 'lucide-react'
+import { RefreshCw, FileText, FileDown, CheckSquare } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 interface FetchSourceResult {
@@ -44,6 +45,7 @@ export default function NewsPage() {
   const [loading, setLoading] = useState(true)
   const [fetching, setFetching] = useState(false)
   const [reportOpen, setReportOpen] = useState(false)
+  const [dossierOpen, setDossierOpen] = useState(false)
   const [activeSource, setActiveSource] = useState<string | null>(null)
   const [activePeriod, setActivePeriod] = useState<number | null>(null)
   const [dateFrom, setDateFrom] = useState<string>('')
@@ -345,15 +347,24 @@ export default function NewsPage() {
         <ArticleListView articles={filtered} selected={selected} onSelect={toggleSelect} scores={scores} />
       )}
 
-      {/* Floating Report Button */}
+      {/* Floating action buttons */}
       {selected.size > 0 && (
-        <button
-          onClick={() => setReportOpen(true)}
-          className="fixed bottom-8 right-8 bg-black text-white px-6 py-3 flex items-center gap-2 shadow-xl hover:bg-gray-800 transition-colors z-40"
-        >
-          <FileText className="w-4 h-4" />
-          Gerar Relatório ({selected.size})
-        </button>
+        <div className="fixed bottom-8 right-8 flex items-center gap-3 z-40">
+          <button
+            onClick={() => setDossierOpen(true)}
+            className="bg-white text-black border border-black px-5 py-3 flex items-center gap-2 shadow-xl hover:bg-gray-50 transition-colors"
+          >
+            <FileDown className="w-4 h-4" />
+            Exportar dossiê ({selected.size})
+          </button>
+          <button
+            onClick={() => setReportOpen(true)}
+            className="bg-black text-white px-6 py-3 flex items-center gap-2 shadow-xl hover:bg-gray-800 transition-colors"
+          >
+            <FileText className="w-4 h-4" />
+            Gerar Relatório ({selected.size})
+          </button>
+        </div>
       )}
 
       {/* Report Builder Drawer */}
@@ -365,6 +376,15 @@ export default function NewsPage() {
         clientId={activeClient?.id}
         clientName={activeClient?.name}
         contratante={activeClient?.contratante}
+      />
+
+      {/* Dossier Exporter (separate feature) */}
+      <DossierExporter
+        open={dossierOpen}
+        onClose={() => setDossierOpen(false)}
+        articles={selectedArticles}
+        clientId={activeClient?.id}
+        clientName={activeClient?.name}
       />
     </div>
   )

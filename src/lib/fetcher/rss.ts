@@ -37,7 +37,11 @@ export function getPublisher(item: any): string | null {
 export function stripPublisherSuffix(title: string, publisher: string | null): string {
   if (!publisher) return title
   const suffix = ` - ${publisher}`
-  return title.endsWith(suffix) ? title.slice(0, -suffix.length).trim() : title
+  if (!title.endsWith(suffix)) return title
+  const stripped = title.slice(0, -suffix.length).trim()
+  // Keep the original if stripping would empty the title (title == publisher) —
+  // otherwise the empty-title filter would drop the article.
+  return stripped || title
 }
 
 // Fetch RSS as raw bytes, detect charset from XML declaration, decode correctly,
@@ -88,6 +92,7 @@ export function extractFirstImage(html: string | null | undefined): string | nul
   const match =
     html.match(/<img[^>]+data-src=["']([^"']+\.(jpg|jpeg|png|webp)[^"']*)["']/i) ||
     html.match(/<img[^>]+src=["']([^"']+\.(jpg|jpeg|png|webp)[^"']*)["']/i) ||
+    html.match(/<img[^>]+data-src=["']([^"']+)["']/i) ||
     html.match(/<img[^>]+src=["']([^"']+)["']/i)
   if (!match) return null
   const src = match[1]

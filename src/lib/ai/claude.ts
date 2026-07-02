@@ -364,7 +364,8 @@ const SECTION_MODEL = 'claude-sonnet-4-6'
 
 // Resolve the parametrized master prompt for a given client/metadata. Generic
 // defaults when no client is selected — avoids forcing the ONS framing.
-function buildSystemPrompt(metadata?: ReportMetadata, client?: ReportClient | null): string {
+// Exported so the dossier export can reuse the exact master prompt (no AI call).
+export function buildSystemPrompt(metadata?: ReportMetadata, client?: ReportClient | null): string {
   const clienteNome = client?.name || 'a organização cliente'
   const clienteSetor = client?.sector?.trim() || 'seu setor de atuação'
   const contratante = client?.contratante?.trim() || DEFAULT_CONTRATANTE
