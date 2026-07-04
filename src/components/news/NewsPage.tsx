@@ -396,6 +396,7 @@ export default function NewsPage() {
         open={dossierOpen}
         onClose={() => setDossierOpen(false)}
         articles={selectedArticles}
+        allRelevant={filtered}
         clientId={activeClient?.id}
         clientName={activeClient?.name}
       />

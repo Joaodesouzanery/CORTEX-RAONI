@@ -11,22 +11,30 @@ interface Props {
   open: boolean
   onClose: () => void
   articles: Article[]
+  // All client-relevant articles in the period → the full item table + panorama.
+  // `articles` (the selection) is the priority subset that gets full text.
+  allRelevant?: Article[]
   clientId?: string | null
   clientName?: string | null
 }
 
-// Standalone feature: exports a self-contained Markdown briefing (master prompt +
-// full-text articles) to paste into Claude Code. Does not touch the AI report flow.
-export default function DossierExporter({ open, onClose, articles, clientId, clientName }: Props) {
+// Standalone feature: exports a self-contained Markdown briefing PACKAGE (master
+// prompt + panorama + full item table + full-text of the selection + previous
+// report + design handoff) to paste into Claude Code. Does not touch the AI flow.
+export default function DossierExporter({ open, onClose, articles, allRelevant, clientId, clientName }: Props) {
   const [mes, setMes] = useState('')
   const [prompt, setPrompt] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [text, setText] = useState<string | null>(null)
+  const [csv, setCsv] = useState<string | null>(null)
   const [copied, setCopied] = useState(false)
+
+  const tableCount = (allRelevant && allRelevant.length) || articles.length
 
   function reset() {
     setText(null)
+    setCsv(null)
     setError('')
     setCopied(false)
   }
@@ -42,6 +50,7 @@ export default function DossierExporter({ open, onClose, articles, clientId, cli
         body: JSON.stringify({
           prompt,
           article_ids: articles.map((a) => a.id),
+          table_ids: (allRelevant && allRelevant.length ? allRelevant : articles).map((a) => a.id),
           client_id: clientId || null,
           metadata: mes.trim()
             ? { mes: mes.trim(), reunioes_presenciais: 0, reunioes_virtuais: 0, orientacoes: 0, acoes_imprensa: 0 }
@@ -51,6 +60,7 @@ export default function DossierExporter({ open, onClose, articles, clientId, cli
       const data = await res.json().catch(() => null)
       if (!res.ok) throw new Error(data?.error || 'Falha ao gerar o dossiê')
       setText(data.text)
+      setCsv(data.csv || null)
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Erro ao gerar o dossiê')
     } finally {
@@ -65,14 +75,14 @@ export default function DossierExporter({ open, onClose, articles, clientId, cli
     setTimeout(() => setCopied(false), 2000)
   }
 
-  function download() {
-    if (!text) return
-    const blob = new Blob([text], { type: 'text/markdown;charset=utf-8' })
+  const slug = (clientName || 'cortex').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-')
+
+  function downloadBlob(content: string, mime: string, ext: string) {
+    const blob = new Blob([content], { type: `${mime};charset=utf-8` })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    const slug = (clientName || 'cortex').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-')
-    a.download = `dossie-${slug}.md`
+    a.download = `dossie-${slug}.${ext}`
     a.click()
     URL.revokeObjectURL(url)
   }
@@ -87,7 +97,10 @@ export default function DossierExporter({ open, onClose, articles, clientId, cli
         {!text ? (
           <div className="mt-6 flex flex-col gap-5">
             <p className="text-sm text-gray-600">
-              Gera um documento pronto (prompt mestre + matérias com texto completo) para você colar no <strong>Claude Code</strong> e produzir o relatório lá.
+              Gera um <strong>pacote de briefing</strong> pronto para colar no <strong>Claude Code</strong>: prompt mestre + panorama +
+              tabela com <strong>{tableCount}</strong> {tableCount === 1 ? 'item' : 'itens'} do mês +
+              texto completo das <strong>{articles.length}</strong> selecionadas + relatório do mês anterior + handoff de design.
+              A tabela também sai em <strong>.csv</strong> (base da planilha).
             </p>
             <div>
               <Label htmlFor="dmes">Mês de referência (opcional)</Label>
@@ -113,7 +126,10 @@ export default function DossierExporter({ open, onClose, articles, clientId, cli
           <div className="mt-6 flex flex-col gap-3">
             <div className="flex gap-2 flex-wrap">
               <Button onClick={copy} size="sm">{copied ? '✓ Copiado' : 'Copiar tudo'}</Button>
-              <Button variant="outline" onClick={download} size="sm">Baixar .md</Button>
+              <Button variant="outline" onClick={() => text && downloadBlob(text, 'text/markdown', 'md')} size="sm">Baixar .md</Button>
+              {csv && (
+                <Button variant="outline" onClick={() => downloadBlob(csv, 'text/csv', 'csv')} size="sm">Baixar .csv (base)</Button>
+              )}
               <Button variant="outline" onClick={reset} size="sm">← Novo</Button>
             </div>
             <textarea

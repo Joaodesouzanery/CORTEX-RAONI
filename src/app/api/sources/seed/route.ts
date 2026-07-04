@@ -21,6 +21,19 @@ const DEFAULT_SOURCES = [
   { name: 'TI Inside', url: 'https://tiinside.com.br/feed/', type: 'rss' },
   { name: 'Startups', url: 'https://startups.com.br/feed/', type: 'rss' },
   { name: 'Convergência Digital', url: 'https://www.convergenciadigital.com.br/feed/', type: 'rss' },
+  // Imprensa especializada de energia / negócios (migration 017).
+  { name: 'Cenário Energia', url: 'https://cenarioenergia.com.br/feed/', type: 'rss' },
+  { name: 'MegaWhat', url: 'https://megawhat.energy/feed/', type: 'rss' },
+  { name: 'InfoMoney', url: 'https://www.infomoney.com.br/feed/', type: 'rss' },
+  { name: 'NeoFeed', url: 'https://neofeed.com.br/feed/', type: 'rss' },
+  // Institucionais / reguladores via Google News (migration 017).
+  { name: 'Institucional — MME', url: 'https://news.google.com/rss/search?q=site:gov.br/mme&hl=pt-BR&gl=BR&ceid=BR:pt-419', type: 'rss' },
+  { name: 'Institucional — ANEEL', url: 'https://news.google.com/rss/search?q=ANEEL%20setor%20el%C3%A9trico&hl=pt-BR&gl=BR&ceid=BR:pt-419', type: 'rss' },
+  { name: 'Institucional — EPE', url: 'https://news.google.com/rss/search?q=site:epe.gov.br&hl=pt-BR&gl=BR&ceid=BR:pt-419', type: 'rss' },
+  { name: 'Institucional — ONS', url: 'https://news.google.com/rss/search?q=site:ons.org.br&hl=pt-BR&gl=BR&ceid=BR:pt-419', type: 'rss' },
+  { name: 'Institucional — CCEE', url: 'https://news.google.com/rss/search?q=site:ccee.org.br&hl=pt-BR&gl=BR&ceid=BR:pt-419', type: 'rss' },
+  { name: 'Institucional — ANM', url: 'https://news.google.com/rss/search?q=%22Ag%C3%AAncia%20Nacional%20de%20Minera%C3%A7%C3%A3o%22&hl=pt-BR&gl=BR&ceid=BR:pt-419', type: 'rss' },
+  { name: 'Institucional — Antaq', url: 'https://news.google.com/rss/search?q=Antaq%20hidrovia%20OR%20porto&hl=pt-BR&gl=BR&ceid=BR:pt-419', type: 'rss' },
   { name: 'Google News — Brasil (manchetes)', url: 'https://news.google.com/rss?hl=pt-BR&gl=BR&ceid=BR:pt-419', type: 'rss' },
 ]
 
