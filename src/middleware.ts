@@ -5,7 +5,7 @@ import { gateToken, GATE_COOKIE } from '@/lib/gate'
 // Opt-in access gate: only active when APP_PASSWORD is set. Protects the whole
 // app (incl. the paid /api/reports) behind a single shared password. Without
 // APP_PASSWORD the app stays open (current behavior).
-const PUBLIC_PATHS = ['/login', '/api/auth', '/api/articles/fetch']
+const PUBLIC_PATHS = ['/login', '/api/auth', '/api/articles/fetch', '/api/alerts/check']
 
 export async function middleware(req: NextRequest) {
   const password = process.env.APP_PASSWORD

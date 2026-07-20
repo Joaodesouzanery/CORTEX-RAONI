@@ -23,6 +23,7 @@ export default function ClientForm({ client, open, onClose, onSaved }: Props) {
   const [keywords, setKeywords] = useState<string[]>(client?.keywords || [])
   const [synonyms, setSynonyms] = useState(client?.synonyms || '')
   const [feedNames, setFeedNames] = useState<string[]>(client?.feed_names || [])
+  const [alertRecipient, setAlertRecipient] = useState(client?.alert_recipient || '')
   const [sources, setSources] = useState<Source[]>([])
   const [kwInput, setKwInput] = useState('')
   const [loading, setLoading] = useState(false)
@@ -73,6 +74,7 @@ export default function ClientForm({ client, open, onClose, onSaved }: Props) {
           keywords: keywords.length ? keywords : null,
           synonyms: synonyms.trim() || null,
           feed_names: feedNames.length ? feedNames : null,
+          alert_recipient: alertRecipient.trim() || null,
         }),
       })
       const data = await res.json()
@@ -130,6 +132,14 @@ export default function ClientForm({ client, open, onClose, onSaved }: Props) {
           </div>
 
           <div>
+            <Label htmlFor="crecipient">Destinatário dos alertas</Label>
+            <p className="text-xs text-gray-500 mb-1">
+              Para quem enviar o digest de alertas deste cliente — você envia manualmente na aba Alertas. Ex.: Fulano da ASCOM &lt;fulano@orgao.gov.br&gt;.
+            </p>
+            <Input id="crecipient" value={alertRecipient} onChange={(e) => setAlertRecipient(e.target.value)} placeholder="Nome <email@dominio>" className="mt-1" />
+          </div>
+
+          <div>
             <Label htmlFor="ctx">Contexto (background do cliente)</Label>
             <Textarea
               id="ctx"
@@ -142,9 +152,9 @@ export default function ClientForm({ client, open, onClose, onSaved }: Props) {
           </div>
 
           <div>
-            <Label htmlFor="rprompt">Direcionamento do Relatório</Label>
+            <Label htmlFor="rprompt">Inteligência setorial e direcionamento</Label>
             <p className="text-xs text-gray-500 mb-1">
-              Instruções persistentes de foco, ênfases e ângulos prioritários para todo relatório deste cliente (vai no prompt da IA).
+              Base de conhecimento do setor (temas-âncora, riscos típicos, oportunidades, stakeholders) + foco deste cliente. Entra no system prompt do relatório e do dossiê. Semeado pela migration 019 a partir de prompts/*.md.
             </p>
             <Textarea
               id="rprompt"

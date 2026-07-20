@@ -1,8 +1,9 @@
 'use client'
 import Image from 'next/image'
 import { formatDate } from '@/lib/utils'
-import type { Article } from '@/types'
+import type { Article, ArticleTag } from '@/types'
 import { cn } from '@/lib/utils'
+import TagControls, { type TagPatch } from './TagControls'
 
 interface Props {
   article: Article
@@ -10,11 +11,30 @@ interface Props {
   anySelected?: boolean
   onSelect: (id: string) => void
   score?: number
+  clientId?: string | null
+  tag?: ArticleTag | null
+  onTag?: (articleId: string, patch: TagPatch) => void
 }
 
-export default function ArticleListItem({ article, selected, onSelect, score }: Props) {
+// Left accent so tagged rows are scannable at a glance (mirrors the report's
+// per-tom color coding in the evidence base).
+const TOM_ACCENT: Record<string, string> = {
+  positivo: 'border-l-emerald-500',
+  neutro: 'border-l-gray-300',
+  negativo: 'border-l-red-500',
+  critico: 'border-l-orange-400',
+}
+
+export default function ArticleListItem({ article, selected, onSelect, score, clientId, tag, onTag }: Props) {
+  const accent = tag?.tom ? TOM_ACCENT[tag.tom] : 'border-l-transparent'
   return (
-    <div className={cn('flex gap-4 py-4 border-b border-gray-100 group', selected && 'bg-gray-50')}>
+    <div
+      className={cn(
+        'flex gap-4 py-4 border-b border-gray-100 border-l-2 pl-2 group',
+        accent,
+        selected && 'bg-gray-50'
+      )}
+    >
       {/* Checkbox */}
       <div
         className={cn(
@@ -60,6 +80,11 @@ export default function ArticleListItem({ article, selected, onSelect, score }: 
         <a href={article.url} target="_blank" rel="noopener noreferrer" className="text-xs text-black hover:underline mt-1">
           ↳ Saiba Mais
         </a>
+
+        {/* Reputational tagging — only when a client is in context. */}
+        {clientId && onTag && (
+          <TagControls tag={tag} onChange={(patch) => onTag(article.id, patch)} className="mt-2" />
+        )}
       </div>
     </div>
   )

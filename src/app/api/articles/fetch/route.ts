@@ -66,6 +66,18 @@ async function runFetch() {
     return { source: sources[i].name, error: message }
   })
 
+  // Health: record each source's last fetch count/time so dead feeds surface in
+  // /sources instead of degrading coverage silently. Best-effort.
+  const nowIso = new Date().toISOString()
+  await Promise.allSettled(
+    sourceResults.map((r, i) =>
+      supabase
+        .from('sources')
+        .update({ last_fetch_count: r.status === 'fulfilled' ? r.value.fetched : 0, last_fetched_at: nowIso })
+        .eq('id', sources[i].id)
+    )
+  )
+
   // Retention: keep the table bounded. Best-effort — never fail the fetch over it.
   const cutoff = new Date(Date.now() - RETENTION_DAYS * 86400000).toISOString()
   const { error: retErr } = await supabase.from('articles').delete().lt('published_at', cutoff)

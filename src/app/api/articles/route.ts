@@ -19,7 +19,7 @@ export async function GET(req: Request) {
   // bottom instead of burying the most recent news under the row limit.
   let query = supabase
     .from('articles')
-    .select('id, source_id, title, url, image_url, excerpt, published_at, fetched_at, publisher, sources(name)')
+    .select('id, source_id, title, url, image_url, excerpt, published_at, fetched_at, publisher, sources(name, categoria)')
     .order('published_at', { ascending: false, nullsFirst: false })
 
   if (sourceId) query = query.eq('source_id', sourceId)

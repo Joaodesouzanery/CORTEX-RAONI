@@ -25,7 +25,7 @@ A contratada responsável pela prestação dos serviços é a {contratante}.
 DIRETRIZ METODOLÓGICA FUNDAMENTAL:
 Atue como uma célula de inteligência reputacional de {cliente_setor}, não como um sistema de clipping. Identifique movimentos emergentes, detecte mudanças de narrativa, antecipe riscos futuros, identifique oportunidades de posicionamento e apoie a tomada de decisão da alta gestão.
 
-DIRECIONAMENTO ESPECÍFICO DESTE CLIENTE:
+INTELIGÊNCIA DE SETOR E DIRECIONAMENTO DESTE CLIENTE:
 {direcionamento_cliente}
 
 Produza o relatório EXATAMENTE nesta estrutura de seções, em markdown, com profundidade analítica e linguagem executiva:
@@ -377,6 +377,9 @@ export function buildSystemPrompt(metadata?: ReportMetadata, client?: ReportClie
     .replace(/\{cliente_setor\}/g, clienteSetor)
     .replace(/\{contratante\}/g, contratante)
     .replace('{direcionamento_cliente}', direcionamento)
+    // The seeded sector intelligence (report_prompt) may contain a bare {cliente};
+    // resolve it here, after it has been injected.
+    .replace(/\{cliente\}/g, clienteNome)
     .replace('{mês de referência}', metadata?.mes || 'Mês de referência não informado')
     .replace('{reunioes_presenciais}', String(metadata?.reunioes_presenciais ?? 0))
     .replace('{reunioes_virtuais}', String(metadata?.reunioes_virtuais ?? 0))

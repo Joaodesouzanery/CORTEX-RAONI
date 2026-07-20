@@ -7,12 +7,17 @@ import SelectAllBar from './SelectAllBar'
 import SourceFilterBar from './SourceFilterBar'
 import ArticleCardGrid from './ArticleCardGrid'
 import ArticleListView from './ArticleListView'
+import PanoramaPanel from './PanoramaPanel'
+import type { TagPatch } from './TagControls'
 import ReportBuilder from '@/components/report/ReportBuilder'
 import DossierExporter from '@/components/report/DossierExporter'
 import { parseKeywords, isRelevant, relevanceScore, expandTerms, dedupeByTitle } from '@/lib/relevance'
 import { fetchArticlesWindow } from '@/lib/articles'
-import type { Article, Client } from '@/types'
-import { RefreshCw, FileText, FileDown, CheckSquare } from 'lucide-react'
+import type { PanoramaRow } from '@/lib/panorama'
+import type { TagSuggestion } from '@/lib/ai/classify'
+import type { Article, Client, ArticleTag } from '@/types'
+import { useToast } from '@/hooks/use-toast'
+import { RefreshCw, FileText, FileDown, CheckSquare, Sparkles } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 interface FetchSourceResult {
@@ -56,6 +61,11 @@ export default function NewsPage() {
   const [clients, setClients] = useState<Client[]>([])
   const [activeClient, setActiveClient] = useState<Client | null>(null)
   const [showAll, setShowAll] = useState(false)
+  // Reputational tags for the active client (article_id → tag). Powers the panel
+  // and the per-row TagControls. Empty when no client is selected.
+  const [tagsById, setTagsById] = useState<Map<string, ArticleTag>>(new Map())
+  const [suggesting, setSuggesting] = useState(false)
+  const { toast } = useToast()
 
   const sources = useMemo(
     () => Array.from(new Set(articles.map((a) => a.sources?.name).filter(Boolean))) as string[],
@@ -137,6 +147,48 @@ export default function NewsPage() {
     return { filtered: ranked, scores: m }
   }, [clientFiltered, dateFiltered, activeSource, activeClient, parsedKws])
 
+  // Monitored universe for the panorama = the client-relevant items in the period
+  // (deduped), independent of the transient source filter — the "234 itens
+  // monitorados" base. Each row reduced to its tag + source type.
+  const monitored = useMemo(() => dedupeByTitle(clientFiltered), [clientFiltered])
+  const panoramaRows = useMemo<PanoramaRow[]>(
+    () =>
+      monitored.map((a) => {
+        const t = tagsById.get(a.id)
+        return {
+          tom: t?.tom ?? null,
+          relevancia: t?.relevancia ?? null,
+          cita_cliente: t?.cita_cliente ?? null,
+          categoria: a.sources?.categoria ?? null,
+        }
+      }),
+    [monitored, tagsById]
+  )
+
+  // Previous equal-length period → the panorama trend. Client-side, from the
+  // loaded window; only for a preset period with no custom date range.
+  const trend = useMemo(() => {
+    if (!activeClient || !activePeriod || dateFrom || dateTo) return null
+    const p = activePeriod
+    const now = Date.now()
+    const curStart = now - p * 86400000
+    const prevStart = now - 2 * p * 86400000
+    const feeds = activeClient.feed_names || []
+    const relevant = (a: Article) =>
+      (parsedKws.length > 0 && isRelevant(parsedKws, { title: a.title, excerpt: a.excerpt })) ||
+      feeds.includes(a.sources?.name || '')
+    const ms = (a: Article) => (a.published_at ? new Date(a.published_at).getTime() : 0)
+    const rel = articles.filter(relevant)
+    const prevArts = dedupeByTitle(rel.filter((a) => ms(a) >= prevStart && ms(a) < curStart))
+    const prevRows: PanoramaRow[] = prevArts.map((a) => {
+      const t = tagsById.get(a.id)
+      return { tom: t?.tom ?? null, relevancia: t?.relevancia ?? null, cita_cliente: t?.cita_cliente ?? null, categoria: a.sources?.categoria ?? null }
+    })
+    const oldest = Math.min(...articles.map(ms).filter((x) => x > 0))
+    const partial = Number.isFinite(oldest) && prevStart < oldest
+    return { prevRows, partial }
+  }, [activeClient, activePeriod, dateFrom, dateTo, parsedKws, articles, tagsById])
+
   useEffect(() => {
     loadArticles()
     fetch('/api/clients').then(r => r.json()).then(d => {
@@ -159,11 +211,119 @@ export default function NewsPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeClient?.id])
 
+  // Load the active client's reputational tags (per-client curation state).
+  useEffect(() => {
+    if (!activeClient) {
+      setTagsById(new Map())
+      return
+    }
+    let cancelled = false
+    fetch(`/api/articles/tag?client_id=${activeClient.id}`)
+      .then((r) => r.json())
+      .then((d: ArticleTag[]) => {
+        if (cancelled) return
+        const m = new Map<string, ArticleTag>()
+        if (Array.isArray(d)) for (const t of d) m.set(t.article_id, t)
+        setTagsById(m)
+      })
+      .catch(() => {
+        if (!cancelled) setTagsById(new Map())
+      })
+    return () => {
+      cancelled = true
+    }
+    // Refetch only when the selected client changes, not on every client edit.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeClient?.id])
+
+  // Optimistic tag write: update the map now, persist, revert + toast on failure.
+  async function handleTag(articleId: string, patch: TagPatch) {
+    if (!activeClient) return
+    const prev = tagsById.get(articleId) ?? null
+    const optimistic: ArticleTag = {
+      article_id: articleId,
+      client_id: activeClient.id,
+      tom: prev?.tom ?? null,
+      relevancia: prev?.relevancia ?? null,
+      cita_cliente: prev?.cita_cliente ?? null,
+      tema: prev?.tema ?? null,
+      ...patch,
+    }
+    setTagsById((m) => new Map(m).set(articleId, optimistic))
+    try {
+      const res = await fetch('/api/articles/tag', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ article_id: articleId, client_id: activeClient.id, ...patch }),
+      })
+      const data = await res.json().catch(() => null)
+      if (!res.ok) throw new Error(data?.error || 'Falha ao salvar a classificação')
+      setTagsById((m) => new Map(m).set(articleId, data as ArticleTag))
+    } catch (e) {
+      setTagsById((m) => {
+        const n = new Map(m)
+        if (prev) n.set(articleId, prev)
+        else n.delete(articleId)
+        return n
+      })
+      toast({
+        title: 'Não foi possível salvar a classificação',
+        description: (e as Error).message,
+        variant: 'destructive',
+      })
+    }
+  }
+
+  // Suggest tags for the monitored set (deterministic; AI when the key is set),
+  // then apply as fill-only via /bulk — never overwriting a tag set by hand.
+  async function runSuggestTags() {
+    if (!activeClient || monitored.length === 0) return
+    setSuggesting(true)
+    try {
+      const sres = await fetch('/api/articles/tag/suggest', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ client_id: activeClient.id, article_ids: monitored.map((a) => a.id) }),
+      })
+      const sdata = await sres.json().catch(() => null)
+      if (!sres.ok) throw new Error(sdata?.error || 'Falha ao sugerir tags')
+      const suggestions = (sdata?.suggestions ?? []) as TagSuggestion[]
+      if (!suggestions.length) throw new Error('Nenhuma sugestão gerada')
+
+      const bres = await fetch('/api/articles/tag/bulk', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ client_id: activeClient.id, items: suggestions }),
+      })
+      const saved = await bres.json().catch(() => null)
+      if (!bres.ok) throw new Error(saved?.error || 'Falha ao aplicar sugestões')
+
+      setTagsById((m) => {
+        const n = new Map(m)
+        for (const t of saved as ArticleTag[]) n.set(t.article_id, t)
+        return n
+      })
+      toast({
+        title: `${(saved as ArticleTag[]).length} matérias classificadas`,
+        description:
+          sdata.mode === 'ai'
+            ? 'Sugestões geradas com IA (Anthropic). Revise os pills.'
+            : 'Modo heurístico — defina ANTHROPIC_API_KEY para ligar a IA. Revise os pills.',
+      })
+    } catch (e) {
+      toast({ title: 'Não foi possível sugerir tags', description: (e as Error).message, variant: 'destructive' })
+    } finally {
+      setSuggesting(false)
+    }
+  }
+
   async function loadArticles() {
     setLoading(true)
     // Page through the window so the period buttons filter over ALL articles, not
     // just the newest 1000 (which the high-volume general feeds would monopolize).
-    const data = await fetchArticlesWindow(45)
+    // 60d so the panorama trend can compare the current period to the previous
+    // equal-length one (e.g. last 30 days vs. the 30 before it).
+    const data = await fetchArticlesWindow(60)
     setArticles(data)
     setLoading(false)
   }
@@ -214,6 +374,18 @@ export default function NewsPage() {
             <RefreshCw className={`w-4 h-4 mr-2 ${fetching ? 'animate-spin' : ''}`} />
             {fetching ? 'Buscando...' : 'Buscar Notícias'}
           </Button>
+          {activeClient && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={runSuggestTags}
+              disabled={suggesting || monitored.length === 0}
+              title="Preenche tom/relevância/cita das matérias ainda não classificadas"
+            >
+              <Sparkles className={`w-4 h-4 mr-2 ${suggesting ? 'animate-pulse' : ''}`} />
+              {suggesting ? 'Sugerindo...' : `Sugerir tags (${monitored.length})`}
+            </Button>
+          )}
           <ViewToggle mode={mode} onToggle={toggle} />
         </div>
       </div>
@@ -336,6 +508,16 @@ export default function NewsPage() {
       {/* Source filter */}
       <SourceFilterBar sources={sources} active={activeSource} onChange={setActiveSource} />
 
+      {/* Live panorama — deterministic, from the active client's tags */}
+      {activeClient && (
+        <PanoramaPanel
+          rows={panoramaRows}
+          clientName={activeClient.name}
+          prevRows={trend?.prevRows}
+          prevPartial={trend?.partial}
+        />
+      )}
+
       {/* Content */}
       {loading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
@@ -357,7 +539,15 @@ export default function NewsPage() {
       ) : mode === 'card' ? (
         <ArticleCardGrid articles={filtered} selected={selected} onSelect={toggleSelect} scores={scores} />
       ) : (
-        <ArticleListView articles={filtered} selected={selected} onSelect={toggleSelect} scores={scores} />
+        <ArticleListView
+          articles={filtered}
+          selected={selected}
+          onSelect={toggleSelect}
+          scores={scores}
+          clientId={activeClient?.id ?? null}
+          tagsById={tagsById}
+          onTag={handleTag}
+        />
       )}
 
       {/* Floating action buttons */}

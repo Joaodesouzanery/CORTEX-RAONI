@@ -1,0 +1,35 @@
+name: Alerts digest
+
+# Daily deterministic alert check (volume spike / negative tone / high relevance)
+# → e-mail digest. Runs ONCE a day so the 24h window doesn't overlap (no dupes).
+# Same pattern as fetch-news.yml: GitHub Actions cron calling a protected endpoint.
+on:
+  schedule:
+    - cron: '0 11 * * *' # 11:00 UTC (~08:00 BRT) daily
+  workflow_dispatch: {} # allow manual runs from the Actions tab
+
+jobs:
+  alerts:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger alert check
+        run: |
+          if [ -z "${APP_URL}" ]; then
+            echo "Missing APP_URL repo secret (e.g. https://cortex-raoni.vercel.app)." >&2
+            exit 1
+          fi
+          auth=()
+          if [ -n "${CRON_SECRET}" ]; then
+            auth=(-H "Authorization: Bearer ${CRON_SECRET}")
+          fi
+          code=$(curl -sS -o /tmp/alerts.json -w '%{http_code}' \
+            --max-time 120 \
+            "${auth[@]}" \
+            "${APP_URL%/}/api/alerts/check")
+          echo "HTTP ${code}"
+          cat /tmp/alerts.json || true
+          echo
+          test "${code}" = "200"
+        env:
+          APP_URL: ${{ secrets.APP_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}

@@ -3,7 +3,11 @@ import { createAdminClient as createClient } from '@/lib/supabase/server'
 import { buildSystemPrompt, type ReportClient, type ReportMetadata } from '@/lib/ai/claude'
 import { reportCreateSchema, formatZodError } from '@/lib/validation'
 import { fetchArticleText } from '@/lib/fetcher/extract'
-import type { Article } from '@/types'
+import { computePanorama, type PanoramaRow } from '@/lib/panorama'
+import type { Article, Tom, Relevancia, SourceCategoria } from '@/types'
+
+const TOM_LABEL: Record<Tom, string> = { positivo: 'Positivo', neutro: 'Neutro', negativo: 'Negativo', critico: 'Crítico' }
+const REL_LABEL: Record<Relevancia, string> = { alta: 'Alta', media: 'Média', baixa: 'Baixa' }
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
@@ -82,7 +86,7 @@ export async function POST(req: Request) {
     supabase.from('articles').select('*, sources(name)').in('id', article_ids),
     supabase
       .from('articles')
-      .select('id, title, url, publisher, published_at, sources(name)')
+      .select('id, title, url, publisher, published_at, sources(name, categoria)')
       .in('id', tableIds)
       .order('published_at', { ascending: false, nullsFirst: false }),
   ])
@@ -91,8 +95,10 @@ export async function POST(req: Request) {
 
   let client: ReportClient | null = null
   let prevReport: { content: string; mes?: string } | null = null
+  // Reputational tags for the deterministic panorama (tom/relevância/cita).
+  const tagMap = new Map<string, { tom: Tom | null; relevancia: Relevancia | null; cita_cliente: boolean | null }>()
   if (client_id) {
-    const [{ data: c }, { data: reports }] = await Promise.all([
+    const [{ data: c }, { data: reports }, { data: tags }] = await Promise.all([
       supabase.from('clients').select('name, context, report_prompt, sector, contratante').eq('id', client_id).single(),
       supabase
         .from('reports')
@@ -100,10 +106,18 @@ export async function POST(req: Request) {
         .eq('client_id', client_id)
         .order('created_at', { ascending: false })
         .limit(1),
+      supabase
+        .from('article_client_tags')
+        .select('article_id, tom, relevancia, cita_cliente')
+        .eq('client_id', client_id)
+        .in('article_id', tableIds),
     ])
     client = (c as ReportClient) || null
     const r = reports?.[0] as { content?: string; metadata?: { mes?: string } } | undefined
     if (r?.content) prevReport = { content: r.content, mes: r.metadata?.mes }
+    for (const t of (tags as { article_id: string; tom: Tom | null; relevancia: Relevancia | null; cita_cliente: boolean | null }[] | null) || []) {
+      tagMap.set(t.article_id, { tom: t.tom, relevancia: t.relevancia, cita_cliente: t.cita_cliente })
+    }
   }
 
   const m = metadata as ReportMetadata | undefined
@@ -125,9 +139,18 @@ export async function POST(req: Request) {
     .filter(Boolean)
     .join('\n\n')
 
-  // ---- Panorama quantitativo (pré-computado; tom/relevância ficam p/ o Claude) ----
+  // ---- Panorama quantitativo (determinístico a partir da curadoria) ----
+  // Categoria da fonte: usa a coluna quando existir; senão cai na heurística de
+  // nome ("Institucional — …"), preservando o comportamento anterior.
   const total = tableRows.length
-  const inst = tableRows.filter(isInstitucional).length
+  const categoriaOf = (a: Article): SourceCategoria =>
+    (a.sources?.categoria as SourceCategoria) || (isInstitucional(a) ? 'institucional' : 'imprensa')
+  const pano = computePanorama(
+    tableRows.map((a): PanoramaRow => {
+      const t = tagMap.get(a.id)
+      return { tom: t?.tom ?? null, relevancia: t?.relevancia ?? null, cita_cliente: t?.cita_cliente ?? null, categoria: categoriaOf(a) }
+    })
+  )
   const byVeiculo = new Map<string, number>()
   for (const a of tableRows) byVeiculo.set(veiculoOf(a), (byVeiculo.get(veiculoOf(a)) || 0) + 1)
   const dates = tableRows.map((a) => a.published_at).filter(Boolean).sort() as string[]
@@ -136,9 +159,20 @@ export async function POST(req: Request) {
     .map(([n, c]) => `- ${n}: ${c}`)
     .join('\n')
   const panorama = [
-    'PANORAMA QUANTITATIVO (pré-computado — classifique tom/relevância na análise):',
+    pano.tagged
+      ? 'PANORAMA QUANTITATIVO (pré-computado a partir da curadoria — determinístico):'
+      : 'PANORAMA QUANTITATIVO (pré-computado; classifique tom/relevância na análise):',
     `- Total de itens monitorados: ${total}`,
-    `- Por tipo de fonte: Imprensa ${total - inst} · Institucional/regulador ${inst}`,
+    `- Por tipo de fonte: Imprensa ${pano.porTipoFonte.imprensa} · Institucional/regulador ${pano.porTipoFonte.institucional} · Agentes do setor ${pano.porTipoFonte.agente}`,
+    pano.tagged
+      ? `- Por tom: Positivos ${pano.porTom.positivo} · Neutros ${pano.porTom.neutro} · Negativos ${pano.porTom.negativo} · Críticos ${pano.porTom.critico}${pano.semTom ? ` · Sem classificação ${pano.semTom}` : ''}`
+      : '',
+    pano.tagged
+      ? `- Por relevância: Alta ${pano.porRelevancia.alta} · Média ${pano.porRelevancia.media} · Baixa ${pano.porRelevancia.baixa}${pano.semRelevancia ? ` · Sem classificação ${pano.semRelevancia}` : ''}`
+      : '',
+    pano.citamCliente || pano.sobOutroProtagonista
+      ? `- Menção ao cliente: Citam o cliente ${pano.citamCliente} · Tema sob outro protagonista ${pano.sobOutroProtagonista}${pano.semCitacao ? ` · Sem classificação ${pano.semCitacao}` : ''}`
+      : '',
     dates.length ? `- Período coberto: ${fmtDate(dates[0])} a ${fmtDate(dates[dates.length - 1])}` : '',
     '- Por veículo:',
     topVeiculos,
@@ -147,19 +181,41 @@ export async function POST(req: Request) {
     .join('\n')
 
   // ---- Tabela completa de itens (vira a base .xlsx) ----
+  const tomOf = (id: string) => {
+    const t = tagMap.get(id)?.tom
+    return t ? TOM_LABEL[t] : ''
+  }
+  const relOf = (id: string) => {
+    const t = tagMap.get(id)?.relevancia
+    return t ? REL_LABEL[t] : ''
+  }
+  const citaOf = (id: string) => {
+    const c = tagMap.get(id)?.cita_cliente
+    return c === true ? 'Sim' : c === false ? 'Não' : ''
+  }
+
   const tabela = [
-    '| Nº | Data | Veículo | Título | URL |',
-    '|---|---|---|---|---|',
+    '| Nº | Data | Veículo | Título | Tom | Relev. | Cita | URL |',
+    '|---|---|---|---|---|---|---|---|',
     ...tableRows.map((a, i) => {
       const titulo = (a.title || '').replace(/\|/g, '\\|').replace(/\s+/g, ' ').trim()
-      return `| ${i + 1} | ${fmtDate(a.published_at)} | ${veiculoOf(a)} | ${titulo} | ${a.url} |`
+      return `| ${i + 1} | ${fmtDate(a.published_at)} | ${veiculoOf(a)} | ${titulo} | ${tomOf(a.id)} | ${relOf(a.id)} | ${citaOf(a.id)} | ${a.url} |`
     }),
   ].join('\n')
 
   const csv = [
-    'Nº,Data,Veículo,Título,URL',
+    'Nº,Data,Veículo,Título,Tom,Relevância,Cita cliente,URL',
     ...tableRows.map((a, i) =>
-      [String(i + 1), fmtDate(a.published_at), veiculoOf(a), (a.title || '').replace(/\s+/g, ' ').trim(), a.url || '']
+      [
+        String(i + 1),
+        fmtDate(a.published_at),
+        veiculoOf(a),
+        (a.title || '').replace(/\s+/g, ' ').trim(),
+        tomOf(a.id),
+        relOf(a.id),
+        citaOf(a.id),
+        a.url || '',
+      ]
         .map(csvCell)
         .join(',')
     ),
