@@ -21,6 +21,7 @@ export interface Source {
   type: 'rss' | 'scrape'
   active: boolean
   categoria?: SourceCategoria
+  is_general?: boolean
   last_fetch_count?: number | null
   last_fetched_at?: string | null
   created_at: string
@@ -37,7 +38,7 @@ export interface Article {
   published_at: string | null
   fetched_at: string
   publisher?: string | null
-  sources?: { name: string; categoria?: SourceCategoria }
+  sources?: { name: string; categoria?: SourceCategoria; is_general?: boolean }
   // Populated client-side by merging the active client's tags (not a DB column).
   tag?: ArticleTag | null
 }

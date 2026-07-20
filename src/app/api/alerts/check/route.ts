@@ -65,8 +65,13 @@ async function runCheck() {
     if (!kws.length && !feeds.length) continue
 
     const recentRel = recent.filter((a) => relevantTo(a, kws, feeds))
-    const baselineRelCount = baseline.filter((a) => relevantTo(a, kws, feeds)).length
-    const baselineDailyAvg = baselineRelCount / BASELINE_DAYS
+    // Baseline = the days BEFORE the recent window, so today's spike doesn't
+    // inflate its own baseline (divide by the pre-recent days, not all 8).
+    const recentMs = now - WINDOW_HOURS * 3600_000
+    const baselineRelCount = baseline.filter(
+      (a) => relevantTo(a, kws, feeds) && a.published_at != null && new Date(a.published_at).getTime() < recentMs
+    ).length
+    const baselineDailyAvg = baselineRelCount / (BASELINE_DAYS - 1)
     if (!recentRel.length) {
       digests.push({ clientName: client.name, alerts: [], recipient: client.alert_recipient ?? null })
       continue

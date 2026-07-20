@@ -25,6 +25,7 @@ export const sourceCreateSchema = z.object({
   url: urlString,
   type: z.enum(['rss', 'scrape']),
   active: z.boolean().optional(),
+  is_general: z.boolean().optional(),
 })
 
 export const sourceUpdateSchema = z.object({
@@ -32,6 +33,7 @@ export const sourceUpdateSchema = z.object({
   url: urlString.optional(),
   type: z.enum(['rss', 'scrape']).optional(),
   active: z.boolean().optional(),
+  is_general: z.boolean().optional(),
 })
 
 // ---- Clients ----

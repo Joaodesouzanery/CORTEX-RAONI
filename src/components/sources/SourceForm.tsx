@@ -17,6 +17,7 @@ export default function SourceForm({ source, open, onClose, onSaved }: Props) {
   const [name, setName] = useState(source?.name || '')
   const [url, setUrl] = useState(source?.url || '')
   const [type, setType] = useState<'rss' | 'scrape'>(source?.type || 'rss')
+  const [isGeneral, setIsGeneral] = useState(source?.is_general || false)
   const [loading, setLoading] = useState(false)
 
   async function save() {
@@ -26,7 +27,7 @@ export default function SourceForm({ source, open, onClose, onSaved }: Props) {
     await fetch(endpoint, {
       method,
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, url, type }),
+      body: JSON.stringify({ name, url, type, is_general: isGeneral }),
     })
     onSaved()
     onClose()
@@ -61,6 +62,10 @@ export default function SourceForm({ source, open, onClose, onSaved }: Props) {
               </label>
             </div>
           </div>
+          <label className="flex items-center gap-2 cursor-pointer text-sm">
+            <input type="checkbox" checked={isGeneral} onChange={(e) => setIsGeneral(e.target.checked)} />
+            <span>Fonte generalista (firehose) — só entra na visão sem cliente quando bate nos termos de algum cliente</span>
+          </label>
           <Button onClick={save} disabled={loading || !name || !url}>
             {loading ? 'Salvando...' : 'Salvar'}
           </Button>

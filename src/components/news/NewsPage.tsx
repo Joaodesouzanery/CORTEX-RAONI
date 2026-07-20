@@ -26,23 +26,9 @@ interface FetchSourceResult {
   error?: string
 }
 
-// Generalist firehose feeds: their articles only show in the default "relevant"
-// view when they match a client's terms. Every other (thematic/specialized) feed
-// is on-topic by construction and always passes.
-const GENERAL_SOURCES = new Set([
-  'Carta Capital',
-  'Metrópoles',
-  'Poder360',
-  'Folha de S.Paulo',
-  'Brasil Journal',
-  'Exame',
-  'G1',
-  'O Globo',
-  'Estadão',
-  'Agência Estado / Broadcast',
-  'Brasil 247',
-  'Google News — Brasil (manchetes)',
-])
+// Generalist firehose feeds (sources.is_general): only show in the default
+// "relevant" (no-client) view when they match a client's terms; thematic feeds
+// always pass. The flag lives in the DB (migration 022), not a hard-coded list.
 
 export default function NewsPage() {
   const { mode, toggle } = useViewMode()
@@ -123,7 +109,7 @@ export default function NewsPage() {
     if (showAll || !allClientsParsed.length) return dateFiltered
     return dateFiltered.filter(
       (a) =>
-        !GENERAL_SOURCES.has(a.sources?.name || '') ||
+        !a.sources?.is_general ||
         isRelevant(allClientsParsed, { title: a.title, excerpt: a.excerpt })
     )
   }, [dateFiltered, activeClient, parsedKws, allClientsParsed, showAll])
@@ -188,6 +174,17 @@ export default function NewsPage() {
     const partial = Number.isFinite(oldest) && prevStart < oldest
     return { prevRows, partial }
   }, [activeClient, activePeriod, dateFrom, dateTo, parsedKws, articles, tagsById])
+
+  // Only items missing at least one tag dimension need a suggestion — re-classifying
+  // already-tagged items just wastes AI calls (bulk apply is fill-only anyway).
+  const pendingTag = useMemo(
+    () =>
+      monitored.filter((a) => {
+        const t = tagsById.get(a.id)
+        return !t || t.tom == null || t.relevancia == null || t.cita_cliente == null
+      }),
+    [monitored, tagsById]
+  )
 
   useEffect(() => {
     loadArticles()
@@ -277,13 +274,17 @@ export default function NewsPage() {
   // Suggest tags for the monitored set (deterministic; AI when the key is set),
   // then apply as fill-only via /bulk — never overwriting a tag set by hand.
   async function runSuggestTags() {
-    if (!activeClient || monitored.length === 0) return
+    if (!activeClient) return
+    if (pendingTag.length === 0) {
+      toast({ title: 'Tudo já classificado', description: 'Nenhuma matéria pendente de tag neste período.' })
+      return
+    }
     setSuggesting(true)
     try {
       const sres = await fetch('/api/articles/tag/suggest', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ client_id: activeClient.id, article_ids: monitored.map((a) => a.id) }),
+        body: JSON.stringify({ client_id: activeClient.id, article_ids: pendingTag.map((a) => a.id) }),
       })
       const sdata = await sres.json().catch(() => null)
       if (!sres.ok) throw new Error(sdata?.error || 'Falha ao sugerir tags')
@@ -379,11 +380,11 @@ export default function NewsPage() {
               variant="outline"
               size="sm"
               onClick={runSuggestTags}
-              disabled={suggesting || monitored.length === 0}
+              disabled={suggesting || pendingTag.length === 0}
               title="Preenche tom/relevância/cita das matérias ainda não classificadas"
             >
               <Sparkles className={`w-4 h-4 mr-2 ${suggesting ? 'animate-pulse' : ''}`} />
-              {suggesting ? 'Sugerindo...' : `Sugerir tags (${monitored.length})`}
+              {suggesting ? 'Sugerindo...' : `Sugerir tags (${pendingTag.length})`}
             </Button>
           )}
           <ViewToggle mode={mode} onToggle={toggle} />
