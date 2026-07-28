@@ -10,8 +10,10 @@ export default function Navbar() {
     { href: '/news', label: 'Notícias' },
     { href: '/alerts', label: 'Alertas' },
     { href: '/sources', label: 'Fontes' },
+    { href: '/imports', label: 'Importações' },
     { href: '/clients', label: 'Clientes' },
     { href: '/reports', label: 'Relatórios' },
+    { href: '/monthly-editions', label: 'Fechamentos' },
   ]
 
   return (
@@ -27,9 +29,7 @@ export default function Navbar() {
               href={link.href}
               className={cn(
                 'text-sm uppercase tracking-wider transition-colors',
-                pathname.startsWith(link.href)
-                  ? 'text-black font-semibold'
-                  : 'text-gray-500 hover:text-black'
+                pathname.startsWith(link.href) ? 'text-black font-semibold' : 'text-gray-500 hover:text-black'
               )}
             >
               {link.label}

@@ -1,0 +1,86 @@
+name: Monthly clippings
+
+on:
+  schedule:
+    - cron: '0 11 1 * *' # primeiro dia, 08:00 em Brasília
+  workflow_dispatch:
+    inputs:
+      edition_ids:
+        description: 'UUIDs já criados, separados por vírgula (opcional)'
+        required: false
+        type: string
+      period:
+        description: 'Mês YYYY-MM; vazio usa o mês anterior'
+        required: false
+        type: string
+
+concurrency:
+  group: monthly-clippings
+  cancel-in-progress: false
+
+jobs:
+  close-and-render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Resolve period and edition IDs
+        id: editions
+        env:
+          APP_URL: ${{ secrets.APP_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+          INPUT_IDS: ${{ inputs.edition_ids }}
+          INPUT_PERIOD: ${{ inputs.period }}
+        run: |
+          if [ -z "${APP_URL}" ] || [ -z "${CRON_SECRET}" ]; then
+            echo "APP_URL and CRON_SECRET secrets are required." >&2
+            exit 1
+          fi
+          period="${INPUT_PERIOD}"
+          if [ -z "${period}" ]; then
+            period=$(node -e "const d=new Date(); d.setUTCMonth(d.getUTCMonth()-1); process.stdout.write(d.toISOString().slice(0,7))")
+          fi
+          ids="${INPUT_IDS}"
+          if [ -z "${ids}" ]; then
+            code=$(curl -sS -o /tmp/monthly.json -w '%{http_code}' \
+              --max-time 120 \
+              -X POST \
+              -H "Authorization: Bearer ${CRON_SECRET}" \
+              -H "Content-Type: application/json" \
+              -d "{\"period\":\"${period}\"}" \
+              "${APP_URL%/}/api/internal/monthly-editions/close")
+            cat /tmp/monthly.json
+            test "${code}" = "200"
+            ids=$(node -e "const x=require('/tmp/monthly.json'); process.stdout.write((x.editions||[]).map(e=>e.id).join(','))")
+          fi
+          echo "period=${period}" >> "$GITHUB_OUTPUT"
+          echo "ids=${ids}" >> "$GITHUB_OUTPUT"
+
+      - name: Render every client independently
+        env:
+          APP_URL: ${{ secrets.APP_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+          EDITION_IDS: ${{ steps.editions.outputs.ids }}
+        run: |
+          if [ -z "${EDITION_IDS}" ]; then
+            echo "No pending editions for this period."
+            exit 0
+          fi
+          failed=0
+          IFS=',' read -ra ids <<< "${EDITION_IDS}"
+          for edition_id in "${ids[@]}"; do
+            echo "Rendering ${edition_id}"
+            if ! EDITION_ID="${edition_id}" node scripts/render-monthly-clipping.mjs; then
+              failed=1
+              echo "::error::Edition ${edition_id} failed"
+            fi
+          done
+          exit "${failed}"

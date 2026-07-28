@@ -5,7 +5,12 @@ export const dynamic = 'force-dynamic'
 
 export async function POST(req: Request) {
   const password = process.env.APP_PASSWORD
-  if (!password) return NextResponse.json({ ok: true }) // gate disabled
+  if (!password) {
+    if (process.env.NODE_ENV === 'production') {
+      return NextResponse.json({ error: 'APP_PASSWORD não configurada.' }, { status: 503 })
+    }
+    return NextResponse.json({ ok: true })
+  }
 
   const body = await req.json().catch(() => null)
   if (!body?.password || body.password !== password) {

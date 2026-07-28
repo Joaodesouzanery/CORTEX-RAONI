@@ -25,7 +25,7 @@ export async function GET(req: Request) {
   if (sourceId) query = query.eq('source_id', sourceId)
   if (search) query = query.ilike('title', `%${search}%`)
 
-  // Optional period window: bounds the payload to the retained window so the row
+  // Optional period window: bounds the payload to the selected window so the row
   // limit doesn't bury older-but-in-period news. Undated articles are kept (some
   // feeds omit dates) so the "Todos" view still shows them.
   let cutoff: string | null = null

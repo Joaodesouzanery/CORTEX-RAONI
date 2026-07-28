@@ -9,7 +9,8 @@ const PAGE = 1000
  * the lower-volume sector feeds out of view. Paging with `offset` loads the whole
  * period so per-client relevance runs over ALL of it — not just the newest 1000.
  *
- * `maxPages` bounds the worst case (retention is 90d); stops early once a page
+ * `maxPages` bounds the worst case for the interactive view; the database
+ * archive itself is permanent and monthly editions query their exact window.
  * comes back short.
  */
 export async function fetchArticlesWindow(days: number, maxPages = 12): Promise<Article[]> {
@@ -31,7 +32,9 @@ export async function fetchArticlesWindow(days: number, maxPages = 12): Promise<
     if (data.length < PAGE) break
     if (page === maxPages - 1) {
       // Hit the safety cap — surface it instead of silently truncating the window.
-      console.warn(`[articles] paginação atingiu o teto de ${maxPages} páginas (${all.length} linhas); janela pode estar truncada.`)
+      console.warn(
+        `[articles] paginação atingiu o teto de ${maxPages} páginas (${all.length} linhas); janela pode estar truncada.`
+      )
     }
   }
   return all

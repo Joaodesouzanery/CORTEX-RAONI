@@ -1,15 +1,15 @@
 import { NextResponse } from 'next/server'
 import { createAdminClient as createClient } from '@/lib/supabase/server'
 import { clientCreateSchema, formatZodError } from '@/lib/validation'
+import { syncClientThematicSources } from '@/lib/client-sources'
 
 export const dynamic = 'force-dynamic'
 
-export async function GET() {
+export async function GET(req: Request) {
   const supabase = createClient()
-  const { data, error } = await supabase
-    .from('clients')
-    .select('*')
-    .order('name', { ascending: true })
+  let query = supabase.from('clients').select('*').order('name', { ascending: true })
+  if (new URL(req.url).searchParams.get('active') === 'true') query = query.eq('active', true)
+  const { data, error } = await query
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
   return NextResponse.json(data)
 }
@@ -21,7 +21,18 @@ export async function POST(req: Request) {
   if (!parsed.success) {
     return NextResponse.json({ error: formatZodError(parsed.error) }, { status: 400 })
   }
-  const { name, context, report_prompt, sector, contratante, keywords, synonyms, feed_names, alert_recipient, logo_url } = parsed.data
+  const {
+    name,
+    context,
+    report_prompt,
+    sector,
+    contratante,
+    keywords,
+    synonyms,
+    feed_names,
+    alert_recipient,
+    logo_url,
+  } = parsed.data
 
   const { data, error } = await supabase
     .from('clients')
@@ -41,5 +52,11 @@ export async function POST(req: Request) {
     .single()
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  try {
+    await syncClientThematicSources(supabase, data.id, feed_names)
+  } catch (syncError) {
+    await supabase.from('clients').delete().eq('id', data.id)
+    return NextResponse.json({ error: (syncError as Error).message }, { status: 500 })
+  }
   return NextResponse.json(data, { status: 201 })
 }

@@ -19,11 +19,15 @@ export default function ArticleCard({ article, selected, onSelect, score }: Prop
       <div className="flex items-center justify-between mb-2">
         <span className="text-xs uppercase tracking-widest text-gray-500 flex items-center gap-2">
           {score != null && score > 0 && (
-            <span className="bg-black text-white px-1.5 py-0.5 text-[10px] tracking-normal" title="Relevância para o cliente">
+            <span
+              className="bg-black text-white px-1.5 py-0.5 text-[10px] tracking-normal"
+              title="Relevância para o cliente"
+            >
               ★ {score}
             </span>
           )}
-          {article.publisher || article.sources?.name}{article.published_at ? `, ${formatDate(article.published_at)}` : ''}
+          {article.publisher || article.sources?.name}
+          {article.published_at ? `, ${formatDate(article.published_at)}` : ''}
         </span>
         {/* Checkbox */}
         <div
@@ -44,13 +48,7 @@ export default function ArticleCard({ article, selected, onSelect, score }: Prop
       {/* Image */}
       <div className="relative w-full aspect-video bg-gray-100 overflow-hidden mb-3">
         {article.image_url ? (
-          <Image
-            src={article.image_url}
-            alt={article.title}
-            fill
-            className="object-cover"
-            unoptimized
-          />
+          <Image src={article.image_url} alt={article.title} fill className="object-cover" unoptimized />
         ) : (
           <div className="w-full h-full bg-gray-100 flex items-center justify-center">
             <span className="text-xs uppercase tracking-widest text-gray-400 px-3 text-center line-clamp-2">
@@ -61,26 +59,24 @@ export default function ArticleCard({ article, selected, onSelect, score }: Prop
       </div>
 
       {/* Title */}
-      <h3 className="font-bold text-base leading-snug line-clamp-2 mb-2">
-        {article.title}
-      </h3>
+      <h3 className="font-bold text-base leading-snug line-clamp-2 mb-2">{article.title}</h3>
 
       {/* Excerpt */}
-      {article.excerpt && (
-        <p className="text-sm text-gray-600 line-clamp-3 mb-3 flex-1">
-          {article.excerpt}
-        </p>
-      )}
+      {article.excerpt && <p className="text-sm text-gray-600 line-clamp-3 mb-3 flex-1">{article.excerpt}</p>}
 
       {/* Read link */}
-      <a
-        href={article.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-sm text-black hover:underline mt-auto"
-      >
-        ↳ Saiba Mais
-      </a>
+      {article.url ? (
+        <a
+          href={article.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-sm text-black hover:underline mt-auto"
+        >
+          ↳ Saiba Mais
+        </a>
+      ) : (
+        <span className="text-xs text-gray-400 mt-auto">Sem link externo</span>
+      )}
     </div>
   )
 }

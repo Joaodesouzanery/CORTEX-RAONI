@@ -2,16 +2,34 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { gateToken, GATE_COOKIE } from '@/lib/gate'
 
-// Opt-in access gate: only active when APP_PASSWORD is set. Protects the whole
-// app (incl. the paid /api/reports) behind a single shared password. Without
-// APP_PASSWORD the app stays open (current behavior).
-const PUBLIC_PATHS = ['/login', '/api/auth', '/api/articles/fetch', '/api/alerts/check']
+const PUBLIC_PATHS = ['/login', '/api/auth']
+const CRON_PATHS = [
+  '/api/articles/fetch',
+  '/api/articles/backfill-images',
+  '/api/articles/enrich',
+  '/api/alerts/check',
+  '/api/internal',
+]
 
 export async function middleware(req: NextRequest) {
   const password = process.env.APP_PASSWORD
-  if (!password) return NextResponse.next() // gate disabled
+  const cronSecret = process.env.CRON_SECRET
+  if (process.env.NODE_ENV === 'production' && (!password || !cronSecret)) {
+    return NextResponse.json(
+      { error: 'Configuração de segurança incompleta: APP_PASSWORD e CRON_SECRET são obrigatórios.' },
+      { status: 503 }
+    )
+  }
+  if (!password) return NextResponse.next()
 
   const { pathname } = req.nextUrl
+  if (
+    cronSecret &&
+    CRON_PATHS.some((p) => pathname === p || pathname.startsWith(p + '/')) &&
+    req.headers.get('authorization') === `Bearer ${cronSecret}`
+  ) {
+    return NextResponse.next()
+  }
   if (PUBLIC_PATHS.some((p) => pathname === p || pathname.startsWith(p + '/'))) {
     return NextResponse.next()
   }

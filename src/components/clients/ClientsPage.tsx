@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
+import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import type { Client } from '@/types'
 import ClientForm from './ClientForm'
@@ -58,7 +59,14 @@ export default function ClientsPage() {
           {clients.map((client) => (
             <div key={client.id} className="flex items-center gap-4 p-4">
               {client.logo_url ? (
-                <img src={client.logo_url} alt={client.name} className="h-10 w-20 object-contain flex-shrink-0" />
+                <Image
+                  src={client.logo_url}
+                  alt={client.name}
+                  width={80}
+                  height={40}
+                  unoptimized
+                  className="h-10 w-20 object-contain flex-shrink-0"
+                />
               ) : (
                 <div className="h-10 w-20 bg-gray-100 flex items-center justify-center text-xs text-gray-400 flex-shrink-0">Sem logo</div>
               )}

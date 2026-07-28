@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { formatDate } from '@/lib/utils'
 import type { Report } from '@/types'
 import { Trash2 } from 'lucide-react'
@@ -30,9 +31,12 @@ export default function ReportsPage() {
             <div key={report.id} className="flex items-center gap-3 p-4 hover:bg-gray-50">
               {/* Client logo */}
               {report.clients?.logo_url && (
-                <img
+                <Image
                   src={report.clients.logo_url}
                   alt={report.clients.name}
+                  width={64}
+                  height={32}
+                  unoptimized
                   className="h-8 w-16 object-contain flex-shrink-0"
                 />
               )}

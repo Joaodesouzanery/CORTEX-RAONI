@@ -25,9 +25,19 @@ export interface FetchedArticle {
   publisher: string | null
 }
 
+type SourceTag = string | { _?: string; name?: string; $?: { url?: string } }
+type MediaValue = string | { _?: string; url?: string; $?: { url?: string } }
+type ExtendedFeedItem = {
+  sourceTag?: SourceTag
+  'media:content'?: MediaValue | MediaValue[]
+  'media:thumbnail'?: MediaValue | MediaValue[]
+  'content:encoded'?: string
+  rawDescription?: string
+}
+
 // Google News titles are "Headline - Outlet"; the outlet is also in <source>.
 // Returns the real outlet name (or null) for cleaner citations.
-export function getPublisher(item: any): string | null {
+export function getPublisher(item: ExtendedFeedItem | null | undefined): string | null {
   const src = item?.sourceTag
   const name = (typeof src === 'string' ? src : src?._ || src?.name)?.trim()
   return name || null
@@ -101,9 +111,10 @@ export function extractFirstImage(html: string | null | undefined): string | nul
 }
 
 // Handles both single-object and array forms of media:content / media:thumbnail
-export function getMediaUrl(field: any): string | null {
+export function getMediaUrl(field: MediaValue | MediaValue[] | null | undefined): string | null {
   if (!field) return null
   const item = Array.isArray(field) ? field[0] : field
+  if (typeof item === 'string') return item || null
   return item?.$?.url || item?.url || item?._ || null
 }
 
@@ -153,10 +164,11 @@ export async function fetchRSS(feedUrl: string): Promise<FetchedArticle[]> {
   const feed = await parser.parseString(xml)
 
   const articles: FetchedArticle[] = feed.items.map((item) => {
-    const mediaContent = (item as any)['media:content']
-    const mediaThumbnail = (item as any)['media:thumbnail']
-    const contentEncoded = (item as any)['content:encoded'] as string | undefined
-    const rawDescription = (item as any)['rawDescription'] as string | undefined
+    const extended = item as typeof item & ExtendedFeedItem
+    const mediaContent = extended['media:content']
+    const mediaThumbnail = extended['media:thumbnail']
+    const contentEncoded = extended['content:encoded']
+    const rawDescription = extended.rawDescription
 
     const imageUrl =
       getMediaUrl(mediaContent) ||
@@ -170,7 +182,7 @@ export async function fetchRSS(feedUrl: string): Promise<FetchedArticle[]> {
     const rawExcerpt = item.contentSnippet?.replace(/<[^>]+>/g, '').trim().slice(0, 300) || null
     const excerpt = rawExcerpt ? decodeHtmlEntities(rawExcerpt) : null
 
-    const publisher = getPublisher(item)
+    const publisher = getPublisher(extended)
     const title = stripPublisherSuffix(decodeHtmlEntities(item.title?.trim() || ''), publisher)
 
     return {

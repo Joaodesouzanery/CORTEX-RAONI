@@ -3,14 +3,15 @@ import { createAdminClient as createClient } from '@/lib/supabase/server'
 
 export const dynamic = 'force-dynamic'
 
-export async function POST(req: Request, { params }: { params: { id: string } }) {
+export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   const supabase = createClient()
   const formData = await req.formData()
   const file = formData.get('logo') as File | null
   if (!file) return NextResponse.json({ error: 'Arquivo não encontrado' }, { status: 400 })
 
   const ext = file.name.split('.').pop()
-  const path = `${params.id}.${ext}`
+  const path = `${id}.${ext}`
   const bytes = await file.arrayBuffer()
 
   const { error: uploadError } = await supabase.storage
@@ -24,7 +25,7 @@ export async function POST(req: Request, { params }: { params: { id: string } })
   const { error: updateError } = await supabase
     .from('clients')
     .update({ logo_url: publicUrl })
-    .eq('id', params.id)
+    .eq('id', id)
 
   if (updateError) return NextResponse.json({ error: updateError.message }, { status: 500 })
 

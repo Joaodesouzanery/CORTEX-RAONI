@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect, useMemo } from 'react'
+import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { parseKeywords, isRelevant, expandTerms, dedupeByTitle } from '@/lib/relevance'
@@ -48,12 +49,19 @@ export default function DashboardPage() {
   const [mes, setMes] = useState('')
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
   const [running, setRunning] = useState(false)
-  const [batchProgress, setBatchProgress] = useState<{ i: number; total: number; client: string; label: string } | null>(null)
+  const [batchProgress, setBatchProgress] = useState<{
+    i: number
+    total: number
+    client: string
+    label: string
+  } | null>(null)
   const [results, setResults] = useState<BatchResult[]>([])
 
   useEffect(() => {
     Promise.all([
-      fetch('/api/clients').then((r) => r.json()).catch(() => []),
+      fetch('/api/clients?active=true')
+        .then((r) => r.json())
+        .catch(() => []),
       fetchArticlesWindow(35).catch(() => [] as Article[]),
     ]).then(([c, a]) => {
       setClients(Array.isArray(c) ? c : [])
@@ -109,7 +117,13 @@ export default function DashboardPage() {
           prompt: '',
           article_ids: relevant.map((a) => a.id),
           client_id: client.id,
-          metadata: { mes: mes.trim(), reunioes_presenciais: 0, reunioes_virtuais: 0, orientacoes: 0, acoes_imprensa: 0 },
+          metadata: {
+            mes: mes.trim(),
+            reunioes_presenciais: 0,
+            reunioes_virtuais: 0,
+            orientacoes: 0,
+            acoes_imprensa: 0,
+          },
         }
         const content = await runSectionedReport({
           basePayload,
@@ -156,7 +170,9 @@ export default function DashboardPage() {
             key={p.label}
             onClick={() => setPeriodDays(p.days)}
             className={`px-3 py-1 text-xs uppercase tracking-widest border transition-colors ${
-              periodDays === p.days ? 'bg-black text-white border-black' : 'border-gray-300 text-gray-600 hover:border-black'
+              periodDays === p.days
+                ? 'bg-black text-white border-black'
+                : 'border-gray-300 text-gray-600 hover:border-black'
             }`}
           >
             {p.label}
@@ -169,7 +185,13 @@ export default function DashboardPage() {
       ) : rows.length === 0 ? (
         <div className="text-center py-24 text-gray-400">
           <p className="text-lg">Nenhum cliente cadastrado.</p>
-          <p className="text-sm mt-2">Cadastre clientes em <a href="/clients" className="underline">Clientes</a>.</p>
+          <p className="text-sm mt-2">
+            Cadastre clientes em{' '}
+            <a href="/clients" className="underline">
+              Clientes
+            </a>
+            .
+          </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -193,9 +215,9 @@ export default function DashboardPage() {
                     <p className="text-[11px] text-amber-600 mt-1">Sem palavras-chave cadastradas</p>
                   )}
                 </div>
-                <a href={`/news?client=${client.id}`} className="text-sm text-black hover:underline">
+                <Link href={`/news?client=${client.id}`} className="text-sm text-black hover:underline">
                   Ver notícias ↗
-                </a>
+                </Link>
               </div>
             </div>
           ))}
@@ -204,15 +226,28 @@ export default function DashboardPage() {
 
       {/* Batch modal */}
       {batchOpen && (
-        <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4" onClick={() => !running && setBatchOpen(false)}>
-          <div className="bg-white w-full max-w-lg max-h-[90vh] overflow-y-auto p-6" onClick={(e) => e.stopPropagation()}>
+        <div
+          className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4"
+          onClick={() => !running && setBatchOpen(false)}
+        >
+          <div
+            className="bg-white w-full max-w-lg max-h-[90vh] overflow-y-auto p-6"
+            onClick={(e) => e.stopPropagation()}
+          >
             <h2 className="text-2xl font-light mb-1">Gerar relatórios do mês</h2>
             <p className="text-xs text-gray-500 mb-4">
-              Um relatório por cliente, com os artigos relevantes do período. Os números de atividade (reuniões etc.) entram como 0 — regenere um cliente individualmente para preenchê-los.
+              Um relatório por cliente, com os artigos relevantes do período. Os números de atividade (reuniões etc.)
+              entram como 0 — regenere um cliente individualmente para preenchê-los.
             </p>
 
             <label className="text-sm font-semibold">Mês de referência *</label>
-            <Input value={mes} onChange={(e) => setMes(e.target.value)} placeholder="Ex: Junho de 2026" className="mt-1 mb-4" disabled={running} />
+            <Input
+              value={mes}
+              onChange={(e) => setMes(e.target.value)}
+              placeholder="Ex: Junho de 2026"
+              className="mt-1 mb-4"
+              disabled={running}
+            />
 
             <p className="text-sm font-semibold mb-2">Clientes</p>
             <div className="border border-gray-100 divide-y divide-gray-100 mb-4 max-h-60 overflow-y-auto">
@@ -228,7 +263,14 @@ export default function DashboardPage() {
                     />
                     <span className="flex-1 truncate">{client.name}</span>
                     <span className="text-xs text-gray-400">{relevant.length} rel.</span>
-                    {res && (res.ok ? <span className="text-green-600 text-xs">✓</span> : <span className="text-red-600 text-xs" title={res.error}>✗</span>)}
+                    {res &&
+                      (res.ok ? (
+                        <span className="text-green-600 text-xs">✓</span>
+                      ) : (
+                        <span className="text-red-600 text-xs" title={res.error}>
+                          ✗
+                        </span>
+                      ))}
                   </label>
                 )
               })}
@@ -236,19 +278,24 @@ export default function DashboardPage() {
 
             {batchProgress && (
               <p className="text-sm text-gray-600 mb-3">
-                Gerando {batchProgress.i}/{batchProgress.total} — <strong>{batchProgress.client}</strong> ({batchProgress.label})…
+                Gerando {batchProgress.i}/{batchProgress.total} — <strong>{batchProgress.client}</strong> (
+                {batchProgress.label})…
               </p>
             )}
 
             {results.length > 0 && !running && (
               <div className="text-sm mb-3">
                 {results.filter((r) => r.ok).length} gerado(s), {results.filter((r) => !r.ok).length} com erro.{' '}
-                <a href="/reports" className="underline">Ver em Relatórios ↗</a>
+                <Link href="/reports" className="underline">
+                  Ver em Relatórios ↗
+                </Link>
               </div>
             )}
 
             <div className="flex gap-2 justify-end">
-              <Button variant="outline" onClick={() => setBatchOpen(false)} disabled={running}>Fechar</Button>
+              <Button variant="outline" onClick={() => setBatchOpen(false)} disabled={running}>
+                Fechar
+              </Button>
               <Button onClick={runBatch} disabled={running || !mes.trim() || selectedIds.size === 0}>
                 {running ? 'Gerando…' : `Gerar (${selectedIds.size})`}
               </Button>

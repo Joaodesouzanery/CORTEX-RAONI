@@ -130,7 +130,7 @@ async function extractMainText(html: string): Promise<string | null> {
 
   let root = $('article').first()
   if (!root.length || root.text().trim().length < 400) {
-    let best: any = null
+    let best: typeof root | null = null
     let bestLen = 0
     $('div,section,main').each((_, el) => {
       const ps = $(el).find('p')
@@ -138,10 +138,10 @@ async function extractMainText(html: string): Promise<string | null> {
       const len = ps.text().replace(/\s+/g, ' ').trim().length
       if (len > bestLen) {
         bestLen = len
-        best = el
+        best = $(el)
       }
     })
-    if (best) root = $(best)
+    if (best) root = best
   }
 
   const container = root.length ? root : $('body')

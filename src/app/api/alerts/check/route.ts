@@ -2,7 +2,15 @@ import { NextResponse } from 'next/server'
 import { createAdminClient as createClient } from '@/lib/supabase/server'
 import { parseKeywords, expandTerms, isRelevant, type ParsedKeyword } from '@/lib/relevance'
 import { heuristicSuggest, type ClassifyClient } from '@/lib/ai/classify'
-import { computeAlerts, hasAlerts, digestSubject, renderDigestText, renderDigestHtml, type AlertArticle, type ClientDigest } from '@/lib/alerts'
+import {
+  computeAlerts,
+  hasAlerts,
+  digestSubject,
+  renderDigestText,
+  renderDigestHtml,
+  type AlertArticle,
+  type ClientDigest,
+} from '@/lib/alerts'
 import { sendEmail, emailEnabled } from '@/lib/email'
 import type { Article, Client, Tom, Relevancia } from '@/types'
 
@@ -15,12 +23,19 @@ const PERIOD_LABEL = `últimas ${WINDOW_HOURS}h`
 const PAGE = 1000
 const MAX_PAGES = 8 // baseline light-load cap (≈ 8k rows); logs if hit
 
-type LightRow = { id: string; title: string; excerpt?: string | null; url?: string; publisher: string | null; published_at: string | null; sources?: { name?: string } | null }
+type LightRow = {
+  id: string
+  title: string
+  excerpt?: string | null
+  url?: string
+  publisher: string | null
+  published_at: string | null
+  sources?: { name?: string } | null
+}
 
 const veiculoOf = (a: LightRow) => a.publisher || a.sources?.name || 'Desconhecida'
 const relevantTo = (a: LightRow, kws: ParsedKeyword[], feeds: string[]) =>
-  (kws.length > 0 && isRelevant(kws, { title: a.title, excerpt: a.excerpt })) ||
-  feeds.includes(a.sources?.name || '')
+  (kws.length > 0 && isRelevant(kws, { title: a.title, excerpt: a.excerpt })) || feeds.includes(a.sources?.name || '')
 
 async function loadWindow(
   supabase: ReturnType<typeof createClient>,
@@ -40,7 +55,8 @@ async function loadWindow(
     const rows = (data as unknown as LightRow[]) || []
     all.push(...rows)
     if (rows.length < PAGE) break
-    if (page === cap - 1) console.warn(`[alerts] baseline load hit ${cap} pages (${all.length} rows) — may be truncated`)
+    if (page === cap - 1)
+      console.warn(`[alerts] baseline load hit ${cap} pages (${all.length} rows) — may be truncated`)
   }
   return all
 }
@@ -52,7 +68,7 @@ async function runCheck() {
   const baselineSince = new Date(now - BASELINE_DAYS * 86400_000).toISOString()
 
   const [{ data: clientsData }, recent, baseline] = await Promise.all([
-    supabase.from('clients').select('id, name, keywords, synonyms, feed_names, alert_recipient'),
+    supabase.from('clients').select('id, name, keywords, synonyms, feed_names, alert_recipient').eq('active', true),
     loadWindow(supabase, recentSince, 'id, title, excerpt, url, publisher, published_at, sources(name)', 3),
     loadWindow(supabase, baselineSince, 'id, title, publisher, published_at, sources(name)'),
   ])
@@ -82,7 +98,10 @@ async function runCheck() {
       .from('article_client_tags')
       .select('article_id, tom, relevancia')
       .eq('client_id', client.id)
-      .in('article_id', recentRel.map((a) => a.id))
+      .in(
+        'article_id',
+        recentRel.map((a) => a.id)
+      )
     const tags = new Map<string, { tom: Tom | null; relevancia: Relevancia | null }>()
     for (const t of (tagRows as { article_id: string; tom: Tom | null; relevancia: Relevancia | null }[]) || []) {
       tags.set(t.article_id, { tom: t.tom, relevancia: t.relevancia })
@@ -102,7 +121,11 @@ async function runCheck() {
       }
     })
 
-    digests.push({ clientName: client.name, alerts: computeAlerts(items, baselineDailyAvg), recipient: client.alert_recipient ?? null })
+    digests.push({
+      clientName: client.name,
+      alerts: computeAlerts(items, baselineDailyAvg),
+      recipient: client.alert_recipient ?? null,
+    })
   }
 
   const active = digests.filter((d) => d.alerts.length > 0)

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createAdminClient as createClient } from '@/lib/supabase/server'
 import { fetchFromSource } from '@/lib/fetcher'
+import { canonicalArticleFingerprint, inferContentStatus } from '@/lib/archive'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
@@ -12,13 +13,8 @@ const FETCH_CONCURRENCY = 6
 // the batched upsert below (one round-trip per source) 100 fits well under 60s,
 // so we no longer discard most of the feed.
 const MAX_PER_FEED = 100
-// Drop articles older than this so the table stays bounded (runs every fetch).
-const RETENTION_DAYS = 90
-
 async function fetchWithTimeout(url: string, type: 'rss' | 'scrape', timeoutMs = 10000) {
-  const timeoutPromise = new Promise<never>((_, reject) =>
-    setTimeout(() => reject(new Error(`Timeout`)), timeoutMs)
-  )
+  const timeoutPromise = new Promise<never>((_, reject) => setTimeout(() => reject(new Error(`Timeout`)), timeoutMs))
   return Promise.race([fetchFromSource(url, type), timeoutPromise])
 }
 
@@ -34,19 +30,53 @@ async function runFetch() {
     // second time"), and some feeds repeat links.
     const byUrl = new Map<string, (typeof raw)[number]>()
     for (const a of raw) if (a.url) byUrl.set(a.url, a)
-    const articles = Array.from(byUrl.values()).map((a) => ({ ...a, source_id: source.id }))
+    const articles = await Promise.all(
+      Array.from(byUrl.values()).map(async (a) => ({
+        ...a,
+        source_id: source.id,
+        content_status: inferContentStatus(a.content, a.excerpt),
+        canonical_fingerprint: await canonicalArticleFingerprint(a),
+      }))
+    )
     if (articles.length === 0) return { source: source.name, fetched: 0 }
 
     // One batched upsert per source (was one round-trip per article). This is
     // what lets us raise MAX_PER_FEED without blowing the 60s budget.
-    const { error } = await supabase
+    const { data: saved, error } = await supabase
       .from('articles')
       .upsert(articles, { onConflict: 'url', ignoreDuplicates: false })
+      .select('id, url')
     if (error) {
       // Surface the real DB error (e.g. a missing column) in the UI diagnostic
       // instead of a silent "0 artigos".
       console.error(`[fetch] upsert falhou em "${source.name}": ${error.message}`)
       return { source: source.name, fetched: 0, error: error.message }
+    }
+
+    if (saved?.length) {
+      const savedIds = saved.map((article) => article.id)
+      const { data: existingProvenance } = await supabase
+        .from('article_provenance')
+        .select('article_id')
+        .eq('source_id', source.id)
+        .eq('acquisition_type', source.type)
+        .is('source_document_id', null)
+        .in('article_id', savedIds)
+      const existingIds = new Set((existingProvenance || []).map((row) => row.article_id))
+      const missing = saved
+        .filter((article) => !existingIds.has(article.id))
+        .map((article) => ({
+          article_id: article.id,
+          source_id: source.id,
+          acquisition_type: source.type,
+          original_reference: article.url,
+        }))
+      if (missing.length) {
+        const { error: provenanceError } = await supabase.from('article_provenance').insert(missing)
+        if (provenanceError) {
+          console.error(`[fetch] proveniência falhou em "${source.name}": ${provenanceError.message}`)
+        }
+      }
     }
     return { source: source.name, fetched: articles.length }
   }
@@ -78,14 +108,7 @@ async function runFetch() {
     )
   )
 
-  // Retention: keep the table bounded. Best-effort — never fail the fetch over it.
-  const cutoff = new Date(Date.now() - RETENTION_DAYS * 86400000).toISOString()
-  const { error: retErr } = await supabase.from('articles').delete().lt('published_at', cutoff)
-  if (retErr) console.error(`[fetch] retenção falhou: ${retErr.message}`)
-  const { error: retErr2 } = await supabase.from('articles').delete().is('published_at', null).lt('fetched_at', cutoff)
-  if (retErr2) console.error(`[fetch] retenção (sem data) falhou: ${retErr2.message}`)
-
-  const totalFetched = results.reduce((sum, r) => sum + (('fetched' in r ? r.fetched : 0)), 0)
+  const totalFetched = results.reduce((sum, r) => sum + ('fetched' in r ? r.fetched : 0), 0)
   return NextResponse.json({ fetched: totalFetched, sources: results })
 }
 

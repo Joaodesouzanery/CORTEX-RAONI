@@ -4,8 +4,16 @@ import { articleTagBulkSchema, formatZodError } from '@/lib/validation'
 
 export const dynamic = 'force-dynamic'
 
-type Dim = 'tom' | 'relevancia' | 'cita_cliente' | 'tema'
-const DIMS: Dim[] = ['tom', 'relevancia', 'cita_cliente', 'tema']
+type Dim = 'tom' | 'relevancia' | 'cita_cliente' | 'tema' | 'classification_source' | 'confidence' | 'impact_summary'
+const DIMS: Dim[] = [
+  'tom',
+  'relevancia',
+  'cita_cliente',
+  'tema',
+  'classification_source',
+  'confidence',
+  'impact_summary',
+]
 
 // POST /api/articles/tag/bulk → apply many (article, client) tags at once.
 // FILL-ONLY: a dimension already set by the human is preserved; a suggestion
@@ -24,7 +32,7 @@ export async function POST(req: Request) {
   const ids = items.map((i) => i.article_id)
   const { data: existing, error: exErr } = await supabase
     .from('article_client_tags')
-    .select('article_id, tom, relevancia, cita_cliente, tema')
+    .select('article_id, tom, relevancia, cita_cliente, tema, classification_source, confidence, impact_summary')
     .eq('client_id', client_id)
     .in('article_id', ids)
   if (exErr) return NextResponse.json({ error: exErr.message }, { status: 500 })
@@ -39,7 +47,7 @@ export async function POST(req: Request) {
     for (const d of DIMS) {
       // Existing non-null wins; otherwise take the suggestion (may be null).
       const existingVal = cur[d]
-      row[d] = existingVal !== undefined && existingVal !== null ? existingVal : item[d] ?? null
+      row[d] = existingVal !== undefined && existingVal !== null ? existingVal : (item[d] ?? null)
     }
     return row
   })
@@ -47,7 +55,9 @@ export async function POST(req: Request) {
   const { data, error } = await supabase
     .from('article_client_tags')
     .upsert(rows, { onConflict: 'article_id,client_id' })
-    .select('article_id, client_id, tom, relevancia, cita_cliente, tema, updated_at')
+    .select(
+      'article_id, client_id, tom, relevancia, cita_cliente, tema, classification_source, confidence, impact_summary, updated_at'
+    )
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
   return NextResponse.json(data)
 }

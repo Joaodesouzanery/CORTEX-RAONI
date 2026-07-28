@@ -6,7 +6,12 @@ import { fetchArticleText } from '@/lib/fetcher/extract'
 import { computePanorama, type PanoramaRow } from '@/lib/panorama'
 import type { Article, Tom, Relevancia, SourceCategoria } from '@/types'
 
-const TOM_LABEL: Record<Tom, string> = { positivo: 'Positivo', neutro: 'Neutro', negativo: 'Negativo', critico: 'Crítico' }
+const TOM_LABEL: Record<Tom, string> = {
+  positivo: 'Positivo',
+  neutro: 'Neutro',
+  negativo: 'Negativo',
+  critico: 'Crítico',
+}
 const REL_LABEL: Record<Relevancia, string> = { alta: 'Alta', media: 'Média', baixa: 'Baixa' }
 
 export const dynamic = 'force-dynamic'
@@ -78,8 +83,7 @@ export async function POST(req: Request) {
   const { prompt, article_ids, metadata, client_id } = parsed.data
   // Full month set for the item table + panorama (falls back to the priority set).
   const rawTableIds = (body as { table_ids?: unknown } | null)?.table_ids
-  const tableIds: string[] =
-    Array.isArray(rawTableIds) && rawTableIds.length ? (rawTableIds as string[]) : article_ids
+  const tableIds: string[] = Array.isArray(rawTableIds) && rawTableIds.length ? (rawTableIds as string[]) : article_ids
 
   // Priority subset (full text). Light rows for the whole table/panorama.
   const [{ data: articles }, { data: tableData }] = await Promise.all([
@@ -115,7 +119,9 @@ export async function POST(req: Request) {
     client = (c as ReportClient) || null
     const r = reports?.[0] as { content?: string; metadata?: { mes?: string } } | undefined
     if (r?.content) prevReport = { content: r.content, mes: r.metadata?.mes }
-    for (const t of (tags as { article_id: string; tom: Tom | null; relevancia: Relevancia | null; cita_cliente: boolean | null }[] | null) || []) {
+    for (const t of (tags as
+      | { article_id: string; tom: Tom | null; relevancia: Relevancia | null; cita_cliente: boolean | null }[]
+      | null) || []) {
       tagMap.set(t.article_id, { tom: t.tom, relevancia: t.relevancia, cita_cliente: t.cita_cliente })
     }
   }
@@ -148,12 +154,20 @@ export async function POST(req: Request) {
   const pano = computePanorama(
     tableRows.map((a): PanoramaRow => {
       const t = tagMap.get(a.id)
-      return { tom: t?.tom ?? null, relevancia: t?.relevancia ?? null, cita_cliente: t?.cita_cliente ?? null, categoria: categoriaOf(a) }
+      return {
+        tom: t?.tom ?? null,
+        relevancia: t?.relevancia ?? null,
+        cita_cliente: t?.cita_cliente ?? null,
+        categoria: categoriaOf(a),
+      }
     })
   )
   const byVeiculo = new Map<string, number>()
   for (const a of tableRows) byVeiculo.set(veiculoOf(a), (byVeiculo.get(veiculoOf(a)) || 0) + 1)
-  const dates = tableRows.map((a) => a.published_at).filter(Boolean).sort() as string[]
+  const dates = tableRows
+    .map((a) => a.published_at)
+    .filter(Boolean)
+    .sort() as string[]
   const topVeiculos = Array.from(byVeiculo.entries())
     .sort((a, b) => b[1] - a[1])
     .map(([n, c]) => `- ${n}: ${c}`)
@@ -229,7 +243,7 @@ export async function POST(req: Request) {
     const batch = thin.slice(i, i + ENRICH_CONCURRENCY)
     await Promise.allSettled(
       batch.map(async (a) => {
-        const text = await fetchArticleText(a.url, ENRICH_TIMEOUT_MS)
+        const text = await fetchArticleText(a.url!, ENRICH_TIMEOUT_MS)
         if (text && text.length > cleanText(a.content).length) enriched.set(a.id, text)
       })
     )

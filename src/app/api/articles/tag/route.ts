@@ -13,7 +13,9 @@ export async function GET(req: Request) {
 
   const { data, error } = await supabase
     .from('article_client_tags')
-    .select('article_id, client_id, tom, relevancia, cita_cliente, tema, updated_at')
+    .select(
+      'article_id, client_id, tom, relevancia, cita_cliente, tema, classification_source, confidence, impact_summary, updated_at'
+    )
     .eq('client_id', clientId)
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
@@ -35,14 +37,24 @@ export async function POST(req: Request) {
   const row: Record<string, unknown> = { article_id, client_id, updated_at: new Date().toISOString() }
   // Only forward the keys actually present in the request so a partial edit
   // (e.g. just `tom`) never blanks the other dimensions.
-  for (const k of ['tom', 'relevancia', 'cita_cliente', 'tema'] as const) {
+  for (const k of [
+    'tom',
+    'relevancia',
+    'cita_cliente',
+    'tema',
+    'classification_source',
+    'confidence',
+    'impact_summary',
+  ] as const) {
     if (k in patch) row[k] = patch[k]
   }
 
   const { data, error } = await supabase
     .from('article_client_tags')
     .upsert(row, { onConflict: 'article_id,client_id' })
-    .select('article_id, client_id, tom, relevancia, cita_cliente, tema, updated_at')
+    .select(
+      'article_id, client_id, tom, relevancia, cita_cliente, tema, classification_source, confidence, impact_summary, updated_at'
+    )
     .single()
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })

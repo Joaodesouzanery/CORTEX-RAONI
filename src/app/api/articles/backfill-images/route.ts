@@ -18,6 +18,7 @@ async function run() {
     .from('articles')
     .select('id, url')
     .is('image_url', null)
+    .not('url', 'is', null)
     .order('published_at', { ascending: false, nullsFirst: false })
     .limit(LIMIT)
 
@@ -28,7 +29,7 @@ async function run() {
     const batch = articles.slice(i, i + BATCH)
     await Promise.allSettled(
       batch.map(async (a) => {
-        const img = await fetchOgImage(a.url)
+        const img = await fetchOgImage(a.url!)
         if (img) {
           const { error } = await supabase.from('articles').update({ image_url: img }).eq('id', a.id)
           if (!error) updated++
@@ -37,10 +38,7 @@ async function run() {
     )
   }
 
-  const { count } = await supabase
-    .from('articles')
-    .select('id', { count: 'exact', head: true })
-    .is('image_url', null)
+  const { count } = await supabase.from('articles').select('id', { count: 'exact', head: true }).is('image_url', null)
 
   return NextResponse.json({ updated, processed: articles.length, remaining: count ?? null })
 }

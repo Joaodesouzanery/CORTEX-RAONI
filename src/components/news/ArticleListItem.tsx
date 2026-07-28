@@ -29,11 +29,7 @@ export default function ArticleListItem({ article, selected, onSelect, score, cl
   const accent = tag?.tom ? TOM_ACCENT[tag.tom] : 'border-l-transparent'
   return (
     <div
-      className={cn(
-        'flex gap-4 py-4 border-b border-gray-100 border-l-2 pl-2 group',
-        accent,
-        selected && 'bg-gray-50'
-      )}
+      className={cn('flex gap-4 py-4 border-b border-gray-100 border-l-2 pl-2 group', accent, selected && 'bg-gray-50')}
     >
       {/* Checkbox */}
       <div
@@ -67,24 +63,33 @@ export default function ArticleListItem({ article, selected, onSelect, score, cl
       <div className="flex flex-col flex-1 min-w-0">
         <span className="text-xs uppercase tracking-widest text-gray-500 mb-1 flex items-center gap-2">
           {score != null && score > 0 && (
-            <span className="bg-black text-white px-1.5 py-0.5 text-[10px] tracking-normal" title="Relevância para o cliente">
+            <span
+              className="bg-black text-white px-1.5 py-0.5 text-[10px] tracking-normal"
+              title="Relevância para o cliente"
+            >
               ★ {score}
             </span>
           )}
-          {article.publisher || article.sources?.name}{article.published_at ? `, ${formatDate(article.published_at)}` : ''}
+          {article.publisher || article.sources?.name}
+          {article.published_at ? `, ${formatDate(article.published_at)}` : ''}
         </span>
         <h3 className="font-bold text-sm leading-snug line-clamp-2 mb-1">{article.title}</h3>
-        {article.excerpt && (
-          <p className="text-sm text-gray-500 line-clamp-2">{article.excerpt}</p>
+        {article.excerpt && <p className="text-sm text-gray-500 line-clamp-2">{article.excerpt}</p>}
+        {article.url ? (
+          <a
+            href={article.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs text-black hover:underline mt-1"
+          >
+            ↳ Saiba Mais
+          </a>
+        ) : (
+          <span className="text-xs text-gray-400 mt-1">Sem link externo</span>
         )}
-        <a href={article.url} target="_blank" rel="noopener noreferrer" className="text-xs text-black hover:underline mt-1">
-          ↳ Saiba Mais
-        </a>
 
         {/* Reputational tagging — only when a client is in context. */}
-        {clientId && onTag && (
-          <TagControls tag={tag} onChange={(patch) => onTag(article.id, patch)} className="mt-2" />
-        )}
+        {clientId && onTag && <TagControls tag={tag} onChange={(patch) => onTag(article.id, patch)} className="mt-2" />}
       </div>
     </div>
   )

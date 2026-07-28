@@ -33,9 +33,15 @@ function toParagraphs(raw: string | null | undefined): string[] {
     .replace(/&gt;/g, '>')
     .replace(/&#39;|&apos;/g, "'")
     .replace(/&quot;/g, '"')
-  text = text.replace(/[ \t\f\v]+/g, ' ').replace(/ *\n */g, '\n').replace(/\n{3,}/g, '\n\n')
+  text = text
+    .replace(/[ \t\f\v]+/g, ' ')
+    .replace(/ *\n */g, '\n')
+    .replace(/\n{3,}/g, '\n\n')
   if (text.length > MAX_CHARS) text = text.slice(0, MAX_CHARS) + '…'
-  return text.split('\n').map((p) => p.trim()).filter(Boolean)
+  return text
+    .split('\n')
+    .map((p) => p.trim())
+    .filter(Boolean)
 }
 
 const bodyLen = (a: Article) => toParagraphs(a.content).join(' ').length
@@ -81,7 +87,7 @@ export async function POST(req: Request) {
     const batch = thin.slice(i, i + ENRICH_CONCURRENCY)
     await Promise.allSettled(
       batch.map(async (a) => {
-        const text = await fetchArticleText(a.url, ENRICH_TIMEOUT_MS)
+        const text = await fetchArticleText(a.url!, ENRICH_TIMEOUT_MS)
         if (text && text.length > bodyLen(a)) enriched.set(a.id, text)
       })
     )
@@ -100,7 +106,9 @@ export async function POST(req: Request) {
       veiculo: veiculoOf(a),
       data: fmtDate(a.published_at),
       url: a.url || '',
-      paragraphs: paragraphs.length ? paragraphs : [a.excerpt?.trim() || '(texto completo indisponível — abra o link da matéria)'],
+      paragraphs: paragraphs.length
+        ? paragraphs
+        : [a.excerpt?.trim() || '(texto completo indisponível — abra o link da matéria)'],
     }
   })
 

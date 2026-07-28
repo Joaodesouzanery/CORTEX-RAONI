@@ -17,15 +17,13 @@ jobs:
             echo "Missing APP_URL repo secret (e.g. https://cortex-raoni.vercel.app)." >&2
             exit 1
           fi
-          # Send the bearer header only if CRON_SECRET is configured (the endpoint
-          # is open otherwise).
-          auth=()
-          if [ -n "${CRON_SECRET}" ]; then
-            auth=(-H "Authorization: Bearer ${CRON_SECRET}")
+          if [ -z "${CRON_SECRET}" ]; then
+            echo "Missing required CRON_SECRET repo secret." >&2
+            exit 1
           fi
           code=$(curl -sS -o /tmp/out.json -w '%{http_code}' \
             --max-time 120 \
-            "${auth[@]}" \
+            -H "Authorization: Bearer ${CRON_SECRET}" \
             "${APP_URL%/}/api/articles/fetch")
           echo "HTTP ${code}"
           cat /tmp/out.json || true
@@ -40,12 +38,27 @@ jobs:
         continue-on-error: true
         run: |
           [ -z "${APP_URL}" ] && exit 0
-          auth=()
-          [ -n "${CRON_SECRET}" ] && auth=(-H "Authorization: Bearer ${CRON_SECRET}")
+          [ -z "${CRON_SECRET}" ] && exit 1
           for n in 1 2 3; do
             code=$(curl -sS -o /tmp/img.json -w '%{http_code}' --max-time 120 \
-              "${auth[@]}" "${APP_URL%/}/api/articles/backfill-images")
+              -H "Authorization: Bearer ${CRON_SECRET}" "${APP_URL%/}/api/articles/backfill-images")
             echo "backfill ${n}: HTTP ${code}"; cat /tmp/img.json || true; echo
+          done
+        env:
+          APP_URL: ${{ secrets.APP_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+
+      - name: Enrich partial article text
+        # Best-effort and public pages only. Paid/unavailable content remains
+        # explicitly marked as partial in the monthly PDF.
+        continue-on-error: true
+        run: |
+          [ -z "${APP_URL}" ] && exit 0
+          [ -z "${CRON_SECRET}" ] && exit 1
+          for n in 1 2; do
+            code=$(curl -sS -o /tmp/enrich.json -w '%{http_code}' --max-time 120 \
+              -H "Authorization: Bearer ${CRON_SECRET}" "${APP_URL%/}/api/articles/enrich")
+            echo "enrich ${n}: HTTP ${code}"; cat /tmp/enrich.json || true; echo
           done
         env:
           APP_URL: ${{ secrets.APP_URL }}

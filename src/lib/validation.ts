@@ -61,6 +61,9 @@ export const articleTagSchema = z.object({
   relevancia: z.enum(['alta', 'media', 'baixa']).nullish(),
   cita_cliente: z.boolean().nullish(),
   tema: z.string().nullish(),
+  classification_source: z.enum(['regra', 'ia', 'humano']).nullish(),
+  confidence: z.number().min(0).max(1).nullish(),
+  impact_summary: z.string().max(2000).nullish(),
 })
 
 // Request a batch of tag suggestions for a client's articles (no save).
@@ -81,6 +84,9 @@ export const articleTagBulkSchema = z.object({
         relevancia: z.enum(['alta', 'media', 'baixa']).nullish(),
         cita_cliente: z.boolean().nullish(),
         tema: z.string().nullish(),
+        classification_source: z.enum(['regra', 'ia', 'humano']).nullish(),
+        confidence: z.number().min(0).max(1).nullish(),
+        impact_summary: z.string().max(2000).nullish(),
       })
     )
     .min(1, 'Nenhum item para aplicar'),
@@ -92,6 +98,35 @@ export const clippingCreateSchema = z.object({
   article_ids: z.array(z.string()).min(1, 'Selecione ao menos um artigo'),
   client_id: z.string().nullish(),
   mes: z.string().nullish(),
+})
+
+// ---- Licensed/public PDF imports ----
+export const importInitSchema = z.object({
+  filename: z
+    .string()
+    .trim()
+    .min(1)
+    .max(255)
+    .refine((v) => /\.pdf$/i.test(v), 'Envie um arquivo PDF'),
+  size: z
+    .number()
+    .int()
+    .positive()
+    .max(50 * 1024 * 1024, 'O PDF deve ter no máximo 50 MB'),
+  sha256: z.string().regex(/^[a-f0-9]{64}$/i, 'SHA-256 inválido'),
+})
+
+// ---- Monthly editions ----
+export const editionCloseSchema = z.object({
+  period: z.string().regex(/^\d{4}-\d{2}$/, 'Use o período YYYY-MM'),
+  client_ids: z.array(z.string().min(1)).optional(),
+  dispatch: z.boolean().optional().default(false),
+})
+
+export const editionCompleteSchema = z.object({
+  pdf_storage_path: z.string().trim().min(1),
+  summary_markdown: z.string().nullish(),
+  summary_data: z.record(z.string(), z.unknown()).optional(),
 })
 
 // ---- Reports ----

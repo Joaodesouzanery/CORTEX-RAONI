@@ -1,5 +1,6 @@
 'use client'
 import { useState, useRef, useEffect } from 'react'
+import Image from 'next/image'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -227,7 +228,14 @@ export default function ClientForm({ client, open, onClose, onSaved }: Props) {
           <div>
             <Label htmlFor="logo">Logo (PNG/JPG)</Label>
             {client?.logo_url && (
-              <img src={client.logo_url} alt="logo" className="h-10 mb-2 object-contain" />
+              <Image
+                src={client.logo_url}
+                alt={`Logo de ${client.name}`}
+                width={200}
+                height={40}
+                unoptimized
+                className="h-10 w-auto mb-2 object-contain"
+              />
             )}
             <Input id="logo" type="file" accept="image/*" ref={fileRef} className="mt-1" />
           </div>

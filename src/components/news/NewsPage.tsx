@@ -112,9 +112,7 @@ export default function NewsPage() {
     // "Ver tudo" bypasses this to show the raw firehose.
     if (showAll || !allClientsParsed.length) return dateFiltered
     return dateFiltered.filter(
-      (a) =>
-        !a.sources?.is_general ||
-        isRelevant(allClientsParsed, { title: a.title, excerpt: a.excerpt })
+      (a) => !a.sources?.is_general || isRelevant(allClientsParsed, { title: a.title, excerpt: a.excerpt })
     )
   }, [dateFiltered, activeClient, parsedKws, allClientsParsed, showAll])
 
@@ -133,7 +131,7 @@ export default function NewsPage() {
     const m = new Map<string, number>()
     for (const a of base) m.set(a.id, relevanceScore(parsedKws, { title: a.title, excerpt: a.excerpt }))
     const dateOf = (x: Article) => (x.published_at ? new Date(x.published_at).getTime() : 0)
-    const ranked = [...base].sort((a, b) => (m.get(b.id)! - m.get(a.id)!) || (dateOf(b) - dateOf(a)))
+    const ranked = [...base].sort((a, b) => m.get(b.id)! - m.get(a.id)! || dateOf(b) - dateOf(a))
     return { filtered: ranked, scores: m }
   }, [clientFiltered, dateFiltered, activeSource, activeClient, parsedKws])
 
@@ -172,7 +170,12 @@ export default function NewsPage() {
     const prevArts = dedupeByTitle(rel.filter((a) => ms(a) >= prevStart && ms(a) < curStart))
     const prevRows: PanoramaRow[] = prevArts.map((a) => {
       const t = tagsById.get(a.id)
-      return { tom: t?.tom ?? null, relevancia: t?.relevancia ?? null, cita_cliente: t?.cita_cliente ?? null, categoria: a.sources?.categoria ?? null }
+      return {
+        tom: t?.tom ?? null,
+        relevancia: t?.relevancia ?? null,
+        cita_cliente: t?.cita_cliente ?? null,
+        categoria: a.sources?.categoria ?? null,
+      }
     })
     const oldest = Math.min(...articles.map(ms).filter((x) => x > 0))
     const partial = Number.isFinite(oldest) && prevStart < oldest
@@ -192,16 +195,18 @@ export default function NewsPage() {
 
   useEffect(() => {
     loadArticles()
-    fetch('/api/clients').then(r => r.json()).then(d => {
-      const list: Client[] = Array.isArray(d) ? d : []
-      setClients(list)
-      // Pre-select a client coming from the dashboard (/news?client=ID).
-      const cid = new URLSearchParams(window.location.search).get('client')
-      if (cid) {
-        const c = list.find((x) => x.id === cid)
-        if (c) setActiveClient(c)
-      }
-    })
+    fetch('/api/clients?active=true')
+      .then((r) => r.json())
+      .then((d) => {
+        const list: Client[] = Array.isArray(d) ? d : []
+        setClients(list)
+        // Pre-select a client coming from the dashboard (/news?client=ID).
+        const cid = new URLSearchParams(window.location.search).get('client')
+        if (cid) {
+          const c = list.find((x) => x.id === cid)
+          if (c) setActiveClient(c)
+        }
+      })
   }, [])
 
   // Auto-select the client's relevant articles when a client is picked, so the
@@ -209,7 +214,6 @@ export default function NewsPage() {
   useEffect(() => {
     if (activeClient) selectAll(filtered.map((a) => a.id))
     // Only react to the chosen client (not to every filter change).
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeClient?.id])
 
   // Load the active client's reputational tags (per-client curation state).
@@ -234,7 +238,6 @@ export default function NewsPage() {
       cancelled = true
     }
     // Refetch only when the selected client changes, not on every client edit.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeClient?.id])
 
   // Optimistic tag write: update the map now, persist, revert + toast on failure.
@@ -385,7 +388,9 @@ export default function NewsPage() {
       <div className="flex items-start justify-between mb-8">
         <div>
           <h1 className="text-5xl font-light tracking-tight">As últimas notícias</h1>
-          <p className="text-xs text-gray-400 mt-1">Marque os checkboxes para selecionar notícias e gerar um relatório</p>
+          <p className="text-xs text-gray-400 mt-1">
+            Marque os checkboxes para selecionar notícias e gerar um relatório
+          </p>
         </div>
         <div className="flex items-center gap-3">
           <Button
@@ -427,8 +432,7 @@ export default function NewsPage() {
             className="w-full flex items-center justify-between px-4 py-2 bg-gray-50 hover:bg-gray-100"
           >
             <span>
-              Resultado da busca:{' '}
-              {fetchResults.filter((r) => r.error).length} fonte(s) com erro,{' '}
+              Resultado da busca: {fetchResults.filter((r) => r.error).length} fonte(s) com erro,{' '}
               {fetchResults.filter((r) => !r.error).length} ok
             </span>
             <span className="text-gray-400">{showDiagnostics ? '▲' : '▼'}</span>
@@ -492,7 +496,10 @@ export default function NewsPage() {
           />
           {(dateFrom || dateTo) && (
             <button
-              onClick={() => { setDateFrom(''); setDateTo('') }}
+              onClick={() => {
+                setDateFrom('')
+                setDateTo('')
+              }}
               className="underline hover:no-underline"
             >
               Limpar datas
@@ -515,7 +522,9 @@ export default function NewsPage() {
           >
             <option value="">Todos</option>
             {clients.map((c) => (
-              <option key={c.id} value={c.id}>{c.name}</option>
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
             ))}
           </select>
           {activeClient ? (
@@ -572,7 +581,13 @@ export default function NewsPage() {
       ) : filtered.length === 0 ? (
         <div className="text-center py-24 text-gray-400">
           <p className="text-lg">Nenhuma notícia ainda.</p>
-          <p className="text-sm mt-2">Adicione fontes em <a href="/sources" className="underline">Fontes</a> e clique em &quot;Buscar Notícias&quot;.</p>
+          <p className="text-sm mt-2">
+            Adicione fontes em{' '}
+            <a href="/sources" className="underline">
+              Fontes
+            </a>{' '}
+            e clique em &quot;Buscar Notícias&quot;.
+          </p>
         </div>
       ) : mode === 'card' ? (
         <ArticleCardGrid articles={filtered} selected={selected} onSelect={toggleSelect} scores={scores} />

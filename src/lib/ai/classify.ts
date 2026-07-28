@@ -1,5 +1,12 @@
 import type { Article, Tom, Relevancia } from '@/types'
-import { parseKeywords, expandTerms, relevanceScore, normalizeText, matchKeyword, type ParsedKeyword } from '@/lib/relevance'
+import {
+  parseKeywords,
+  expandTerms,
+  relevanceScore,
+  normalizeText,
+  matchKeyword,
+  type ParsedKeyword,
+} from '@/lib/relevance'
 
 // Suggested reputational tags for one article/client. Feeds the "Sugerir tags"
 // flow — the human still confirms/adjusts. Deterministic by default; the
@@ -10,6 +17,8 @@ export interface TagSuggestion {
   relevancia: Relevancia | null
   cita_cliente: boolean | null
   tema: string | null
+  confidence?: number | null
+  impact_summary?: string | null
 }
 
 export interface ClassifyClient {
@@ -30,16 +39,66 @@ export function aiEnabled(): boolean {
 // Small PT-BR lexicons for a best-effort tom guess. Normalized (no accents).
 // Intentionally conservative: no signal → null (leave tom for the human/AI).
 const POS = new Set([
-  'avanco', 'avanca', 'investimento', 'aprovacao', 'aprova', 'aprovado', 'conclui', 'concluida',
-  'entrega', 'entregue', 'sucesso', 'beneficio', 'cresce', 'crescimento', 'amplia', 'ampliacao',
-  'moderniza', 'modernizacao', 'inaugura', 'ganho', 'melhora', 'recorde', 'expansao', 'acordo',
-  'parceria', 'positivo', 'reforca', 'impulsiona',
+  'avanco',
+  'avanca',
+  'investimento',
+  'aprovacao',
+  'aprova',
+  'aprovado',
+  'conclui',
+  'concluida',
+  'entrega',
+  'entregue',
+  'sucesso',
+  'beneficio',
+  'cresce',
+  'crescimento',
+  'amplia',
+  'ampliacao',
+  'moderniza',
+  'modernizacao',
+  'inaugura',
+  'ganho',
+  'melhora',
+  'recorde',
+  'expansao',
+  'acordo',
+  'parceria',
+  'positivo',
+  'reforca',
+  'impulsiona',
 ])
 const NEG = new Set([
-  'crise', 'falha', 'atraso', 'atrasa', 'risco', 'apagao', 'corte', 'problema', 'denuncia',
-  'suspensao', 'suspende', 'alerta', 'temor', 'adiamento', 'adia', 'prejuizo', 'queda', 'multa',
-  'irregularidade', 'investigacao', 'paralisacao', 'greve', 'acidente', 'morte', 'negativo',
-  'critica', 'fraude', 'sobrepreco', 'gargalo', 'colapso',
+  'crise',
+  'falha',
+  'atraso',
+  'atrasa',
+  'risco',
+  'apagao',
+  'corte',
+  'problema',
+  'denuncia',
+  'suspensao',
+  'suspende',
+  'alerta',
+  'temor',
+  'adiamento',
+  'adia',
+  'prejuizo',
+  'queda',
+  'multa',
+  'irregularidade',
+  'investigacao',
+  'paralisacao',
+  'greve',
+  'acidente',
+  'morte',
+  'negativo',
+  'critica',
+  'fraude',
+  'sobrepreco',
+  'gargalo',
+  'colapso',
 ])
 
 function tomFromText(text: string): Tom | null {
@@ -94,6 +153,8 @@ export function heuristicSuggest(
     relevancia: relevanciaFromScore(relevanceScore(kws, fields)),
     cita_cliente: citesClient(nk, article.title, article.excerpt ?? null),
     tema: temaFromKeywords(kws, article.title, article.excerpt ?? null),
+    confidence: null,
+    impact_summary: null,
   }
 }
 
@@ -113,7 +174,10 @@ function coerceRel(v: unknown): Relevancia | null {
   return v === 'alta' || v === 'media' || v === 'baixa' ? v : null
 }
 function parseJsonArray(text: string): Array<Record<string, unknown>> {
-  const cleaned = text.replace(/```json/gi, '').replace(/```/g, '').trim()
+  const cleaned = text
+    .replace(/```json/gi, '')
+    .replace(/```/g, '')
+    .trim()
   const start = cleaned.indexOf('[')
   const end = cleaned.lastIndexOf(']')
   if (start === -1 || end === -1) return []
@@ -135,16 +199,16 @@ async function classifyWithAI(articles: Article[], client: ClassifyClient): Prom
 
   for (let i = 0; i < articles.length; i += BATCH) {
     const batch = articles.slice(i, i + BATCH)
-    const list = batch
-      .map((a, j) => `${j}. ${a.title}${a.excerpt ? ` — ${a.excerpt.slice(0, 240)}` : ''}`)
-      .join('\n')
+    const list = batch.map((a, j) => `${j}. ${a.title}${a.excerpt ? ` — ${a.excerpt.slice(0, 240)}` : ''}`).join('\n')
     const system = `Você é um analista de inteligência reputacional do cliente "${client.name}". Classifique cada matéria de imprensa. Campos:
 - tom: "positivo" | "neutro" | "negativo" | "critico" (para a reputação do cliente/setor)
 - relevancia: "alta" | "media" | "baixa"
 - cita_cliente: true se cita o cliente diretamente; false se é tema do setor sob outro protagonista
 - tema: rótulo de 1 a 3 palavras
+- confidence: número entre 0 e 1
+- impact_summary: uma frase objetiva sobre o impacto para o cliente
 Responda SOMENTE com um array JSON, um objeto por item, no formato exato:
-[{"i":0,"tom":"neutro","relevancia":"media","cita_cliente":false,"tema":"..."}]`
+[{"i":0,"tom":"neutro","relevancia":"media","cita_cliente":false,"tema":"...","confidence":0.85,"impact_summary":"..."}]`
 
     const message = await anthropic.messages.create({
       model: CLASSIFY_MODEL,
@@ -164,6 +228,9 @@ Responda SOMENTE com um array JSON, um objeto por item, no formato exato:
         relevancia: coerceRel(item.relevancia),
         cita_cliente: typeof item.cita_cliente === 'boolean' ? item.cita_cliente : null,
         tema: item.tema ? String(item.tema).slice(0, 60) : null,
+        confidence:
+          typeof item.confidence === 'number' && item.confidence >= 0 && item.confidence <= 1 ? item.confidence : null,
+        impact_summary: item.impact_summary ? String(item.impact_summary).slice(0, 500) : null,
       })
     }
   }
@@ -176,13 +243,20 @@ Responda SOMENTE com um array JSON, um objeto por item, no formato exato:
  * call fails, it falls back to the heuristic.
  */
 export async function suggestTags(articles: Article[], client: ClassifyClient): Promise<TagSuggestion[]> {
+  return (await suggestTagsWithMode(articles, client)).suggestions
+}
+
+export async function suggestTagsWithMode(
+  articles: Article[],
+  client: ClassifyClient
+): Promise<{ suggestions: TagSuggestion[]; mode: 'ia' | 'regra' }> {
   if (aiEnabled()) {
     try {
       const ai = await classifyWithAI(articles, client)
-      if (ai.length) return ai
+      if (ai.length === articles.length) return { suggestions: ai, mode: 'ia' }
     } catch {
       // fall through to heuristic
     }
   }
-  return suggestTagsHeuristic(articles, client)
+  return { suggestions: suggestTagsHeuristic(articles, client), mode: 'regra' }
 }
