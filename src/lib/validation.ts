@@ -86,6 +86,14 @@ export const articleTagBulkSchema = z.object({
     .min(1, 'Nenhum item para aplicar'),
 })
 
+// ---- Clipping (curated PDF: cover + sumário + full text) ----
+// Selected articles → a branded clipping. Deterministic, no AI.
+export const clippingCreateSchema = z.object({
+  article_ids: z.array(z.string()).min(1, 'Selecione ao menos um artigo'),
+  client_id: z.string().nullish(),
+  mes: z.string().nullish(),
+})
+
 // ---- Reports ----
 export const reportMetadataSchema = z.object({
   mes: z.string().trim().min(1, 'Mês de referência é obrigatório'),

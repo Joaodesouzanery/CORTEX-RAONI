@@ -16,8 +16,17 @@ export async function fetchArticlesWindow(days: number, maxPages = 12): Promise<
   const all: Article[] = []
   for (let page = 0; page < maxPages; page++) {
     const res = await fetch(`/api/articles?days=${days}&limit=${PAGE}&offset=${page * PAGE}`)
-    const data = await res.json().catch(() => [])
-    if (!Array.isArray(data) || data.length === 0) break
+    // Distinguish a real failure (500/4xx — e.g. banco fora do ar, service key
+    // ausente) from a genuinely empty window. Antes um erro virava [] e a tela
+    // mostrava "Nenhuma notícia ainda.", escondendo a falha. Agora propagamos.
+    if (!res.ok) {
+      const body = await res.json().catch(() => null)
+      const msg = (body && (body.error || body.message)) || `HTTP ${res.status}`
+      throw new Error(msg)
+    }
+    const data = await res.json().catch(() => null)
+    if (!Array.isArray(data)) throw new Error('Resposta inesperada do servidor ao carregar notícias.')
+    if (data.length === 0) break
     all.push(...data)
     if (data.length < PAGE) break
     if (page === maxPages - 1) {

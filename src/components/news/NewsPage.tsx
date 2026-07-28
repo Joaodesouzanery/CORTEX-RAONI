@@ -11,6 +11,7 @@ import PanoramaPanel from './PanoramaPanel'
 import type { TagPatch } from './TagControls'
 import ReportBuilder from '@/components/report/ReportBuilder'
 import DossierExporter from '@/components/report/DossierExporter'
+import ClippingPdfButton from '@/components/report/ClippingPdfButton'
 import { parseKeywords, isRelevant, relevanceScore, expandTerms, dedupeByTitle } from '@/lib/relevance'
 import { fetchArticlesWindow } from '@/lib/articles'
 import type { PanoramaRow } from '@/lib/panorama'
@@ -51,6 +52,9 @@ export default function NewsPage() {
   // and the per-row TagControls. Empty when no client is selected.
   const [tagsById, setTagsById] = useState<Map<string, ArticleTag>>(new Map())
   const [suggesting, setSuggesting] = useState(false)
+  // Non-null when the last load failed (DB/env outage). Lets the UI show the real
+  // error instead of the misleading "Nenhuma notícia ainda." empty state.
+  const [loadError, setLoadError] = useState<string | null>(null)
   const { toast } = useToast()
 
   const sources = useMemo(
@@ -324,9 +328,16 @@ export default function NewsPage() {
     // just the newest 1000 (which the high-volume general feeds would monopolize).
     // 60d so the panorama trend can compare the current period to the previous
     // equal-length one (e.g. last 30 days vs. the 30 before it).
-    const data = await fetchArticlesWindow(60)
-    setArticles(data)
-    setLoading(false)
+    try {
+      const data = await fetchArticlesWindow(60)
+      setArticles(data)
+      setLoadError(null)
+    } catch (e) {
+      setLoadError((e as Error).message)
+      toast({ title: 'Falha ao carregar notícias', description: (e as Error).message, variant: 'destructive' })
+    } finally {
+      setLoading(false)
+    }
   }
 
   async function fetchNews() {
@@ -338,10 +349,27 @@ export default function NewsPage() {
         body: JSON.stringify({ manual: true }),
       })
       const data = await res.json().catch(() => null)
+      // Antes um 500 (banco fora, service key ausente) virava `data = null` e o
+      // botão não dizia nada. Agora surface o erro em vez de falhar em silêncio.
+      if (!res.ok) {
+        const msg = (data && (data.error || data.message)) || `HTTP ${res.status}`
+        toast({ title: 'Falha ao buscar notícias', description: msg, variant: 'destructive' })
+        return
+      }
       if (data?.sources) {
         setFetchResults(data.sources)
         setShowDiagnostics(true)
+        const results = data.sources as FetchSourceResult[]
+        const total = results.reduce((n, r) => n + (r.fetched ?? 0), 0)
+        if (total === 0) {
+          toast({
+            title: 'Nenhum artigo novo',
+            description: 'As fontes não trouxeram itens novos — veja o diagnóstico por fonte.',
+          })
+        }
       }
+    } catch (e) {
+      toast({ title: 'Falha ao buscar notícias', description: (e as Error).message, variant: 'destructive' })
     } finally {
       await loadArticles()
       setFetching(false)
@@ -532,6 +560,15 @@ export default function NewsPage() {
             </div>
           ))}
         </div>
+      ) : loadError ? (
+        <div className="text-center py-24">
+          <p className="text-lg text-red-600">Não foi possível carregar as notícias.</p>
+          <p className="text-sm mt-2 text-red-500 break-words max-w-xl mx-auto">{loadError}</p>
+          <p className="text-sm mt-3 text-gray-400 max-w-xl mx-auto">
+            Provável falha de conexão com o banco (Supabase) — verifique se o projeto não está pausado e se as variáveis
+            de ambiente do deploy estão definidas. Depois recarregue a página.
+          </p>
+        </div>
       ) : filtered.length === 0 ? (
         <div className="text-center py-24 text-gray-400">
           <p className="text-lg">Nenhuma notícia ainda.</p>
@@ -561,6 +598,12 @@ export default function NewsPage() {
             <FileDown className="w-4 h-4" />
             Exportar dossiê ({selected.size})
           </button>
+          <ClippingPdfButton
+            articles={selectedArticles}
+            clientId={activeClient?.id}
+            clientName={activeClient?.name}
+            logoUrl={activeClient?.logo_url}
+          />
           <button
             onClick={() => setReportOpen(true)}
             className="bg-black text-white px-6 py-3 flex items-center gap-2 shadow-xl hover:bg-gray-800 transition-colors"
