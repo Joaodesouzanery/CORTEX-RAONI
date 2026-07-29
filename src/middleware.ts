@@ -1,8 +1,6 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { gateToken, GATE_COOKIE } from '@/lib/gate'
 
-const PUBLIC_PATHS = ['/login', '/api/auth']
 const CRON_PATHS = [
   '/api/articles/fetch',
   '/api/articles/backfill-images',
@@ -11,41 +9,20 @@ const CRON_PATHS = [
   '/api/internal',
 ]
 
-export async function middleware(req: NextRequest) {
-  const password = process.env.APP_PASSWORD
-  const cronSecret = process.env.CRON_SECRET
-  if (process.env.NODE_ENV === 'production' && (!password || !cronSecret)) {
-    return NextResponse.json(
-      { error: 'Configuração de segurança incompleta: APP_PASSWORD e CRON_SECRET são obrigatórios.' },
-      { status: 503 }
-    )
-  }
-  if (!password) return NextResponse.next()
-
+export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
-  if (
-    cronSecret &&
-    CRON_PATHS.some((p) => pathname === p || pathname.startsWith(p + '/')) &&
-    req.headers.get('authorization') === `Bearer ${cronSecret}`
-  ) {
-    return NextResponse.next()
-  }
-  if (PUBLIC_PATHS.some((p) => pathname === p || pathname.startsWith(p + '/'))) {
-    return NextResponse.next()
+  const isProtectedWorkerPath = CRON_PATHS.some((path) => pathname === path || pathname.startsWith(`${path}/`))
+  if (!isProtectedWorkerPath) return NextResponse.next()
+
+  const cronSecret = process.env.CRON_SECRET
+  if (!cronSecret) {
+    return NextResponse.json({ error: 'CRON_SECRET não configurado para o worker.' }, { status: 503 })
   }
 
-  const cookie = req.cookies.get(GATE_COOKIE)?.value
-  if (cookie && cookie === (await gateToken(password))) {
-    return NextResponse.next()
-  }
-
-  if (pathname.startsWith('/api/')) {
+  if (req.headers.get('authorization') !== `Bearer ${cronSecret}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
-  const url = req.nextUrl.clone()
-  url.pathname = '/login'
-  url.searchParams.set('from', pathname)
-  return NextResponse.redirect(url)
+  return NextResponse.next()
 }
 
 export const config = {

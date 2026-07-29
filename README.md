@@ -34,8 +34,7 @@ Variáveis da aplicação:
 | `NEXT_PUBLIC_SUPABASE_URL` | URL do projeto Supabase |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | chave pública do Supabase |
 | `SUPABASE_SERVICE_ROLE_KEY` | acesso administrativo das API routes |
-| `APP_PASSWORD` | senha única da ferramenta; obrigatória em produção |
-| `CRON_SECRET` | bearer dos workers; obrigatório em produção |
+| `CRON_SECRET` | bearer dos endpoints de coleta e dos workers |
 | `ANTHROPIC_API_KEY` | classificação e relatórios por IA; opcional |
 | `GITHUB_ACTIONS_TOKEN` | token restrito, com `Actions: write`, usado pelos botões de fechamento |
 | `GITHUB_REPOSITORY` | repositório no formato `organização/nome` |
@@ -46,9 +45,11 @@ Secrets do GitHub Actions:
 - `APP_URL`: URL pública da aplicação;
 - `CRON_SECRET`: o mesmo valor configurado na aplicação.
 
-O deployment recusa tráfego em produção se `APP_PASSWORD` ou `CRON_SECRET`
-estiverem ausentes. Os buckets `source-documents` e `monthly-clippings` são
-privados; uploads e downloads usam URLs assinadas de curta duração.
+A interface é aberta e não exige login. Os endpoints automáticos de coleta,
+alertas e fechamento continuam protegidos por `CRON_SECRET`; se ele não estiver
+configurado, somente esses endpoints retornam indisponibilidade. Os buckets
+`source-documents` e `monthly-clippings` são privados; uploads e downloads usam
+URLs assinadas de curta duração.
 
 ## Banco de dados
 
