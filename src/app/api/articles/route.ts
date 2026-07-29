@@ -3,6 +3,14 @@ import { createAdminClient as createClient } from '@/lib/supabase/server'
 
 export const dynamic = 'force-dynamic'
 
+type JoinedArticle = Record<string, unknown> & {
+  article_provenance?: Array<{ sources?: unknown }>
+}
+
+type ClientArticleJoin = Record<string, unknown> & {
+  articles: JoinedArticle | JoinedArticle[] | null
+}
+
 export async function GET(req: Request) {
   const supabase = createClient()
   const { searchParams } = new URL(req.url)
@@ -52,7 +60,8 @@ export async function GET(req: Request) {
       if (sourceId) query = query.eq('articles.article_provenance.source_id', sourceId)
       const { data, error, count } = await query
       if (error) return NextResponse.json({ error: error.message }, { status: 500 })
-      const items = (data || []).flatMap((row) => {
+      const joinedRows = (data || []) as unknown as ClientArticleJoin[]
+      const items = joinedRows.flatMap((row) => {
         const article = Array.isArray(row.articles) ? row.articles[0] : row.articles
         if (!article) return []
         const provenance = Array.isArray(article.article_provenance) ? article.article_provenance : []
