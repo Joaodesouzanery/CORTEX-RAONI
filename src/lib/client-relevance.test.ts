@@ -126,6 +126,13 @@ describe('contextual client relevance', () => {
         content: null,
       })
     ).toBeNull()
+    expect(
+      evaluateClientArticle(ons, onsRules, {
+        title: 'Ibovespa sobe com ações ONs e PNs',
+        excerpt: 'Papéis negociados aparecem no radar financeiro.',
+        content: null,
+      })
+    ).toBeNull()
 
     const simineral = client('SIMINERAL')
     const miningRules = [rule('SIMINERAL', 'mineração', 'setorial', [['mineração']], 3)]

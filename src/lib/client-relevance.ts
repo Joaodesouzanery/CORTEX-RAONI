@@ -20,25 +20,32 @@ export interface RelevanceEvaluation {
   tema: string | null
 }
 
-function articleText(article: Pick<Article, 'title' | 'excerpt' | 'content'>): string {
-  return normalizeText([article.title, article.excerpt, article.content].filter(Boolean).join(' '))
+function articleText(article: Pick<Article, 'title' | 'excerpt' | 'content'>): { raw: string; normalized: string } {
+  const raw = [article.title, article.excerpt, article.content].filter(Boolean).join(' ')
+  return { raw, normalized: normalizeText(raw) }
 }
 
-function matchingTerms(terms: string[], normalized: string): string[] {
+function matchingTerms(terms: string[], normalized: string, raw = ''): string[] {
   const matched: string[] = []
   for (const term of parseKeywords(terms)) {
-    if (matchKeyword(term, normalized)) matched.push(term.raw)
+    // Normalization intentionally erases case. Acronyms need an additional
+    // case-sensitive guard so ONS never matches the stock-market plural "ONs"
+    // and ANM never matches an ordinary lowercase word.
+    const acronymMatch =
+      term.kind !== 'acronym' ||
+      new RegExp(`(?:^|[^A-Za-z0-9])${term.raw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?:$|[^A-Za-z0-9])`).test(raw)
+    if (acronymMatch && matchKeyword(term, normalized)) matched.push(term.raw)
   }
   return matched
 }
 
-function ruleMatches(rule: ClientRelevanceRule, normalized: string): string[] | null {
-  if (matchingTerms(rule.excluded_terms || [], normalized).length) return null
+function ruleMatches(rule: ClientRelevanceRule, normalized: string, raw: string): string[] | null {
+  if (matchingTerms(rule.excluded_terms || [], normalized, raw).length) return null
   const groups = Array.isArray(rule.required_groups) ? rule.required_groups : []
   if (!groups.length) return null
   const allMatches: string[] = []
   for (const group of groups) {
-    const matches = matchingTerms(group, normalized)
+    const matches = matchingTerms(group, normalized, raw)
     if (!matches.length) return null
     allMatches.push(...matches)
   }
@@ -62,7 +69,7 @@ export function evaluateClientArticle(
   article: Pick<Article, 'title' | 'excerpt' | 'content'>,
   thematicSource = false
 ): RelevanceEvaluation | null {
-  const normalized = articleText(article)
+  const { raw, normalized } = articleText(article)
   if (!normalized) return null
 
   const reasons: MatchReason[] = []
@@ -71,7 +78,7 @@ export function evaluateClientArticle(
   let ruleVersion = 1
 
   for (const rule of rules.filter((item) => item.active !== false)) {
-    const terms = ruleMatches(rule, normalized)
+    const terms = ruleMatches(rule, normalized, raw)
     if (!terms) continue
     reasons.push({
       rule_id: rule.id,
