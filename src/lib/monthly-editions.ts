@@ -1,27 +1,34 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type { Article, ArticleTag, Client, MonthlyEdition, MonthlyEditionItem, Relevancia, Tom } from '@/types'
-import { parseKeywords, expandTerms, isRelevant, normalizeText, relevanceScore } from '@/lib/relevance'
+import { parseKeywords, expandTerms, normalizeText, relevanceScore } from '@/lib/relevance'
 import { heuristicSuggest } from '@/lib/ai/classify'
 import { clusterKey, editionSection, monthBounds, snapshotArticle, tomLabel } from '@/lib/archive'
+import { evaluateClientArticle } from '@/lib/client-relevance'
+import type { ClientRelevanceRule } from '@/types'
 
 const PAGE = 1000
 
 export type ClientWithSources = Client & {
   client_sources?: Array<{ source_id: string; is_thematic: boolean; priority: number }>
+  client_relevance_rules?: ClientRelevanceRule[]
 }
 
-async function loadMonthArticles(supabase: SupabaseClient, start: string, end: string): Promise<Article[]> {
-  const all: Article[] = []
+type ArticleWithProvenance = Article & {
+  article_provenance?: Array<{ source_id: string | null }>
+}
+
+async function loadMonthArticles(supabase: SupabaseClient, start: string, end: string): Promise<ArticleWithProvenance[]> {
+  const all: ArticleWithProvenance[] = []
   for (let offset = 0; ; offset += PAGE) {
     const { data, error } = await supabase
       .from('articles')
-      .select('*, sources(name, categoria, is_general)')
+      .select('*, sources(name, categoria, is_general), article_provenance(source_id)')
       .gte('published_at', start)
       .lt('published_at', end)
       .order('published_at', { ascending: false })
       .range(offset, offset + PAGE - 1)
     if (error) throw new Error(error.message)
-    const rows = (data as unknown as Article[]) || []
+    const rows = (data as unknown as ArticleWithProvenance[]) || []
     all.push(...rows)
     if (rows.length < PAGE) break
   }
@@ -111,21 +118,9 @@ export async function createEditionForClient(
     if (existing) return existing as unknown as MonthlyEdition
   }
   const allArticles = await loadMonthArticles(supabase, start, end)
-  const terms = parseKeywords(expandTerms(client.keywords, client.synonyms))
-  const sourceRules = new Map((client.client_sources || []).map((row) => [row.source_id, row]))
-  const candidates = allArticles.filter((article) => {
-    const sourceRule = sourceRules.get(article.source_id)
-    const keywordMatch = isRelevant(terms, {
-      title: article.title,
-      excerpt: article.excerpt,
-      content: article.content,
-    })
-    return keywordMatch || sourceRule?.is_thematic === true
-  })
-
   const existingTags = new Map<string, ArticleTag>()
-  for (let offset = 0; offset < candidates.length; offset += PAGE) {
-    const ids = candidates.slice(offset, offset + PAGE).map((a) => a.id)
+  for (let offset = 0; offset < allArticles.length; offset += PAGE) {
+    const ids = allArticles.slice(offset, offset + PAGE).map((article) => article.id)
     if (!ids.length) continue
     const { data, error } = await supabase
       .from('article_client_tags')
@@ -133,8 +128,24 @@ export async function createEditionForClient(
       .eq('client_id', client.id)
       .in('article_id', ids)
     if (error) throw new Error(error.message)
-    for (const tag of (data as ArticleTag[]) || []) existingTags.set(tag.article_id, tag)
+    for (const tag of (data as ArticleTag[]) || []) {
+      existingTags.set(tag.article_id, tag)
+    }
   }
+
+  const sourceRules = new Map((client.client_sources || []).map((row) => [row.source_id, row]))
+  const candidates = allArticles.filter((article) => {
+    const persisted = existingTags.get(article.id)
+    if (persisted?.monitoring_status === 'excluido') return false
+    if (persisted) return true
+    const provenanceIds = new Set([
+      article.source_id,
+      ...(article.article_provenance || []).flatMap((row) => (row.source_id ? [row.source_id] : [])),
+    ])
+    const thematic = Array.from(provenanceIds).some((sourceId) => sourceRules.get(sourceId)?.is_thematic === true)
+    return !!evaluateClientArticle(client, client.client_relevance_rules || [], article, thematic)
+  })
+  const terms = parseKeywords(expandTerms(client.keywords, client.synonyms))
 
   const pdfOrigins = new Map<string, { document_id: string; page_start: number; page_end: number }>()
   for (let offset = 0; offset < candidates.length; offset += PAGE) {
@@ -164,13 +175,17 @@ export async function createEditionForClient(
   }
 
   const rows = candidates.map((article) => {
-    const sourceRule = sourceRules.get(article.source_id)
+    const provenanceIds = new Set([
+      article.source_id,
+      ...(article.article_provenance || []).flatMap((row) => (row.source_id ? [row.source_id] : [])),
+    ])
+    const thematic = Array.from(provenanceIds).some((sourceId) => sourceRules.get(sourceId)?.is_thematic === true)
     const score = relevanceScore(terms, {
       title: article.title,
       excerpt: article.excerpt,
       content: article.content,
     })
-    const tag = mergeTag(article, client, existingTags.get(article.id), sourceRule?.is_thematic === true, score)
+    const tag = mergeTag(article, client, existingTags.get(article.id), thematic, score)
     return { article, tag, section: editionSection(tag) }
   })
 

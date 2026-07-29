@@ -56,7 +56,7 @@ export async function POST(req: Request) {
     .from('article_client_tags')
     .upsert(rows, { onConflict: 'article_id,client_id' })
     .select(
-      'article_id, client_id, tom, relevancia, cita_cliente, tema, classification_source, confidence, impact_summary, updated_at'
+      'article_id, client_id, tom, relevancia, cita_cliente, tema, classification_source, confidence, impact_summary, monitoring_status, match_score, match_reasons, rule_version, classified_at, updated_at'
     )
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
   return NextResponse.json(data)

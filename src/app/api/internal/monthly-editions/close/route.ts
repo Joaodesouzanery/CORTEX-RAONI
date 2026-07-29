@@ -15,7 +15,7 @@ export async function POST(req: Request) {
   const supabase = createClient()
   let query = supabase
     .from('clients')
-    .select('*, client_sources(source_id, priority, is_thematic)')
+    .select('*, client_sources(source_id, priority, is_thematic), client_relevance_rules(*)')
     .eq('active', true)
     .order('name', { ascending: true })
   if (parsed.data.client_ids?.length) query = query.in('id', parsed.data.client_ids)

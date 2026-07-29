@@ -43,18 +43,10 @@ async function run() {
   return NextResponse.json({ updated, processed: articles.length, remaining: count ?? null })
 }
 
-function authorized(req: Request): boolean {
-  const cronSecret = process.env.CRON_SECRET
-  if (!cronSecret) return true // endpoint open when no secret is configured
-  return req.headers.get('authorization') === `Bearer ${cronSecret}`
-}
-
-export async function POST(req: Request) {
-  if (!authorized(req)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+export async function POST() {
   return run()
 }
 
-export async function GET(req: Request) {
-  if (!authorized(req)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+export async function GET() {
   return run()
 }

@@ -22,6 +22,33 @@ export interface ParsedKeyword {
   kind: KeywordKind
 }
 
+// Accent stripping is useful for phrases, but a single geographic term such as
+// "Pará" becomes the Portuguese stopword "para". A bare stopword can never be a
+// safe relevance signal; phrases such as "mineração no Pará" remain valid.
+const UNSAFE_SINGLE_TERMS = new Set([
+  'a',
+  'as',
+  'com',
+  'da',
+  'das',
+  'de',
+  'do',
+  'dos',
+  'e',
+  'em',
+  'na',
+  'nas',
+  'no',
+  'nos',
+  'o',
+  'os',
+  'para',
+  'por',
+  'sem',
+  'um',
+  'uma',
+])
+
 /**
  * Normalize text for comparison: NFD + strip diacritics, lowercase, turn any
  * non-alphanumeric run into a single space, trim. Deterministic, no stemming.
@@ -88,10 +115,12 @@ export function parseKeywords(raw: string[] | null | undefined): ParsedKeyword[]
     if (typeof term !== 'string') continue
     const normalized = normalizeText(term)
     if (!normalized) continue
+    const tokens = tokenize(normalized)
+    if (tokens.length === 1 && UNSAFE_SINGLE_TERMS.has(tokens[0])) continue
     out.push({
       raw: term,
       normalized,
-      tokens: tokenize(normalized),
+      tokens,
       kind: classifyKeyword(term),
     })
   }
@@ -99,23 +128,25 @@ export function parseKeywords(raw: string[] | null | undefined): ParsedKeyword[]
 }
 
 /** Two tokens match if equal, or differ only by a trailing 's' (simple plural). */
-function tokensEqual(a: string, b: string): boolean {
+function tokensEqual(a: string, b: string, allowPlural = true): boolean {
   if (a === b) return true
+  if (!allowPlural) return false
   if (a.length > 1 && a === b + 's') return true
   if (b.length > 1 && b === a + 's') return true
   return false
 }
 
 /** Find a contiguous run of `needle` tokens inside `haystack` tokens. */
-function containsTokenSequence(haystack: string[], needle: string[]): boolean {
+function containsTokenSequence(haystack: string[], needle: string[], allowPlural: boolean): boolean {
   if (needle.length === 0) return false
-  if (needle.length === 1) return haystack.some((t) => tokensEqual(t, needle[0]))
+  if (needle.length === 1) return haystack.some((t) => tokensEqual(t, needle[0], allowPlural))
   const last = needle.length - 1
   for (let i = 0; i + last < haystack.length; i++) {
     let ok = true
     for (let j = 0; j < needle.length; j++) {
       // Exact match on inner tokens; tolerate plural only on the final token.
-      const equal = j === last ? tokensEqual(haystack[i + j], needle[j]) : haystack[i + j] === needle[j]
+      const equal =
+        j === last ? tokensEqual(haystack[i + j], needle[j], allowPlural) : haystack[i + j] === needle[j]
       if (!equal) {
         ok = false
         break
@@ -130,7 +161,7 @@ function containsTokenSequence(haystack: string[], needle: string[]): boolean {
 export function matchKeyword(parsed: ParsedKeyword, normalizedText: string): boolean {
   if (!parsed.tokens.length || !normalizedText) return false
   const haystack = tokenize(normalizedText)
-  return containsTokenSequence(haystack, parsed.tokens)
+  return containsTokenSequence(haystack, parsed.tokens, parsed.kind !== 'acronym')
 }
 
 interface Fields {

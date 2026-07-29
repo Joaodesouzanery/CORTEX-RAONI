@@ -10,6 +10,8 @@ export const CRAWLER_USER_AGENT =
   'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'
 
 export const FETCH_TIMEOUTS = {
+  /** RSS/XML request. */
+  rss: 20000,
   /** og:image fallback fetch on an individual article page. */
   ogImage: 8000,
   /** Single page scrape (Open Graph metadata extraction). */

@@ -6,6 +6,9 @@ export type SourceCategoria = 'imprensa' | 'institucional' | 'agente'
 export type ContentStatus = 'integral' | 'parcial' | 'metadados'
 export type AccessMode = 'publico' | 'licenciado' | 'referencia'
 export type ClassificationSource = 'regra' | 'ia' | 'humano'
+export type MonitoringStatus = 'candidato' | 'confirmado' | 'revisao' | 'excluido'
+export type FetchRunStatus = 'pendente' | 'executando' | 'concluido' | 'parcial' | 'erro'
+export type FetchRunSourceStatus = 'pendente' | 'executando' | 'concluido' | 'erro'
 export type ImportDocumentType = 'caderno' | 'artigo' | 'desconhecido'
 export type ImportStatus = 'enviado' | 'processando' | 'concluido' | 'revisao' | 'erro'
 export type EditionStatus = 'rascunho' | 'classificando' | 'renderizando' | 'concluido' | 'erro'
@@ -22,7 +25,65 @@ export interface ArticleTag {
   classification_source?: ClassificationSource | null
   confidence?: number | null
   impact_summary?: string | null
+  monitoring_status?: MonitoringStatus
+  match_score?: number
+  match_reasons?: MatchReason[]
+  rule_version?: number
+  classified_at?: string | null
   updated_at?: string
+}
+
+export interface MatchReason {
+  rule_id?: string
+  label: string
+  match_type: 'direta' | 'setorial' | 'fonte'
+  terms: string[]
+  weight: number
+}
+
+export interface ClientRelevanceRule {
+  id: string
+  client_id: string
+  label: string
+  match_type: 'direta' | 'setorial'
+  required_groups: string[][]
+  excluded_terms: string[]
+  weight: number
+  version: number
+  active: boolean
+}
+
+export interface FetchRunSource {
+  run_id: string
+  source_id: string
+  status: FetchRunSourceStatus
+  parsed_count: number
+  inserted_count: number
+  updated_count: number
+  duplicate_count: number
+  attempt_count: number
+  duration_ms: number | null
+  oldest_published_at: string | null
+  latest_published_at: string | null
+  error: string | null
+  sources?: Pick<Source, 'name' | 'type'>
+}
+
+export interface FetchRun {
+  id: string
+  trigger_type: 'manual' | 'schedule'
+  status: FetchRunStatus
+  total_sources: number
+  completed_sources: number
+  parsed_count: number
+  inserted_count: number
+  updated_count: number
+  duplicate_count: number
+  error_count: number
+  created_at: string
+  started_at: string | null
+  finished_at: string | null
+  source_results?: FetchRunSource[]
 }
 
 export interface Source {
@@ -37,6 +98,9 @@ export interface Source {
   access_mode?: AccessMode
   last_fetch_count?: number | null
   last_fetched_at?: string | null
+  last_success_at?: string | null
+  last_fetch_error?: string | null
+  last_fetch_duration_ms?: number | null
   created_at: string
 }
 
@@ -55,6 +119,12 @@ export interface Article {
   fetched_at: string
   publisher?: string | null
   sources?: { name: string; categoria?: SourceCategoria; is_general?: boolean }
+  provenance_sources?: Array<{
+    id: string
+    name: string
+    categoria?: SourceCategoria
+    is_general?: boolean
+  }>
   // Populated client-side by merging the active client's tags (not a DB column).
   tag?: ArticleTag | null
 }
@@ -84,6 +154,43 @@ export interface Client {
   logo_url: string | null
   active?: boolean
   created_at: string
+}
+
+export interface DashboardClientSummary {
+  client: Client
+  total: number
+  direct_mentions: number
+  review_count: number
+  previous_total: number
+  variation_percent: number | null
+}
+
+export interface DashboardSummary {
+  period_days: number
+  generated_at: string
+  clients: DashboardClientSummary[]
+  health: {
+    active_sources: number
+    healthy_sources: number
+    stale_sources: number
+    failed_sources: number
+    never_fetched_sources: number
+    last_success_at: string | null
+    coverage_start: string | null
+    coverage_complete: boolean
+    latest_run: FetchRun | null
+  }
+}
+
+export interface PaginatedArticles {
+  items: Article[]
+  total: number
+  next_cursor: string | null
+  coverage: {
+    start: string | null
+    end: string | null
+    complete: boolean
+  }
 }
 
 export interface ImportDocument {

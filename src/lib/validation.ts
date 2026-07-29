@@ -64,6 +64,7 @@ export const articleTagSchema = z.object({
   classification_source: z.enum(['regra', 'ia', 'humano']).nullish(),
   confidence: z.number().min(0).max(1).nullish(),
   impact_summary: z.string().max(2000).nullish(),
+  monitoring_status: z.enum(['candidato', 'confirmado', 'revisao', 'excluido']).optional(),
 })
 
 // Request a batch of tag suggestions for a client's articles (no save).

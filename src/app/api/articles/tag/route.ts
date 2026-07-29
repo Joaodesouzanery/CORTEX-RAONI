@@ -14,7 +14,7 @@ export async function GET(req: Request) {
   const { data, error } = await supabase
     .from('article_client_tags')
     .select(
-      'article_id, client_id, tom, relevancia, cita_cliente, tema, classification_source, confidence, impact_summary, updated_at'
+      'article_id, client_id, tom, relevancia, cita_cliente, tema, classification_source, confidence, impact_summary, monitoring_status, match_score, match_reasons, rule_version, classified_at, updated_at'
     )
     .eq('client_id', clientId)
 
@@ -45,15 +45,17 @@ export async function POST(req: Request) {
     'classification_source',
     'confidence',
     'impact_summary',
+    'monitoring_status',
   ] as const) {
     if (k in patch) row[k] = patch[k]
   }
+  if (!('classification_source' in patch)) row.classification_source = 'humano'
 
   const { data, error } = await supabase
     .from('article_client_tags')
     .upsert(row, { onConflict: 'article_id,client_id' })
     .select(
-      'article_id, client_id, tom, relevancia, cita_cliente, tema, classification_source, confidence, impact_summary, updated_at'
+      'article_id, client_id, tom, relevancia, cita_cliente, tema, classification_source, confidence, impact_summary, monitoring_status, match_score, match_reasons, rule_version, classified_at, updated_at'
     )
     .single()
 

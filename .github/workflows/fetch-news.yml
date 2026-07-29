@@ -1,52 +1,70 @@
 name: Fetch news
 
 # Vercel Hobby crons run at most once/day, so we schedule from GitHub Actions
-# (free, arbitrary frequency) and call the protected fetch endpoint.
+# (free, arbitrary frequency) and call the same public, rate-limited flow used
+# by the operator in the browser.
 on:
   schedule:
     - cron: '0 */6 * * *' # every 6 hours (UTC)
-  workflow_dispatch: {} # allow manual runs from the Actions tab
+  workflow_dispatch:
+    inputs:
+      reclassify_archive:
+        description: 'Reclassificar todo o acervo após alterar regras'
+        required: false
+        default: true
+        type: boolean
 
 jobs:
   fetch:
     runs-on: ubuntu-latest
     steps:
       - name: Trigger news fetch
+        shell: bash
         run: |
           if [ -z "${APP_URL}" ]; then
             echo "Missing APP_URL repo secret (e.g. https://cortex-raoni.vercel.app)." >&2
             exit 1
           fi
-          if [ -z "${CRON_SECRET}" ]; then
-            echo "Missing required CRON_SECRET repo secret." >&2
-            exit 1
-          fi
-          code=$(curl -sS -o /tmp/out.json -w '%{http_code}' \
+          code=$(curl -sS -o /tmp/run.json -w '%{http_code}' \
             --max-time 120 \
-            -H "Authorization: Bearer ${CRON_SECRET}" \
-            "${APP_URL%/}/api/articles/fetch")
+            -X POST \
+            -H "Content-Type: application/json" \
+            -d '{"trigger_type":"schedule"}' \
+            "${APP_URL%/}/api/fetch-runs")
           echo "HTTP ${code}"
-          cat /tmp/out.json || true
-          echo
-          test "${code}" = "200"
+          cat /tmp/run.json
+          test "${code}" = "200" -o "${code}" = "201"
+          run_id=$(node -e "const x=require('/tmp/run.json'); process.stdout.write(x.run?.id||'')")
+          test -n "${run_id}"
+
+          for n in $(seq 1 100); do
+            code=$(curl -sS -o /tmp/process.json -w '%{http_code}' \
+              --max-time 120 -X POST "${APP_URL%/}/api/fetch-runs/${run_id}/process")
+            cat /tmp/process.json
+            test "${code}" = "200"
+            status=$(node -e "const x=require('/tmp/process.json'); process.stdout.write(x.run?.status||'')")
+            case "${status}" in
+              concluido|parcial) exit 0 ;;
+              erro) exit 1 ;;
+            esac
+          done
+          echo "Fetch run did not finish after 100 batches." >&2
+          exit 1
         env:
           APP_URL: ${{ secrets.APP_URL }}
-          CRON_SECRET: ${{ secrets.CRON_SECRET }}
 
       - name: Backfill article images
         # Best-effort: fills missing images (incl. Google News) in batches.
         continue-on-error: true
         run: |
           [ -z "${APP_URL}" ] && exit 0
-          [ -z "${CRON_SECRET}" ] && exit 1
           for n in 1 2 3; do
             code=$(curl -sS -o /tmp/img.json -w '%{http_code}' --max-time 120 \
-              -H "Authorization: Bearer ${CRON_SECRET}" "${APP_URL%/}/api/articles/backfill-images")
+              "${APP_URL%/}/api/articles/backfill-images")
             echo "backfill ${n}: HTTP ${code}"; cat /tmp/img.json || true; echo
           done
         env:
           APP_URL: ${{ secrets.APP_URL }}
-          CRON_SECRET: ${{ secrets.CRON_SECRET }}
 
       - name: Enrich partial article text
         # Best-effort and public pages only. Paid/unavailable content remains
@@ -54,12 +72,31 @@ jobs:
         continue-on-error: true
         run: |
           [ -z "${APP_URL}" ] && exit 0
-          [ -z "${CRON_SECRET}" ] && exit 1
           for n in 1 2; do
             code=$(curl -sS -o /tmp/enrich.json -w '%{http_code}' --max-time 120 \
-              -H "Authorization: Bearer ${CRON_SECRET}" "${APP_URL%/}/api/articles/enrich")
+              "${APP_URL%/}/api/articles/enrich")
             echo "enrich ${n}: HTTP ${code}"; cat /tmp/enrich.json || true; echo
           done
         env:
           APP_URL: ${{ secrets.APP_URL }}
-          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+
+      - name: Reclassify archive
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.reclassify_archive }}
+        env:
+          APP_URL: ${{ secrets.APP_URL }}
+        run: |
+          cursor=""
+          for n in $(seq 1 500); do
+            body=$(node -e "process.stdout.write(JSON.stringify({cursor:process.argv[1]||null}))" "${cursor}")
+            code=$(curl -sS -o /tmp/classify.json -w '%{http_code}' --max-time 120 \
+              -X POST -H "Content-Type: application/json" -d "${body}" \
+              "${APP_URL%/}/api/articles/classify")
+            cat /tmp/classify.json
+            test "${code}" = "200"
+            done=$(node -e "const x=require('/tmp/classify.json'); process.stdout.write(String(!!x.done))")
+            [ "${done}" = "true" ] && exit 0
+            cursor=$(node -e "const x=require('/tmp/classify.json'); process.stdout.write(x.next_cursor||'')")
+            test -n "${cursor}"
+          done
+          echo "Classification did not finish after 500 batches." >&2
+          exit 1

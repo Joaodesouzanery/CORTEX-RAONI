@@ -50,6 +50,11 @@ describe('matchKeyword — acronyms match whole tokens only', () => {
     expect(matchKeyword(ons, normalizeText('Foram bons resultados'))).toBe(false)
     expect(matchKeyword(ons, normalizeText('Houve consórcio entre empresas'))).toBe(false)
   })
+  it('does NOT treat an English word as the singular of an acronym', () => {
+    expect(matchKeyword(ons, normalizeText('appeared first on InfoMoney'))).toBe(false)
+    const anm = parseKeywords(['ANM'])[0]
+    expect(matchKeyword(anm, normalizeText('an important market update'))).toBe(false)
+  })
 })
 
 describe('matchKeyword — phrases match contiguous tokens', () => {
@@ -119,5 +124,11 @@ describe('expandTerms', () => {
   it('handles null/empty synonyms', () => {
     expect(expandTerms(['energia'], null)).toEqual(['energia'])
     expect(expandTerms(null, '  ')).toEqual([])
+  })
+  it('drops unsafe bare stopwords created by accent normalization', () => {
+    const parsed = parseKeywords(expandTerms([], 'Pará, mineração no Pará'))
+    expect(parsed.map((term) => term.raw)).not.toContain('Pará')
+    expect(parsed.map((term) => term.raw)).toContain('mineração no Pará')
+    expect(isRelevant(parsed, { title: 'Crédito para pequenas empresas', excerpt: null })).toBe(false)
   })
 })

@@ -34,7 +34,7 @@ Variáveis da aplicação:
 | `NEXT_PUBLIC_SUPABASE_URL` | URL do projeto Supabase |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | chave pública do Supabase |
 | `SUPABASE_SERVICE_ROLE_KEY` | acesso administrativo das API routes |
-| `CRON_SECRET` | bearer dos endpoints de coleta e dos workers |
+| `CRON_SECRET` | bearer somente de alertas e fechamentos internos |
 | `ANTHROPIC_API_KEY` | classificação e relatórios por IA; opcional |
 | `GITHUB_ACTIONS_TOKEN` | token restrito, com `Actions: write`, usado pelos botões de fechamento |
 | `GITHUB_REPOSITORY` | repositório no formato `organização/nome` |
@@ -45,23 +45,27 @@ Secrets do GitHub Actions:
 - `APP_URL`: URL pública da aplicação;
 - `CRON_SECRET`: o mesmo valor configurado na aplicação.
 
-A interface é aberta e não exige login. Os endpoints automáticos de coleta,
-alertas e fechamento continuam protegidos por `CRON_SECRET`; se ele não estiver
-configurado, somente esses endpoints retornam indisponibilidade. Os buckets
+A interface é aberta e não exige login. A coleta de notícias usa endpoints
+públicos, limitados a uma execução por vez e com intervalo mínimo de dez
+minutos. Alertas e fechamentos internos continuam protegidos por `CRON_SECRET`;
+se ele não estiver configurado, somente esses workers retornam
+indisponibilidade. Os buckets
 `source-documents` e `monthly-clippings` são privados; uploads e downloads usam
 URLs assinadas de curta duração.
 
 ## Banco de dados
 
 Aplique, na ordem, todas as migrations versionadas em
-`supabase/migrations/` (atualmente `001` a `024`) pelo Supabase CLI ou SQL
+`supabase/migrations/` (atualmente `001` a `025`) pelo Supabase CLI ou SQL
 Editor. As migrations incluem clientes, classificações editoriais, alertas,
 acervo permanente, proveniências, importações, edições mensais e buckets.
 
 Depois das migrations, use `/sources` para revisar ou cadastrar fontes. A
 migration `024_priority_sources.sql` adiciona fontes nacionais e temáticas
-prioritárias, inclusive fontes apenas de referência cujas íntegras não são
-coletadas sem acesso autorizado.
+prioritárias. A `025_news_qa_and_dashboard.sql` cria o histórico detalhado das
+coletas, as regras contextuais de relevância, corrige fontes quebradas e
+adiciona os índices usados pelo Painel e pela paginação. Fontes apenas de
+referência não têm íntegras coletadas sem acesso autorizado.
 
 ## Operação
 
@@ -70,14 +74,23 @@ coletadas sem acesso autorizado.
 `.github/workflows/fetch-news.yml` executa a cada seis horas. A coleta:
 
 - grava até 100 itens por fonte em cada passagem;
+- processa no máximo quatro fontes por chamada e repete uma fonte uma vez em
+  caso de falha;
+- registra duração, erros, itens lidos, novos, enriquecidos e duplicados;
 - não exclui mais notícias com 90 dias;
 - registra proveniência por fonte;
+- classifica cada matéria de forma independente para os cinco clientes;
 - enriquece em lotes somente páginas públicas;
 - marca conteúdo como `integral`, `parcial` ou `metadados`;
 - não tenta contornar paywalls.
 
 Notícias, alertas, dossiês e os relatórios estratégicos existentes continuam
 disponíveis nas áreas originais.
+
+O botão **Buscar Notícias** usa esse mesmo fluxo sem `CRON_SECRET`, mostra o
+progresso real por fonte e respeita o intervalo de dez minutos. Para recalcular
+todo o acervo após uma alteração de regra, execute manualmente o workflow com a
+opção `reclassify_archive`.
 
 ### Importação de PDFs
 
@@ -135,6 +148,13 @@ npm run test:pdf-load
 Ele gera 500 publicações sintéticas e falha se houver menos páginas de matéria
 que itens ou se o heap ultrapassar 1 GB.
 
+Depois do rollout e da reclassificação histórica, gere o relatório de QA com
+contagens integrais de 7, 15 e 30 dias:
+
+```bash
+npm run qa:news -- https://seu-app.vercel.app
+```
+
 ## Estrutura principal
 
 ```text
@@ -146,6 +166,8 @@ src/app/api/internal/monthly-editions   lotes protegidos do worker
 src/lib/import/pdf-parser.ts            separação de cadernos e artigos
 src/lib/monthly-editions.ts             universo, snapshots e versões
 scripts/render-monthly-clipping.mjs     PDF em duas passagens
+scripts/qa-news.mjs                     auditoria pós-rollout das contagens
 supabase/migrations/023_*.sql           acervo e edições
 supabase/migrations/024_*.sql           fontes prioritárias
+supabase/migrations/025_*.sql           coleta rastreável e relevância
 ```

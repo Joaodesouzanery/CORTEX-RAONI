@@ -6,12 +6,131 @@ export const dynamic = 'force-dynamic'
 export async function GET(req: Request) {
   const supabase = createClient()
   const { searchParams } = new URL(req.url)
+  const paginated = searchParams.get('paginated') === 'true'
+  const clientId = searchParams.get('client_id')
+  const status = searchParams.get('status')
   const sourceId = searchParams.get('source_id')
   const search = searchParams.get('search')
-  const limit = parseInt(searchParams.get('limit') || '500')
+  const requestedLimit = parseInt(searchParams.get('limit') || (paginated ? '100' : '500'))
+  const limit = paginated ? Math.min(200, Math.max(1, requestedLimit || 100)) : requestedLimit
   const offsetParam = searchParams.get('offset')
+  const cursorParam = searchParams.get('cursor')
   const daysParam = searchParams.get('days')
   const publishedAfter = searchParams.get('published_after')
+  const publishedBefore = searchParams.get('published_before')
+
+  if (paginated) {
+    const offset = Math.max(0, Number.parseInt(cursorParam || '0') || 0)
+    let cutoff: string | null = publishedAfter
+    if (!cutoff && daysParam) {
+      const days = Number.parseInt(daysParam)
+      if (Number.isFinite(days) && days > 0) cutoff = new Date(Date.now() - days * 86400000).toISOString()
+    }
+
+    if (clientId) {
+      const provenanceJoin = sourceId
+        ? 'article_provenance!inner(source_id, sources(id, name, categoria, is_general))'
+        : 'article_provenance(source_id, sources(id, name, categoria, is_general))'
+      let query = supabase
+        .from('article_client_tags')
+        .select(
+          `article_id, client_id, tom, relevancia, cita_cliente, tema, classification_source, confidence, impact_summary, monitoring_status, match_score, match_reasons, rule_version, classified_at, updated_at, articles!inner(id, source_id, title, url, image_url, excerpt, published_at, fetched_at, publisher, sources(name, categoria, is_general), ${provenanceJoin})`,
+          { count: 'exact' }
+        )
+        .eq('client_id', clientId)
+        .neq('monitoring_status', 'excluido')
+        .order('published_at', { referencedTable: 'articles', ascending: false, nullsFirst: false })
+        .range(offset, offset + limit - 1)
+      if (status && ['candidato', 'confirmado', 'revisao'].includes(status)) query = query.eq('monitoring_status', status)
+      if (cutoff) query = query.gte('articles.published_at', cutoff)
+      if (publishedBefore) query = query.lte('articles.published_at', publishedBefore)
+      if (search) query = query.ilike('articles.title', `%${search}%`)
+      if (sourceId) query = query.eq('articles.article_provenance.source_id', sourceId)
+      const { data, error, count } = await query
+      if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+      const items = (data || []).flatMap((row) => {
+        const article = Array.isArray(row.articles) ? row.articles[0] : row.articles
+        if (!article) return []
+        const provenance = Array.isArray(article.article_provenance) ? article.article_provenance : []
+        return [
+          {
+            ...article,
+            article_provenance: undefined,
+            provenance_sources: provenance.flatMap((item: { sources?: unknown }) =>
+              item.sources ? (Array.isArray(item.sources) ? item.sources : [item.sources]) : []
+            ),
+            tag: {
+              article_id: row.article_id,
+              client_id: row.client_id,
+              tom: row.tom,
+              relevancia: row.relevancia,
+              cita_cliente: row.cita_cliente,
+              tema: row.tema,
+              classification_source: row.classification_source,
+              confidence: row.confidence,
+              impact_summary: row.impact_summary,
+              monitoring_status: row.monitoring_status,
+              match_score: row.match_score,
+              match_reasons: row.match_reasons,
+              rule_version: row.rule_version,
+              classified_at: row.classified_at,
+              updated_at: row.updated_at,
+            },
+          },
+        ]
+      })
+      const total = count || 0
+      return NextResponse.json({
+        items,
+        total,
+        next_cursor: offset + items.length < total ? String(offset + items.length) : null,
+        coverage: {
+          start: cutoff,
+          end: publishedBefore || new Date().toISOString(),
+          complete: offset + items.length >= total,
+        },
+      })
+    }
+
+    const provenanceJoin = sourceId
+      ? 'article_provenance!inner(source_id, sources(id, name, categoria, is_general))'
+      : 'article_provenance(source_id, sources(id, name, categoria, is_general))'
+    let query = supabase
+      .from('articles')
+      .select(
+        `id, source_id, title, url, image_url, excerpt, published_at, fetched_at, publisher, sources(name, categoria, is_general), ${provenanceJoin}`,
+        { count: 'exact' }
+      )
+      .order('published_at', { ascending: false, nullsFirst: false })
+      .range(offset, offset + limit - 1)
+    if (cutoff) query = query.gte('published_at', cutoff)
+    if (publishedBefore) query = query.lte('published_at', publishedBefore)
+    if (search) query = query.ilike('title', `%${search}%`)
+    if (sourceId) query = query.eq('article_provenance.source_id', sourceId)
+    const { data, error, count } = await query
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+    const items = (data || []).map((article) => {
+      const provenance = Array.isArray(article.article_provenance) ? article.article_provenance : []
+      return {
+        ...article,
+        article_provenance: undefined,
+        provenance_sources: provenance.flatMap((item: { sources?: unknown }) =>
+          item.sources ? (Array.isArray(item.sources) ? item.sources : [item.sources]) : []
+        ),
+      }
+    })
+    const total = count || 0
+    return NextResponse.json({
+      items,
+      total,
+      next_cursor: offset + items.length < total ? String(offset + items.length) : null,
+      coverage: {
+        start: cutoff,
+        end: publishedBefore || new Date().toISOString(),
+        complete: offset + items.length >= total,
+      },
+    })
+  }
 
   // List view never reads `content` (full HTML). Excluding it keeps the payload
   // small — the report flow re-fetches content by id in /api/reports.

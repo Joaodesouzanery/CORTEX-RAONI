@@ -1,12 +1,14 @@
 'use client'
-import type { ArticleTag, Tom, Relevancia } from '@/types'
+import type { ArticleTag, MonitoringStatus, Tom, Relevancia } from '@/types'
 import { cn } from '@/lib/utils'
 
 // One-click reputational tagging of an article for the active client. Purely
 // deterministic curation — it feeds the panorama counts, no AI. Clicking the
 // active value again clears it (sends null).
 
-export type TagPatch = Partial<Pick<ArticleTag, 'tom' | 'relevancia' | 'cita_cliente'>>
+export type TagPatch = Partial<
+  Pick<ArticleTag, 'tom' | 'relevancia' | 'cita_cliente' | 'monitoring_status'>
+>
 
 interface Props {
   tag?: ArticleTag | null
@@ -25,6 +27,13 @@ const REL_OPTS: { v: Relevancia; label: string }[] = [
   { v: 'alta', label: 'Alta' },
   { v: 'media', label: 'Média' },
   { v: 'baixa', label: 'Baixa' },
+]
+
+const STATUS_OPTS: { v: MonitoringStatus; label: string }[] = [
+  { v: 'confirmado', label: 'Confirmar' },
+  { v: 'candidato', label: 'Candidata' },
+  { v: 'revisao', label: 'Revisar' },
+  { v: 'excluido', label: 'Excluir' },
 ]
 
 const pill =
@@ -90,6 +99,30 @@ export default function TagControls({ tag, onChange, className }: Props) {
         >
           Sob outro
         </button>
+      </div>
+
+      <div className="flex items-center gap-1">
+        <span className="mr-0.5 text-[9px] uppercase tracking-widest text-gray-400">
+          Monitor.
+        </span>
+        {STATUS_OPTS.map((option) => (
+          <button
+            key={option.v}
+            type="button"
+            onClick={() => onChange({ monitoring_status: option.v })}
+            className={cn(
+              pill,
+              tag?.monitoring_status === option.v
+                ? option.v === 'excluido'
+                  ? 'border-red-600 bg-red-600 text-white'
+                  : 'border-black bg-black text-white'
+                : off
+            )}
+            title={`Monitoramento: ${option.label}`}
+          >
+            {option.label}
+          </button>
+        ))}
       </div>
     </div>
   )

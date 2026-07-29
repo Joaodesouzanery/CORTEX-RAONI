@@ -18,6 +18,13 @@ function HealthBadge({ source }: { source: Source }) {
   if (source.last_fetched_at == null) {
     return <span className="text-xs text-gray-400">sem coleta</span>
   }
+  if (source.last_fetch_error) {
+    return (
+      <Badge variant="outline" className="max-w-40 truncate text-xs text-red-600 border-red-300" title={source.last_fetch_error}>
+        ✗ {source.last_fetch_error}
+      </Badge>
+    )
+  }
   if (!source.last_fetch_count) {
     return (
       <Badge variant="outline" className="text-xs text-orange-600 border-orange-300">
@@ -34,7 +41,7 @@ export default function SourceTable({ sources, onRefresh }: Props) {
   const [seeding, setSeeding] = useState(false)
 
   async function deleteSource(id: string) {
-    if (!confirm('Tem certeza? Todos os artigos desta fonte serão removidos.')) return
+    if (!confirm('Desativar esta fonte? O acervo e as proveniências serão preservados.')) return
     await fetch(`/api/sources/${id}`, { method: 'DELETE' })
     onRefresh()
   }

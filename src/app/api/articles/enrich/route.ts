@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server'
 import { createAdminClient as createClient } from '@/lib/supabase/server'
 import { fetchArticleText } from '@/lib/fetcher/extract'
 import { cleanArticleText, inferContentStatus } from '@/lib/archive'
-import { internalAuthorized } from '@/lib/internal-auth'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
@@ -53,12 +52,10 @@ async function run() {
   return NextResponse.json({ processed: articles.length, updated })
 }
 
-export async function GET(req: Request) {
-  if (!internalAuthorized(req)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+export async function GET() {
   return run()
 }
 
-export async function POST(req: Request) {
-  if (!internalAuthorized(req)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+export async function POST() {
   return run()
 }

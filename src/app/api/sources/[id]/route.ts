@@ -22,7 +22,7 @@ export async function PUT(req: Request, { params }: RouteContext) {
 export async function DELETE(_: Request, { params }: RouteContext) {
   const { id } = await params
   const supabase = createClient()
-  const { error } = await supabase.from('sources').delete().eq('id', id)
+  const { error } = await supabase.from('sources').update({ active: false }).eq('id', id)
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
-  return NextResponse.json({ success: true })
+  return NextResponse.json({ success: true, deactivated: true })
 }

@@ -1,7 +1,9 @@
 'use client'
-import { useState, useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { CheckSquare, FileDown, FileText, RefreshCw, Sparkles } from 'lucide-react'
 import { useViewMode } from '@/hooks/useViewMode'
 import { useArticleSelection } from '@/hooks/useArticleSelection'
+import { useToast } from '@/hooks/use-toast'
 import ViewToggle from './ViewToggle'
 import SelectAllBar from './SelectAllBar'
 import SourceFilterBar from './SourceFilterBar'
@@ -12,248 +14,223 @@ import type { TagPatch } from './TagControls'
 import ReportBuilder from '@/components/report/ReportBuilder'
 import DossierExporter from '@/components/report/DossierExporter'
 import ClippingPdfButton from '@/components/report/ClippingPdfButton'
-import { parseKeywords, isRelevant, relevanceScore, expandTerms, dedupeByTitle } from '@/lib/relevance'
-import { fetchArticlesWindow } from '@/lib/articles'
+import { Button } from '@/components/ui/button'
+import type {
+  Article,
+  ArticleTag,
+  Client,
+  FetchRun,
+  MonitoringStatus,
+  PaginatedArticles,
+  Source,
+} from '@/types'
 import type { PanoramaRow } from '@/lib/panorama'
 import type { TagSuggestion } from '@/lib/ai/classify'
-import type { Article, Client, ArticleTag } from '@/types'
-import { useToast } from '@/hooks/use-toast'
-import { RefreshCw, FileText, FileDown, CheckSquare, Sparkles } from 'lucide-react'
-import { Button } from '@/components/ui/button'
 
-interface FetchSourceResult {
-  source: string
-  fetched?: number
-  error?: string
-}
-
-// Generalist firehose feeds (sources.is_general): only show in the default
-// "relevant" (no-client) view when they match a client's terms; thematic feeds
-// always pass. The flag lives in the DB (migration 022), not a hard-coded list.
+const PAGE_SIZE = 100
+const TERMINAL_RUNS = new Set(['concluido', 'parcial', 'erro'])
 
 export default function NewsPage() {
   const { mode, toggle } = useViewMode()
   const { selected, toggle: toggleSelect, selectAll, clearAll } = useArticleSelection()
+  const { toast } = useToast()
   const [articles, setArticles] = useState<Article[]>([])
+  const [total, setTotal] = useState(0)
+  const [nextCursor, setNextCursor] = useState<string | null>(null)
+  const [coverageComplete, setCoverageComplete] = useState(true)
   const [loading, setLoading] = useState(true)
+  const [loadingMore, setLoadingMore] = useState(false)
+  const [loadError, setLoadError] = useState<string | null>(null)
   const [fetching, setFetching] = useState(false)
+  const [fetchRun, setFetchRun] = useState<FetchRun | null>(null)
   const [reportOpen, setReportOpen] = useState(false)
   const [dossierOpen, setDossierOpen] = useState(false)
   const [activeSource, setActiveSource] = useState<string | null>(null)
-  const [activePeriod, setActivePeriod] = useState<number | null>(null)
-  const [dateFrom, setDateFrom] = useState<string>('')
-  const [dateTo, setDateTo] = useState<string>('')
-  const [fetchResults, setFetchResults] = useState<FetchSourceResult[] | null>(null)
-  const [showDiagnostics, setShowDiagnostics] = useState(false)
+  const [activePeriod, setActivePeriod] = useState<number | null>(30)
+  const [dateFrom, setDateFrom] = useState('')
+  const [dateTo, setDateTo] = useState('')
   const [clients, setClients] = useState<Client[]>([])
+  const [sources, setSources] = useState<Source[]>([])
   const [activeClient, setActiveClient] = useState<Client | null>(null)
-  const [showAll, setShowAll] = useState(false)
-  // Reputational tags for the active client (article_id → tag). Powers the panel
-  // and the per-row TagControls. Empty when no client is selected.
+  const [activeStatus, setActiveStatus] = useState<
+    Exclude<MonitoringStatus, 'excluido'> | null
+  >(null)
   const [tagsById, setTagsById] = useState<Map<string, ArticleTag>>(new Map())
   const [suggesting, setSuggesting] = useState(false)
-  // Non-null when the last load failed (DB/env outage). Lets the UI show the real
-  // error instead of the misleading "Nenhuma notícia ainda." empty state.
-  const [loadError, setLoadError] = useState<string | null>(null)
-  const { toast } = useToast()
 
-  const sources = useMemo(
-    () => Array.from(new Set(articles.map((a) => a.sources?.name).filter(Boolean))) as string[],
-    [articles]
+  const sourceNames = useMemo(() => sources.filter((source) => source.active).map((source) => source.name), [sources])
+  const activeSourceId = useMemo(
+    () => sources.find((source) => source.name === activeSource)?.id || null,
+    [sources, activeSource]
   )
-
-  const periodFiltered = useMemo(() => {
-    if (!activePeriod) return articles
-    const cutoff = Date.now() - activePeriod * 24 * 60 * 60 * 1000
-    return articles.filter((a) => a.published_at && new Date(a.published_at).getTime() >= cutoff)
-  }, [articles, activePeriod])
-
-  const dateFiltered = useMemo(() => {
-    let result = periodFiltered
-    if (dateFrom) {
-      const start = new Date(dateFrom).getTime()
-      result = result.filter((a) => a.published_at && new Date(a.published_at).getTime() >= start)
-    }
-    if (dateTo) {
-      const end = new Date(dateTo)
-      end.setHours(23, 59, 59, 999)
-      result = result.filter((a) => a.published_at && new Date(a.published_at).getTime() <= end.getTime())
-    }
-    return result
-  }, [periodFiltered, dateFrom, dateTo])
-
-  const parsedKws = useMemo(
-    () => parseKeywords(expandTerms(activeClient?.keywords, activeClient?.synonyms)),
-    [activeClient]
-  )
-
-  // Union of every client's terms — drives the default "relevant to the portfolio"
-  // view when no single client is selected.
-  const allClientsParsed = useMemo(() => {
-    const terms: string[] = []
-    for (const c of clients) terms.push(...expandTerms(c.keywords, c.synonyms))
-    return parseKeywords(terms)
-  }, [clients])
-
-  const clientFiltered = useMemo(() => {
-    if (activeClient) {
-      // A specific client is selected → relevant = matches its terms OR comes from
-      // one of its thematic feeds (the feed IS the client's curated stream).
-      const feeds = activeClient.feed_names || []
-      if (!parsedKws.length && !feeds.length) return dateFiltered
-      return dateFiltered.filter(
-        (a) =>
-          (parsedKws.length > 0 && isRelevant(parsedKws, { title: a.title, excerpt: a.excerpt })) ||
-          feeds.includes(a.sources?.name || '')
-      )
-    }
-    // No client selected → default to what's relevant to the whole portfolio:
-    // anything from a thematic/specialized feed, OR matching any client's terms.
-    // "Ver tudo" bypasses this to show the raw firehose.
-    if (showAll || !allClientsParsed.length) return dateFiltered
-    return dateFiltered.filter(
-      (a) => !a.sources?.is_general || isRelevant(allClientsParsed, { title: a.title, excerpt: a.excerpt })
-    )
-  }, [dateFiltered, activeClient, parsedKws, allClientsParsed, showAll])
-
-  // Source selected → show ALL from that source (no dedup). Otherwise → the
-  // general/client view, with duplicates collapsed. When a client is active, rank
-  // by relevance (score desc, date desc) and expose a score map for the badge.
-  const { filtered, scores } = useMemo(() => {
-    let base: Article[]
-    if (activeSource) {
-      const src = activeClient ? clientFiltered : dateFiltered
-      base = src.filter((a) => a.sources?.name === activeSource)
-    } else {
-      base = dedupeByTitle(clientFiltered)
-    }
-    if (!parsedKws.length) return { filtered: base, scores: null as Map<string, number> | null }
-    const m = new Map<string, number>()
-    for (const a of base) m.set(a.id, relevanceScore(parsedKws, { title: a.title, excerpt: a.excerpt }))
-    const dateOf = (x: Article) => (x.published_at ? new Date(x.published_at).getTime() : 0)
-    const ranked = [...base].sort((a, b) => m.get(b.id)! - m.get(a.id)! || dateOf(b) - dateOf(a))
-    return { filtered: ranked, scores: m }
-  }, [clientFiltered, dateFiltered, activeSource, activeClient, parsedKws])
-
-  // Monitored universe for the panorama = the client-relevant items in the period
-  // (deduped), independent of the transient source filter — the "234 itens
-  // monitorados" base. Each row reduced to its tag + source type.
-  const monitored = useMemo(() => dedupeByTitle(clientFiltered), [clientFiltered])
-  const panoramaRows = useMemo<PanoramaRow[]>(
-    () =>
-      monitored.map((a) => {
-        const t = tagsById.get(a.id)
-        return {
-          tom: t?.tom ?? null,
-          relevancia: t?.relevancia ?? null,
-          cita_cliente: t?.cita_cliente ?? null,
-          categoria: a.sources?.categoria ?? null,
-        }
-      }),
-    [monitored, tagsById]
-  )
-
-  // Previous equal-length period → the panorama trend. Client-side, from the
-  // loaded window; only for a preset period with no custom date range.
-  const trend = useMemo(() => {
-    if (!activeClient || !activePeriod || dateFrom || dateTo) return null
-    const p = activePeriod
-    const now = Date.now()
-    const curStart = now - p * 86400000
-    const prevStart = now - 2 * p * 86400000
-    const feeds = activeClient.feed_names || []
-    const relevant = (a: Article) =>
-      (parsedKws.length > 0 && isRelevant(parsedKws, { title: a.title, excerpt: a.excerpt })) ||
-      feeds.includes(a.sources?.name || '')
-    const ms = (a: Article) => (a.published_at ? new Date(a.published_at).getTime() : 0)
-    const rel = articles.filter(relevant)
-    const prevArts = dedupeByTitle(rel.filter((a) => ms(a) >= prevStart && ms(a) < curStart))
-    const prevRows: PanoramaRow[] = prevArts.map((a) => {
-      const t = tagsById.get(a.id)
-      return {
-        tom: t?.tom ?? null,
-        relevancia: t?.relevancia ?? null,
-        cita_cliente: t?.cita_cliente ?? null,
-        categoria: a.sources?.categoria ?? null,
-      }
-    })
-    const oldest = Math.min(...articles.map(ms).filter((x) => x > 0))
-    const partial = Number.isFinite(oldest) && prevStart < oldest
-    return { prevRows, partial }
-  }, [activeClient, activePeriod, dateFrom, dateTo, parsedKws, articles, tagsById])
-
-  // Only items missing at least one tag dimension need a suggestion — re-classifying
-  // already-tagged items just wastes AI calls (bulk apply is fill-only anyway).
+  const scores = useMemo(() => {
+    if (!activeClient) return null
+    return new Map(articles.map((article) => [article.id, article.tag?.match_score || 0]))
+  }, [articles, activeClient])
+  const allLoadedSelected = articles.length > 0 && articles.every((article) => selected.has(article.id))
+  const selectedArticles = articles.filter((article) => selected.has(article.id))
   const pendingTag = useMemo(
     () =>
-      monitored.filter((a) => {
-        const t = tagsById.get(a.id)
-        return !t || t.tom == null || t.relevancia == null || t.cita_cliente == null
+      activeClient
+        ? articles.filter((article) => {
+            const tag = tagsById.get(article.id)
+            return !tag || tag.tom == null || tag.relevancia == null || tag.cita_cliente == null
+          })
+        : [],
+    [activeClient, articles, tagsById]
+  )
+  const panoramaRows = useMemo<PanoramaRow[]>(
+    () =>
+      articles.map((article) => {
+        const tag = tagsById.get(article.id) || article.tag
+        return {
+          tom: tag?.tom ?? null,
+          relevancia: tag?.relevancia ?? null,
+          cita_cliente: tag?.cita_cliente ?? null,
+          categoria: article.sources?.categoria ?? null,
+        }
       }),
-    [monitored, tagsById]
+    [articles, tagsById]
   )
 
+  function articleQuery(cursor?: string | null): URLSearchParams {
+    const query = new URLSearchParams({ paginated: 'true', limit: String(PAGE_SIZE) })
+    if (cursor) query.set('cursor', cursor)
+    if (activeClient) query.set('client_id', activeClient.id)
+    if (activeStatus) query.set('status', activeStatus)
+    if (activeSourceId) query.set('source_id', activeSourceId)
+    if (activePeriod) query.set('days', String(activePeriod))
+    if (dateFrom) query.set('published_after', new Date(`${dateFrom}T00:00:00-03:00`).toISOString())
+    if (dateTo) query.set('published_before', new Date(`${dateTo}T23:59:59-03:00`).toISOString())
+    return query
+  }
+
+  async function loadArticles(reset = true) {
+    if (reset) setLoading(true)
+    else setLoadingMore(true)
+    try {
+      const cursor = reset ? null : nextCursor
+      const res = await fetch(`/api/articles?${articleQuery(cursor)}`)
+      const data = (await res.json().catch(() => null)) as PaginatedArticles | { error?: string } | null
+      if (!res.ok || !data || !('items' in data)) {
+        throw new Error((data && 'error' in data && data.error) || 'Falha ao carregar notícias.')
+      }
+      setArticles((previous) => (reset ? data.items : [...previous, ...data.items]))
+      setTotal(data.total)
+      setNextCursor(data.next_cursor)
+      setCoverageComplete(data.coverage.complete)
+      setLoadError(null)
+      if (reset) {
+        const tagMap = new Map<string, ArticleTag>()
+        for (const article of data.items) if (article.tag) tagMap.set(article.id, article.tag)
+        setTagsById(tagMap)
+        clearAll()
+      } else {
+        setTagsById((previous) => {
+          const next = new Map(previous)
+          for (const article of data.items) if (article.tag) next.set(article.id, article.tag)
+          return next
+        })
+      }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Falha ao carregar notícias.'
+      setLoadError(message)
+      toast({ title: 'Falha ao carregar notícias', description: message, variant: 'destructive' })
+    } finally {
+      setLoading(false)
+      setLoadingMore(false)
+    }
+  }
+
   useEffect(() => {
-    loadArticles()
-    fetch('/api/clients?active=true')
-      .then((r) => r.json())
-      .then((d) => {
-        const list: Client[] = Array.isArray(d) ? d : []
-        setClients(list)
-        // Pre-select a client coming from the dashboard (/news?client=ID).
-        const cid = new URLSearchParams(window.location.search).get('client')
-        if (cid) {
-          const c = list.find((x) => x.id === cid)
-          if (c) setActiveClient(c)
-        }
+    Promise.all([
+      fetch('/api/clients?active=true').then((res) => res.json()),
+      fetch('/api/sources').then((res) => res.json()),
+    ])
+      .then(([clientRows, sourceRows]) => {
+        const clientList = Array.isArray(clientRows) ? (clientRows as Client[]) : []
+        setClients(clientList)
+        setSources(Array.isArray(sourceRows) ? (sourceRows as Source[]) : [])
+        const params = new URLSearchParams(window.location.search)
+        const clientId = params.get('client')
+        const period = Number.parseInt(params.get('period') || '')
+        if ([1, 7, 15, 30].includes(period)) setActivePeriod(period)
+        if (clientId) setActiveClient(clientList.find((client) => client.id === clientId) || null)
+      })
+      .catch(() => {
+        setClients([])
+        setSources([])
       })
   }, [])
 
-  // Auto-select the client's relevant articles when a client is picked, so the
-  // user can jump straight to generating a report.
   useEffect(() => {
-    if (activeClient) selectAll(filtered.map((a) => a.id))
-    // Only react to the chosen client (not to every filter change).
-  }, [activeClient?.id])
+    loadArticles(true)
+  }, [activeClient?.id, activeSourceId, activeStatus, activePeriod, dateFrom, dateTo])
 
-  // Load the active client's reputational tags (per-client curation state).
-  useEffect(() => {
-    if (!activeClient) {
-      setTagsById(new Map())
-      return
+  async function processRun(runId: string): Promise<FetchRun> {
+    let latest: FetchRun | null = null
+    for (let index = 0; index < 40; index++) {
+      const res = await fetch(`/api/fetch-runs/${runId}/process`, { method: 'POST' })
+      const data = await res.json().catch(() => null)
+      if (!res.ok) throw new Error(data?.error || 'Falha ao processar lote de fontes.')
+      latest = data.run as FetchRun
+      setFetchRun(latest)
+      if (TERMINAL_RUNS.has(latest.status)) return latest
     }
-    let cancelled = false
-    fetch(`/api/articles/tag?client_id=${activeClient.id}`)
-      .then((r) => r.json())
-      .then((d: ArticleTag[]) => {
-        if (cancelled) return
-        const m = new Map<string, ArticleTag>()
-        if (Array.isArray(d)) for (const t of d) m.set(t.article_id, t)
-        setTagsById(m)
-      })
-      .catch(() => {
-        if (!cancelled) setTagsById(new Map())
-      })
-    return () => {
-      cancelled = true
-    }
-    // Refetch only when the selected client changes, not on every client edit.
-  }, [activeClient?.id])
+    throw new Error('A coleta excedeu o número máximo de lotes.')
+  }
 
-  // Optimistic tag write: update the map now, persist, revert + toast on failure.
+  async function fetchNews() {
+    setFetching(true)
+    try {
+      const res = await fetch('/api/fetch-runs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ trigger_type: 'manual' }),
+      })
+      const data = await res.json().catch(() => null)
+      if (!res.ok || !data?.run) throw new Error(data?.error || 'Falha ao iniciar a coleta.')
+      setFetchRun(data.run as FetchRun)
+      if (data.cooldown) {
+        toast({ title: 'Fontes já atualizadas', description: 'A última coleta terminou há menos de dez minutos.' })
+        return
+      }
+      const runId = String(data.run.id)
+      const completed = await Promise.all([processRun(runId), processRun(runId)])
+      const latest = completed.sort((a, b) => b.completed_sources - a.completed_sources)[0]
+      const detail = await fetch(`/api/fetch-runs/${runId}`).then((response) => response.json())
+      setFetchRun(detail as FetchRun)
+      toast({
+        title: latest.status === 'concluido' ? 'Coleta concluída' : 'Coleta concluída com ressalvas',
+        description: `${latest.inserted_count} novas, ${latest.updated_count} enriquecidas e ${latest.error_count} fontes com erro.`,
+      })
+      await loadArticles(true)
+    } catch (error) {
+      toast({
+        title: 'Falha ao buscar notícias',
+        description: error instanceof Error ? error.message : 'Erro desconhecido',
+        variant: 'destructive',
+      })
+    } finally {
+      setFetching(false)
+    }
+  }
+
   async function handleTag(articleId: string, patch: TagPatch) {
     if (!activeClient) return
-    const prev = tagsById.get(articleId) ?? null
+    const previous = tagsById.get(articleId) || null
     const optimistic: ArticleTag = {
       article_id: articleId,
       client_id: activeClient.id,
-      tom: prev?.tom ?? null,
-      relevancia: prev?.relevancia ?? null,
-      cita_cliente: prev?.cita_cliente ?? null,
-      tema: prev?.tema ?? null,
+      tom: previous?.tom ?? null,
+      relevancia: previous?.relevancia ?? null,
+      cita_cliente: previous?.cita_cliente ?? null,
+      tema: previous?.tema ?? null,
+      ...previous,
       ...patch,
+      classification_source: 'humano',
     }
-    setTagsById((m) => new Map(m).set(articleId, optimistic))
+    setTagsById((current) => new Map(current).set(articleId, optimistic))
     try {
       const res = await fetch('/api/articles/tag', {
         method: 'POST',
@@ -261,339 +238,195 @@ export default function NewsPage() {
         body: JSON.stringify({ article_id: articleId, client_id: activeClient.id, ...patch }),
       })
       const data = await res.json().catch(() => null)
-      if (!res.ok) throw new Error(data?.error || 'Falha ao salvar a classificação')
-      setTagsById((m) => new Map(m).set(articleId, data as ArticleTag))
-    } catch (e) {
-      setTagsById((m) => {
-        const n = new Map(m)
-        if (prev) n.set(articleId, prev)
-        else n.delete(articleId)
-        return n
+      if (!res.ok) throw new Error(data?.error || 'Falha ao salvar a classificação.')
+      setTagsById((current) => new Map(current).set(articleId, data as ArticleTag))
+    } catch (error) {
+      setTagsById((current) => {
+        const next = new Map(current)
+        if (previous) next.set(articleId, previous)
+        else next.delete(articleId)
+        return next
       })
       toast({
         title: 'Não foi possível salvar a classificação',
-        description: (e as Error).message,
+        description: error instanceof Error ? error.message : 'Erro desconhecido',
         variant: 'destructive',
       })
     }
   }
 
-  // Suggest tags for the monitored set (deterministic; AI when the key is set),
-  // then apply as fill-only via /bulk — never overwriting a tag set by hand.
   async function runSuggestTags() {
-    if (!activeClient) return
-    if (pendingTag.length === 0) {
-      toast({ title: 'Tudo já classificado', description: 'Nenhuma matéria pendente de tag neste período.' })
-      return
-    }
+    if (!activeClient || !pendingTag.length) return
     setSuggesting(true)
     try {
-      const sres = await fetch('/api/articles/tag/suggest', {
+      const suggestionRes = await fetch('/api/articles/tag/suggest', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ client_id: activeClient.id, article_ids: pendingTag.map((a) => a.id) }),
+        body: JSON.stringify({ client_id: activeClient.id, article_ids: pendingTag.map((article) => article.id) }),
       })
-      const sdata = await sres.json().catch(() => null)
-      if (!sres.ok) throw new Error(sdata?.error || 'Falha ao sugerir tags')
-      const suggestions = (sdata?.suggestions ?? []) as TagSuggestion[]
-      if (!suggestions.length) throw new Error('Nenhuma sugestão gerada')
-
-      const bres = await fetch('/api/articles/tag/bulk', {
+      const suggestionData = await suggestionRes.json().catch(() => null)
+      if (!suggestionRes.ok) throw new Error(suggestionData?.error || 'Falha ao sugerir tags.')
+      const suggestions = (suggestionData?.suggestions || []) as TagSuggestion[]
+      const bulkRes = await fetch('/api/articles/tag/bulk', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ client_id: activeClient.id, items: suggestions }),
       })
-      const saved = await bres.json().catch(() => null)
-      if (!bres.ok) throw new Error(saved?.error || 'Falha ao aplicar sugestões')
-
-      setTagsById((m) => {
-        const n = new Map(m)
-        for (const t of saved as ArticleTag[]) n.set(t.article_id, t)
-        return n
+      const saved = await bulkRes.json().catch(() => null)
+      if (!bulkRes.ok) throw new Error(saved?.error || 'Falha ao aplicar sugestões.')
+      setTagsById((current) => {
+        const next = new Map(current)
+        for (const tag of saved as ArticleTag[]) next.set(tag.article_id, tag)
+        return next
       })
+      toast({ title: `${(saved as ArticleTag[]).length} matérias classificadas` })
+    } catch (error) {
       toast({
-        title: `${(saved as ArticleTag[]).length} matérias classificadas`,
-        description:
-          sdata.mode === 'ai'
-            ? 'Sugestões geradas com IA (Anthropic). Revise os pills.'
-            : 'Modo heurístico — defina ANTHROPIC_API_KEY para ligar a IA. Revise os pills.',
+        title: 'Não foi possível sugerir tags',
+        description: error instanceof Error ? error.message : 'Erro desconhecido',
+        variant: 'destructive',
       })
-    } catch (e) {
-      toast({ title: 'Não foi possível sugerir tags', description: (e as Error).message, variant: 'destructive' })
     } finally {
       setSuggesting(false)
     }
   }
 
-  async function loadArticles() {
-    setLoading(true)
-    // Page through the window so the period buttons filter over ALL articles, not
-    // just the newest 1000 (which the high-volume general feeds would monopolize).
-    // 60d so the panorama trend can compare the current period to the previous
-    // equal-length one (e.g. last 30 days vs. the 30 before it).
-    try {
-      const data = await fetchArticlesWindow(60)
-      setArticles(data)
-      setLoadError(null)
-    } catch (e) {
-      setLoadError((e as Error).message)
-      toast({ title: 'Falha ao carregar notícias', description: (e as Error).message, variant: 'destructive' })
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  async function fetchNews() {
-    setFetching(true)
-    try {
-      const res = await fetch('/api/articles/fetch', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ manual: true }),
-      })
-      const data = await res.json().catch(() => null)
-      // Antes um 500 (banco fora, service key ausente) virava `data = null` e o
-      // botão não dizia nada. Agora surface o erro em vez de falhar em silêncio.
-      if (!res.ok) {
-        const msg = (data && (data.error || data.message)) || `HTTP ${res.status}`
-        toast({ title: 'Falha ao buscar notícias', description: msg, variant: 'destructive' })
-        return
-      }
-      if (data?.sources) {
-        setFetchResults(data.sources)
-        setShowDiagnostics(true)
-        const results = data.sources as FetchSourceResult[]
-        const total = results.reduce((n, r) => n + (r.fetched ?? 0), 0)
-        if (total === 0) {
-          toast({
-            title: 'Nenhum artigo novo',
-            description: 'As fontes não trouxeram itens novos — veja o diagnóstico por fonte.',
-          })
-        }
-      }
-    } catch (e) {
-      toast({ title: 'Falha ao buscar notícias', description: (e as Error).message, variant: 'destructive' })
-    } finally {
-      await loadArticles()
-      setFetching(false)
-    }
-  }
-
-  const selectedArticles = articles.filter((a) => selected.has(a.id))
-  const allFilteredSelected = filtered.length > 0 && filtered.every((a) => selected.has(a.id))
-
   return (
-    <div className="max-w-screen-2xl mx-auto px-6 py-8">
-      {/* Header */}
-      <div className="flex items-start justify-between mb-8">
+    <div className="mx-auto max-w-screen-2xl px-6 py-8">
+      <div className="mb-8 flex flex-wrap items-start justify-between gap-4">
         <div>
           <h1 className="text-5xl font-light tracking-tight">As últimas notícias</h1>
-          <p className="text-xs text-gray-400 mt-1">
-            Marque os checkboxes para selecionar notícias e gerar um relatório
+          <p className="mt-1 text-xs text-gray-400">
+            {total.toLocaleString('pt-BR')} publicações no filtro · carregadas {articles.length}
           </p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           <Button
             variant="outline"
             size="sm"
-            onClick={() => (allFilteredSelected ? clearAll() : selectAll(filtered.map((a) => a.id)))}
-            disabled={filtered.length === 0}
+            onClick={() => (allLoadedSelected ? clearAll() : selectAll(articles.map((article) => article.id)))}
+            disabled={!articles.length}
           >
-            <CheckSquare className="w-4 h-4 mr-2" />
-            {allFilteredSelected
-              ? 'Limpar seleção'
-              : `${activeClient ? 'Selecionar relevantes' : 'Selecionar todas'} (${filtered.length})`}
+            <CheckSquare className="mr-2 h-4 w-4" />
+            {allLoadedSelected ? 'Limpar seleção' : `Selecionar carregadas (${articles.length})`}
           </Button>
           <Button variant="outline" size="sm" onClick={fetchNews} disabled={fetching}>
-            <RefreshCw className={`w-4 h-4 mr-2 ${fetching ? 'animate-spin' : ''}`} />
-            {fetching ? 'Buscando...' : 'Buscar Notícias'}
+            <RefreshCw className={`mr-2 h-4 w-4 ${fetching ? 'animate-spin' : ''}`} />
+            {fetching && fetchRun
+              ? `${fetchRun.completed_sources}/${fetchRun.total_sources}`
+              : fetching
+                ? 'Iniciando…'
+                : 'Buscar Notícias'}
           </Button>
           {activeClient && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={runSuggestTags}
-              disabled={suggesting || pendingTag.length === 0}
-              title="Preenche tom/relevância/cita das matérias ainda não classificadas"
-            >
-              <Sparkles className={`w-4 h-4 mr-2 ${suggesting ? 'animate-pulse' : ''}`} />
-              {suggesting ? 'Sugerindo...' : `Sugerir tags (${pendingTag.length})`}
+            <Button variant="outline" size="sm" onClick={runSuggestTags} disabled={suggesting || !pendingTag.length}>
+              <Sparkles className={`mr-2 h-4 w-4 ${suggesting ? 'animate-pulse' : ''}`} />
+              {suggesting ? 'Sugerindo…' : `Sugerir tags (${pendingTag.length})`}
             </Button>
           )}
           <ViewToggle mode={mode} onToggle={toggle} />
         </div>
       </div>
 
-      {/* Fetch diagnostics */}
-      {fetchResults && (
-        <div className="mb-4 border border-gray-200 text-sm">
-          <button
-            onClick={() => setShowDiagnostics((v) => !v)}
-            className="w-full flex items-center justify-between px-4 py-2 bg-gray-50 hover:bg-gray-100"
-          >
+      {fetchRun && (
+        <div className="mb-5 border border-gray-200 bg-gray-50 px-4 py-3 text-sm">
+          <div className="flex justify-between gap-4">
             <span>
-              Resultado da busca: {fetchResults.filter((r) => r.error).length} fonte(s) com erro,{' '}
-              {fetchResults.filter((r) => !r.error).length} ok
+              Coleta {fetchRun.status}: {fetchRun.completed_sources}/{fetchRun.total_sources} fontes
             </span>
-            <span className="text-gray-400">{showDiagnostics ? '▲' : '▼'}</span>
-          </button>
-          {showDiagnostics && (
-            <ul className="divide-y divide-gray-100">
-              {fetchResults.map((r) => (
-                <li key={r.source} className="flex items-center justify-between px-4 py-1.5">
-                  <span>{r.source}</span>
-                  {r.error ? (
-                    <span className="text-red-600">✗ {r.error}</span>
-                  ) : (
-                    <span className="text-green-600">✓ {r.fetched ?? 0} artigos</span>
-                  )}
-                </li>
+            <span className="tabular-nums">
+              {fetchRun.inserted_count} novas · {fetchRun.updated_count} enriquecidas · {fetchRun.error_count} erros
+            </span>
+          </div>
+          <div className="mt-2 h-1.5 overflow-hidden bg-gray-200">
+            <div
+              className="h-full bg-black transition-all"
+              style={{ width: `${fetchRun.total_sources ? (fetchRun.completed_sources / fetchRun.total_sources) * 100 : 0}%` }}
+            />
+          </div>
+          {fetchRun.source_results?.some((row) => row.error) && (
+            <ul className="mt-2 text-xs text-red-600">
+              {fetchRun.source_results.filter((row) => row.error).map((row) => (
+                <li key={row.source_id}>{row.sources?.name || row.source_id}: {row.error}</li>
               ))}
             </ul>
           )}
         </div>
       )}
 
-      {/* Selection bar */}
-      <SelectAllBar
-        selectedCount={selected.size}
-        totalCount={filtered.length}
-        onSelectAll={() => selectAll(filtered.map((a) => a.id))}
-        onClear={clearAll}
-      />
+      <SelectAllBar selectedCount={selected.size} totalCount={articles.length} onSelectAll={() => selectAll(articles.map((article) => article.id))} onClear={clearAll} />
 
-      {/* Period filter */}
-      <div className="flex flex-wrap items-center gap-2 mb-4">
-        {([null, 1, 7, 15, 30] as (number | null)[]).map((days) => (
+      <div className="mb-4 flex flex-wrap items-center gap-2">
+        {([null, 1, 7, 15, 30] as Array<number | null>).map((days) => (
           <button
             key={days ?? 'all'}
             onClick={() => setActivePeriod(days)}
-            className={`px-3 py-1 text-xs uppercase tracking-widest border transition-colors ${
-              activePeriod === days
-                ? 'bg-black text-white border-black'
-                : 'border-gray-300 text-gray-600 hover:border-black hover:text-black'
+            className={`border px-3 py-1 text-xs uppercase tracking-widest ${
+              activePeriod === days ? 'border-black bg-black text-white' : 'border-gray-300 text-gray-600 hover:border-black'
             }`}
           >
-            {days === null ? 'Todos' : days === 1 ? '1 Dia' : `${days} Dias`}
+            {days == null ? 'Todos' : days === 1 ? '1 dia' : `${days} dias`}
           </button>
         ))}
-
-        {/* Custom date range */}
-        <div className="flex items-center gap-2 ml-2 text-xs text-gray-600">
-          <span className="uppercase tracking-widest">De</span>
-          <input
-            type="date"
-            value={dateFrom}
-            onChange={(e) => setDateFrom(e.target.value)}
-            className="border border-gray-300 px-2 py-1 focus:border-black outline-none"
-          />
-          <span className="uppercase tracking-widest">Até</span>
-          <input
-            type="date"
-            value={dateTo}
-            onChange={(e) => setDateTo(e.target.value)}
-            className="border border-gray-300 px-2 py-1 focus:border-black outline-none"
-          />
-          {(dateFrom || dateTo) && (
-            <button
-              onClick={() => {
-                setDateFrom('')
-                setDateTo('')
-              }}
-              className="underline hover:no-underline"
-            >
-              Limpar datas
-            </button>
-          )}
-        </div>
+        <span className="ml-2 text-xs uppercase tracking-widest text-gray-500">De</span>
+        <input type="date" value={dateFrom} onChange={(event) => setDateFrom(event.target.value)} className="border border-gray-300 px-2 py-1 text-xs" />
+        <span className="text-xs uppercase tracking-widest text-gray-500">Até</span>
+        <input type="date" value={dateTo} onChange={(event) => setDateTo(event.target.value)} className="border border-gray-300 px-2 py-1 text-xs" />
       </div>
 
-      {/* Client filter */}
-      {clients.length > 0 && (
-        <div className="flex items-center gap-2 mb-3">
-          <span className="text-xs uppercase tracking-widest text-gray-500">Cliente:</span>
+      <div className="mb-3 flex items-center gap-2">
+        <span className="text-xs uppercase tracking-widest text-gray-500">Cliente:</span>
+        <select
+          value={activeClient?.id || ''}
+          onChange={(event) => setActiveClient(clients.find((client) => client.id === event.target.value) || null)}
+          className="border border-gray-300 bg-white px-2 py-1 text-xs"
+        >
+          <option value="">Todos</option>
+          {clients.map((client) => <option key={client.id} value={client.id}>{client.name}</option>)}
+        </select>
+        {activeClient && <span className="text-xs text-gray-500">Total inclusivo classificado no servidor</span>}
+        {activeClient && (
           <select
-            value={activeClient?.id || ''}
-            onChange={(e) => {
-              const c = clients.find((c) => c.id === e.target.value) || null
-              setActiveClient(c)
-            }}
-            className="border border-gray-300 text-xs px-2 py-1 focus:border-black outline-none bg-white"
+            value={activeStatus || ''}
+            onChange={(event) =>
+              setActiveStatus(
+                (event.target.value ||
+                  null) as Exclude<MonitoringStatus, 'excluido'> | null
+              )
+            }
+            className="border border-gray-300 bg-white px-2 py-1 text-xs"
           >
-            <option value="">Todos</option>
-            {clients.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.name}
-              </option>
-            ))}
+            <option value="">Todos os status</option>
+            <option value="confirmado">Confirmadas</option>
+            <option value="candidato">Candidatas</option>
+            <option value="revisao">Em revisão</option>
           </select>
-          {activeClient ? (
-            <span className="text-xs text-gray-500">
-              Filtrando por: <strong>{activeClient.keywords?.join(', ')}</strong>
-            </span>
-          ) : (
-            <button
-              onClick={() => setShowAll((v) => !v)}
-              className="text-xs underline text-gray-500 hover:text-black"
-              title="Alternar entre só notícias relevantes aos clientes e o feed completo"
-            >
-              {showAll ? 'Ver só relevantes' : 'Ver tudo (sem filtro)'}
-            </button>
-          )}
-        </div>
-      )}
+        )}
+      </div>
 
-      {/* Source filter */}
-      <SourceFilterBar sources={sources} active={activeSource} onChange={setActiveSource} />
+      <SourceFilterBar sources={sourceNames} active={activeSource} onChange={setActiveSource} />
 
-      {/* Live panorama — deterministic, from the active client's tags */}
       {activeClient && (
-        <PanoramaPanel
-          rows={panoramaRows}
-          clientName={activeClient.name}
-          prevRows={trend?.prevRows}
-          prevPartial={trend?.partial}
-        />
+        <div>
+          {!coverageComplete && <p className="mb-2 text-xs text-amber-700">O panorama abaixo considera as {articles.length} matérias já carregadas.</p>}
+          <PanoramaPanel rows={panoramaRows} clientName={activeClient.name} />
+        </div>
       )}
 
-      {/* Content */}
       {loading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-          {Array.from({ length: 8 }).map((_, i) => (
-            <div key={i} className="animate-pulse">
-              <div className="h-4 bg-gray-200 w-32 mb-2" />
-              <div className="aspect-video bg-gray-200 mb-3" />
-              <div className="h-5 bg-gray-200 mb-2" />
-              <div className="h-4 bg-gray-200 w-3/4 mb-1" />
-              <div className="h-4 bg-gray-200 w-1/2" />
-            </div>
-          ))}
-        </div>
+        <div className="py-24 text-center text-gray-400">Carregando notícias…</div>
       ) : loadError ? (
-        <div className="text-center py-24">
+        <div className="py-24 text-center">
           <p className="text-lg text-red-600">Não foi possível carregar as notícias.</p>
-          <p className="text-sm mt-2 text-red-500 break-words max-w-xl mx-auto">{loadError}</p>
-          <p className="text-sm mt-3 text-gray-400 max-w-xl mx-auto">
-            Provável falha de conexão com o banco (Supabase) — verifique se o projeto não está pausado e se as variáveis
-            de ambiente do deploy estão definidas. Depois recarregue a página.
-          </p>
+          <p className="mx-auto mt-2 max-w-xl break-words text-sm text-red-500">{loadError}</p>
         </div>
-      ) : filtered.length === 0 ? (
-        <div className="text-center py-24 text-gray-400">
-          <p className="text-lg">Nenhuma notícia ainda.</p>
-          <p className="text-sm mt-2">
-            Adicione fontes em{' '}
-            <a href="/sources" className="underline">
-              Fontes
-            </a>{' '}
-            e clique em &quot;Buscar Notícias&quot;.
-          </p>
-        </div>
+      ) : !articles.length ? (
+        <div className="py-24 text-center text-gray-400">Nenhuma publicação encontrada no filtro.</div>
       ) : mode === 'card' ? (
-        <ArticleCardGrid articles={filtered} selected={selected} onSelect={toggleSelect} scores={scores} />
+        <ArticleCardGrid articles={articles} selected={selected} onSelect={toggleSelect} scores={scores} />
       ) : (
         <ArticleListView
-          articles={filtered}
+          articles={articles}
           selected={selected}
           onSelect={toggleSelect}
           scores={scores}
@@ -603,33 +436,26 @@ export default function NewsPage() {
         />
       )}
 
-      {/* Floating action buttons */}
+      {nextCursor && (
+        <div className="mt-8 flex justify-center">
+          <Button variant="outline" onClick={() => loadArticles(false)} disabled={loadingMore}>
+            {loadingMore ? 'Carregando…' : `Carregar mais (${articles.length}/${total})`}
+          </Button>
+        </div>
+      )}
+
       {selected.size > 0 && (
-        <div className="fixed bottom-8 right-8 flex items-center gap-3 z-40">
-          <button
-            onClick={() => setDossierOpen(true)}
-            className="bg-white text-black border border-black px-5 py-3 flex items-center gap-2 shadow-xl hover:bg-gray-50 transition-colors"
-          >
-            <FileDown className="w-4 h-4" />
-            Exportar dossiê ({selected.size})
+        <div className="fixed bottom-8 right-8 z-40 flex items-center gap-3">
+          <button onClick={() => setDossierOpen(true)} className="flex items-center gap-2 border border-black bg-white px-5 py-3 shadow-xl">
+            <FileDown className="h-4 w-4" /> Exportar dossiê ({selected.size})
           </button>
-          <ClippingPdfButton
-            articles={selectedArticles}
-            clientId={activeClient?.id}
-            clientName={activeClient?.name}
-            logoUrl={activeClient?.logo_url}
-          />
-          <button
-            onClick={() => setReportOpen(true)}
-            className="bg-black text-white px-6 py-3 flex items-center gap-2 shadow-xl hover:bg-gray-800 transition-colors"
-          >
-            <FileText className="w-4 h-4" />
-            Gerar Relatório ({selected.size})
+          <ClippingPdfButton articles={selectedArticles} clientId={activeClient?.id} clientName={activeClient?.name} logoUrl={activeClient?.logo_url} />
+          <button onClick={() => setReportOpen(true)} className="flex items-center gap-2 bg-black px-6 py-3 text-white shadow-xl">
+            <FileText className="h-4 w-4" /> Gerar Relatório ({selected.size})
           </button>
         </div>
       )}
 
-      {/* Report Builder Drawer */}
       <ReportBuilder
         open={reportOpen}
         onClose={() => setReportOpen(false)}
@@ -639,13 +465,11 @@ export default function NewsPage() {
         clientName={activeClient?.name}
         contratante={activeClient?.contratante}
       />
-
-      {/* Dossier Exporter (separate feature) */}
       <DossierExporter
         open={dossierOpen}
         onClose={() => setDossierOpen(false)}
         articles={selectedArticles}
-        allRelevant={filtered}
+        allRelevant={articles}
         clientId={activeClient?.id}
         clientName={activeClient?.name}
       />

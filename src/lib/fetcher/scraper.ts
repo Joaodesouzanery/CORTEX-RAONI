@@ -48,12 +48,12 @@ export async function scrapeSite(siteUrl: string): Promise<FetchedArticle[]> {
       }
     })
 
-    const results: FetchedArticle[] = []
-    for (const link of articleLinks.slice(0, 20)) {
-      const article = await scrapeOpenGraph(link)
-      if (article?.title) results.push(article)
-    }
-    return results
+    const candidates = await Promise.all(
+      articleLinks.slice(0, 12).map((link) => scrapeOpenGraph(link))
+    )
+    return candidates.filter(
+      (article): article is FetchedArticle => Boolean(article?.title)
+    )
   } catch {
     return []
   }

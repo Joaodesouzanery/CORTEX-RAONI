@@ -63,6 +63,7 @@ async function fetchFeedString(url: string): Promise<string> {
       Accept: 'application/rss+xml, application/xml, text/xml, */*',
     },
     redirect: 'follow',
+    signal: AbortSignal.timeout(FETCH_TIMEOUTS.rss),
   })
   if (!res.ok) throw new Error(`HTTP ${res.status}`)
   const buffer = await res.arrayBuffer()

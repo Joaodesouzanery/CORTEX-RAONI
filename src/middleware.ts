@@ -2,9 +2,6 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 const CRON_PATHS = [
-  '/api/articles/fetch',
-  '/api/articles/backfill-images',
-  '/api/articles/enrich',
   '/api/alerts/check',
   '/api/internal',
 ]
