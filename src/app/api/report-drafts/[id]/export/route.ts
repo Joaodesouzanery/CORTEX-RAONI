@@ -1,7 +1,12 @@
 import { NextResponse } from 'next/server'
 import { createAdminClient as createClient } from '@/lib/supabase/server'
-import { buildAnnex, buildDossier, buildQualifiedSection, evidenceCsv } from '@/lib/report-drafts'
-import type { ReportEvidenceItem } from '@/types'
+import {
+  buildAnnex,
+  buildDossier,
+  buildQualifiedSection,
+  evidenceCsv,
+  reportEvidenceItems,
+} from '@/lib/report-drafts'
 
 export const dynamic = 'force-dynamic'
 
@@ -9,13 +14,13 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
   const { id } = await params
   const format = new URL(req.url).searchParams.get('format') || 'dossier'
   const supabase = createClient()
-  const [{ data: draft, error }, { data: items }, { data: sections }] = await Promise.all([
+  const [{ data: draft, error }, items, { data: sections }] = await Promise.all([
     supabase.from('monthly_report_drafts').select('*, clients(name)').eq('id', id).single(),
-    supabase.from('report_evidence_items').select('*').eq('draft_id', id).order('bucket').order('position'),
+    reportEvidenceItems(supabase, id),
     supabase.from('report_sections').select('*').eq('draft_id', id).order('section_key'),
   ])
   if (error || !draft) return NextResponse.json({ error: error?.message || 'Preparação não encontrada.' }, { status: 404 })
-  const evidence = (items || []) as ReportEvidenceItem[]
+  const evidence = items
   const safeName = `${String(draft.clients?.name || 'cliente').replace(/[^a-z0-9]+/gi, '-')}-${draft.period_month.slice(0, 7)}`
   let content: string
   let contentType: string
@@ -50,4 +55,3 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     },
   })
 }
-

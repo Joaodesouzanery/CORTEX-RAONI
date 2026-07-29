@@ -76,7 +76,7 @@ function bucketFor(row: TaggedArticleRow): EvidenceBucket {
   return editorialScore(row) >= 55 && row.monitoring_status !== 'revisao' ? 'qualified' : 'annex'
 }
 
-async function fetchAll<T>(
+export async function fetchAll<T>(
   queryPage: (from: number, to: number) => PromiseLike<{ data: T[] | null; error: { message: string } | null }>
 ) {
   const output: T[] = []
@@ -87,6 +87,27 @@ async function fetchAll<T>(
     if (!data || data.length < 1000) break
   }
   return output
+}
+
+export async function reportEvidenceItems(
+  supabase: SupabaseClient,
+  draftId: string,
+  includeExcluded = true
+): Promise<ReportEvidenceItem[]> {
+  return fetchAll<ReportEvidenceItem>((from, to) => {
+    let query = supabase
+      .from('report_evidence_items')
+      .select('*')
+      .eq('draft_id', draftId)
+      .order('bucket')
+      .order('position')
+      .range(from, to)
+    if (!includeExcluded) query = query.neq('bucket', 'excluded')
+    return query as unknown as PromiseLike<{
+      data: ReportEvidenceItem[] | null
+      error: { message: string } | null
+    }>
+  })
 }
 
 export async function monthlyTaggedArticles(

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createAdminClient as createClient } from '@/lib/supabase/server'
 import { triageEvidence } from '@/lib/ai/triage'
+import { fetchAll, refreshDraftEvidence, reportEvidenceItems } from '@/lib/report-drafts'
 import type { ArticleSnapshot } from '@/types'
 
 export const dynamic = 'force-dynamic'
@@ -19,25 +20,28 @@ export async function POST(_: Request, { params }: { params: Promise<{ id: strin
     return NextResponse.json({ error: 'A versão aprovada é imutável.' }, { status: 409 })
   }
 
-  const { data: humanTags } = await supabase
-    .from('article_client_tags')
-    .select('article_id')
-    .eq('client_id', draft.client_id)
-    .eq('report_role_source', 'humano')
-  const protectedIds = new Set((humanTags || []).map((tag) => tag.article_id))
-  const { data: evidence } = await supabase
-    .from('report_evidence_items')
-    .select('article_id, article_snapshot, classification_snapshot, bucket')
-    .eq('draft_id', id)
-    .neq('bucket', 'excluded')
-    .order('position')
-  const candidates = (evidence || []).filter((item) => !protectedIds.has(item.article_id))
-  const { data: triaged } = await supabase
-    .from('article_client_tags')
-    .select('article_id')
-    .eq('client_id', draft.client_id)
-    .not('triaged_at', 'is', null)
-  const triagedIds = new Set((triaged || []).map((tag) => tag.article_id))
+  const [evidence, humanTags, triaged] = await Promise.all([
+    reportEvidenceItems(supabase, id, false),
+    fetchAll<{ article_id: string }>((from, to) =>
+      supabase
+        .from('article_client_tags')
+        .select('article_id')
+        .eq('client_id', draft.client_id)
+        .eq('report_role_source', 'humano')
+        .range(from, to)
+    ),
+    fetchAll<{ article_id: string }>((from, to) =>
+      supabase
+        .from('article_client_tags')
+        .select('article_id')
+        .eq('client_id', draft.client_id)
+        .not('triaged_at', 'is', null)
+        .range(from, to)
+    ),
+  ])
+  const protectedIds = new Set(humanTags.map((tag) => tag.article_id))
+  const candidates = evidence.filter((item) => !protectedIds.has(item.article_id))
+  const triagedIds = new Set(triaged.map((tag) => tag.article_id))
   const batch = candidates.filter((item) => !triagedIds.has(item.article_id)).slice(0, 20)
   if (!batch.length) return NextResponse.json({ processed: 0, remaining: 0, complete: true })
 
@@ -77,10 +81,17 @@ export async function POST(_: Request, { params }: { params: Promise<{ id: strin
       if (updateError) throw new Error(updateError.message)
     }
     const remaining = Math.max(0, candidates.filter((item) => !triagedIds.has(item.article_id)).length - batch.length)
-    await supabase
-      .from('monthly_report_drafts')
-      .update({ status: remaining ? 'triaging' : 'ready', updated_at: now })
-      .eq('id', id)
+    if (remaining) {
+      await supabase
+        .from('monthly_report_drafts')
+        .update({ status: 'triaging', updated_at: now })
+        .eq('id', id)
+    } else {
+      // Replace the immutable evidence snapshots only after the final batch so
+      // section generation sees every triage decision without rewriting 1k+
+      // rows on each 20-item request.
+      await refreshDraftEvidence(supabase, draft)
+    }
     return NextResponse.json({
       processed: result.decisions.length,
       remaining,

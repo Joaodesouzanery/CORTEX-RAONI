@@ -130,7 +130,6 @@ export default function ReportPreparationPage() {
         setTriageProgress({ done, remaining: data.remaining || 0 })
         if (data.complete) break
       }
-      await fetch(`/api/report-drafts/${draft.id}/refresh`, { method: 'POST' })
       await loadDraft(draft.id)
     } catch (triageError) {
       setError(triageError instanceof Error ? triageError.message : 'Falha na triagem.')

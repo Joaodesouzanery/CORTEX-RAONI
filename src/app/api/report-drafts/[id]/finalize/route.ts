@@ -1,17 +1,16 @@
 import { NextResponse } from 'next/server'
 import { createAdminClient as createClient } from '@/lib/supabase/server'
-import { buildQualifiedSection } from '@/lib/report-drafts'
-import type { ReportEvidenceItem } from '@/types'
+import { buildQualifiedSection, reportEvidenceItems } from '@/lib/report-drafts'
 
 export const dynamic = 'force-dynamic'
 
 export async function POST(_: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const supabase = createClient()
-  const [{ data: draft, error }, { data: sections }, { data: evidence }] = await Promise.all([
+  const [{ data: draft, error }, { data: sections }, evidence] = await Promise.all([
     supabase.from('monthly_report_drafts').select('*, clients(name)').eq('id', id).single(),
     supabase.from('report_sections').select('*').eq('draft_id', id).order('section_key'),
-    supabase.from('report_evidence_items').select('*').eq('draft_id', id).order('bucket').order('position'),
+    reportEvidenceItems(supabase, id),
   ])
   if (error || !draft) return NextResponse.json({ error: error?.message || 'Preparação não encontrada.' }, { status: 404 })
   if (!draft.lead_article_id) {
@@ -20,7 +19,7 @@ export async function POST(_: Request, { params }: { params: Promise<{ id: strin
   if (!sections || sections.length !== 9 || sections.some((section) => !section.content.trim())) {
     return NextResponse.json({ error: 'Gere ou edite todas as seções 1–9 antes de finalizar.' }, { status: 400 })
   }
-  const items = (evidence || []) as ReportEvidenceItem[]
+  const items = evidence
   const lead = items.find((item) => item.article_id === draft.lead_article_id)
   if (!lead) return NextResponse.json({ error: 'A matéria principal não está na base atual.' }, { status: 400 })
   const leadTitle = lead.article_snapshot.title.toLocaleLowerCase('pt-BR')
@@ -80,4 +79,3 @@ export async function POST(_: Request, { params }: { params: Promise<{ id: strin
     .eq('id', id)
   return NextResponse.json({ report, counts }, { status: 201 })
 }
-

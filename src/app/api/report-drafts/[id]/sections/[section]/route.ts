@@ -2,8 +2,7 @@ import { NextResponse } from 'next/server'
 import { createAdminClient as createClient } from '@/lib/supabase/server'
 import { generateReportSection } from '@/lib/ai/claude'
 import { formatZodError, reportDraftSectionEditSchema, reportDraftSectionSchema } from '@/lib/validation'
-import { buildAnnex, ensureLeadInSection, evidenceArticles } from '@/lib/report-drafts'
-import type { ReportEvidenceItem } from '@/types'
+import { buildAnnex, ensureLeadInSection, evidenceArticles, reportEvidenceItems } from '@/lib/report-drafts'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
@@ -23,15 +22,7 @@ async function contextForDraft(supabase: ReturnType<typeof createClient>, draftI
     .single()
   if (error || !draft) throw new Error(error?.message || 'Preparação não encontrada.')
   if (!draft.lead_article_id) throw new Error('Escolha manualmente a matéria principal antes de gerar.')
-  const { data: items, error: itemsError } = await supabase
-    .from('report_evidence_items')
-    .select('*')
-    .eq('draft_id', draftId)
-    .neq('bucket', 'excluded')
-    .order('bucket')
-    .order('position')
-  if (itemsError) throw new Error(itemsError.message)
-  const evidence = (items || []) as ReportEvidenceItem[]
+  const evidence = await reportEvidenceItems(supabase, draftId, false)
   const untriaged = evidence.filter(
     (item) =>
       item.bucket !== 'excluded' &&
