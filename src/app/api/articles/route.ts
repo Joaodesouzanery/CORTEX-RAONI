@@ -11,6 +11,8 @@ export async function GET(req: Request) {
   const status = searchParams.get('status')
   const sourceId = searchParams.get('source_id')
   const search = searchParams.get('search')
+  const includeContent = searchParams.get('include_content') === 'true'
+  const directOnly = searchParams.get('direct') === 'true'
   const requestedLimit = parseInt(searchParams.get('limit') || (paginated ? '100' : '500'))
   const limit = paginated ? Math.min(200, Math.max(1, requestedLimit || 100)) : requestedLimit
   const offsetParam = searchParams.get('offset')
@@ -31,10 +33,11 @@ export async function GET(req: Request) {
       const provenanceJoin = sourceId
         ? 'article_provenance!inner(source_id, sources(id, name, categoria, is_general))'
         : 'article_provenance(source_id, sources(id, name, categoria, is_general))'
+      const articleColumns = `id, source_id, title, url, image_url, excerpt, ${includeContent ? 'content,' : ''} published_at, fetched_at, publisher, sources(name, categoria, is_general), ${provenanceJoin}`
       let query = supabase
         .from('article_client_tags')
         .select(
-          `article_id, client_id, tom, relevancia, cita_cliente, tema, classification_source, confidence, impact_summary, monitoring_status, match_score, match_reasons, rule_version, classified_at, updated_at, articles!inner(id, source_id, title, url, image_url, excerpt, published_at, fetched_at, publisher, sources(name, categoria, is_general), ${provenanceJoin})`,
+          `article_id, client_id, tom, relevancia, cita_cliente, tema, classification_source, confidence, impact_summary, monitoring_status, match_score, match_reasons, rule_version, classified_at, updated_at, articles!inner(${articleColumns})`,
           { count: 'exact' }
         )
         .eq('client_id', clientId)
@@ -42,6 +45,7 @@ export async function GET(req: Request) {
         .order('published_at', { referencedTable: 'articles', ascending: false, nullsFirst: false })
         .range(offset, offset + limit - 1)
       if (status && ['candidato', 'confirmado', 'revisao'].includes(status)) query = query.eq('monitoring_status', status)
+      if (directOnly) query = query.eq('cita_cliente', true)
       if (cutoff) query = query.gte('articles.published_at', cutoff)
       if (publishedBefore) query = query.lte('articles.published_at', publishedBefore)
       if (search) query = query.ilike('articles.title', `%${search}%`)

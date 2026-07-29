@@ -23,7 +23,7 @@ function normalize(value) {
     .trim()
 }
 
-async function readClientPeriod(clientId, days) {
+async function readClientPeriod(clientId, days, options = {}) {
   const items = []
   let cursor = null
   do {
@@ -33,6 +33,8 @@ async function readClientPeriod(clientId, days) {
       days: String(days),
       limit: '200',
     })
+    if (options.direct) query.set('direct', 'true')
+    if (options.includeContent) query.set('include_content', 'true')
     if (cursor) query.set('cursor', cursor)
     const page = await getJson(`/api/articles?${query}`)
     items.push(...page.items)
@@ -43,10 +45,11 @@ async function readClientPeriod(clientId, days) {
 
 function knownFalsePositives(clientName, articles) {
   return articles.filter((article) => {
-    const text = normalize(`${article.title} ${article.excerpt || ''}`)
+    const raw = `${article.title} ${article.excerpt || ''} ${article.content || ''}`
+    const text = normalize(raw)
     if (clientName === 'ONS' && article.tag?.cita_cliente) {
       return (
-        !text.split(' ').includes('ons') &&
+        !/(?:^|[^A-Za-z0-9])ONS(?:$|[^A-Za-z0-9])/.test(raw) &&
         !text.includes('operador nacional do sistema')
       )
     }
@@ -77,7 +80,13 @@ const checks = []
 
 for (const row of primary.clients) {
   const articles = await readClientPeriod(row.client.id, 30)
-  const falsePositives = knownFalsePositives(row.client.name, articles)
+  const directArticles = row.direct_mentions
+    ? await readClientPeriod(row.client.id, 30, { direct: true, includeContent: true })
+    : []
+  const falsePositives = knownFalsePositives(
+    row.client.name,
+    row.client.name === 'ONS' ? directArticles : articles
+  )
   checks.push({
     client: row.client.name,
     dashboard_total: row.total,
