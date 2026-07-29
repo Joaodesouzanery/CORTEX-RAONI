@@ -15,6 +15,10 @@ try {
 }
 
 const nextConfig = {
+  // pdf-parse resolves its worker and native canvas module at runtime. Bundling
+  // it would bake the local build path into the server function and make PDF
+  // processing fail after deployment.
+  serverExternalPackages: ['pdf-parse', '@napi-rs/canvas'],
   images: {
     remotePatterns,
   },
