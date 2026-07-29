@@ -20,6 +20,7 @@ export interface ParsedPdfDocument {
   documentType: ImportDocumentType
   pageCount: number
   metadata: Record<string, unknown>
+  referenceText?: string
   articles: ParsedPdfArticle[]
   warnings: string[]
 }
@@ -300,6 +301,30 @@ function creationDate(info: Record<string, unknown> | undefined): string | null 
   return m ? new Date(Date.UTC(Number(m[1]), Number(m[2]) - 1, Number(m[3]), 12)).toISOString() : null
 }
 
+export function looksLikeReferenceReport(text: string): boolean {
+  const normalized = normalizeText(text)
+  const signals = [
+    /\brelatorio mensal\b/.test(normalized),
+    /\bsumario executivo\b/.test(normalized),
+    /\btemas estrategicos do mes\b/.test(normalized),
+    /\bleitura reputacional\b/.test(normalized),
+    /\briscos reputacionais\b/.test(normalized),
+    /\brecomendacoes executivas\b/.test(normalized),
+    /\bbase qualificada de evidencias\b/.test(normalized),
+    /\bdemonstracao dos servicos\b/.test(normalized),
+  ].filter(Boolean).length
+  return signals >= 2
+}
+
+function looksLikeRasterizedReport(text: string, pageCount: number): boolean {
+  if (pageCount < 5) return false
+  const normalized = normalizeText(text)
+  const sparse = normalized.length < pageCount * 120
+  const pageMarkers = /--\s*1\s+of\s+\d+\s*--/i.test(text)
+  const editorialMarker = /\b(confidencial|a\s+preencher|relatorio)\b/i.test(text)
+  return sparse && pageMarkers && editorialMarker
+}
+
 export async function parsePdf(data: Uint8Array, filename: string): Promise<ParsedPdfDocument> {
   const parser = new PDFParse({ data })
   try {
@@ -317,6 +342,27 @@ export async function parsePdf(data: Uint8Array, filename: string): Promise<Pars
       author: info.info?.Author || null,
       producer: info.info?.Producer || null,
       toc_entries: tocResult.tocCount,
+    }
+
+    if (looksLikeRasterizedReport(textResult.text, textResult.total)) {
+      return {
+        documentType: 'relatorio',
+        pageCount: textResult.total,
+        metadata,
+        articles: [],
+        warnings: ['Relatório rasterizado reconhecido. Solicite OCR para tornar o conteúdo pesquisável.'],
+      }
+    }
+
+    if (looksLikeReferenceReport(textResult.text)) {
+      return {
+        documentType: 'relatorio',
+        pageCount: textResult.total,
+        metadata,
+        referenceText: cleanArticleText(textResult.text),
+        articles: [],
+        warnings: ['Relatório reconhecido e preservado como referência; nenhuma notícia foi criada.'],
+      }
     }
 
     if (vendorArticles.length >= 2 || /\nSumário\s*\n/i.test(textResult.text)) {

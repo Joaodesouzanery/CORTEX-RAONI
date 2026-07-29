@@ -17,7 +17,13 @@ type ArticleWithProvenance = Article & {
   article_provenance?: Array<{ source_id: string | null }>
 }
 
-async function loadMonthArticles(supabase: SupabaseClient, start: string, end: string): Promise<ArticleWithProvenance[]> {
+async function loadMonthArticles(
+  supabase: SupabaseClient,
+  clientId: string,
+  month: string,
+  start: string,
+  end: string
+): Promise<ArticleWithProvenance[]> {
   const all: ArticleWithProvenance[] = []
   for (let offset = 0; ; offset += PAGE) {
     const { data, error } = await supabase
@@ -31,6 +37,24 @@ async function loadMonthArticles(supabase: SupabaseClient, start: string, end: s
     const rows = (data as unknown as ArticleWithProvenance[]) || []
     all.push(...rows)
     if (rows.length < PAGE) break
+  }
+  const { data: assignments, error: assignmentsError } = await supabase
+    .from('article_period_assignments')
+    .select('article_id')
+    .eq('client_id', clientId)
+    .eq('period_month', month)
+  if (assignmentsError) throw new Error(assignmentsError.message)
+  const existingIds = new Set(all.map((article) => article.id))
+  const importedIds = Array.from(new Set((assignments || []).map((row) => row.article_id))).filter(
+    (id) => !existingIds.has(id)
+  )
+  for (let offset = 0; offset < importedIds.length; offset += 300) {
+    const { data, error } = await supabase
+      .from('articles')
+      .select('*, sources(name, categoria, is_general), article_provenance(source_id)')
+      .in('id', importedIds.slice(offset, offset + 300))
+    if (error) throw new Error(error.message)
+    all.push(...(((data as unknown as ArticleWithProvenance[]) || [])))
   }
   return all
 }
@@ -117,7 +141,7 @@ export async function createEditionForClient(
     if (error) throw new Error(error.message)
     if (existing) return existing as unknown as MonthlyEdition
   }
-  const allArticles = await loadMonthArticles(supabase, start, end)
+  const allArticles = await loadMonthArticles(supabase, client.id, month, start, end)
   const existingTags = new Map<string, ArticleTag>()
   for (let offset = 0; offset < allArticles.length; offset += PAGE) {
     const ids = allArticles.slice(offset, offset + PAGE).map((article) => article.id)

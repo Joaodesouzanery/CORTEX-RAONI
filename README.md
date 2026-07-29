@@ -56,7 +56,7 @@ URLs assinadas de curta duração.
 ## Banco de dados
 
 Aplique, na ordem, todas as migrations versionadas em
-`supabase/migrations/` (atualmente `001` a `025`) pelo Supabase CLI ou SQL
+`supabase/migrations/` (atualmente `001` a `026`) pelo Supabase CLI ou SQL
 Editor. As migrations incluem clientes, classificações editoriais, alertas,
 acervo permanente, proveniências, importações, edições mensais e buckets.
 
@@ -66,6 +66,9 @@ prioritárias. A `025_news_qa_and_dashboard.sql` cria o histórico detalhado das
 coletas, as regras contextuais de relevância, corrige fontes quebradas e
 adiciona os índices usados pelo Painel e pela paginação. Fontes apenas de
 referência não têm íntegras coletadas sem acesso autorizado.
+A `026_batch_imports_and_report_drafts.sql` acrescenta lotes persistentes,
+relatórios de referência, competência editorial de PDFs, triagem, preparação
+mensal versionada, seções editáveis e snapshots de marca.
 
 ## Operação
 
@@ -94,17 +97,46 @@ opção `reclassify_archive`.
 
 ### Importação de PDFs
 
-Em `/imports`, selecione vários PDFs. Cada arquivo é enviado diretamente ao
-Storage privado e depois processado. O importador reconhece:
+Em `/imports`, escolha cliente, competência e finalidade uma única vez, depois
+selecione vários PDFs. Dois arquivos são processados simultaneamente e a falha
+de um não interrompe os demais. Cada arquivo é enviado diretamente ao Storage
+privado e depois processado. O importador reconhece:
 
 - cadernos com sumário e matérias paginadas, como os “Clipping ONS”;
 - matérias individuais impressas pelo navegador;
+- relatórios anteriores, armazenados como referência sem gerar falsas notícias;
 - arquivos não reconhecidos, que ficam preservados com status de revisão.
 
 SHA-256 impede reenvio do mesmo arquivo. A identidade
 `veículo + título + data` e uma verificação conservadora entre cópias importadas
 enriquecem artigos existentes sem duplicá-los. Cada arquivo e faixa de páginas
 permanece em `article_provenance`.
+
+O mês do lote é uma associação editorial em `article_period_assignments` e
+nunca substitui `published_at`. Cada matéria de um lote de notícias é
+classificada contra os cinco clientes e fica garantidamente vinculada ao
+cliente escolhido; ausência de regra contextual resulta em revisão, não
+descarte. PDFs rasterizados oferecem OCR por IA sob demanda. Se a chave de IA
+estiver ausente ou o OCR falhar, o original privado permanece preservado.
+
+### Preparação do relatório mensal
+
+Em `/reports/prepare`:
+
+1. escolha cliente e competência para montar a base completa no servidor;
+2. execute a triagem de todo o universo, em lotes pequenos;
+3. revise `Base qualificada`, `Anexo monitorado` e exclusões humanas;
+4. escolha manualmente a matéria principal;
+5. gere, edite ou regenere individualmente as seções 1–9;
+6. finalize a versão, cuja seção 10 lista somente a base qualificada;
+7. exporte dossiê Markdown, CSV integral, anexo e texto para o Claude Design.
+
+A matéria principal é colocada primeiro no contexto e deve constar nominalmente
+no Sumário Executivo e na seção 4.1. Atualizar a base não sobrescreve texto
+manual: seções prontas ficam marcadas como desatualizadas. O anexo preserva
+contexto, baixa confiança e ruído para auditoria, mas não alimenta diretamente
+a redação. Relatórios aprovados e snapshots de marca são imutáveis; mudanças
+como CRTIVE LAB → SAUZ só afetam versões futuras.
 
 ### Fechamento mensal
 
@@ -159,8 +191,11 @@ npm run qa:news -- https://seu-app.vercel.app
 
 ```text
 src/app/imports                         importação múltipla
+src/app/reports/prepare                 preparação editorial mensal
 src/app/monthly-editions                operação dos fechamentos
+src/app/api/import-batches              lotes persistentes
 src/app/api/imports                     upload e processamento
+src/app/api/report-drafts               base, triagem, seções e exports
 src/app/api/monthly-editions            criação, listagem e downloads
 src/app/api/internal/monthly-editions   lotes protegidos do worker
 src/lib/import/pdf-parser.ts            separação de cadernos e artigos
@@ -170,4 +205,5 @@ scripts/qa-news.mjs                     auditoria pós-rollout das contagens
 supabase/migrations/023_*.sql           acervo e edições
 supabase/migrations/024_*.sql           fontes prioritárias
 supabase/migrations/025_*.sql           coleta rastreável e relevância
+supabase/migrations/026_*.sql           lotes e preparação mensal
 ```

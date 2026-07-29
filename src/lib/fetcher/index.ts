@@ -13,6 +13,13 @@ export async function fetchFromSource(
       'https://news.google.com/rss/search?q=site%3Atiinside.com.br%20%28software%20OR%20tecnologia%20OR%20tributa%C3%A7%C3%A3o%20OR%20trabalho%29&hl=pt-BR&gl=BR&ceid=BR%3Apt-419'
     )
   }
+  if (url.includes('news.google.com/rss/search?q=site%3Acartacapital.com.br')) {
+    const broad = await fetchRSS(url)
+    if (broad.length) return broad
+    return fetchRSS(
+      'https://news.google.com/rss/search?q=site%3Acartacapital.com.br%20%28energia%20OR%20infraestrutura%20OR%20minera%C3%A7%C3%A3o%20OR%20tecnologia%29&hl=pt-BR&gl=BR&ceid=BR%3Apt-419'
+    )
+  }
   if (type === 'rss') return fetchRSS(url)
   return scrapeSite(url)
 }

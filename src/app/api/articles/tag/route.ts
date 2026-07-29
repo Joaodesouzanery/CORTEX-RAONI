@@ -14,7 +14,7 @@ export async function GET(req: Request) {
   const { data, error } = await supabase
     .from('article_client_tags')
     .select(
-      'article_id, client_id, tom, relevancia, cita_cliente, tema, classification_source, confidence, impact_summary, monitoring_status, match_score, match_reasons, rule_version, classified_at, updated_at'
+      'article_id, client_id, tom, relevancia, cita_cliente, tema, classification_source, confidence, impact_summary, monitoring_status, match_score, match_reasons, rule_version, classified_at, report_role, editorial_score, editorial_reason, cluster_label, report_role_source, triaged_at, triage_version, updated_at'
     )
     .eq('client_id', clientId)
 
@@ -46,16 +46,26 @@ export async function POST(req: Request) {
     'confidence',
     'impact_summary',
     'monitoring_status',
+    'report_role',
+    'editorial_score',
+    'editorial_reason',
+    'cluster_label',
+    'report_role_source',
   ] as const) {
     if (k in patch) row[k] = patch[k]
   }
   if (!('classification_source' in patch)) row.classification_source = 'humano'
+  if ('report_role' in patch) {
+    row.report_role_source = 'humano'
+    row.triaged_at = new Date().toISOString()
+    row.triage_version = 1
+  }
 
   const { data, error } = await supabase
     .from('article_client_tags')
     .upsert(row, { onConflict: 'article_id,client_id' })
     .select(
-      'article_id, client_id, tom, relevancia, cita_cliente, tema, classification_source, confidence, impact_summary, monitoring_status, match_score, match_reasons, rule_version, classified_at, updated_at'
+      'article_id, client_id, tom, relevancia, cita_cliente, tema, classification_source, confidence, impact_summary, monitoring_status, match_score, match_reasons, rule_version, classified_at, report_role, editorial_score, editorial_reason, cluster_label, report_role_source, triaged_at, triage_version, updated_at'
     )
     .single()
 

@@ -22,7 +22,12 @@ export default function ReportsPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-8">
-      <h1 className="text-3xl font-bold mb-8">Relatórios Gerados</h1>
+      <div className="flex justify-between items-center gap-4 mb-8">
+        <h1 className="text-3xl font-bold">Relatórios Gerados</h1>
+        <Link href="/reports/prepare">
+          <Button>Preparação mensal</Button>
+        </Link>
+      </div>
       {reports.length === 0 ? (
         <p className="text-gray-500 text-center py-12">Nenhum relatório ainda. Selecione artigos em <Link href="/news" className="underline">Notícias</Link> para gerar um.</p>
       ) : (

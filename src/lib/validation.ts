@@ -48,6 +48,9 @@ export const clientCreateSchema = z.object({
   feed_names: z.array(z.string()).nullish(),
   alert_recipient: z.string().nullish(),
   logo_url: z.string().nullish(),
+  report_brand_name: z.string().nullish(),
+  report_brand_footer: z.string().nullish(),
+  report_brand_guidelines: z.string().nullish(),
 })
 
 export const clientUpdateSchema = clientCreateSchema
@@ -65,6 +68,11 @@ export const articleTagSchema = z.object({
   confidence: z.number().min(0).max(1).nullish(),
   impact_summary: z.string().max(2000).nullish(),
   monitoring_status: z.enum(['candidato', 'confirmado', 'revisao', 'excluido']).optional(),
+  report_role: z.enum(['evidencia', 'contexto', 'ruido']).nullish(),
+  editorial_score: z.number().int().min(0).max(100).nullish(),
+  editorial_reason: z.string().max(2000).nullish(),
+  cluster_label: z.string().max(300).nullish(),
+  report_role_source: z.enum(['regra', 'ia', 'humano']).nullish(),
 })
 
 // Request a batch of tag suggestions for a client's articles (no save).
@@ -115,6 +123,39 @@ export const importInitSchema = z.object({
     .positive()
     .max(50 * 1024 * 1024, 'O PDF deve ter no máximo 50 MB'),
   sha256: z.string().regex(/^[a-f0-9]{64}$/i, 'SHA-256 inválido'),
+  batch_id: z.string().uuid('Lote inválido').optional(),
+})
+
+export const importBatchCreateSchema = z.object({
+  client_id: z.string().uuid('Cliente inválido'),
+  period: z.string().regex(/^\d{4}-\d{2}$/, 'Use o período YYYY-MM'),
+  intent: z.enum(['noticias', 'relatorio_referencia']),
+  total_files: z.number().int().min(1).max(100),
+})
+
+export const reportDraftCreateSchema = z.object({
+  client_id: z.string().uuid('Cliente inválido'),
+  period: z.string().regex(/^\d{4}-\d{2}$/, 'Use o período YYYY-MM'),
+  monthly_instructions: z.string().max(10000).optional().default(''),
+  service_metrics: z.record(z.string(), z.number().int().min(0)).optional().default({}),
+  new_version: z.boolean().optional().default(false),
+})
+
+export const reportDraftUpdateSchema = z.object({
+  monthly_instructions: z.string().max(10000),
+  service_metrics: z.record(z.string(), z.number().int().min(0)),
+})
+
+export const reportDraftLeadSchema = z.object({
+  article_id: z.string().uuid('Matéria inválida'),
+})
+
+export const reportDraftSectionSchema = z.object({
+  instructions: z.string().max(10000).optional(),
+})
+
+export const reportDraftSectionEditSchema = z.object({
+  content: z.string().min(1, 'O texto não pode ficar vazio'),
 })
 
 // ---- Monthly editions ----

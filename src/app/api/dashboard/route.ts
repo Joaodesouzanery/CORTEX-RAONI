@@ -68,7 +68,10 @@ export async function GET(req: Request) {
         (source.last_success_at || source.last_fetched_at) &&
         new Date((source.last_success_at || source.last_fetched_at)!).getTime() < staleThreshold
     )
-    const failed = sources.filter((source) => !!source.last_fetch_error || (source.last_fetched_at && !source.last_fetch_count))
+    const failed = sources.filter((source) => !!source.last_fetch_error)
+    const empty = sources.filter(
+      (source) => !source.last_fetch_error && !!source.last_fetched_at && source.last_fetch_count === 0
+    )
     const { data: latestRun } = await supabase
       .from('fetch_runs')
       .select('*')
@@ -93,9 +96,11 @@ export async function GET(req: Request) {
       clients: clients.sort((a, b) => b.total - a.total),
       health: {
         active_sources: sources.length,
-        healthy_sources: sources.length - new Set([...never, ...stale, ...failed].map((source) => source.id)).size,
+        healthy_sources:
+          sources.length - new Set([...never, ...stale, ...failed, ...empty].map((source) => source.id)).size,
         stale_sources: stale.length,
         failed_sources: failed.length,
+        empty_sources: empty.length,
         never_fetched_sources: never.length,
         last_success_at:
           sources

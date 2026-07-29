@@ -9,8 +9,24 @@ export type ClassificationSource = 'regra' | 'ia' | 'humano'
 export type MonitoringStatus = 'candidato' | 'confirmado' | 'revisao' | 'excluido'
 export type FetchRunStatus = 'pendente' | 'executando' | 'concluido' | 'parcial' | 'erro'
 export type FetchRunSourceStatus = 'pendente' | 'executando' | 'concluido' | 'erro'
-export type ImportDocumentType = 'caderno' | 'artigo' | 'desconhecido'
+export type ImportDocumentType = 'caderno' | 'artigo' | 'relatorio' | 'desconhecido'
 export type ImportStatus = 'enviado' | 'processando' | 'concluido' | 'revisao' | 'erro'
+export type ImportIntent = 'noticias' | 'relatorio_referencia'
+export type ImportBatchStatus = 'pending' | 'processing' | 'complete' | 'partial' | 'error'
+export type OcrStatus = 'not_requested' | 'pending' | 'processing' | 'complete' | 'error'
+export type EvidenceBucket = 'qualified' | 'annex' | 'excluded'
+export type ReportRole = 'evidencia' | 'contexto' | 'ruido'
+export type ReportRoleSource = 'regra' | 'ia' | 'humano'
+export type ReportDraftStatus =
+  | 'preparing'
+  | 'triaging'
+  | 'ready'
+  | 'generating'
+  | 'review'
+  | 'approved'
+  | 'stale'
+  | 'error'
+export type ReportSectionStatus = 'pending' | 'generating' | 'generated' | 'edited' | 'stale' | 'error'
 export type EditionStatus = 'rascunho' | 'classificando' | 'renderizando' | 'concluido' | 'erro'
 export type EditionSection = 'mencao_direta' | 'cobertura_setorial' | 'baixa_confianca'
 export type EditionVersion = number
@@ -30,6 +46,13 @@ export interface ArticleTag {
   match_reasons?: MatchReason[]
   rule_version?: number
   classified_at?: string | null
+  report_role?: ReportRole | null
+  editorial_score?: number | null
+  editorial_reason?: string | null
+  cluster_label?: string | null
+  report_role_source?: ReportRoleSource | null
+  triaged_at?: string | null
+  triage_version?: number | null
   updated_at?: string
 }
 
@@ -138,6 +161,11 @@ export interface Report {
   client_id?: string | null
   clients?: { name: string; logo_url: string | null } | null
   metadata?: Record<string, unknown> | null
+  draft_id?: string | null
+  period_month?: string | null
+  version?: number | null
+  lead_article_id?: string | null
+  brand_snapshot?: ReportBrand | null
 }
 
 export interface Client {
@@ -152,6 +180,9 @@ export interface Client {
   feed_names: string[] | null
   alert_recipient: string | null
   logo_url: string | null
+  report_brand_name?: string | null
+  report_brand_footer?: string | null
+  report_brand_guidelines?: string | null
   active?: boolean
   created_at: string
 }
@@ -174,6 +205,7 @@ export interface DashboardSummary {
     healthy_sources: number
     stale_sources: number
     failed_sources: number
+    empty_sources?: number
     never_fetched_sources: number
     last_success_at: string | null
     coverage_start: string | null
@@ -204,8 +236,104 @@ export interface ImportDocument {
   imported_article_count: number
   error: string | null
   metadata: Record<string, unknown>
+  ocr_status?: OcrStatus
+  ocr_text?: string | null
   created_at: string
   processed_at: string | null
+}
+
+export interface ImportBatchDocument {
+  batch_id: string
+  document_id: string
+  filename: string
+  status: 'pending' | 'uploading' | 'processing' | 'complete' | 'review' | 'error'
+  article_count: number
+  error: string | null
+  created_at: string
+  processed_at: string | null
+  source_documents?: ImportDocument
+}
+
+export interface ImportBatch {
+  id: string
+  client_id: string
+  period_month: string
+  intent: ImportIntent
+  status: ImportBatchStatus
+  total_files: number
+  completed_files: number
+  review_files: number
+  failed_files: number
+  article_count: number
+  created_at: string
+  started_at: string | null
+  completed_at: string | null
+  clients?: Pick<Client, 'id' | 'name'>
+  documents?: ImportBatchDocument[]
+}
+
+export interface ReferenceReport {
+  id: string
+  client_id: string
+  period_month: string
+  source_document_id: string
+  title: string
+  extracted_text: string | null
+  status: 'ready' | 'ocr_pending' | 'review' | 'error'
+  metadata: Record<string, unknown>
+  created_at: string
+}
+
+export interface ReportBrand {
+  name: string
+  footer: string | null
+  guidelines: string | null
+  contratante: string | null
+  client_name: string
+}
+
+export interface ReportEvidenceItem {
+  id: string
+  draft_id: string
+  article_id: string
+  bucket: EvidenceBucket
+  position: number
+  article_snapshot: ArticleSnapshot
+  classification_snapshot: Record<string, unknown>
+  cluster_key: string | null
+  created_at: string
+}
+
+export interface ReportSection {
+  id: string
+  draft_id: string
+  section_key: number
+  content: string
+  status: ReportSectionStatus
+  version: number
+  generated_at: string | null
+  updated_at: string
+}
+
+export interface MonthlyReportDraft {
+  id: string
+  client_id: string
+  period_month: string
+  version: number
+  status: ReportDraftStatus
+  lead_article_id: string | null
+  monthly_instructions: string
+  service_metrics: Record<string, number>
+  brand_snapshot: ReportBrand
+  base_version: number
+  base_refreshed_at: string | null
+  error: string | null
+  created_at: string
+  updated_at: string
+  approved_at: string | null
+  clients?: Client
+  evidence_items?: ReportEvidenceItem[]
+  sections?: ReportSection[]
 }
 
 export interface ArticleProvenance {

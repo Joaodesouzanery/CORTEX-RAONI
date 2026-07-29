@@ -34,6 +34,9 @@ export async function PUT(req: Request, { params }: RouteContext) {
     feed_names,
     alert_recipient,
     logo_url,
+    report_brand_name,
+    report_brand_footer,
+    report_brand_guidelines,
   } = parsed.data
 
   const { data, error } = await supabase
@@ -49,6 +52,9 @@ export async function PUT(req: Request, { params }: RouteContext) {
       feed_names: feed_names || null,
       alert_recipient: alert_recipient || null,
       logo_url: logo_url || null,
+      report_brand_name: report_brand_name || contratante || null,
+      report_brand_footer: report_brand_footer || null,
+      report_brand_guidelines: report_brand_guidelines || null,
     })
     .eq('id', id)
     .select()

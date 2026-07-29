@@ -1,7 +1,28 @@
 import { existsSync, readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import { canonicalArticleFingerprint, sameImportedPublication } from '../archive'
-import { parsePdf, parseVendorClippingPages } from './pdf-parser'
+import { looksLikeReferenceReport, parsePdf, parseVendorClippingPages } from './pdf-parser'
+
+describe('reference report detection', () => {
+  it('keeps a strategic report out of the news archive', () => {
+    expect(
+      looksLikeReferenceReport(`
+        RELATÓRIO MENSAL DE COMUNICAÇÃO ESTRATÉGICA
+        1. SUMÁRIO EXECUTIVO
+        3. LEITURA REPUTACIONAL DO AMBIENTE EXTERNO
+        10. BASE QUALIFICADA DE EVIDÊNCIAS MONITORADAS NO MÊS
+      `)
+    ).toBe(true)
+  })
+
+  it('does not mistake one article about a monthly report for the report itself', () => {
+    expect(
+      looksLikeReferenceReport(
+        'Empresa publica relatório mensal sobre energia. A reportagem apresenta dados e entrevista especialistas.'
+      )
+    ).toBe(false)
+  })
+})
 
 describe('vendor clipping parser', () => {
   it('joins continuation pages while preserving page boundaries', () => {
@@ -101,3 +122,11 @@ describe.skipIf(![...realFiles, ...individualFiles].every((filename) => existsSy
     }, 30000)
   }
 )
+
+describe.skipIf(!existsSync(`${downloads}/Claude.pdf`))('reference report regression', () => {
+  it('never imports Claude.pdf as a news article', async () => {
+    const parsed = await parsePdf(new Uint8Array(readFileSync(`${downloads}/Claude.pdf`)), 'Claude.pdf')
+    expect(parsed.documentType).not.toBe('artigo')
+    expect(parsed.articles).toHaveLength(0)
+  }, 30000)
+})

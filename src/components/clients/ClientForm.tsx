@@ -25,6 +25,9 @@ export default function ClientForm({ client, open, onClose, onSaved }: Props) {
   const [synonyms, setSynonyms] = useState(client?.synonyms || '')
   const [feedNames, setFeedNames] = useState<string[]>(client?.feed_names || [])
   const [alertRecipient, setAlertRecipient] = useState(client?.alert_recipient || '')
+  const [reportBrandName, setReportBrandName] = useState(client?.report_brand_name || client?.contratante || '')
+  const [reportBrandFooter, setReportBrandFooter] = useState(client?.report_brand_footer || '')
+  const [reportBrandGuidelines, setReportBrandGuidelines] = useState(client?.report_brand_guidelines || '')
   const [sources, setSources] = useState<Source[]>([])
   const [kwInput, setKwInput] = useState('')
   const [loading, setLoading] = useState(false)
@@ -76,6 +79,9 @@ export default function ClientForm({ client, open, onClose, onSaved }: Props) {
           synonyms: synonyms.trim() || null,
           feed_names: feedNames.length ? feedNames : null,
           alert_recipient: alertRecipient.trim() || null,
+          report_brand_name: reportBrandName.trim() || null,
+          report_brand_footer: reportBrandFooter.trim() || null,
+          report_brand_guidelines: reportBrandGuidelines.trim() || null,
         }),
       })
       const data = await res.json()
@@ -150,6 +156,41 @@ export default function ClientForm({ client, open, onClose, onSaved }: Props) {
               rows={4}
               className="mt-1 resize-none"
             />
+          </div>
+
+          <div className="border border-gray-200 p-3 space-y-3">
+            <p className="text-sm font-semibold uppercase tracking-wider">Marca do relatório</p>
+            <div>
+              <Label htmlFor="brand-name">Nome da marca</Label>
+              <Input
+                id="brand-name"
+                value={reportBrandName}
+                onChange={(e) => setReportBrandName(e.target.value)}
+                placeholder="Ex.: CRTIVE LAB ou SAUZ"
+                className="mt-1"
+              />
+            </div>
+            <div>
+              <Label htmlFor="brand-footer">Rodapé</Label>
+              <Input
+                id="brand-footer"
+                value={reportBrandFooter}
+                onChange={(e) => setReportBrandFooter(e.target.value)}
+                placeholder="Texto do rodapé do relatório"
+                className="mt-1"
+              />
+            </div>
+            <div>
+              <Label htmlFor="brand-guidelines">Instruções de design</Label>
+              <Textarea
+                id="brand-guidelines"
+                value={reportBrandGuidelines}
+                onChange={(e) => setReportBrandGuidelines(e.target.value)}
+                placeholder="Paleta, tom visual e instruções para o handoff."
+                rows={3}
+                className="mt-1 resize-none"
+              />
+            </div>
           </div>
 
           <div>

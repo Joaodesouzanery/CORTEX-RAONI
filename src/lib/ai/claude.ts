@@ -394,8 +394,11 @@ function buildInputContext(
   metadata?: ReportMetadata,
   client?: ReportClient | null
 ): string {
+  // Draft preparation passes only qualified evidence here. Prefer the full
+  // legally available text; imported clipping PDFs therefore contribute their
+  // íntegra instead of a short RSS excerpt.
   const articlesSummary = articles.map((a, i) =>
-    `## Artigo ${i + 1}: ${a.title}\nFonte: ${a.publisher || a.sources?.name || 'Desconhecida'} | Data: ${a.published_at || 'N/A'} | URL: ${a.url}\n\n${a.excerpt || ''}`
+    `## Artigo ${i + 1}: ${a.title}\nFonte: ${a.publisher || a.sources?.name || 'Desconhecida'} | Data: ${a.published_at || 'N/A'} | URL: ${a.url || 'sem URL'}\n\n${a.content || a.excerpt || '[Somente metadados disponíveis]'}`
   ).join('\n\n---\n\n')
 
   return `INPUT DO MÊS:

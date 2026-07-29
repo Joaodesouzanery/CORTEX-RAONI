@@ -4,44 +4,17 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { AlertTriangle, FileText, RefreshCw } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { runSectionedReport } from '@/lib/report-runner'
-import type { Article, DashboardSummary, PaginatedArticles } from '@/types'
+import type { DashboardSummary } from '@/types'
 
 const PERIODS = [7, 15, 30] as const
 
-interface BatchResult {
-  client: string
-  ok: boolean
-  reportId?: string
-  error?: string
-}
-
-async function loadMonitoredArticles(clientId: string, days: number): Promise<Article[]> {
-  const all: Article[] = []
-  let cursor: string | null = null
-  do {
-    const query = new URLSearchParams({
-      paginated: 'true',
-      client_id: clientId,
-      days: String(days),
-      limit: '200',
-    })
-    if (cursor) query.set('cursor', cursor)
-    const res = await fetch(`/api/articles?${query}`)
-    const data = (await res.json().catch(() => null)) as PaginatedArticles | { error?: string } | null
-    if (!res.ok || !data || !('items' in data)) {
-      throw new Error((data && 'error' in data && data.error) || 'Falha ao carregar matérias monitoradas.')
-    }
-    all.push(...data.items)
-    cursor = data.next_cursor
-  } while (cursor)
-  return all
-}
-
 function HealthBanner({ summary }: { summary: DashboardSummary }) {
   const { health } = summary
-  const degraded = !health.coverage_complete || health.stale_sources > 0 || health.failed_sources > 0
+  const degraded =
+    !health.coverage_complete ||
+    health.stale_sources > 0 ||
+    health.failed_sources > 0 ||
+    (health.empty_sources || 0) > 0
   const label = health.last_success_at
     ? new Date(health.last_success_at).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
     : 'nenhuma coleta concluída'
@@ -59,7 +32,8 @@ function HealthBanner({ summary }: { summary: DashboardSummary }) {
       <p className="mt-1 text-xs text-gray-600">
         Última coleta: {label}. {health.healthy_sources}/{health.active_sources} fontes saudáveis
         {health.stale_sources ? `, ${health.stale_sources} atrasadas` : ''}
-        {health.failed_sources ? `, ${health.failed_sources} vazias/com falha` : ''}
+        {health.failed_sources ? `, ${health.failed_sources} com falha` : ''}
+        {health.empty_sources ? `, ${health.empty_sources} sem itens` : ''}
         {health.never_fetched_sources ? `, ${health.never_fetched_sources} ainda não executadas` : ''}.
         {' '}Cobertura do período desde {coverageStart}
         {health.latest_run ? `; última execução ${health.latest_run.status}` : ''}.
@@ -73,12 +47,6 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true)
   const [loadError, setLoadError] = useState<string | null>(null)
   const [periodDays, setPeriodDays] = useState<number>(30)
-  const [batchOpen, setBatchOpen] = useState(false)
-  const [mes, setMes] = useState('')
-  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
-  const [running, setRunning] = useState(false)
-  const [batchProgress, setBatchProgress] = useState<{ i: number; total: number; client: string; label: string } | null>(null)
-  const [results, setResults] = useState<BatchResult[]>([])
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -102,73 +70,6 @@ export default function DashboardPage() {
 
   const rows = summary?.clients || []
 
-  function openBatch() {
-    setSelectedIds(new Set(rows.filter((row) => row.total > 0).map((row) => row.client.id)))
-    setResults([])
-    setBatchOpen(true)
-  }
-
-  function toggle(id: string) {
-    setSelectedIds((previous) => {
-      const next = new Set(previous)
-      if (next.has(id)) next.delete(id)
-      else next.add(id)
-      return next
-    })
-  }
-
-  async function runBatch() {
-    if (!mes.trim()) return
-    const targets = rows.filter((row) => selectedIds.has(row.client.id))
-    setRunning(true)
-    setResults([])
-    const output: BatchResult[] = []
-    for (let index = 0; index < targets.length; index++) {
-      const { client } = targets[index]
-      try {
-        setBatchProgress({ i: index + 1, total: targets.length, client: client.name, label: 'carregando matérias' })
-        const relevant = await loadMonitoredArticles(client.id, periodDays)
-        if (!relevant.length) throw new Error('Sem notícias monitoradas no período')
-        const basePayload = {
-          prompt: '',
-          article_ids: relevant.map((article) => article.id),
-          client_id: client.id,
-          metadata: {
-            mes: mes.trim(),
-            reunioes_presenciais: 0,
-            reunioes_virtuais: 0,
-            orientacoes: 0,
-            acoes_imprensa: 0,
-          },
-        }
-        const content = await runSectionedReport({
-          basePayload,
-          articles: relevant,
-          contratante: client.contratante,
-          onProgress: (_done, _total, label) =>
-            setBatchProgress({ i: index + 1, total: targets.length, client: client.name, label }),
-        })
-        const res = await fetch('/api/reports', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ ...basePayload, content }),
-        })
-        const data = await res.json().catch(() => null)
-        if (!res.ok) throw new Error(data?.error || 'Falha ao salvar')
-        output.push({ client: client.name, ok: true, reportId: data.id })
-      } catch (error) {
-        output.push({
-          client: client.name,
-          ok: false,
-          error: error instanceof Error ? error.message : 'Erro',
-        })
-      }
-      setResults([...output])
-    }
-    setBatchProgress(null)
-    setRunning(false)
-  }
-
   return (
     <div className="mx-auto max-w-screen-2xl px-6 py-8">
       <div className="mb-8 flex flex-wrap items-start justify-between gap-4">
@@ -181,10 +82,12 @@ export default function DashboardPage() {
             <RefreshCw className={`mr-2 h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
             Atualizar
           </Button>
-          <Button onClick={openBatch} disabled={loading || rows.length === 0}>
-            <FileText className="mr-2 h-4 w-4" />
-            Gerar relatórios do mês
-          </Button>
+          <Link href="/reports/prepare">
+            <Button disabled={loading || rows.length === 0}>
+              <FileText className="mr-2 h-4 w-4" />
+              Preparação mensal
+            </Button>
+          </Link>
         </div>
       </div>
 
@@ -247,41 +150,6 @@ export default function DashboardPage() {
         </div>
       )}
 
-      {batchOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={() => !running && setBatchOpen(false)}>
-          <div className="max-h-[90vh] w-full max-w-lg overflow-y-auto bg-white p-6" onClick={(event) => event.stopPropagation()}>
-            <h2 className="mb-1 text-2xl font-light">Gerar relatórios do mês</h2>
-            <p className="mb-4 text-xs text-gray-500">Um relatório por cliente usando todas as matérias monitoradas no período.</p>
-            <label className="text-sm font-semibold">Mês de referência *</label>
-            <Input value={mes} onChange={(event) => setMes(event.target.value)} placeholder="Ex: Julho de 2026" className="mb-4 mt-1" disabled={running} />
-            <p className="mb-2 text-sm font-semibold">Clientes</p>
-            <div className="mb-4 max-h-60 overflow-y-auto border border-gray-100">
-              {rows.map(({ client, total }) => {
-                const result = results.find((item) => item.client === client.name)
-                return (
-                  <label key={client.id} className="flex items-center gap-3 border-b border-gray-100 px-3 py-2 text-sm last:border-0">
-                    <input type="checkbox" checked={selectedIds.has(client.id)} onChange={() => toggle(client.id)} disabled={running || total === 0} />
-                    <span className="flex-1 truncate">{client.name}</span>
-                    <span className="text-xs text-gray-400">{total}</span>
-                    {result && <span className={result.ok ? 'text-green-600' : 'text-red-600'} title={result.error}>{result.ok ? '✓' : '✗'}</span>}
-                  </label>
-                )
-              })}
-            </div>
-            {batchProgress && (
-              <p className="mb-3 text-sm text-gray-600">
-                {batchProgress.i}/{batchProgress.total} — <strong>{batchProgress.client}</strong> ({batchProgress.label})…
-              </p>
-            )}
-            <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={() => setBatchOpen(false)} disabled={running}>Fechar</Button>
-              <Button onClick={runBatch} disabled={running || !mes.trim() || selectedIds.size === 0}>
-                {running ? 'Gerando…' : `Gerar (${selectedIds.size})`}
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   )
 }
