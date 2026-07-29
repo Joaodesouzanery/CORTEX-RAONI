@@ -93,9 +93,17 @@ export default function ImportsPage() {
           init.upload.path,
           init.upload.token,
           file,
-          { contentType: 'application/pdf' }
+          { contentType: 'application/pdf', upsert: Boolean(init.upload.upsert) }
         )
         if (uploadError) throw uploadError
+      }
+
+      if (init.already_processed) {
+        updateFile(file.name, {
+          status: 'complete',
+          label: 'Documento já processado neste lote.',
+        })
+        return
       }
 
       updateFile(file.name, {

@@ -5,6 +5,80 @@ import { refreshImportBatch } from '@/lib/import/batches'
 
 export const dynamic = 'force-dynamic'
 
+type StoredDocument = {
+  id: string
+  storage_path: string
+  status: string
+  [key: string]: unknown
+}
+
+async function prepareExistingDocument(
+  supabase: ReturnType<typeof createClient>,
+  document: StoredDocument,
+  filename: string,
+  batchId?: string
+) {
+  if (batchId) {
+    const { data: currentLink } = await supabase
+      .from('import_batch_documents')
+      .select('status')
+      .eq('batch_id', batchId)
+      .eq('document_id', document.id)
+      .maybeSingle()
+    const alreadyProcessed = currentLink?.status === 'complete' || currentLink?.status === 'review'
+    if (alreadyProcessed) {
+      return { duplicate: true, already_processed: true, document }
+    }
+
+    await supabase.from('import_batch_documents').upsert(
+      {
+        batch_id: batchId,
+        document_id: document.id,
+        filename,
+        status: document.status === 'concluido' || document.status === 'revisao' ? 'pending' : 'uploading',
+        error: null,
+      },
+      { onConflict: 'batch_id,document_id' }
+    )
+    await refreshImportBatch(supabase, batchId)
+  }
+
+  if (document.status === 'concluido' || document.status === 'revisao') {
+    return { duplicate: true, already_processed: false, document }
+  }
+
+  const { data: signed, error: signError } = await supabase.storage
+    .from('source-documents')
+    .createSignedUploadUrl(document.storage_path, { upsert: true })
+  if (signError || !signed) {
+    const message = signError?.message || 'Falha ao assinar retomada do upload'
+    await supabase.from('source_documents').update({ status: 'erro', error: message }).eq('id', document.id)
+    if (batchId) {
+      await supabase
+        .from('import_batch_documents')
+        .update({ status: 'error', error: message })
+        .eq('batch_id', batchId)
+        .eq('document_id', document.id)
+      await refreshImportBatch(supabase, batchId)
+    }
+    throw new Error(message)
+  }
+
+  const { data: resumedDocument } = await supabase
+    .from('source_documents')
+    .update({ status: 'enviado', error: null })
+    .eq('id', document.id)
+    .select()
+    .single()
+
+  return {
+    duplicate: false,
+    resumed: true,
+    document: resumedDocument || document,
+    upload: { path: document.storage_path, token: signed.token, upsert: true },
+  }
+}
+
 export async function GET() {
   const supabase = createClient()
   const { data, error } = await supabase
@@ -36,19 +110,16 @@ export async function POST(req: Request) {
     .eq('sha256', sha256.toLowerCase())
     .maybeSingle()
   if (existing) {
-    if (batch_id) {
-      await supabase.from('import_batch_documents').upsert(
-        {
-          batch_id,
-          document_id: existing.id,
-          filename,
-          status: 'pending',
-        },
-        { onConflict: 'batch_id,document_id' }
+    try {
+      return NextResponse.json(
+        await prepareExistingDocument(supabase, existing as StoredDocument, filename, batch_id)
       )
-      await refreshImportBatch(supabase, batch_id)
+    } catch (error) {
+      return NextResponse.json(
+        { error: error instanceof Error ? error.message : 'Falha ao retomar upload.' },
+        { status: 500 }
+      )
     }
-    return NextResponse.json({ duplicate: true, document: existing })
   }
 
   const safeName = filename
@@ -78,7 +149,18 @@ export async function POST(req: Request) {
       .select('*')
       .eq('sha256', sha256.toLowerCase())
       .single()
-    if (duplicate) return NextResponse.json({ duplicate: true, document: duplicate })
+    if (duplicate) {
+      try {
+        return NextResponse.json(
+          await prepareExistingDocument(supabase, duplicate as StoredDocument, filename, batch_id)
+        )
+      } catch (error) {
+        return NextResponse.json(
+          { error: error instanceof Error ? error.message : 'Falha ao retomar upload.' },
+          { status: 500 }
+        )
+      }
+    }
   }
   if (insertError) return NextResponse.json({ error: insertError.message }, { status: 500 })
 
@@ -118,7 +200,7 @@ export async function POST(req: Request) {
     {
       duplicate: false,
       document,
-      upload: { path: storagePath, token: signed.token },
+      upload: { path: storagePath, token: signed.token, upsert: false },
     },
     { status: 201 }
   )
