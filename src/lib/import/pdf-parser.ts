@@ -1,4 +1,3 @@
-import { PDFParse } from 'pdf-parse'
 import { cleanArticleText, inferContentStatus } from '@/lib/archive'
 import { normalizeText } from '@/lib/relevance'
 import type { ContentStatus, ImportDocumentType } from '@/types'
@@ -326,7 +325,12 @@ function looksLikeRasterizedReport(text: string, pageCount: number): boolean {
 }
 
 export async function parsePdf(data: Uint8Array, filename: string): Promise<ParsedPdfDocument> {
-  const parser = new PDFParse({ data })
+  // Load the Node canvas shim before pdf-parse. Besides supplying DOMMatrix in
+  // serverless runtimes, the dynamic import keeps initialization failures
+  // inside the API handler so the original document remains recoverable.
+  const { CanvasFactory } = await import('pdf-parse/worker')
+  const { PDFParse } = await import('pdf-parse')
+  const parser = new PDFParse({ data, CanvasFactory })
   try {
     const info = await parser.getInfo({ parsePageInfo: true })
     const textResult = await parser.getText()
