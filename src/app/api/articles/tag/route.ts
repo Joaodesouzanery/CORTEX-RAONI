@@ -11,12 +11,20 @@ export async function GET(req: Request) {
   const clientId = new URL(req.url).searchParams.get('client_id')
   if (!clientId) return NextResponse.json({ error: 'client_id é obrigatório' }, { status: 400 })
 
-  const { data, error } = await supabase
+  const baseColumns =
+    'article_id, client_id, tom, relevancia, cita_cliente, tema, classification_source, confidence, impact_summary, monitoring_status, match_score, match_reasons, rule_version, classified_at, report_role, editorial_score, editorial_reason, cluster_label, report_role_source, triaged_at, triage_version, updated_at'
+  const strategicColumns =
+    ', central_message, strategic_effect, recommended_action, verification_status, editorial_review_state, qualified_at, qualification_version'
+  const result = await supabase
     .from('article_client_tags')
-    .select(
-      'article_id, client_id, tom, relevancia, cita_cliente, tema, classification_source, confidence, impact_summary, monitoring_status, match_score, match_reasons, rule_version, classified_at, report_role, editorial_score, editorial_reason, cluster_label, report_role_source, triaged_at, triage_version, central_message, strategic_effect, recommended_action, verification_status, editorial_review_state, qualified_at, qualification_version, updated_at'
-    )
+    .select(`${baseColumns}${strategicColumns}`)
     .eq('client_id', clientId)
+  if (result.error?.message.includes('central_message')) {
+    const fallback = await supabase.from('article_client_tags').select(baseColumns).eq('client_id', clientId)
+    if (fallback.error) return NextResponse.json({ error: fallback.error.message }, { status: 500 })
+    return NextResponse.json(fallback.data)
+  }
+  const { data, error } = result
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
   return NextResponse.json(data)

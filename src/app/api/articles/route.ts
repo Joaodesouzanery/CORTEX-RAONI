@@ -42,23 +42,34 @@ export async function GET(req: Request) {
         ? 'article_provenance!inner(source_id, sources(id, name, categoria, is_general))'
         : 'article_provenance(source_id, sources(id, name, categoria, is_general))'
       const articleColumns = `id, source_id, title, url, image_url, excerpt, ${includeContent ? 'content,' : ''} published_at, fetched_at, publisher, sources(name, categoria, is_general), ${provenanceJoin}`
-      let query = supabase
-        .from('article_client_tags')
-        .select(
-          `article_id, client_id, tom, relevancia, cita_cliente, tema, classification_source, confidence, impact_summary, monitoring_status, match_score, match_reasons, rule_version, classified_at, central_message, strategic_effect, recommended_action, verification_status, editorial_review_state, qualified_at, qualification_version, updated_at, articles!inner(${articleColumns})`,
-          { count: 'exact' }
-        )
-        .eq('client_id', clientId)
-        .neq('monitoring_status', 'excluido')
-        .order('published_at', { referencedTable: 'articles', ascending: false, nullsFirst: false })
-        .range(offset, offset + limit - 1)
-      if (status && ['candidato', 'confirmado', 'revisao'].includes(status)) query = query.eq('monitoring_status', status)
-      if (directOnly) query = query.eq('cita_cliente', true)
-      if (cutoff) query = query.gte('articles.published_at', cutoff)
-      if (publishedBefore) query = query.lte('articles.published_at', publishedBefore)
-      if (search) query = query.ilike('articles.title', `%${search}%`)
-      if (sourceId) query = query.eq('articles.article_provenance.source_id', sourceId)
-      const { data, error, count } = await query
+      const baseTagColumns =
+        'article_id, client_id, tom, relevancia, cita_cliente, tema, classification_source, confidence, impact_summary, monitoring_status, match_score, match_reasons, rule_version, classified_at, updated_at'
+      const strategicColumns =
+        ', central_message, strategic_effect, recommended_action, verification_status, editorial_review_state, qualified_at, qualification_version'
+      const runQuery = (columns: string) => {
+        let query = supabase
+          .from('article_client_tags')
+          .select(`${columns}, articles!inner(${articleColumns})`, { count: 'exact' })
+          .eq('client_id', clientId)
+          .neq('monitoring_status', 'excluido')
+          .order('published_at', { referencedTable: 'articles', ascending: false, nullsFirst: false })
+          .range(offset, offset + limit - 1)
+        if (status && ['candidato', 'confirmado', 'revisao'].includes(status)) {
+          query = query.eq('monitoring_status', status)
+        }
+        if (directOnly) query = query.eq('cita_cliente', true)
+        if (cutoff) query = query.gte('articles.published_at', cutoff)
+        if (publishedBefore) query = query.lte('articles.published_at', publishedBefore)
+        if (search) query = query.ilike('articles.title', `%${search}%`)
+        if (sourceId) query = query.eq('articles.article_provenance.source_id', sourceId)
+        return query
+      }
+      let result = await runQuery(`${baseTagColumns}${strategicColumns}`)
+      if (result.error?.message.includes('central_message')) {
+        // Mantém Notícias disponível durante a curta janela entre deploy e 027.
+        result = await runQuery(baseTagColumns)
+      }
+      const { data, error, count } = result
       if (error) return NextResponse.json({ error: error.message }, { status: 500 })
       const joinedRows = (data || []) as unknown as ClientArticleJoin[]
       const items = joinedRows.flatMap((row) => {

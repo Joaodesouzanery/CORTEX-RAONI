@@ -14,7 +14,17 @@ export async function GET(req: Request) {
     .order('created_at', { ascending: false })
     .limit(50)
   if (params.get('period')) query = query.eq('period_month', periodMonth(params.get('period')!))
-  const { data, error } = await query
+  let result = await query
+  if (result.error?.message.includes('import_batch_clients')) {
+    let fallback = supabase
+      .from('import_batches')
+      .select('*, clients(id, name)')
+      .order('created_at', { ascending: false })
+      .limit(50)
+    if (params.get('period')) fallback = fallback.eq('period_month', periodMonth(params.get('period')!))
+    result = await fallback
+  }
+  const { data, error } = result
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
   const rows = (data || []).map((batch) => {
     const links = Array.isArray(batch.import_batch_clients) ? batch.import_batch_clients : []
@@ -22,11 +32,14 @@ export async function GET(req: Request) {
       const client = Array.isArray(link.clients) ? link.clients[0] : link.clients
       return client ? [client] : []
     })
+    const legacyClient = Array.isArray(batch.clients) ? batch.clients[0] : batch.clients
     return {
       ...batch,
       import_batch_clients: undefined,
-      client_ids: links.map((link: { client_id: string }) => link.client_id),
-      selected_clients: selectedClients,
+      client_ids: links.length
+        ? links.map((link: { client_id: string }) => link.client_id)
+        : [batch.client_id],
+      selected_clients: selectedClients.length ? selectedClients : legacyClient ? [legacyClient] : [],
     }
   })
   const clientId = params.get('client_id')
