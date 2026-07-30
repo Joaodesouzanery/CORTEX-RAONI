@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { createAdminClient as createClient } from '@/lib/supabase/server'
 import { formatZodError, reportDraftCreateSchema } from '@/lib/validation'
 import { monthBounds, refreshDraftEvidence, reportBrand } from '@/lib/report-drafts'
+import { SIMINERAL_JULY_2026_TOPICS } from '@/lib/monthly-agenda'
 import type { Client } from '@/types'
 
 export const dynamic = 'force-dynamic'
@@ -59,6 +60,18 @@ export async function POST(req: Request) {
       .select()
       .single()
     if (updateError) return NextResponse.json({ error: updateError.message }, { status: 500 })
+    const { count: topicCount } = await supabase
+      .from('monthly_report_topics')
+      .select('id', { count: 'exact', head: true })
+      .eq('draft_id', latest.id)
+    if (!topicCount && client.name === 'SIMINERAL' && period === '2026-07') {
+      await supabase.from('monthly_report_topics').insert(
+        SIMINERAL_JULY_2026_TOPICS.map((topic) => ({
+          draft_id: latest.id,
+          ...topic,
+        }))
+      )
+    }
     return NextResponse.json({ draft: updated, created: false })
   }
 
@@ -83,6 +96,39 @@ export async function POST(req: Request) {
     }))
   )
   if (sectionsError) return NextResponse.json({ error: sectionsError.message }, { status: 500 })
+  let topicsToCreate: Array<{
+    position: number
+    title: string
+    rationale: string
+    inclusion_terms: readonly string[] | string[]
+    exclusion_terms: readonly string[] | string[]
+    required?: boolean
+  }> = []
+  if (latest) {
+    const { data: priorTopics } = await supabase
+      .from('monthly_report_topics')
+      .select('position, title, rationale, inclusion_terms, exclusion_terms, required')
+      .eq('draft_id', latest.id)
+      .order('position')
+    topicsToCreate = priorTopics || []
+  }
+  if (!topicsToCreate.length && client.name === 'SIMINERAL' && period === '2026-07') {
+    topicsToCreate = [...SIMINERAL_JULY_2026_TOPICS]
+  }
+  if (topicsToCreate.length) {
+    const { error: topicsError } = await supabase.from('monthly_report_topics').insert(
+      topicsToCreate.map((topic) => ({
+        draft_id: draft.id,
+        position: topic.position,
+        title: topic.title,
+        rationale: topic.rationale,
+        inclusion_terms: [...topic.inclusion_terms],
+        exclusion_terms: [...topic.exclusion_terms],
+        required: topic.required ?? true,
+      }))
+    )
+    if (topicsError) return NextResponse.json({ error: topicsError.message }, { status: 500 })
+  }
 
   try {
     const refreshed = await refreshDraftEvidence(supabase, draft)

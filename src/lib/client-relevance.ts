@@ -63,6 +63,29 @@ function isDaqRoadFalsePositive(client: Client, normalized: string): boolean {
   return road && !water
 }
 
+function isInvalidNewsDocument(title: string): boolean {
+  const normalized = normalizeText(title)
+  return (
+    /\.(cdr|psd|ai|zip|xlsx?|docx?)$/i.test(title.trim()) ||
+    /^portfolio\b/.test(normalized) ||
+    /^portifolio\b/.test(normalized) ||
+    /^login\b/.test(normalized) ||
+    normalized === 'inicio'
+  )
+}
+
+function isSimineralHardFalsePositive(client: Client, normalized: string): boolean {
+  if (client.name !== 'SIMINERAL') return false
+  if (/\b(criptomoeda|bitcoin|ethereum|mineracao de cripto|minerar cripto)\b/.test(normalized)) return true
+  const market =
+    /\b(ibovespa|vale3|cmin3|day trade|carteira recomendada|dividendos|cotacao|acoes)\b/.test(normalized)
+  const strategic =
+    /\b(anm|cfem|licenciamento|regulacao|minerais criticos|minerais estrategicos|terras raras|mineracao no para|setor mineral do para|amazonia|carajas)\b/.test(
+      normalized
+    )
+  return market && !strategic
+}
+
 export function evaluateClientArticle(
   client: Client,
   rules: ClientRelevanceRule[],
@@ -70,7 +93,7 @@ export function evaluateClientArticle(
   thematicSource = false
 ): RelevanceEvaluation | null {
   const { raw, normalized } = articleText(article)
-  if (!normalized) return null
+  if (!normalized || isInvalidNewsDocument(article.title) || isSimineralHardFalsePositive(client, normalized)) return null
 
   const reasons: MatchReason[] = []
   let score = 0

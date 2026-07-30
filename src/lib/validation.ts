@@ -78,6 +78,24 @@ export const articleTagSchema = z.object({
   recommended_action: z.string().max(3000).nullish(),
   verification_status: z.enum(['verificada', 'parcial', 'pendente']).optional(),
   editorial_review_state: z.enum(['automatico', 'pendente', 'revisado']).optional(),
+  editorial_confidence: z.number().min(0).max(1).nullish(),
+  geographic_scope: z.enum(['para', 'amazonia', 'brasil', 'internacional', 'indeterminado']).nullish(),
+  quality_flags: z
+    .array(
+      z.enum([
+        'texto_insuficiente',
+        'duplicata_exata',
+        'possivel_mercado_financeiro',
+        'ambiguidade_criptomoeda',
+        'energia_nuclear_desconectada',
+        'equipamento_comercial',
+        'exterior_sem_impacto_local',
+        'fora_do_periodo',
+        'divergencia_de_classificacao',
+        'agenda_obrigatoria',
+      ])
+    )
+    .optional(),
 })
 
 // Request a batch of tag suggestions for a client's articles (no save).
@@ -177,12 +195,40 @@ export const reportDraftLeadSchema = z.object({
   article_id: z.string().uuid('Matéria inválida'),
 })
 
+export const reportDraftItemsSchema = z.object({
+  article_ids: z.array(z.string().uuid('Matéria inválida')).min(1).max(500),
+})
+
 export const reportDraftSectionSchema = z.object({
   instructions: z.string().max(10000).optional(),
 })
 
 export const reportDraftSectionEditSchema = z.object({
   content: z.string().min(1, 'O texto não pode ficar vazio'),
+})
+
+export const reportTopicCreateSchema = z.object({
+  title: z.string().trim().min(1, 'Título é obrigatório').max(200),
+  rationale: z.string().trim().max(2000).optional().default(''),
+  inclusion_terms: z.array(z.string().trim().min(1).max(100)).min(1).max(50),
+  exclusion_terms: z.array(z.string().trim().min(1).max(100)).max(50).optional().default([]),
+  required: z.boolean().optional().default(true),
+})
+
+export const reportTopicUpdateSchema = z.object({
+  title: z.string().trim().min(1).max(200).optional(),
+  rationale: z.string().trim().max(2000).optional(),
+  inclusion_terms: z.array(z.string().trim().min(1).max(100)).min(1).max(50).optional(),
+  exclusion_terms: z.array(z.string().trim().min(1).max(100)).max(50).optional(),
+  required: z.boolean().optional(),
+  position: z.number().int().min(1).max(100).optional(),
+  coverage_status: z.enum(['unchecked', 'searching', 'covered', 'gap', 'review']).optional(),
+  gap_reason: z.string().trim().max(2000).nullish(),
+  acknowledge_gap: z.boolean().optional(),
+})
+
+export const reportTopicReorderSchema = z.object({
+  ordered_ids: z.array(z.string().uuid()).min(1).max(100),
 })
 
 // ---- Monthly editions ----

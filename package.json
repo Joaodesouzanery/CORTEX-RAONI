@@ -14,6 +14,7 @@
     "test": "vitest run",
     "test:pdf-load": "node scripts/smoke-monthly-pdf.mjs 500",
     "qa:news": "node scripts/qa-news.mjs",
+    "qa:qualification": "node scripts/qa-report-quality.mjs",
     "test:watch": "vitest",
     "format": "prettier --write .",
     "format:check": "prettier --check ."

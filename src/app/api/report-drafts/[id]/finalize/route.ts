@@ -1,41 +1,68 @@
 import { NextResponse } from 'next/server'
 import { createAdminClient as createClient } from '@/lib/supabase/server'
 import { buildQualifiedSection, reportEvidenceItems } from '@/lib/report-drafts'
+import { buildAgendaSection } from '@/lib/report-quality'
+import type { MonthlyReportTopic } from '@/types'
 
 export const dynamic = 'force-dynamic'
 
 export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
-  const body = await req.json().catch(() => ({}))
-  const confirmPending = body?.confirm_pending === true
+  await req.json().catch(() => ({}))
   const supabase = createClient()
-  const [{ data: draft, error }, { data: sections }, evidence] = await Promise.all([
+  const [
+    { data: draft, error },
+    { data: sections },
+    evidence,
+    { data: topicRows },
+    { data: topicLinks },
+    { data: latestQuality },
+  ] = await Promise.all([
     supabase.from('monthly_report_drafts').select('*, clients(name)').eq('id', id).single(),
     supabase.from('report_sections').select('*').eq('draft_id', id).order('section_key'),
     reportEvidenceItems(supabase, id),
+    supabase.from('monthly_report_topics').select('*').eq('draft_id', id).order('position'),
+    supabase
+      .from('report_topic_evidence')
+      .select('*, monthly_report_topics!inner(draft_id)')
+      .eq('monthly_report_topics.draft_id', id),
+    supabase
+      .from('report_quality_checks')
+      .select('*')
+      .eq('draft_id', id)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle(),
   ])
   if (error || !draft) return NextResponse.json({ error: error?.message || 'Preparação não encontrada.' }, { status: 404 })
   if (!draft.lead_article_id) {
     return NextResponse.json({ error: 'Escolha a matéria principal antes de finalizar.' }, { status: 400 })
   }
-  if (!sections || sections.length !== 9 || sections.some((section) => !section.content.trim())) {
+  if (
+    !sections ||
+    sections.length !== 9 ||
+    sections.some((section) => !section.content.trim() || section.status === 'stale' || section.status === 'error')
+  ) {
     return NextResponse.json({ error: 'Gere ou edite todas as seções 1–9 antes de finalizar.' }, { status: 400 })
   }
-  const items = evidence
-  const pendingReview = items.filter(
-    (item) =>
-      item.bucket !== 'excluded' && item.classification_snapshot.editorial_review_state === 'pendente'
-  ).length
-  if (pendingReview && !confirmPending) {
+  if (
+    draft.quality_status !== 'passed' ||
+    !latestQuality ||
+    latestQuality.status !== 'passed' ||
+    latestQuality.base_version !== draft.base_version
+  ) {
     return NextResponse.json(
       {
-        error: `${pendingReview} ocorrência(s) permanecem pendentes e serão mantidas no anexo.`,
-        code: 'PENDING_REVIEW',
-        pending_review: pendingReview,
+        error: 'Execute os portões de qualidade sobre a versão atual da base antes de finalizar.',
+        code: 'QUALITY_CHECK_REQUIRED',
       },
       { status: 409 }
     )
   }
+  const items = evidence
+  const pendingReview = items.filter(
+    (item) => item.bucket === 'annex' && item.classification_snapshot.editorial_review_state === 'pendente'
+  ).length
   const lead = items.find((item) => item.article_id === draft.lead_article_id)
   if (!lead) return NextResponse.json({ error: 'A matéria principal não está na base atual.' }, { status: 400 })
   const leadTitle = lead.article_snapshot.title.toLocaleLowerCase('pt-BR')
@@ -48,8 +75,17 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     )
   }
 
+  const qualifiedSet = new Set(items.filter((item) => item.bucket === 'qualified').map((item) => item.article_id))
+  const topics = (topicRows || []).map((topic) => ({
+    ...topic,
+    evidence: (topicLinks || []).filter((link) => link.topic_id === topic.id),
+    evidence_count: (topicLinks || []).filter(
+      (link) => link.topic_id === topic.id && qualifiedSet.has(link.article_id)
+    ).length,
+  })) as MonthlyReportTopic[]
   const mainContent = [
     ...sections.map((section) => section.content.trim()),
+    buildAgendaSection(topics),
     buildQualifiedSection(items),
     '---',
     `*${draft.brand_snapshot?.footer || draft.brand_snapshot?.name || draft.clients?.name || ''}*`,
@@ -79,7 +115,9 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
         evidence_counts: counts,
         base_version: draft.base_version,
         handoff: 'claude_design',
-        pending_review_confirmed: pendingReview > 0,
+        pending_annex_review: pendingReview,
+        agenda_topics: topics.length,
+        quality_status: latestQuality.status,
       },
       client_id: draft.client_id,
       draft_id: id,
@@ -87,6 +125,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       version: (existing?.version || 0) + 1,
       lead_article_id: draft.lead_article_id,
       brand_snapshot: draft.brand_snapshot,
+      agenda_snapshot: topics,
+      quality_snapshot: latestQuality,
     })
     .select()
     .single()

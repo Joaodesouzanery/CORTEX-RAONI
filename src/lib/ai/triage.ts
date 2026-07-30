@@ -1,10 +1,13 @@
 import type {
   ArticleSnapshot,
   EditorialReviewState,
+  GeographicScope,
+  QualityFlag,
   ReportRole,
   StrategicEffect,
   VerificationStatus,
 } from '@/types'
+import { deterministicQualityFlags, inferGeographicScope } from '@/lib/report-quality'
 
 export interface TriageDecision {
   article_id: string
@@ -18,22 +21,31 @@ export interface TriageDecision {
   recommended_action: string
   verification_status: VerificationStatus
   editorial_review_state: EditorialReviewState
+  editorial_confidence: number
+  geographic_scope: GeographicScope
+  quality_flags: QualityFlag[]
 }
 
 function fallback(articles: ArticleSnapshot[]): TriageDecision[] {
-  return articles.map((article) => ({
-    article_id: article.id,
-    report_role: 'contexto',
-    editorial_score: 45,
-    editorial_reason: 'Triagem conservadora aplicada sem IA; requer revisão editorial.',
-    cluster_label: 'Revisão pendente',
-    central_message: article.excerpt || article.title,
-    impact_summary: 'Impacto ainda não validado por análise editorial.',
-    strategic_effect: 'informativo',
-    recommended_action: 'Revisar a publicação antes do fechamento mensal.',
-    verification_status: article.content_status === 'integral' ? 'verificada' : 'parcial',
-    editorial_review_state: 'pendente',
-  }))
+  return articles.map((article) => {
+    const geographicScope = inferGeographicScope(article)
+    return {
+      article_id: article.id,
+      report_role: 'contexto',
+      editorial_score: 35,
+      editorial_reason: 'Sem IA: mantida conservadoramente no anexo para revisão.',
+      cluster_label: 'Revisão pendente',
+      central_message: article.excerpt || article.title,
+      impact_summary: 'Impacto ainda não validado por análise editorial.',
+      strategic_effect: 'informativo',
+      recommended_action: 'Revisar a publicação antes do fechamento mensal.',
+      verification_status: article.content_status === 'integral' ? 'verificada' : 'parcial',
+      editorial_review_state: 'pendente',
+      editorial_confidence: 0,
+      geographic_scope: geographicScope,
+      quality_flags: deterministicQualityFlags(article, geographicScope),
+    }
+  })
 }
 
 export async function triageEvidence(
@@ -53,12 +65,15 @@ export async function triageEvidence(
   const message = await anthropic.messages.create({
     model: 'claude-sonnet-4-6',
     max_tokens: 5000,
-    system: `Você faz triagem editorial de inteligência reputacional para ${client.name}, no setor ${client.sector || 'informado pelo cliente'}.
+    system: `Você faz triagem editorial conservadora de inteligência reputacional para ${client.name}, no setor ${client.sector || 'informado pelo cliente'}.
 Classifique cada publicação sem eliminar itens. Use:
-- evidencia: fato ou análise diretamente útil às seções estratégicas;
+- evidencia: fato ou análise diretamente útil às seções estratégicas, com impacto específico e explicável para o cliente;
 - contexto: cobertura adjacente/baixa confiança, útil apenas no anexo;
 - ruido: sem impacto concreto, entretenimento, loteria, consumo, esporte ou exterior desconectado.
-Pontue de 0 a 100. Matéria principal não é escolhida por você. Veículos diferentes permanecem distintos.
+Não promova uma matéria apenas porque contém uma palavra ampla do setor. Pontue de 0 a 100 e informe editorial_confidence entre 0 e 1. Matéria principal não é escolhida por você. Veículos diferentes permanecem distintos.
+geographic_scope deve ser para, amazonia, brasil, internacional ou indeterminado.
+quality_flags pode conter: texto_insuficiente, possivel_mercado_financeiro, ambiguidade_criptomoeda, energia_nuclear_desconectada, equipamento_comercial, exterior_sem_impacto_local ou divergencia_de_classificacao.
+Para SIMINERAL, priorize Pará/Amazônia, menções institucionais, regulação mineral, ANM/CFEM/licenciamento, minerais críticos, sustentabilidade, comunidades e infraestrutura. Brasil ou exterior só são evidência se houver impacto estratégico concreto para o setor mineral paraense. Bolsa, cotação, criptomoeda, produto/equipamento e exterior desconectado são contexto ou ruído.
 Para cada item, produza também uma ficha estratégica objetiva:
 - central_message: o fato/sinal factual principal, sem interpretação;
 - impact_summary: por que isso importa especificamente para o cliente;
@@ -66,7 +81,7 @@ Para cada item, produza também uma ficha estratégica objetiva:
 - recommended_action: ação concreta de comunicação ou monitoramento;
 - verification_status: verificada quando há texto integral e fonte identificável, parcial quando há somente trecho, pendente quando os metadados são insuficientes;
 - editorial_review_state: pendente para baixa confiança, conflito ou possível menção direta; automático nos demais. Nunca marque como revisado.
-Responda somente JSON válido: [{"article_id":"uuid","report_role":"evidencia|contexto|ruido","editorial_score":0,"editorial_reason":"frase curta","cluster_label":"pauta","central_message":"fato","impact_summary":"impacto","strategic_effect":"oportunidade|risco|misto|informativo","recommended_action":"ação","verification_status":"verificada|parcial|pendente","editorial_review_state":"automatico|pendente"}].`,
+Responda somente JSON válido: [{"article_id":"uuid","report_role":"evidencia|contexto|ruido","editorial_score":0,"editorial_confidence":0.0,"geographic_scope":"para|amazonia|brasil|internacional|indeterminado","quality_flags":[],"editorial_reason":"frase curta","cluster_label":"pauta","central_message":"fato","impact_summary":"impacto","strategic_effect":"oportunidade|risco|misto|informativo","recommended_action":"ação","verification_status":"verificada|parcial|pendente","editorial_review_state":"automatico|pendente"}].`,
     messages: [
       {
         role: 'user',
@@ -110,6 +125,36 @@ Responda somente JSON válido: [{"article_id":"uuid","report_role":"evidencia|co
           decision.editorial_review_state === 'pendente'
             ? ('pendente' as const)
             : ('automatico' as const),
+        editorial_confidence: Math.max(
+          0,
+          Math.min(1, Number.isFinite(decision.editorial_confidence) ? decision.editorial_confidence : 0)
+        ),
+        geographic_scope: ['para', 'amazonia', 'brasil', 'internacional', 'indeterminado'].includes(
+          decision.geographic_scope
+        )
+          ? decision.geographic_scope
+          : inferGeographicScope(article),
+        quality_flags: Array.from(
+          new Set([
+            ...deterministicQualityFlags(article),
+            ...(Array.isArray(decision.quality_flags)
+              ? decision.quality_flags.filter((flag): flag is QualityFlag =>
+                  [
+                    'texto_insuficiente',
+                    'duplicata_exata',
+                    'possivel_mercado_financeiro',
+                    'ambiguidade_criptomoeda',
+                    'energia_nuclear_desconectada',
+                    'equipamento_comercial',
+                    'exterior_sem_impacto_local',
+                    'fora_do_periodo',
+                    'divergencia_de_classificacao',
+                    'agenda_obrigatoria',
+                  ].includes(flag)
+                )
+              : []),
+          ])
+        ),
       }
     })
     return { decisions, source: 'ia' }

@@ -5,10 +5,22 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { Download, RefreshCw, Sparkles, Star, Save, CheckCircle2 } from 'lucide-react'
+import {
+  AlertTriangle,
+  CheckCircle2,
+  Download,
+  Plus,
+  RefreshCw,
+  Save,
+  Search,
+  ShieldCheck,
+  Sparkles,
+  Star,
+} from 'lucide-react'
 import type {
   Client,
   EditorialReviewState,
+  MonthlyReportTopic,
   MonthlyReportDraft,
   ReportEvidenceItem,
   ReportSection,
@@ -49,6 +61,7 @@ export default function ReportPreparationPage() {
   const [busy, setBusy] = useState('')
   const [error, setError] = useState('')
   const [triageProgress, setTriageProgress] = useState<{ done: number; remaining: number } | null>(null)
+  const [verificationProgress, setVerificationProgress] = useState<{ done: number; remaining: number } | null>(null)
   const [evidenceFilter, setEvidenceFilter] = useState<'all' | 'pending' | 'qualified' | 'annex'>('all')
   const [editingArticleId, setEditingArticleId] = useState('')
   const [qualification, setQualification] = useState({
@@ -58,11 +71,18 @@ export default function ReportPreparationPage() {
     recommended_action: '',
     verification_status: 'pendente' as VerificationStatus,
   })
+  const [topicForm, setTopicForm] = useState({
+    title: '',
+    rationale: '',
+    inclusion_terms: '',
+    exclusion_terms: '',
+  })
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
     const queryClient = params.get('client')
     const queryPeriod = params.get('period')
+    const queryDraft = params.get('draft')
     if (queryPeriod && /^\d{4}-\d{2}$/.test(queryPeriod)) setPeriod(queryPeriod)
     fetch('/api/clients?active=true')
       .then((response) => response.json())
@@ -70,11 +90,36 @@ export default function ReportPreparationPage() {
         const rows = Array.isArray(data) ? data : []
         setClients(rows)
         setClientId(queryClient && rows.some((client: Client) => client.id === queryClient) ? queryClient : rows[0]?.id || '')
+        if (queryDraft) {
+          fetch(`/api/report-drafts/${queryDraft}`)
+            .then(async (response) => {
+              const reportDraft = await response.json().catch(() => null)
+              if (!response.ok) throw new Error(reportDraft?.error || 'Falha ao carregar a preparação.')
+              setDraft(reportDraft)
+              setClientId(reportDraft.client_id)
+              setPeriod(String(reportDraft.period_month).slice(0, 7))
+              setInstructions(reportDraft.monthly_instructions || '')
+              setMetrics((current) => ({ ...current, ...(reportDraft.service_metrics || {}) }))
+              setSectionTexts(
+                Object.fromEntries(
+                  (reportDraft.sections || []).map((section: ReportSection) => [
+                    section.section_key,
+                    section.content || '',
+                  ])
+                )
+              )
+            })
+            .catch((loadError) => {
+              setError(loadError instanceof Error ? loadError.message : 'Falha ao carregar a preparação.')
+            })
+        }
       })
   }, [])
 
   function applyDraft(data: MonthlyReportDraft) {
     setDraft(data)
+    setClientId(data.client_id)
+    setPeriod(String(data.period_month).slice(0, 7))
     setInstructions(data.monthly_instructions || '')
     setMetrics((current) => ({ ...current, ...(data.service_metrics || {}) }))
     setSectionTexts(
@@ -134,6 +179,10 @@ export default function ReportPreparationPage() {
 
   async function triageAll() {
     if (!draft) return
+    if (!draft.topics?.length) {
+      setError('Defina ao menos um tópico da agenda mensal antes de iniciar a triagem.')
+      return
+    }
     setBusy('triage')
     setError('')
     setTriageProgress({ done: 0, remaining: draft.evidence_items?.length || 0 })
@@ -153,6 +202,188 @@ export default function ReportPreparationPage() {
     } finally {
       setBusy('')
       setTriageProgress(null)
+    }
+  }
+
+  async function verifyAll() {
+    if (!draft) return
+    setBusy('verify')
+    setError('')
+    setVerificationProgress({ done: 0, remaining: counts.qualified })
+    let done = 0
+    try {
+      for (;;) {
+        const res = await fetch(`/api/report-drafts/${draft.id}/verify`, { method: 'POST' })
+        const data = await res.json().catch(() => null)
+        if (!res.ok) throw new Error(data?.error || 'Falha na verificação independente.')
+        done += data.processed || 0
+        setVerificationProgress({ done, remaining: data.remaining || 0 })
+        if (data.complete) break
+      }
+      await loadDraft(draft.id)
+    } catch (verificationError) {
+      setError(
+        verificationError instanceof Error
+          ? verificationError.message
+          : 'Falha na verificação independente.'
+      )
+    } finally {
+      setBusy('')
+      setVerificationProgress(null)
+    }
+  }
+
+  async function runQualityChecks() {
+    if (!draft) return
+    setBusy('quality')
+    setError('')
+    try {
+      const res = await fetch(`/api/report-drafts/${draft.id}/quality`, { method: 'POST' })
+      const data = await res.json().catch(() => null)
+      if (!res.ok) throw new Error(data?.error || 'Falha nos portões de qualidade.')
+      await loadDraft(draft.id)
+    } catch (qualityError) {
+      setError(qualityError instanceof Error ? qualityError.message : 'Falha nos portões de qualidade.')
+    } finally {
+      setBusy('')
+    }
+  }
+
+  async function addTopic() {
+    if (!draft || !topicForm.title.trim() || !topicForm.inclusion_terms.trim()) return
+    setBusy('topic-add')
+    setError('')
+    try {
+      const res = await fetch(`/api/report-drafts/${draft.id}/topics`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: topicForm.title,
+          rationale: topicForm.rationale,
+          inclusion_terms: topicForm.inclusion_terms.split(/[,;\n]+/).map((term) => term.trim()).filter(Boolean),
+          exclusion_terms: topicForm.exclusion_terms.split(/[,;\n]+/).map((term) => term.trim()).filter(Boolean),
+          required: true,
+        }),
+      })
+      const data = await res.json().catch(() => null)
+      if (!res.ok) throw new Error(data?.error || 'Falha ao criar o tópico.')
+      setTopicForm({ title: '', rationale: '', inclusion_terms: '', exclusion_terms: '' })
+      await loadDraft(draft.id)
+    } catch (topicError) {
+      setError(topicError instanceof Error ? topicError.message : 'Falha ao criar o tópico.')
+    } finally {
+      setBusy('')
+    }
+  }
+
+  async function updateTopic(topic: MonthlyReportTopic, patch: Record<string, unknown>) {
+    if (!draft) return
+    setBusy(`topic-${topic.id}`)
+    setError('')
+    try {
+      const res = await fetch(`/api/report-drafts/${draft.id}/topics/${topic.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(patch),
+      })
+      const data = await res.json().catch(() => null)
+      if (!res.ok) throw new Error(data?.error || 'Falha ao atualizar o tópico.')
+      await loadDraft(draft.id)
+    } catch (topicError) {
+      setError(topicError instanceof Error ? topicError.message : 'Falha ao atualizar o tópico.')
+    } finally {
+      setBusy('')
+    }
+  }
+
+  async function searchTopic(topic: MonthlyReportTopic) {
+    if (!draft) return
+    setBusy(`topic-search-${topic.id}`)
+    setError('')
+    try {
+      const search = async (afterFetch: boolean) => {
+        const res = await fetch(`/api/report-drafts/${draft.id}/topics/${topic.id}/search`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ after_fetch: afterFetch }),
+        })
+        const data = await res.json().catch(() => null)
+        if (!res.ok) throw new Error(data?.error || 'Falha na busca do tópico.')
+        return data
+      }
+      const result = await search(false)
+      if (result.fetch_run_id) {
+        for (let index = 0; index < 40; index++) {
+          const process = await fetch(`/api/fetch-runs/${result.fetch_run_id}/process`, { method: 'POST' })
+          const processData = await process.json().catch(() => null)
+          if (!process.ok) throw new Error(processData?.error || 'Falha ao atualizar as fontes.')
+          if (['concluido', 'parcial', 'erro'].includes(processData.run?.status)) break
+        }
+        await refreshBase()
+        await search(true)
+      }
+      await loadDraft(draft.id)
+    } catch (topicError) {
+      setError(topicError instanceof Error ? topicError.message : 'Falha na busca do tópico.')
+    } finally {
+      setBusy('')
+    }
+  }
+
+  async function editTopic(topic: MonthlyReportTopic) {
+    const title = window.prompt('Título do tópico', topic.title)
+    if (!title) return
+    const rationale = window.prompt('Justificativa editorial', topic.rationale) ?? topic.rationale
+    const inclusion = window.prompt('Termos de inclusão, separados por vírgula', topic.inclusion_terms.join(', '))
+    if (!inclusion) return
+    const exclusion = window.prompt('Termos de exclusão, separados por vírgula', topic.exclusion_terms.join(', '))
+    await updateTopic(topic, {
+      title,
+      rationale,
+      inclusion_terms: inclusion.split(/[,;\n]+/).map((term) => term.trim()).filter(Boolean),
+      exclusion_terms: (exclusion || '').split(/[,;\n]+/).map((term) => term.trim()).filter(Boolean),
+      coverage_status: 'unchecked',
+      acknowledge_gap: false,
+    })
+  }
+
+  async function deleteTopic(topic: MonthlyReportTopic) {
+    if (!draft || !window.confirm(`Remover o tópico “${topic.title}”?`)) return
+    setBusy(`topic-delete-${topic.id}`)
+    setError('')
+    try {
+      const res = await fetch(`/api/report-drafts/${draft.id}/topics/${topic.id}`, { method: 'DELETE' })
+      const data = await res.json().catch(() => null)
+      if (!res.ok) throw new Error(data?.error || 'Falha ao remover o tópico.')
+      await loadDraft(draft.id)
+    } catch (topicError) {
+      setError(topicError instanceof Error ? topicError.message : 'Falha ao remover o tópico.')
+    } finally {
+      setBusy('')
+    }
+  }
+
+  async function moveTopic(topic: MonthlyReportTopic, direction: -1 | 1) {
+    if (!draft) return
+    const ordered = [...topics].sort((a, b) => a.position - b.position)
+    const index = ordered.findIndex((candidate) => candidate.id === topic.id)
+    const next = index + direction
+    if (index < 0 || next < 0 || next >= ordered.length) return
+    ;[ordered[index], ordered[next]] = [ordered[next], ordered[index]]
+    setBusy(`topic-move-${topic.id}`)
+    try {
+      const res = await fetch(`/api/report-drafts/${draft.id}/topics/reorder`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ordered_ids: ordered.map((candidate) => candidate.id) }),
+      })
+      const data = await res.json().catch(() => null)
+      if (!res.ok) throw new Error(data?.error || 'Falha ao reordenar os tópicos.')
+      await loadDraft(draft.id)
+    } catch (topicError) {
+      setError(topicError instanceof Error ? topicError.message : 'Falha ao reordenar os tópicos.')
+    } finally {
+      setBusy('')
     }
   }
 
@@ -221,6 +452,8 @@ export default function ReportPreparationPage() {
           article_id: item.article_id,
           client_id: draft.client_id,
           ...patch,
+          editorial_confidence: role === 'evidencia' ? 1 : role === 'contexto' ? 0.7 : 0.95,
+          editorial_review_state: 'revisado',
           editorial_reason: 'Decisão manual na preparação mensal.',
         }),
       })
@@ -324,7 +557,7 @@ export default function ReportPreparationPage() {
     }
   }
 
-  async function finalize(confirmPending = false) {
+  async function finalize() {
     if (!draft) return
     setBusy('finalize')
     setError('')
@@ -332,19 +565,9 @@ export default function ReportPreparationPage() {
       const res = await fetch(`/api/report-drafts/${draft.id}/finalize`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ confirm_pending: confirmPending }),
+        body: JSON.stringify({}),
       })
       const data = await res.json().catch(() => null)
-      if (res.status === 409 && data?.code === 'PENDING_REVIEW') {
-        const confirmed = window.confirm(
-          `${data.pending_review} ocorrência(s) ainda estão pendentes. Elas serão preservadas no anexo. Deseja finalizar mesmo assim?`
-        )
-        if (confirmed) {
-          setBusy('')
-          await finalize(true)
-        }
-        return
-      }
       if (!res.ok) throw new Error(data?.error || 'Falha ao finalizar.')
       await loadDraft(draft.id)
       window.open(`/reports/${data.report.id}`, '_blank')
@@ -358,6 +581,17 @@ export default function ReportPreparationPage() {
   const evidence = useMemo(() => draft?.evidence_items || [], [draft?.evidence_items])
   const counts = useMemo(
     () => ({
+      triaged: evidence.filter(
+        (item) =>
+          Boolean(item.classification_snapshot.triaged_at) ||
+          item.classification_snapshot.report_role_source === 'humano'
+      ).length,
+      verified: evidence.filter(
+        (item) =>
+          item.classification_snapshot.editorial_review_state === 'revisado' ||
+          (item.classification_snapshot.verification_status === 'verificada' &&
+            Boolean(item.classification_snapshot.qa_checked_at))
+      ).length,
       qualified: evidence.filter((item) => item.bucket === 'qualified').length,
       annex: evidence.filter((item) => item.bucket === 'annex').length,
       excluded: evidence.filter((item) => item.bucket === 'excluded').length,
@@ -368,6 +602,8 @@ export default function ReportPreparationPage() {
     }),
     [evidence]
   )
+  const topics = draft?.topics || []
+  const latestQuality = draft?.quality_checks?.[0]
   const orderedEvidence = [...evidence].sort((a, b) => {
     if (a.article_id === draft?.lead_article_id) return -1
     if (b.article_id === draft?.lead_article_id) return 1
@@ -445,12 +681,13 @@ export default function ReportPreparationPage() {
 
       {draft && (
         <>
-          <div className="grid md:grid-cols-5 border border-gray-200 mb-4 divide-x">
-            <div className="p-4"><p className="text-xs text-gray-500">Base integral</p><p className="text-3xl">{evidence.length}</p></div>
+          <div className="grid md:grid-cols-6 border border-gray-200 mb-4 divide-x">
+            <div className="p-4"><p className="text-xs text-gray-500">Candidatas detectadas</p><p className="text-3xl">{evidence.length}</p></div>
+            <div className="p-4"><p className="text-xs text-gray-500">Triadas</p><p className="text-3xl">{counts.triaged}</p></div>
+            <div className="p-4"><p className="text-xs text-gray-500">Verificadas</p><p className="text-3xl">{counts.verified}</p></div>
             <div className="p-4"><p className="text-xs text-gray-500">Base qualificada</p><p className="text-3xl">{counts.qualified}</p></div>
-            <div className="p-4"><p className="text-xs text-gray-500">Anexo monitorado</p><p className="text-3xl">{counts.annex}</p></div>
-            <div className="p-4"><p className="text-xs text-gray-500">Excluídas manualmente</p><p className="text-3xl">{counts.excluded}</p></div>
-            <div className="p-4"><p className="text-xs text-gray-500">Pendentes de revisão</p><p className="text-3xl">{counts.pending}</p></div>
+            <div className="p-4"><p className="text-xs text-gray-500">Anexo / ruído</p><p className="text-3xl">{counts.annex}</p></div>
+            <div className="p-4"><p className="text-xs text-gray-500">Em revisão</p><p className="text-3xl">{counts.pending}</p></div>
           </div>
           <div className="flex gap-2 flex-wrap mb-6">
             <Button variant="outline" onClick={refreshBase} disabled={!!busy}>
@@ -460,10 +697,128 @@ export default function ReportPreparationPage() {
               <Sparkles className="w-4 h-4 mr-2" />
               {triageProgress ? `${triageProgress.done} triadas; ${triageProgress.remaining} restantes` : 'Triar todo o universo'}
             </Button>
+            <Button variant="outline" onClick={verifyAll} disabled={!!busy || counts.triaged < evidence.length}>
+              <ShieldCheck className="w-4 h-4 mr-2" />
+              {verificationProgress
+                ? `${verificationProgress.done} verificadas; ${verificationProgress.remaining} restantes`
+                : 'Verificar evidências'}
+            </Button>
+            <Button onClick={runQualityChecks} disabled={!!busy}>
+              <CheckCircle2 className="w-4 h-4 mr-2" />Executar portões
+            </Button>
             <a href={`/api/report-drafts/${draft.id}/export?format=dossier`}><Button variant="outline"><Download className="w-4 h-4 mr-2" />Dossiê</Button></a>
             <a href={`/api/report-drafts/${draft.id}/export?format=csv`}><Button variant="outline"><Download className="w-4 h-4 mr-2" />CSV integral</Button></a>
             <a href={`/api/report-drafts/${draft.id}/export?format=annex`}><Button variant="outline">Anexo</Button></a>
           </div>
+
+          <div className="mb-8 border border-gray-200 p-4">
+            <div className="mb-3 flex items-start justify-between gap-4">
+              <div>
+                <h2 className="text-xl font-semibold">Agenda mensal obrigatória</h2>
+                <p className="text-xs text-gray-500">
+                  A seção 10 será montada deterministicamente com estes tópicos e suas evidências.
+                </p>
+              </div>
+              <span className={`text-xs uppercase ${
+                draft.quality_status === 'passed' ? 'text-emerald-700' : draft.quality_status === 'blocked' ? 'text-red-700' : 'text-amber-700'
+              }`}>
+                Qualidade: {draft.quality_status || 'pending'}
+              </span>
+            </div>
+            <div className="space-y-2">
+              {topics.map((topic) => (
+                <div key={topic.id} className="flex flex-wrap items-center justify-between gap-3 border border-gray-100 p-3">
+                  <div>
+                    <p className="font-medium">{topic.position}. {topic.title}</p>
+                    <p className="mt-1 text-xs text-gray-500">
+                      {topic.rationale || 'Sem justificativa'} · {topic.evidence_count || 0} ocorrência(s) · {topic.coverage_status}
+                    </p>
+                    {topic.gap_reason && <p className="mt-1 text-xs text-amber-700">{topic.gap_reason}</p>}
+                  </div>
+                  <div className="flex gap-2">
+                    <Button size="sm" variant="outline" onClick={() => moveTopic(topic, -1)} disabled={!!busy || topic.position === 1}>
+                      ↑
+                    </Button>
+                    <Button size="sm" variant="outline" onClick={() => moveTopic(topic, 1)} disabled={!!busy || topic.position === topics.length}>
+                      ↓
+                    </Button>
+                    <Button size="sm" variant="outline" onClick={() => editTopic(topic)} disabled={!!busy}>
+                      Editar
+                    </Button>
+                    <Button size="sm" variant="outline" onClick={() => searchTopic(topic)} disabled={!!busy}>
+                      <Search className="mr-1 h-3 w-3" />Buscar
+                    </Button>
+                    {topic.coverage_status === 'review' && (
+                      <span className="self-center text-xs text-amber-700">
+                        Qualifique ao menos uma ocorrência para confirmar a cobertura.
+                      </span>
+                    )}
+                    {topic.coverage_status === 'gap' && !topic.gap_acknowledged_at && (
+                      <Button size="sm" variant="outline" onClick={() => updateTopic(topic, { acknowledge_gap: true })} disabled={!!busy}>
+                        Reconhecer lacuna
+                      </Button>
+                    )}
+                    <Button size="sm" variant="outline" onClick={() => deleteTopic(topic)} disabled={!!busy}>
+                      Remover
+                    </Button>
+                  </div>
+                </div>
+              ))}
+              {!topics.length && (
+                <div className="border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800">
+                  Defina ao menos um tópico antes da triagem.
+                </div>
+              )}
+            </div>
+            <div className="mt-4 grid gap-3 md:grid-cols-2">
+              <Input
+                value={topicForm.title}
+                onChange={(event) => setTopicForm((current) => ({ ...current, title: event.target.value }))}
+                placeholder="Novo tópico obrigatório"
+              />
+              <Input
+                value={topicForm.rationale}
+                onChange={(event) => setTopicForm((current) => ({ ...current, rationale: event.target.value }))}
+                placeholder="Justificativa editorial"
+              />
+              <Textarea
+                value={topicForm.inclusion_terms}
+                onChange={(event) => setTopicForm((current) => ({ ...current, inclusion_terms: event.target.value }))}
+                placeholder="Termos de inclusão, separados por vírgula"
+                rows={2}
+              />
+              <Textarea
+                value={topicForm.exclusion_terms}
+                onChange={(event) => setTopicForm((current) => ({ ...current, exclusion_terms: event.target.value }))}
+                placeholder="Termos de exclusão, separados por vírgula"
+                rows={2}
+              />
+            </div>
+            <Button className="mt-3" size="sm" onClick={addTopic} disabled={!!busy || !topicForm.title.trim() || !topicForm.inclusion_terms.trim()}>
+              <Plus className="mr-1 h-3 w-3" />Adicionar tópico
+            </Button>
+          </div>
+
+          {latestQuality && (
+            <div className={`mb-8 border p-4 ${latestQuality.status === 'passed' ? 'border-emerald-200 bg-emerald-50' : 'border-red-200 bg-red-50'}`}>
+              <h2 className="font-semibold">
+                Portões de qualidade · {latestQuality.status === 'passed' ? 'aprovados' : 'bloqueados'}
+              </h2>
+              <div className="mt-3 grid gap-2 md:grid-cols-2">
+                {latestQuality.checks.map((check) => (
+                  <div key={check.key} className="flex items-start gap-2 text-sm">
+                    {check.status === 'passed'
+                      ? <CheckCircle2 className="mt-0.5 h-4 w-4 text-emerald-700" />
+                      : <AlertTriangle className="mt-0.5 h-4 w-4 text-red-700" />}
+                    <div>
+                      <p>{check.label}{check.count ? ` (${check.count})` : ''}</p>
+                      {check.details?.length ? <p className="text-xs text-gray-600">{check.details.slice(0, 3).join(' · ')}</p> : null}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           <div className="mb-8">
             <div className="flex justify-between items-center mb-2">
@@ -499,6 +854,20 @@ export default function ReportPreparationPage() {
                         <p className="text-xs text-gray-500 mt-1">
                           {article.publisher || article.source_name || 'Veículo não identificado'} · {item.bucket} · nota {String(item.classification_snapshot.editorial_score ?? '—')}
                         </p>
+                        <p className="text-xs text-gray-500 mt-1">
+                          Confiança editorial:{' '}
+                          {item.classification_snapshot.editorial_confidence == null
+                            ? '—'
+                            : `${Math.round(Number(item.classification_snapshot.editorial_confidence) * 100)}%`}
+                          {' · '}Escopo: {String(item.classification_snapshot.geographic_scope || 'indeterminado')}
+                          {' · '}Verificação: {String(item.classification_snapshot.verification_status || 'pendente')}
+                        </p>
+                        {Array.isArray(item.classification_snapshot.quality_flags) &&
+                          item.classification_snapshot.quality_flags.length > 0 && (
+                            <p className="text-xs text-amber-700 mt-1">
+                              Alertas: {(item.classification_snapshot.quality_flags as string[]).join(', ')}
+                            </p>
+                          )}
                         {Boolean(item.classification_snapshot.editorial_reason) && (
                           <p className="text-xs text-gray-600 mt-1">{String(item.classification_snapshot.editorial_reason)}</p>
                         )}
@@ -615,7 +984,7 @@ export default function ReportPreparationPage() {
 
           <div className="flex justify-between items-center mb-3">
             <h2 className="text-xl font-semibold">Seções 1–9</h2>
-            <Button onClick={generateMissing} disabled={!!busy || !draft.lead_article_id}>
+            <Button onClick={generateMissing} disabled={!!busy || !draft.lead_article_id || draft.quality_status !== 'passed'}>
               <Sparkles className="w-4 h-4 mr-2" />Gerar seções vazias
             </Button>
           </div>
@@ -635,7 +1004,7 @@ export default function ReportPreparationPage() {
                     placeholder="Gere com IA ou escreva manualmente."
                   />
                   <div className="flex gap-2 mt-2">
-                    <Button size="sm" onClick={() => generateSection(section)} disabled={!!busy || !draft.lead_article_id}>
+                    <Button size="sm" onClick={() => generateSection(section)} disabled={!!busy || !draft.lead_article_id || draft.quality_status !== 'passed'}>
                       <Sparkles className="w-3 h-3 mr-1" />{sectionTexts[section] ? 'Regenerar' : 'Gerar'}
                     </Button>
                     <Button size="sm" variant="outline" onClick={() => saveSection(section)} disabled={!!busy || !sectionTexts[section]?.trim()}>
@@ -650,13 +1019,13 @@ export default function ReportPreparationPage() {
           <div className="border border-black p-4 mt-6 flex justify-between items-center gap-4">
             <div>
               <p className="font-semibold">Texto final no CORTEX</p>
-              <p className="text-sm text-gray-500">A seção 10 usa apenas a base qualificada. O anexo permanece separado.</p>
+              <p className="text-sm text-gray-500">A seção 10 registra a agenda; a seção 11 contém somente evidências qualificadas. O anexo permanece separado.</p>
             </div>
             <div className="flex gap-2">
               <a href={`/api/report-drafts/${draft.id}/export?format=text`}>
                 <Button variant="outline"><Download className="w-4 h-4 mr-2" />Handoff Claude Design</Button>
               </a>
-              <Button onClick={() => finalize()} disabled={!!busy || draft.status === 'approved'}>
+              <Button onClick={() => finalize()} disabled={!!busy || draft.status === 'approved' || draft.quality_status !== 'passed'}>
                 <CheckCircle2 className="w-4 h-4 mr-2" />{draft.status === 'approved' ? 'Versão aprovada' : 'Finalizar versão'}
               </Button>
             </div>

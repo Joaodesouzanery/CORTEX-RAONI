@@ -9,7 +9,7 @@ async function monitoredCount(
   clientId: string,
   start: string,
   end?: string,
-  filter?: 'direct' | 'review'
+  filter?: 'direct' | 'review' | 'triaged' | 'qualified' | 'annex' | 'pending'
 ): Promise<number> {
   let query = supabase
     .from('article_client_tags')
@@ -20,6 +20,20 @@ async function monitoredCount(
   if (end) query = query.lt('articles.published_at', end)
   if (filter === 'direct') query = query.eq('cita_cliente', true)
   if (filter === 'review') query = query.eq('monitoring_status', 'revisao')
+  if (filter === 'triaged') {
+    query = query.or('triaged_at.not.is.null,report_role_source.eq.humano')
+  }
+  if (filter === 'qualified') {
+    query = query
+      .eq('report_role', 'evidencia')
+      .or(
+        'report_role_source.eq.humano,editorial_review_state.eq.revisado,and(verification_status.eq.verificada,qa_checked_at.not.is.null,editorial_confidence.gte.0.85)'
+      )
+  }
+  if (filter === 'annex') query = query.in('report_role', ['contexto', 'ruido'])
+  if (filter === 'pending') {
+    query = query.or('report_role.is.null,editorial_review_state.eq.pendente')
+  }
   const { count, error } = await query
   if (error) throw new Error(error.message)
   return count || 0
@@ -43,15 +57,23 @@ export async function GET(req: Request) {
   try {
     const clients: DashboardClientSummary[] = await Promise.all(
       ((clientRows as Client[]) || []).map(async (client) => {
-        const [total, direct, review, previous] = await Promise.all([
+        const [total, direct, review, previous, triaged, qualified, annex, pending] = await Promise.all([
           monitoredCount(supabase, client.id, cutoff),
           monitoredCount(supabase, client.id, cutoff, undefined, 'direct'),
           monitoredCount(supabase, client.id, cutoff, undefined, 'review'),
           monitoredCount(supabase, client.id, previousStart, cutoff),
+          monitoredCount(supabase, client.id, cutoff, undefined, 'triaged'),
+          monitoredCount(supabase, client.id, cutoff, undefined, 'qualified'),
+          monitoredCount(supabase, client.id, cutoff, undefined, 'annex'),
+          monitoredCount(supabase, client.id, cutoff, undefined, 'pending'),
         ])
         return {
           client,
           total,
+          triaged_count: triaged,
+          qualified_count: qualified,
+          annex_count: annex,
+          pending_count: pending,
           direct_mentions: direct,
           review_count: review,
           previous_total: previous,

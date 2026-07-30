@@ -21,6 +21,21 @@ export type IntakeKind = 'file' | 'url' | 'text'
 export type StrategicEffect = 'oportunidade' | 'risco' | 'misto' | 'informativo'
 export type VerificationStatus = 'verificada' | 'parcial' | 'pendente'
 export type EditorialReviewState = 'automatico' | 'pendente' | 'revisado'
+export type EditorialConfidence = number
+export type GeographicScope = 'para' | 'amazonia' | 'brasil' | 'internacional' | 'indeterminado'
+export type QualityFlag =
+  | 'texto_insuficiente'
+  | 'duplicata_exata'
+  | 'possivel_mercado_financeiro'
+  | 'ambiguidade_criptomoeda'
+  | 'energia_nuclear_desconectada'
+  | 'equipamento_comercial'
+  | 'exterior_sem_impacto_local'
+  | 'fora_do_periodo'
+  | 'divergencia_de_classificacao'
+  | 'agenda_obrigatoria'
+export type TopicCoverage = 'unchecked' | 'searching' | 'covered' | 'gap' | 'review'
+export type ReportQualityStatus = 'pending' | 'running' | 'passed' | 'blocked'
 export type ReportDraftStatus =
   | 'preparing'
   | 'triaging'
@@ -64,6 +79,12 @@ export interface ArticleTag {
   editorial_review_state?: EditorialReviewState
   qualified_at?: string | null
   qualification_version?: number | null
+  editorial_confidence?: EditorialConfidence | null
+  geographic_scope?: GeographicScope | null
+  quality_flags?: QualityFlag[]
+  adjudication_version?: number | null
+  qa_source?: ReportRoleSource | null
+  qa_checked_at?: string | null
   updated_at?: string
 }
 
@@ -177,6 +198,8 @@ export interface Report {
   version?: number | null
   lead_article_id?: string | null
   brand_snapshot?: ReportBrand | null
+  agenda_snapshot?: MonthlyReportTopic[] | null
+  quality_snapshot?: Record<string, unknown> | null
 }
 
 export interface Client {
@@ -201,6 +224,10 @@ export interface Client {
 export interface DashboardClientSummary {
   client: Client
   total: number
+  triaged_count: number
+  qualified_count: number
+  annex_count: number
+  pending_count: number
   direct_mentions: number
   review_count: number
   previous_total: number
@@ -234,6 +261,12 @@ export interface PaginatedArticles {
     end: string | null
     complete: boolean
   }
+}
+
+export interface NewsQualificationSummary {
+  total: number
+  panorama: import('@/lib/panorama').Panorama
+  funnel: QualificationFunnel
 }
 
 export interface ImportDocument {
@@ -364,9 +397,89 @@ export interface MonthlyReportDraft {
   created_at: string
   updated_at: string
   approved_at: string | null
+  quality_status?: ReportQualityStatus
+  quality_summary?: QualificationFunnel & {
+    blocking_checks?: number
+    warning_checks?: number
+  }
+  quality_checked_at?: string | null
   clients?: Client
   evidence_items?: ReportEvidenceItem[]
   sections?: ReportSection[]
+  topics?: MonthlyReportTopic[]
+  quality_checks?: ReportQualityCheck[]
+}
+
+export interface MonthlyReportTopic {
+  id: string
+  draft_id: string
+  position: number
+  title: string
+  rationale: string
+  inclusion_terms: string[]
+  exclusion_terms: string[]
+  required: boolean
+  coverage_status: TopicCoverage
+  gap_reason: string | null
+  gap_acknowledged_at: string | null
+  created_at: string
+  updated_at: string
+  evidence_count?: number
+  evidence?: ReportTopicEvidence[]
+  search_runs?: TopicSearchRun[]
+}
+
+export interface ReportTopicEvidence {
+  topic_id: string
+  article_id: string
+  source: ReportRoleSource
+  confidence: number | null
+  reason: string | null
+  human_confirmed: boolean
+  created_at: string
+  updated_at: string
+}
+
+export interface TopicSearchRun {
+  id: string
+  topic_id: string
+  status: 'pending' | 'searching' | 'complete' | 'gap' | 'error'
+  query_snapshot: Record<string, unknown>
+  matched_count: number
+  linked_count: number
+  fetch_run_id: string | null
+  error: string | null
+  started_at: string | null
+  finished_at: string | null
+  created_at: string
+}
+
+export interface ReportQualityCheckItem {
+  key: string
+  label: string
+  status: 'passed' | 'warning' | 'blocked'
+  count: number
+  details?: string[]
+}
+
+export interface ReportQualityCheck {
+  id: string
+  draft_id: string
+  base_version: number
+  status: 'passed' | 'blocked'
+  checks: ReportQualityCheckItem[]
+  summary: Record<string, unknown>
+  created_at: string
+}
+
+export interface QualificationFunnel {
+  detected: number
+  triaged: number
+  verified: number
+  qualified: number
+  review: number
+  annex: number
+  excluded: number
 }
 
 export interface ArticleProvenance {

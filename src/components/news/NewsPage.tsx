@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useMemo, useState } from 'react'
-import { CheckSquare, FileDown, FileText, RefreshCw, Sparkles } from 'lucide-react'
+import { CheckSquare, FilePlus2, FileText, RefreshCw, Sparkles } from 'lucide-react'
 import { useViewMode } from '@/hooks/useViewMode'
 import { useArticleSelection } from '@/hooks/useArticleSelection'
 import { useToast } from '@/hooks/use-toast'
@@ -12,7 +12,6 @@ import ArticleListView from './ArticleListView'
 import PanoramaPanel from './PanoramaPanel'
 import type { TagPatch } from './TagControls'
 import ReportBuilder from '@/components/report/ReportBuilder'
-import DossierExporter from '@/components/report/DossierExporter'
 import ClippingPdfButton from '@/components/report/ClippingPdfButton'
 import { Button } from '@/components/ui/button'
 import type {
@@ -21,6 +20,7 @@ import type {
   Client,
   FetchRun,
   MonitoringStatus,
+  NewsQualificationSummary,
   PaginatedArticles,
   Source,
 } from '@/types'
@@ -37,14 +37,12 @@ export default function NewsPage() {
   const [articles, setArticles] = useState<Article[]>([])
   const [total, setTotal] = useState(0)
   const [nextCursor, setNextCursor] = useState<string | null>(null)
-  const [coverageComplete, setCoverageComplete] = useState(true)
   const [loading, setLoading] = useState(true)
   const [loadingMore, setLoadingMore] = useState(false)
   const [loadError, setLoadError] = useState<string | null>(null)
   const [fetching, setFetching] = useState(false)
   const [fetchRun, setFetchRun] = useState<FetchRun | null>(null)
   const [reportOpen, setReportOpen] = useState(false)
-  const [dossierOpen, setDossierOpen] = useState(false)
   const [activeSource, setActiveSource] = useState<string | null>(null)
   const [activePeriod, setActivePeriod] = useState<number | null>(30)
   const [dateFrom, setDateFrom] = useState('')
@@ -57,6 +55,8 @@ export default function NewsPage() {
   >(null)
   const [tagsById, setTagsById] = useState<Map<string, ArticleTag>>(new Map())
   const [suggesting, setSuggesting] = useState(false)
+  const [busySelection, setBusySelection] = useState(false)
+  const [qualificationSummary, setQualificationSummary] = useState<NewsQualificationSummary | null>(null)
 
   const sourceNames = useMemo(() => sources.filter((source) => source.active).map((source) => source.name), [sources])
   const activeSourceId = useMemo(
@@ -105,6 +105,23 @@ export default function NewsPage() {
     return query
   }
 
+  function summaryQuery(): URLSearchParams {
+    const query = articleQuery()
+    query.delete('paginated')
+    query.delete('limit')
+    return query
+  }
+
+  async function loadQualificationSummary() {
+    if (!activeClient) {
+      setQualificationSummary(null)
+      return
+    }
+    const summaryRes = await fetch(`/api/articles/summary?${summaryQuery()}`)
+    const summaryData = await summaryRes.json().catch(() => null)
+    setQualificationSummary(summaryRes.ok ? (summaryData as NewsQualificationSummary) : null)
+  }
+
   async function loadArticles(reset = true) {
     if (reset) setLoading(true)
     else setLoadingMore(true)
@@ -118,13 +135,13 @@ export default function NewsPage() {
       setArticles((previous) => (reset ? data.items : [...previous, ...data.items]))
       setTotal(data.total)
       setNextCursor(data.next_cursor)
-      setCoverageComplete(data.coverage.complete)
       setLoadError(null)
       if (reset) {
         const tagMap = new Map<string, ArticleTag>()
         for (const article of data.items) if (article.tag) tagMap.set(article.id, article.tag)
         setTagsById(tagMap)
         clearAll()
+        await loadQualificationSummary()
       } else {
         setTagsById((previous) => {
           const next = new Map(previous)
@@ -240,6 +257,7 @@ export default function NewsPage() {
       const data = await res.json().catch(() => null)
       if (!res.ok) throw new Error(data?.error || 'Falha ao salvar a classificação.')
       setTagsById((current) => new Map(current).set(articleId, data as ArticleTag))
+      await loadQualificationSummary()
     } catch (error) {
       setTagsById((current) => {
         const next = new Map(current)
@@ -279,6 +297,7 @@ export default function NewsPage() {
         for (const tag of saved as ArticleTag[]) next.set(tag.article_id, tag)
         return next
       })
+      await loadQualificationSummary()
       toast({ title: `${(saved as ArticleTag[]).length} matérias classificadas` })
     } catch (error) {
       toast({
@@ -288,6 +307,51 @@ export default function NewsPage() {
       })
     } finally {
       setSuggesting(false)
+    }
+  }
+
+  async function addToPreparation() {
+    if (!activeClient || !selectedArticles.length) return
+    setBusySelection(true)
+    try {
+      const dated = selectedArticles.find((article) => article.published_at)?.published_at
+      const selectedPeriod = dated?.slice(0, 7) || new Date().toISOString().slice(0, 7)
+      const create = async (newVersion: boolean) =>
+        fetch('/api/report-drafts', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            client_id: activeClient.id,
+            period: selectedPeriod,
+            monthly_instructions: '',
+            service_metrics: {},
+            new_version: newVersion,
+          }),
+        })
+      let prepareRes = await create(false)
+      let prepareData = await prepareRes.json().catch(() => null)
+      if (prepareRes.status === 409) {
+        prepareRes = await create(true)
+        prepareData = await prepareRes.json().catch(() => null)
+      }
+      if (!prepareRes.ok) throw new Error(prepareData?.error || 'Falha ao abrir a preparação mensal.')
+      const draftId = String((prepareData.draft || prepareData).id)
+      const assignRes = await fetch(`/api/report-drafts/${draftId}/items`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ article_ids: selectedArticles.map((article) => article.id) }),
+      })
+      const assignData = await assignRes.json().catch(() => null)
+      if (!assignRes.ok) throw new Error(assignData?.error || 'Falha ao adicionar as matérias.')
+      window.location.href = `/reports/prepare?client=${activeClient.id}&period=${selectedPeriod}&draft=${draftId}`
+    } catch (error) {
+      toast({
+        title: 'Não foi possível adicionar à preparação',
+        description: error instanceof Error ? error.message : 'Erro desconhecido',
+        variant: 'destructive',
+      })
+    } finally {
+      setBusySelection(false)
     }
   }
 
@@ -408,8 +472,15 @@ export default function NewsPage() {
 
       {activeClient && (
         <div>
-          {!coverageComplete && <p className="mb-2 text-xs text-amber-700">O panorama abaixo considera as {articles.length} matérias já carregadas.</p>}
-          <PanoramaPanel rows={panoramaRows} clientName={activeClient.name} />
+          <p className="mb-2 text-xs text-gray-500">
+            Panorama calculado no servidor sobre todo o filtro, independentemente das {articles.length} matérias carregadas.
+          </p>
+          <PanoramaPanel
+            rows={panoramaRows}
+            panorama={qualificationSummary?.panorama}
+            funnel={qualificationSummary?.funnel}
+            clientName={activeClient.name}
+          />
         </div>
       )}
 
@@ -446,9 +517,16 @@ export default function NewsPage() {
 
       {selected.size > 0 && (
         <div className="fixed bottom-8 right-8 z-40 flex items-center gap-3">
-          <button onClick={() => setDossierOpen(true)} className="flex items-center gap-2 border border-black bg-white px-5 py-3 shadow-xl">
-            <FileDown className="h-4 w-4" /> Exportar dossiê ({selected.size})
-          </button>
+          {activeClient && (
+            <button
+              onClick={addToPreparation}
+              disabled={busySelection}
+              className="flex items-center gap-2 border border-black bg-white px-5 py-3 shadow-xl disabled:opacity-50"
+            >
+              <FilePlus2 className="h-4 w-4" />
+              {busySelection ? 'Adicionando…' : `Adicionar à preparação (${selected.size})`}
+            </button>
+          )}
           <ClippingPdfButton articles={selectedArticles} clientId={activeClient?.id} clientName={activeClient?.name} logoUrl={activeClient?.logo_url} />
           <button onClick={() => setReportOpen(true)} className="flex items-center gap-2 bg-black px-6 py-3 text-white shadow-xl">
             <FileText className="h-4 w-4" /> Gerar Relatório ({selected.size})
@@ -464,14 +542,6 @@ export default function NewsPage() {
         clientId={activeClient?.id}
         clientName={activeClient?.name}
         contratante={activeClient?.contratante}
-      />
-      <DossierExporter
-        open={dossierOpen}
-        onClose={() => setDossierOpen(false)}
-        articles={selectedArticles}
-        allRelevant={articles}
-        clientId={activeClient?.id}
-        clientName={activeClient?.name}
       />
     </div>
   )

@@ -56,7 +56,7 @@ URLs assinadas de curta duração.
 ## Banco de dados
 
 Aplique, na ordem, todas as migrations versionadas em
-`supabase/migrations/` (atualmente `001` a `027`) pelo Supabase CLI ou SQL
+`supabase/migrations/` (atualmente `001` a `028`) pelo Supabase CLI ou SQL
 Editor. As migrations incluem clientes, classificações editoriais, alertas,
 acervo permanente, proveniências, importações, edições mensais e buckets.
 
@@ -72,6 +72,9 @@ mensal versionada, seções editáveis e snapshots de marca.
 A `027_strategic_qualification_and_inbox.sql` permite selecionar vários
 clientes por lote, registra a ficha estratégica de cada publicação e preserva
 as linhas qualificadas extraídas de relatórios anteriores.
+A `028_report_quality_and_monthly_agenda.sql` separa captura de evidência,
+adiciona a agenda obrigatória por competência, verificação independente,
+escopo geográfico, indicadores de ruído e portões auditáveis de fechamento.
 
 ## Operação
 
@@ -131,20 +134,26 @@ estiver ausente ou o OCR falhar, o original privado permanece preservado.
 Em `/reports/prepare`:
 
 1. escolha cliente e competência para montar a base completa no servidor;
-2. execute a triagem de todo o universo, em lotes pequenos;
-3. revise a ficha estratégica — mensagem central, impacto, risco/oportunidade,
+2. defina a agenda obrigatória do mês e busque tópicos ausentes;
+3. execute a triagem de todo o universo e a verificação independente das
+   evidências propostas;
+4. revise somente a fila de exceções — menções diretas, negativas/críticas,
+   evidências parciais, agenda obrigatória e divergências;
+5. revise a ficha estratégica — mensagem central, impacto, risco/oportunidade,
    ação recomendada e verificação — e separe base, anexo e exclusões humanas;
-4. escolha manualmente a matéria principal;
-5. gere, edite ou regenere individualmente as seções 1–9;
-6. finalize a versão, cuja seção 10 lista somente a base qualificada;
-7. exporte dossiê Markdown, CSV integral, anexo e texto para o Claude Design.
+6. escolha manualmente a matéria principal e execute os portões de qualidade;
+7. gere, edite ou regenere individualmente as seções 1–9;
+8. finalize a versão: a seção 10 registra a agenda e a seção 11 contém somente
+   a base qualificada;
+9. exporte dossiê Markdown, CSV integral, anexo e texto para o Claude Design.
 
 A matéria principal é colocada primeiro no contexto e deve constar nominalmente
 no Sumário Executivo e na seção 4.1. Atualizar a base não sobrescreve texto
 manual: seções prontas ficam marcadas como desatualizadas. O anexo separa
 pendências de contexto/ruído e preserva ambos para auditoria, mas não alimenta
-diretamente a redação. A revisão é opcional: ao finalizar com pendências, o
-sistema pede confirmação e mantém todas no anexo. Relatórios aprovados e
+diretamente a redação. Pendências do anexo não bloqueiam, mas nenhuma evidência,
+menção direta, matéria negativa/crítica ou pauta obrigatória entra no relatório
+sem verificação independente ou decisão humana. Relatórios aprovados e
 snapshots de marca são imutáveis; mudanças
 como CRTIVE LAB → SAUZ só afetam versões futuras.
 
@@ -195,6 +204,7 @@ contagens integrais de 7, 15 e 30 dias:
 
 ```bash
 npm run qa:news -- https://seu-app.vercel.app
+npm run qa:qualification -- https://seu-app.vercel.app 2026-07
 ```
 
 ## Estrutura principal
@@ -218,4 +228,5 @@ supabase/migrations/024_*.sql           fontes prioritárias
 supabase/migrations/025_*.sql           coleta rastreável e relevância
 supabase/migrations/026_*.sql           lotes e preparação mensal
 supabase/migrations/027_*.sql           caixa multicliente e ficha estratégica
+supabase/migrations/028_*.sql           agenda, verificação e portões de qualidade
 ```

@@ -22,7 +22,15 @@ async function contextForDraft(supabase: ReturnType<typeof createClient>, draftI
     .single()
   if (error || !draft) throw new Error(error?.message || 'Preparação não encontrada.')
   if (!draft.lead_article_id) throw new Error('Escolha manualmente a matéria principal antes de gerar.')
+  if (draft.quality_status !== 'passed') {
+    throw new Error('Execute e aprove os portões de qualidade antes de gerar as seções.')
+  }
   const evidence = await reportEvidenceItems(supabase, draftId, false)
+  const { data: topics } = await supabase
+    .from('monthly_report_topics')
+    .select('*')
+    .eq('draft_id', draftId)
+    .order('position')
   const untriaged = evidence.filter(
     (item) =>
       item.bucket !== 'excluded' &&
@@ -33,7 +41,7 @@ async function contextForDraft(supabase: ReturnType<typeof createClient>, draftI
   if (!lead) throw new Error('A matéria principal não está mais na base. Atualize a escolha.')
   const qualified = evidenceArticles(evidence, draft.lead_article_id)
   if (!qualified.length) throw new Error('A base qualificada está vazia.')
-  return { draft, evidence, lead, qualified, untriaged }
+  return { draft, evidence, lead, qualified, untriaged, topics: topics || [] }
 }
 
 export async function POST(
@@ -49,7 +57,7 @@ export async function POST(
   if (!parsed.success) return NextResponse.json({ error: formatZodError(parsed.error) }, { status: 400 })
   const supabase = createClient()
   try {
-    const { draft, evidence, lead, qualified, untriaged } = await contextForDraft(supabase, id)
+    const { draft, evidence, lead, qualified, untriaged, topics } = await contextForDraft(supabase, id)
     if (draft.status === 'approved') throw new Error('A versão aprovada é imutável. Crie uma nova versão.')
     await supabase
       .from('report_sections')
@@ -99,6 +107,9 @@ export async function POST(
       draft.monthly_instructions,
       parsed.data.instructions,
       leadInstruction,
+      `AGENDA MENSAL OBRIGATÓRIA — trate estes temas explicitamente quando forem pertinentes à seção e não invente cobertura ausente:\n${topics
+        .map((topic) => `- ${topic.title}: ${topic.coverage_status}${topic.rationale ? ` — ${topic.rationale}` : ''}`)
+        .join('\n')}`,
       `FICHAS ESTRATÉGICAS DA BASE QUALIFICADA — use-as como eixo analítico e cite somente fatos sustentados pelas publicações:\n${strategicCards}`,
       untriaged
         ? `AVISO DE COBERTURA: ${untriaged} item(ns) permanecem sem triagem completa e foram preservados no anexo; não os trate como evidência direta.`

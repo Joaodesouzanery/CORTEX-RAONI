@@ -1,6 +1,7 @@
 'use client'
 import { useMemo } from 'react'
-import { computePanorama, pct, comparePanoramas, shareOfVoice, type PanoramaRow } from '@/lib/panorama'
+import { computePanorama, pct, comparePanoramas, shareOfVoice, type Panorama, type PanoramaRow } from '@/lib/panorama'
+import type { QualificationFunnel } from '@/types'
 
 // Live, deterministic mirror of the report's "Panorama Quantitativo" (section
 // 2.1). Same numbers the dossier ships to Claude — computed here from the
@@ -11,6 +12,8 @@ interface Props {
   clientName?: string | null
   prevRows?: PanoramaRow[]
   prevPartial?: boolean
+  panorama?: Panorama | null
+  funnel?: QualificationFunnel | null
 }
 
 // One period-over-period delta, colored by whether the change is good or bad for
@@ -49,8 +52,9 @@ function Bar({ label, value, total, color }: { label: string; value: number; tot
   )
 }
 
-export default function PanoramaPanel({ rows, clientName, prevRows, prevPartial }: Props) {
-  const p = useMemo(() => computePanorama(rows), [rows])
+export default function PanoramaPanel({ rows, clientName, prevRows, prevPartial, panorama, funnel }: Props) {
+  const computed = useMemo(() => computePanorama(rows), [rows])
+  const p = panorama || computed
   const prev = useMemo(() => (prevRows && prevRows.length ? computePanorama(prevRows) : null), [prevRows])
   const delta = prev && prev.total > 0 ? comparePanoramas(p, prev) : null
   const sov = shareOfVoice(p)
@@ -81,7 +85,7 @@ export default function PanoramaPanel({ rows, clientName, prevRows, prevPartial 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-5">
         <div>
           <div className="text-3xl font-light tabular-nums">{p.total}</div>
-          <div className="text-[10px] uppercase tracking-widest text-gray-400">itens monitorados</div>
+          <div className="text-[10px] uppercase tracking-widest text-gray-400">candidatas detectadas</div>
         </div>
         <div>
           <div className="text-3xl font-light tabular-nums">
@@ -174,6 +178,20 @@ export default function PanoramaPanel({ rows, clientName, prevRows, prevPartial 
           </div>
         )}
       </div>
+      {funnel && (
+        <div className="mt-5 border-t border-gray-100 pt-4">
+          <div className="mb-2 text-[10px] uppercase tracking-widest text-gray-400">
+            Funil de qualificação editorial
+          </div>
+          <div className="grid grid-cols-2 gap-3 text-xs sm:grid-cols-5">
+            <div><strong className="block text-lg">{funnel.detected}</strong>detectadas</div>
+            <div><strong className="block text-lg">{funnel.triaged}</strong>triadas</div>
+            <div><strong className="block text-lg">{funnel.verified}</strong>verificadas</div>
+            <div><strong className="block text-lg">{funnel.qualified}</strong>evidências</div>
+            <div><strong className="block text-lg">{funnel.review}</strong>em revisão</div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

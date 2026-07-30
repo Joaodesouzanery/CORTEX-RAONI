@@ -45,7 +45,9 @@ export async function GET(req: Request) {
       const baseTagColumns =
         'article_id, client_id, tom, relevancia, cita_cliente, tema, classification_source, confidence, impact_summary, monitoring_status, match_score, match_reasons, rule_version, classified_at, updated_at'
       const strategicColumns =
-        ', central_message, strategic_effect, recommended_action, verification_status, editorial_review_state, qualified_at, qualification_version'
+        ', report_role, editorial_score, editorial_reason, cluster_label, report_role_source, triaged_at, triage_version, central_message, strategic_effect, recommended_action, verification_status, editorial_review_state, qualified_at, qualification_version'
+      const qualityColumns =
+        ', editorial_confidence, geographic_scope, quality_flags, adjudication_version, qa_source, qa_checked_at'
       const runQuery = (columns: string) => {
         let query = supabase
           .from('article_client_tags')
@@ -64,8 +66,11 @@ export async function GET(req: Request) {
         if (sourceId) query = query.eq('articles.article_provenance.source_id', sourceId)
         return query
       }
-      let result = await runQuery(`${baseTagColumns}${strategicColumns}`)
-      if (result.error?.message.includes('central_message')) {
+      let result = await runQuery(`${baseTagColumns}${strategicColumns}${qualityColumns}`)
+      if (result.error?.message.includes('editorial_confidence')) {
+        result = await runQuery(`${baseTagColumns}${strategicColumns}`)
+      }
+      if (result.error?.message.includes('central_message') || result.error?.message.includes('report_role')) {
         // Mantém Notícias disponível durante a curta janela entre deploy e 027.
         result = await runQuery(baseTagColumns)
       }
@@ -98,6 +103,13 @@ export async function GET(req: Request) {
               match_reasons: row.match_reasons,
               rule_version: row.rule_version,
               classified_at: row.classified_at,
+              report_role: row.report_role,
+              editorial_score: row.editorial_score,
+              editorial_reason: row.editorial_reason,
+              cluster_label: row.cluster_label,
+              report_role_source: row.report_role_source,
+              triaged_at: row.triaged_at,
+              triage_version: row.triage_version,
               central_message: row.central_message,
               strategic_effect: row.strategic_effect,
               recommended_action: row.recommended_action,
@@ -105,6 +117,12 @@ export async function GET(req: Request) {
               editorial_review_state: row.editorial_review_state,
               qualified_at: row.qualified_at,
               qualification_version: row.qualification_version,
+              editorial_confidence: row.editorial_confidence,
+              geographic_scope: row.geographic_scope,
+              quality_flags: row.quality_flags,
+              adjudication_version: row.adjudication_version,
+              qa_source: row.qa_source,
+              qa_checked_at: row.qa_checked_at,
               updated_at: row.updated_at,
             },
           },

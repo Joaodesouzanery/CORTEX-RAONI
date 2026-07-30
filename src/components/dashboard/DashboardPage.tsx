@@ -119,7 +119,16 @@ export default function DashboardPage() {
         <p className="py-24 text-center text-gray-400">Nenhum cliente ativo encontrado.</p>
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {rows.map(({ client, total, direct_mentions, review_count, variation_percent }) => (
+          {rows.map(({
+            client,
+            total,
+            triaged_count,
+            qualified_count,
+            annex_count,
+            pending_count,
+            direct_mentions,
+            variation_percent,
+          }) => (
             <div key={client.id} className="flex flex-col gap-3 border border-gray-200 p-5">
               <div className="flex items-center gap-3">
                 {client.logo_url && (
@@ -134,11 +143,14 @@ export default function DashboardPage() {
                 <div>
                   <div>
                     <span className="text-4xl font-light tabular-nums">{total}</span>
-                    <span className="ml-1 text-xs text-gray-500">monitoradas</span>
+                    <span className="ml-1 text-xs text-gray-500">candidatas detectadas</span>
                   </div>
                   <p className="mt-1 text-[11px] text-gray-500">
-                    {direct_mentions} menções diretas · {review_count} em revisão
+                    {triaged_count} triadas · {qualified_count} evidências · {pending_count} pendentes
                     {variation_percent != null && ` · ${variation_percent >= 0 ? '+' : ''}${variation_percent}%`}
+                  </p>
+                  <p className="mt-1 text-[11px] text-gray-400">
+                    {direct_mentions} menções diretas · {annex_count} em contexto/ruído
                   </p>
                 </div>
                 <Link href={`/news?client=${client.id}&period=${periodDays}`} className="whitespace-nowrap text-sm hover:underline">

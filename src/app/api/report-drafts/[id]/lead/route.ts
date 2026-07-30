@@ -33,6 +33,13 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       triage_version: 1,
       monitoring_status: 'confirmado',
       relevancia: 'alta',
+      editorial_confidence: 1,
+      editorial_review_state: 'revisado',
+      qa_source: 'humano',
+      qa_checked_at: now,
+      adjudication_version: 2,
+      qualified_at: now,
+      qualification_version: 2,
     })
     .eq('article_id', parsed.data.article_id)
     .eq('client_id', draft.client_id)
@@ -43,4 +50,3 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     .eq('id', id)
   return NextResponse.json(await refreshDraftEvidence(supabase, { ...draft, lead_article_id: parsed.data.article_id }))
 }
-

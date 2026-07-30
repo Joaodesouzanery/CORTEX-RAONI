@@ -87,6 +87,28 @@ export default function ArticleListItem({ article, selected, onSelect, score, cl
         ) : (
           <span className="text-xs text-gray-400 mt-1">Sem link externo</span>
         )}
+        {clientId && tag && (
+          <div className="mt-2 flex flex-wrap gap-1 text-[10px] text-gray-600">
+            <span className="border border-gray-200 px-1.5 py-0.5">
+              Papel: {tag.report_role || 'aguardando triagem'}
+            </span>
+            <span className="border border-gray-200 px-1.5 py-0.5">
+              Confiança editorial:{' '}
+              {tag.editorial_confidence == null ? '—' : `${Math.round(tag.editorial_confidence * 100)}%`}
+            </span>
+            <span className="border border-gray-200 px-1.5 py-0.5">
+              Escopo: {tag.geographic_scope || 'indeterminado'}
+            </span>
+            <span className="border border-gray-200 px-1.5 py-0.5">
+              Revisão: {tag.editorial_review_state || 'automático'}
+            </span>
+            {tag.quality_flags?.map((flag) => (
+              <span key={flag} className="border border-amber-200 bg-amber-50 px-1.5 py-0.5 text-amber-800">
+                {flag.replaceAll('_', ' ')}
+              </span>
+            ))}
+          </div>
+        )}
 
         {/* Reputational tagging — only when a client is in context. */}
         {clientId && onTag && <TagControls tag={tag} onChange={(patch) => onTag(article.id, patch)} className="mt-2" />}

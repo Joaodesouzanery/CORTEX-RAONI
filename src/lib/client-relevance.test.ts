@@ -219,6 +219,32 @@ describe('contextual client relevance', () => {
     expect(software?.monitoring_status).toBe('candidato')
   })
 
+  it('rejects SIMINERAL crypto, market-only and fake document records', () => {
+    const rules = [rule('SIMINERAL', 'mineração ampla', 'setorial', [['mineração', 'mineral']], 3)]
+    const simineral = client('SIMINERAL')
+    expect(
+      evaluateClientArticle(simineral, rules, {
+        title: 'PM encontra central de mineração de criptomoedas',
+        excerpt: 'Equipamentos mineravam bitcoin.',
+        content: null,
+      })
+    ).toBeNull()
+    expect(
+      evaluateClientArticle(simineral, rules, {
+        title: 'Vale (VALE3) sobe no Ibovespa',
+        excerpt: 'Ações e dividendos estão no radar.',
+        content: null,
+      })
+    ).toBeNull()
+    expect(
+      evaluateClientArticle(simineral, rules, {
+        title: 'PORTIFÓLIO GRANBEL FINAL 17.cdr',
+        excerpt: 'SIMINERAL',
+        content: null,
+      })
+    ).toBeNull()
+  })
+
   it('preserves a human decision during automated reprocessing', () => {
     const evaluation = evaluateClientArticle(
       client('ONS'),

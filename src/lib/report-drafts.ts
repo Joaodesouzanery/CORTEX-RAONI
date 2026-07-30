@@ -5,9 +5,11 @@ import type {
   ArticleTag,
   Client,
   EvidenceBucket,
+  MonthlyReportTopic,
   ReportBrand,
   ReportEvidenceItem,
 } from '@/types'
+import { buildAgendaSection, deterministicQualityFlags, inferGeographicScope } from '@/lib/report-quality'
 
 type TaggedArticleRow = ArticleTag & {
   articles: Article & { sources?: { name: string; categoria?: string } }
@@ -67,13 +69,19 @@ function editorialScore(row: TaggedArticleRow) {
 
 function bucketFor(row: TaggedArticleRow): EvidenceBucket {
   if (row.monitoring_status === 'excluido') return 'excluded'
-  if (row.report_role_source === 'humano') {
-    if (row.report_role === 'evidencia') return 'qualified'
-    if (row.report_role === 'ruido' || row.report_role === 'contexto') return 'annex'
+  // Captura e relevância contextual não são evidência editorial. Somente uma
+  // decisão explícita e validada (segunda passagem ou pessoa) promove o item.
+  if (row.report_role === 'evidencia') {
+    const humanApproved =
+      row.report_role_source === 'humano' || row.editorial_review_state === 'revisado'
+    const independentlyVerified =
+      Boolean(row.qa_checked_at) &&
+      Number(row.editorial_confidence || 0) >= 0.85 &&
+      row.verification_status === 'verificada' &&
+      row.editorial_review_state !== 'pendente'
+    if (humanApproved || independentlyVerified) return 'qualified'
   }
-  if (row.report_role === 'evidencia') return 'qualified'
-  if (row.report_role === 'ruido' || row.report_role === 'contexto') return 'annex'
-  return editorialScore(row) >= 55 && row.monitoring_status !== 'revisao' ? 'qualified' : 'annex'
+  return 'annex'
 }
 
 export async function fetchAll<T>(
@@ -158,6 +166,9 @@ export async function monthlyTaggedArticles(
 }
 
 function classificationSnapshot(row: TaggedArticleRow) {
+  const article = snapshot(row)
+  const scope = row.geographic_scope || inferGeographicScope(article)
+  const deterministicFlags = deterministicQualityFlags(article, scope)
   return {
     tom: row.tom,
     relevancia: row.relevancia,
@@ -180,6 +191,12 @@ function classificationSnapshot(row: TaggedArticleRow) {
     editorial_review_state: row.editorial_review_state,
     qualified_at: row.qualified_at,
     qualification_version: row.qualification_version,
+    editorial_confidence: row.editorial_confidence,
+    geographic_scope: scope,
+    quality_flags: Array.from(new Set([...(row.quality_flags || []), ...deterministicFlags])),
+    adjudication_version: row.adjudication_version,
+    qa_source: row.qa_source,
+    qa_checked_at: row.qa_checked_at,
   }
 }
 
@@ -248,6 +265,9 @@ export async function refreshDraftEvidence(
       base_version: (draft.base_version || 0) + 1,
       base_refreshed_at: now,
       status: sections?.length ? 'stale' : untriaged ? 'preparing' : 'ready',
+      quality_status: 'pending',
+      quality_summary: {},
+      quality_checked_at: null,
       updated_at: now,
       error: null,
     })
@@ -290,7 +310,7 @@ function tableCell(value: unknown) {
     .trim()
 }
 
-export function buildQualifiedSection(items: ReportEvidenceItem[]) {
+export function buildQualifiedSection(items: ReportEvidenceItem[], sectionNumber = 11) {
   const qualified = items.filter((item) => item.bucket === 'qualified').sort((a, b) => a.position - b.position)
   const rows = qualified.map((item, index) => {
     const article = item.article_snapshot
@@ -298,7 +318,7 @@ export function buildQualifiedSection(items: ReportEvidenceItem[]) {
     const date = article.published_at ? new Date(article.published_at).toLocaleDateString('pt-BR') : '—'
     return `| ${index + 1} | ${tableCell(date)} | ${tableCell(article.publisher || article.source_name)} | ${tableCell(article.title)} | ${tableCell(classification.relevancia)} | ${tableCell(classification.tom)} |`
   })
-  return `## 10. BASE QUALIFICADA DE EVIDÊNCIAS MONITORADAS NO MÊS\n\n${
+  return `## ${sectionNumber}. BASE QUALIFICADA DE EVIDÊNCIAS MONITORADAS NO MÊS\n\n${
     rows.length
       ? ['| Nº | Data | Veículo | Título | Relevância | Tom |', '|---:|---|---|---|---|---|', ...rows].join('\n')
       : '_Nenhuma evidência qualificada._'
@@ -321,15 +341,22 @@ export function buildAnnex(items: ReportEvidenceItem[]) {
       .join(' · ')
     return detail ? `${base}\n   - ${detail}` : base
   }
-  return `# ANEXO MONITORADO\n\nTodas as ocorrências fora da base qualificada são preservadas para auditoria. Não alimentaram diretamente a seção 10.\n\n## Pendentes de conferência (${pending.length})\n\n${
+  return `# ANEXO MONITORADO\n\nTodas as ocorrências fora da base qualificada são preservadas para auditoria. Não alimentaram diretamente as seções analíticas nem a Base Qualificada.\n\n## Pendentes de conferência (${pending.length})\n\n${
     pending.length ? pending.map(detailedLine).join('\n') : '_Nenhuma pendência._'
   }\n\n## Contexto e ruído monitorados (${confirmed.length})\n\n${
     confirmed.length ? confirmed.map(detailedLine).join('\n') : '_Nenhuma ocorrência._'
   }`
 }
 
-export function buildDossier(items: ReportEvidenceItem[]) {
-  return [buildQualifiedSection(items), '---', buildAnnex(items)].join('\n\n')
+export function buildDossier(items: ReportEvidenceItem[], topics: MonthlyReportTopic[] = []) {
+  return [
+    topics.length ? buildAgendaSection(topics) : '',
+    buildQualifiedSection(items),
+    '---',
+    buildAnnex(items),
+  ]
+    .filter(Boolean)
+    .join('\n\n')
 }
 
 export function ensureLeadInSection(
@@ -369,6 +396,9 @@ export function evidenceCsv(items: ReportEvidenceItem[]) {
     'strategic_effect',
     'recommended_action',
     'verification_status',
+    'editorial_confidence',
+    'geographic_scope',
+    'quality_flags',
   ]
   const rows = items
     .filter((item) => item.bucket !== 'excluded')
@@ -392,6 +422,9 @@ export function evidenceCsv(items: ReportEvidenceItem[]) {
         classification.strategic_effect,
         classification.recommended_action,
         classification.verification_status,
+        classification.editorial_confidence,
+        classification.geographic_scope,
+        Array.isArray(classification.quality_flags) ? classification.quality_flags.join('|') : '',
       ]
         .map(csvCell)
         .join(',')

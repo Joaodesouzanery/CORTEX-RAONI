@@ -2,9 +2,9 @@
 // deps) so both the server (claude.ts) and the client (ReportBuilder) can import
 // it — the client needs the count/labels to drive the progress UI.
 //
-// The 10-section report is produced one group at a time so each API call
-// finishes under Vercel Hobby's 60s function limit. Large sections (2 and 4)
-// get their own group.
+// The nine analytical sections are produced one group at a time so each API
+// call finishes under Vercel Hobby's 60s function limit. The monthly workflow
+// appends agenda (10) and qualified evidence (11) deterministically.
 
 export interface ReportSectionGroup {
   id: number
@@ -24,5 +24,5 @@ export const REPORT_SECTION_GROUPS: ReportSectionGroup[] = [
   { id: 5, label: 'Oportunidades', includeHeader: false, instruction: 'APENAS a seção "## 6. OPORTUNIDADES DE POSICIONAMENTO INSTITUCIONAL"' },
   { id: 6, label: 'Recomendações', includeHeader: false, instruction: 'APENAS a seção "## 7. RECOMENDAÇÕES EXECUTIVAS"' },
   { id: 7, label: 'Cenários Prospectivos', includeHeader: false, instruction: 'APENAS a seção "## 8. CENÁRIOS PROSPECTIVOS"' },
-  { id: 8, label: 'Demonstração dos Serviços', includeHeader: false, instruction: 'APENAS a seção "## 9. DEMONSTRAÇÃO DOS SERVIÇOS". NÃO produza a seção 10 (Base de Evidências) nem o rodapé final — eles são anexados automaticamente pelo sistema' },
+  { id: 8, label: 'Demonstração dos Serviços', includeHeader: false, instruction: 'APENAS a seção "## 9. DEMONSTRAÇÃO DOS SERVIÇOS". NÃO produza seções posteriores nem o rodapé final — eles são anexados deterministicamente pelo sistema' },
 ]
