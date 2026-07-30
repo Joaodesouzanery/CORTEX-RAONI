@@ -345,6 +345,4 @@ CROSS JOIN (
 ) AS seed(position, title, rationale, inclusion_terms, exclusion_terms)
 WHERE c.name = 'SIMINERAL'
   AND d.period_month = DATE '2026-07-01'
-  AND NOT EXISTS (
-    SELECT 1 FROM monthly_report_topics existing WHERE existing.draft_id = d.id
-  );
+ON CONFLICT (draft_id, position) DO NOTHING;
