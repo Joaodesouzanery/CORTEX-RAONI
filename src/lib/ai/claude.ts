@@ -49,7 +49,7 @@ Produza o relatório EXATAMENTE nesta estrutura de seções, em markdown, com pr
 
 ## 2. TEMAS ESTRATÉGICOS DO MÊS
 
-[Identificar entre 5 e 10 temas-matriz. Para cada tema: subtítulo em negrito numerado (ex: **2.1. Nome do tema**), análise de 2-3 parágrafos explicando o tema, sua evolução no período e impacto potencial para {cliente_nome}.]
+[Identificar entre 5 e 10 temas-matriz. Para cada tema: subtítulo em negrito numerado (ex: **2.1. Nome do tema**), **Sinal do mês:** com a evidência factual concreta e **Leitura estratégica:** com 2-3 parágrafos explicando evolução, impacto, risco/oportunidade e ação recomendada para {cliente_nome}.]
 
 ---
 

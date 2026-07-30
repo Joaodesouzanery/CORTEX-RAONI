@@ -73,6 +73,11 @@ export const articleTagSchema = z.object({
   editorial_reason: z.string().max(2000).nullish(),
   cluster_label: z.string().max(300).nullish(),
   report_role_source: z.enum(['regra', 'ia', 'humano']).nullish(),
+  central_message: z.string().max(3000).nullish(),
+  strategic_effect: z.enum(['oportunidade', 'risco', 'misto', 'informativo']).nullish(),
+  recommended_action: z.string().max(3000).nullish(),
+  verification_status: z.enum(['verificada', 'parcial', 'pendente']).optional(),
+  editorial_review_state: z.enum(['automatico', 'pendente', 'revisado']).optional(),
 })
 
 // Request a batch of tag suggestions for a client's articles (no save).
@@ -116,7 +121,7 @@ export const importInitSchema = z.object({
     .trim()
     .min(1)
     .max(255)
-    .refine((v) => /\.pdf$/i.test(v), 'Envie um arquivo PDF'),
+    .refine((v) => /\.(pdf|html?)$/i.test(v), 'Envie um PDF ou HTML'),
   size: z
     .number()
     .int()
@@ -126,11 +131,33 @@ export const importInitSchema = z.object({
   batch_id: z.string().uuid('Lote inválido').optional(),
 })
 
-export const importBatchCreateSchema = z.object({
-  client_id: z.string().uuid('Cliente inválido'),
-  period: z.string().regex(/^\d{4}-\d{2}$/, 'Use o período YYYY-MM'),
-  intent: z.enum(['noticias', 'relatorio_referencia']),
-  total_files: z.number().int().min(1).max(100),
+export const importBatchCreateSchema = z
+  .object({
+    client_ids: z.array(z.string().uuid('Cliente inválido')).min(1).max(20).optional(),
+    client_id: z.string().uuid('Cliente inválido').optional(),
+    period: z.string().regex(/^\d{4}-\d{2}$/, 'Use o período YYYY-MM'),
+    intent: z.enum(['noticias', 'relatorio_referencia']),
+    total_files: z.number().int().min(1).max(100),
+  })
+  .refine((value) => Boolean(value.client_ids?.length || value.client_id), {
+    message: 'Selecione ao menos um cliente',
+  })
+  .transform((value) => ({
+    ...value,
+    client_ids: Array.from(new Set(value.client_ids?.length ? value.client_ids : [value.client_id!])),
+  }))
+
+export const importBatchItemsSchema = z.object({
+  items: z
+    .array(
+      z.object({
+        kind: z.enum(['url', 'text']),
+        value: z.string().trim().min(1).max(200000),
+        label: z.string().trim().max(255).optional(),
+      })
+    )
+    .min(1)
+    .max(100),
 })
 
 export const reportDraftCreateSchema = z.object({

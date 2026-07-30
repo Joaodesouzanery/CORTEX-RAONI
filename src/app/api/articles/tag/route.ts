@@ -14,7 +14,7 @@ export async function GET(req: Request) {
   const { data, error } = await supabase
     .from('article_client_tags')
     .select(
-      'article_id, client_id, tom, relevancia, cita_cliente, tema, classification_source, confidence, impact_summary, monitoring_status, match_score, match_reasons, rule_version, classified_at, report_role, editorial_score, editorial_reason, cluster_label, report_role_source, triaged_at, triage_version, updated_at'
+      'article_id, client_id, tom, relevancia, cita_cliente, tema, classification_source, confidence, impact_summary, monitoring_status, match_score, match_reasons, rule_version, classified_at, report_role, editorial_score, editorial_reason, cluster_label, report_role_source, triaged_at, triage_version, central_message, strategic_effect, recommended_action, verification_status, editorial_review_state, qualified_at, qualification_version, updated_at'
     )
     .eq('client_id', clientId)
 
@@ -51,21 +51,40 @@ export async function POST(req: Request) {
     'editorial_reason',
     'cluster_label',
     'report_role_source',
+    'central_message',
+    'strategic_effect',
+    'recommended_action',
+    'verification_status',
+    'editorial_review_state',
   ] as const) {
     if (k in patch) row[k] = patch[k]
   }
   if (!('classification_source' in patch)) row.classification_source = 'humano'
+  if (
+    [
+      'central_message',
+      'impact_summary',
+      'strategic_effect',
+      'recommended_action',
+      'verification_status',
+      'editorial_review_state',
+    ].some((key) => key in patch)
+  ) {
+    row.qualified_at = new Date().toISOString()
+    row.qualification_version = 1
+  }
   if ('report_role' in patch) {
     row.report_role_source = 'humano'
     row.triaged_at = new Date().toISOString()
     row.triage_version = 1
+    row.editorial_review_state = 'revisado'
   }
 
   const { data, error } = await supabase
     .from('article_client_tags')
     .upsert(row, { onConflict: 'article_id,client_id' })
     .select(
-      'article_id, client_id, tom, relevancia, cita_cliente, tema, classification_source, confidence, impact_summary, monitoring_status, match_score, match_reasons, rule_version, classified_at, report_role, editorial_score, editorial_reason, cluster_label, report_role_source, triaged_at, triage_version, updated_at'
+      'article_id, client_id, tom, relevancia, cita_cliente, tema, classification_source, confidence, impact_summary, monitoring_status, match_score, match_reasons, rule_version, classified_at, report_role, editorial_score, editorial_reason, cluster_label, report_role_source, triaged_at, triage_version, central_message, strategic_effect, recommended_action, verification_status, editorial_review_state, qualified_at, qualification_version, updated_at'
     )
     .single()
 

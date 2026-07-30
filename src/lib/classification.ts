@@ -52,6 +52,14 @@ export async function classifyArticleBatch(
   for (const row of (currentRows as ArticleTag[]) || []) {
     current.set(`${row.article_id}:${row.client_id}`, row)
   }
+  const { data: assignmentRows, error: assignmentsError } = await supabase
+    .from('article_period_assignments')
+    .select('article_id, client_id')
+    .in('article_id', ids)
+  if (assignmentsError) throw new Error(assignmentsError.message)
+  const editorialAssignments = new Set(
+    (assignmentRows || []).map((row) => `${row.article_id}:${row.client_id}`)
+  )
 
   const now = new Date().toISOString()
   const upserts: Record<string, unknown>[] = []
@@ -103,7 +111,13 @@ export async function classifyArticleBatch(
       .filter((article) => {
         const key = `${article.id}:${client.id}`
         const existing = current.get(key)
-        return existing && existing.classification_source !== 'humano' && !matchedKeys.has(key)
+        return (
+          existing &&
+          existing.classification_source !== 'humano' &&
+          existing.editorial_review_state !== 'revisado' &&
+          !editorialAssignments.has(key) &&
+          !matchedKeys.has(key)
+        )
       })
       .map((article) => article.id)
     if (!staleIds.length) continue

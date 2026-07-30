@@ -27,7 +27,9 @@ export async function POST(_: Request, { params }: { params: Promise<{ id: strin
         .from('article_client_tags')
         .select('article_id')
         .eq('client_id', draft.client_id)
-        .eq('report_role_source', 'humano')
+        .or(
+          'report_role_source.eq.humano,classification_source.eq.humano,editorial_review_state.eq.revisado'
+        )
         .range(from, to)
     ),
     fetchAll<{ article_id: string }>((from, to) =>
@@ -62,6 +64,18 @@ export async function POST(_: Request, { params }: { params: Promise<{ id: strin
               editorial_score: Number(current.classification_snapshot?.editorial_score || rawDecision.editorial_score),
               editorial_reason: 'Triagem determinística baseada na classificação contextual existente.',
               cluster_label: String(current.classification_snapshot?.tema || 'Monitoramento contextual'),
+              central_message: String(current.article_snapshot.excerpt || current.article_snapshot.title),
+              impact_summary: String(
+                current.classification_snapshot?.impact_summary || 'Impacto inferido pela classificação contextual.'
+              ),
+              strategic_effect: 'informativo' as const,
+              recommended_action: 'Manter em monitoramento e revisar se o tema ganhar relevância.',
+              verification_status:
+                current.article_snapshot.content_status === 'integral' ? ('verificada' as const) : ('parcial' as const),
+              editorial_review_state:
+                current.classification_snapshot?.monitoring_status === 'revisao'
+                  ? ('pendente' as const)
+                  : ('automatico' as const),
             }
           : rawDecision
       const { error: updateError } = await supabase
@@ -74,6 +88,14 @@ export async function POST(_: Request, { params }: { params: Promise<{ id: strin
           report_role_source: result.source,
           triaged_at: now,
           triage_version: 1,
+          central_message: decision.central_message,
+          impact_summary: decision.impact_summary,
+          strategic_effect: decision.strategic_effect,
+          recommended_action: decision.recommended_action,
+          verification_status: decision.verification_status,
+          editorial_review_state: decision.editorial_review_state,
+          qualified_at: now,
+          qualification_version: 1,
         })
         .eq('article_id', decision.article_id)
         .eq('client_id', draft.client_id)

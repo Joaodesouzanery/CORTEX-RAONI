@@ -1,10 +1,11 @@
 'use client'
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
-import { Upload, FileText, RefreshCw, ScanText, CheckCircle2, AlertTriangle } from 'lucide-react'
+import { Upload, FileText, RefreshCw, ScanText, CheckCircle2, AlertTriangle, Link2, MessageSquareText } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
 import { createClient } from '@/lib/supabase/client'
 import { sha256Bytes } from '@/lib/archive'
 import type { Client, ImportBatch, ImportDocument, ImportIntent } from '@/types'
@@ -33,12 +34,14 @@ export default function ImportsPage() {
   const [documents, setDocuments] = useState<ImportDocument[]>([])
   const [batches, setBatches] = useState<ImportBatch[]>([])
   const [clients, setClients] = useState<Client[]>([])
-  const [clientId, setClientId] = useState('')
+  const [clientIds, setClientIds] = useState<string[]>([])
   const [period, setPeriod] = useState(currentPeriod())
   const [intent, setIntent] = useState<ImportIntent>('noticias')
   const [progress, setProgress] = useState<FileProgress[]>([])
   const [running, setRunning] = useState(false)
   const [error, setError] = useState('')
+  const [urls, setUrls] = useState('')
+  const [messageText, setMessageText] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
 
   async function load() {
@@ -55,7 +58,7 @@ export default function ImportsPage() {
     setDocuments(Array.isArray(documentsData) ? documentsData : [])
     setBatches(Array.isArray(batchesData) ? batchesData : [])
     setClients(Array.isArray(clientsData) ? clientsData : [])
-    if (!clientId && Array.isArray(clientsData) && clientsData.length) setClientId(clientsData[0].id)
+    if (!clientIds.length && Array.isArray(clientsData) && clientsData.length) setClientIds([clientsData[0].id])
   }
 
   useEffect(() => {
@@ -72,7 +75,7 @@ export default function ImportsPage() {
     let documentId: string | null = null
     let attemptedProcessing = false
     try {
-      if (!/\.pdf$/i.test(file.name)) throw new Error('Apenas PDF é aceito.')
+      if (!/\.(pdf|html?)$/i.test(file.name)) throw new Error('Envie um PDF ou HTML.')
       updateFile(file.name, { status: 'working', label: 'Calculando SHA-256…' })
       const bytes = await file.arrayBuffer()
       const sha256 = await sha256Bytes(bytes)
@@ -93,7 +96,10 @@ export default function ImportsPage() {
           init.upload.path,
           init.upload.token,
           file,
-          { contentType: 'application/pdf', upsert: Boolean(init.upload.upsert) }
+          {
+            contentType: /\.html?$/i.test(file.name) ? 'text/html' : 'application/pdf',
+            upsert: Boolean(init.upload.upsert),
+          }
         )
         if (uploadError) throw uploadError
       }
@@ -140,7 +146,7 @@ export default function ImportsPage() {
   }
 
   async function uploadFiles(files: FileList | null) {
-    if (!files?.length || !clientId || !period) return
+    if (!files?.length || !clientIds.length || !period) return
     const selected = Array.from(files)
     setError('')
     setRunning(true)
@@ -149,7 +155,7 @@ export default function ImportsPage() {
       const batchRes = await fetch('/api/import-batches', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ client_id: clientId, period, intent, total_files: selected.length }),
+        body: JSON.stringify({ client_ids: clientIds, period, intent, total_files: selected.length }),
       })
       const batch = await batchRes.json().catch(() => null)
       if (!batchRes.ok) throw new Error(batch?.error || 'Falha ao criar o lote.')
@@ -171,6 +177,60 @@ export default function ImportsPage() {
     }
   }
 
+  async function submitManualInputs() {
+    if (!clientIds.length || !period || intent !== 'noticias') return
+    const uniqueUrls = Array.from(
+      new Set(
+        urls
+          .split(/\s+/)
+          .map((value) => value.trim())
+          .filter((value) => /^https?:\/\//i.test(value))
+      )
+    )
+    const items = [
+      ...uniqueUrls.map((value) => ({ kind: 'url' as const, value })),
+      ...(messageText.trim()
+        ? [{ kind: 'text' as const, value: messageText.trim(), label: 'Notícias recebidas' }]
+        : []),
+    ]
+    if (!items.length) {
+      setError('Cole ao menos um link ou uma mensagem.')
+      return
+    }
+    setRunning(true)
+    setError('')
+    try {
+      const batchRes = await fetch('/api/import-batches', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ client_ids: clientIds, period, intent: 'noticias', total_files: items.length }),
+      })
+      const batch = await batchRes.json().catch(() => null)
+      if (!batchRes.ok) throw new Error(batch?.error || 'Falha ao criar o lote.')
+      const processRes = await fetch(`/api/import-batches/${batch.id}/items`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items }),
+      })
+      const result = await processRes.json().catch(() => null)
+      if (!processRes.ok) throw new Error(result?.error || 'Falha ao processar as entradas.')
+      const failures = Array.isArray(result?.results)
+        ? result.results.filter((row: { status?: string }) => row.status === 'error')
+        : []
+      if (failures.length) {
+        setError(`${failures.length} entrada(s) exigem nova tentativa. As demais foram preservadas.`)
+      } else {
+        setUrls('')
+        setMessageText('')
+      }
+      await load()
+    } catch (manualError) {
+      setError(manualError instanceof Error ? manualError.message : 'Falha ao adicionar notícias.')
+    } finally {
+      setRunning(false)
+    }
+  }
+
   async function runOcr(documentId: string) {
     setError('')
     setDocuments((rows) => rows.map((row) => (row.id === documentId ? { ...row, ocr_status: 'processing' } : row)))
@@ -189,7 +249,7 @@ export default function ImportsPage() {
     await load()
   }
 
-  const activeClient = clients.find((client) => client.id === clientId)
+  const activeClient = clients.find((client) => client.id === clientIds[0])
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-8">
@@ -197,7 +257,7 @@ export default function ImportsPage() {
         <div>
           <h1 className="text-4xl font-light tracking-tight">Importações em lote</h1>
           <p className="text-sm text-gray-500 mt-1">
-            Escolha cliente e competência uma vez. Dois PDFs são processados simultaneamente e falhas ficam isoladas.
+            Escolha todos os clientes e a competência uma vez. Arquivos, links e mensagens entram no mesmo acervo.
           </p>
         </div>
         <Button variant="outline" size="sm" onClick={load}>
@@ -208,19 +268,27 @@ export default function ImportsPage() {
 
       <div className="border border-gray-200 p-4 mb-6">
         <div className="grid md:grid-cols-3 gap-4">
-          <div>
-            <Label htmlFor="import-client">Cliente</Label>
-            <select
-              id="import-client"
-              value={clientId}
-              onChange={(event) => setClientId(event.target.value)}
-              className="mt-1 h-10 w-full border border-gray-300 bg-white px-3 text-sm"
-              disabled={running}
-            >
+          <div className="md:col-span-1">
+            <Label>Clientes do lote</Label>
+            <div className="mt-1 border border-gray-300 p-2 space-y-1 max-h-36 overflow-y-auto">
               {clients.map((client) => (
-                <option key={client.id} value={client.id}>{client.name}</option>
+                <label key={client.id} className="flex items-center gap-2 text-sm cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={clientIds.includes(client.id)}
+                    onChange={(event) =>
+                      setClientIds((current) =>
+                        event.target.checked
+                          ? [...current, client.id]
+                          : current.filter((id) => id !== client.id)
+                      )
+                    }
+                    disabled={running}
+                  />
+                  {client.name}
+                </label>
               ))}
-            </select>
+            </div>
           </div>
           <div>
             <Label htmlFor="import-period">Mês editorial</Label>
@@ -248,14 +316,14 @@ export default function ImportsPage() {
           </div>
         </div>
         <div className="flex gap-2 mt-4 flex-wrap">
-          <Button onClick={() => inputRef.current?.click()} disabled={running || !clientId || !period}>
+          <Button onClick={() => inputRef.current?.click()} disabled={running || !clientIds.length || !period}>
             <Upload className="w-4 h-4 mr-2" />
-            Selecionar vários PDFs
+            Selecionar PDFs ou HTMLs
           </Button>
           <input
             ref={inputRef}
             type="file"
-            accept="application/pdf,.pdf"
+            accept="application/pdf,text/html,.pdf,.html,.htm"
             multiple
             className="hidden"
             onChange={(event) => uploadFiles(event.target.files)}
@@ -275,6 +343,47 @@ export default function ImportsPage() {
           O mês é uma associação editorial e não altera a data real de publicação. Arquivos repetidos reutilizam o
           original e acrescentam a nova proveniência.
         </p>
+      </div>
+
+      <div className="border border-gray-200 p-4 mb-6">
+        <h2 className="text-lg font-semibold mb-1">Adicionar notícias recebidas</h2>
+        <p className="text-xs text-gray-500 mb-4">
+          Cada link é processado separadamente. Textos de e-mail, WhatsApp ou chat podem conter várias matérias.
+        </p>
+        <div className="grid md:grid-cols-2 gap-4">
+          <div>
+            <Label htmlFor="manual-urls">Links — um por linha</Label>
+            <Textarea
+              id="manual-urls"
+              value={urls}
+              onChange={(event) => setUrls(event.target.value)}
+              rows={7}
+              placeholder={'https://veiculo.com.br/materia-1\nhttps://veiculo.com.br/materia-2'}
+              disabled={running || intent !== 'noticias'}
+              className="mt-1"
+            />
+          </div>
+          <div>
+            <Label htmlFor="manual-message">Texto recebido</Label>
+            <Textarea
+              id="manual-message"
+              value={messageText}
+              onChange={(event) => setMessageText(event.target.value)}
+              rows={7}
+              placeholder="Cole aqui uma ou várias notícias. Use uma linha com --- se quiser indicar uma separação."
+              disabled={running || intent !== 'noticias'}
+              className="mt-1"
+            />
+          </div>
+        </div>
+        <Button
+          className="mt-3"
+          onClick={submitManualInputs}
+          disabled={running || !clientIds.length || !period || intent !== 'noticias'}
+        >
+          {urls.trim() ? <Link2 className="w-4 h-4 mr-2" /> : <MessageSquareText className="w-4 h-4 mr-2" />}
+          Salvar e qualificar notícias
+        </Button>
       </div>
 
       {progress.length > 0 && (
@@ -307,7 +416,10 @@ export default function ImportsPage() {
           batches.map((batch) => (
             <div key={batch.id} className="p-4 flex items-start justify-between gap-4">
               <div>
-                <p className="font-medium">{batch.clients?.name || 'Cliente'} · {batch.period_month.slice(0, 7)}</p>
+                <p className="font-medium">
+                  {(batch.selected_clients?.map((client) => client.name).join(', ') || batch.clients?.name || 'Cliente')}
+                  {' · '}{batch.period_month.slice(0, 7)}
+                </p>
                 <p className="text-xs text-gray-500 mt-1">
                   {batch.intent === 'noticias' ? 'Notícias' : 'Relatório de referência'} · {batch.completed_files} concluído(s)
                   · {batch.review_files} em revisão · {batch.failed_files} falha(s) · {batch.article_count} matéria(s)

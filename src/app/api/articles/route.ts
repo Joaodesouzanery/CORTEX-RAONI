@@ -45,7 +45,7 @@ export async function GET(req: Request) {
       let query = supabase
         .from('article_client_tags')
         .select(
-          `article_id, client_id, tom, relevancia, cita_cliente, tema, classification_source, confidence, impact_summary, monitoring_status, match_score, match_reasons, rule_version, classified_at, updated_at, articles!inner(${articleColumns})`,
+          `article_id, client_id, tom, relevancia, cita_cliente, tema, classification_source, confidence, impact_summary, monitoring_status, match_score, match_reasons, rule_version, classified_at, central_message, strategic_effect, recommended_action, verification_status, editorial_review_state, qualified_at, qualification_version, updated_at, articles!inner(${articleColumns})`,
           { count: 'exact' }
         )
         .eq('client_id', clientId)
@@ -87,6 +87,13 @@ export async function GET(req: Request) {
               match_reasons: row.match_reasons,
               rule_version: row.rule_version,
               classified_at: row.classified_at,
+              central_message: row.central_message,
+              strategic_effect: row.strategic_effect,
+              recommended_action: row.recommended_action,
+              verification_status: row.verification_status,
+              editorial_review_state: row.editorial_review_state,
+              qualified_at: row.qualified_at,
+              qualification_version: row.qualification_version,
               updated_at: row.updated_at,
             },
           },

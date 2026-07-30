@@ -173,6 +173,13 @@ function classificationSnapshot(row: TaggedArticleRow) {
     report_role_source: row.report_role_source,
     triaged_at: row.triaged_at,
     triage_version: row.triage_version,
+    central_message: row.central_message,
+    strategic_effect: row.strategic_effect,
+    recommended_action: row.recommended_action,
+    verification_status: row.verification_status,
+    editorial_review_state: row.editorial_review_state,
+    qualified_at: row.qualified_at,
+    qualification_version: row.qualification_version,
   }
 }
 
@@ -276,17 +283,48 @@ function evidenceLine(item: ReportEvidenceItem, index: number) {
   return `${index + 1}. **${publisher}** — ${article.title} (${date})`
 }
 
+function tableCell(value: unknown) {
+  return String(value ?? '—')
+    .replace(/\|/g, '\\|')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
 export function buildQualifiedSection(items: ReportEvidenceItem[]) {
   const qualified = items.filter((item) => item.bucket === 'qualified').sort((a, b) => a.position - b.position)
+  const rows = qualified.map((item, index) => {
+    const article = item.article_snapshot
+    const classification = item.classification_snapshot
+    const date = article.published_at ? new Date(article.published_at).toLocaleDateString('pt-BR') : '—'
+    return `| ${index + 1} | ${tableCell(date)} | ${tableCell(article.publisher || article.source_name)} | ${tableCell(article.title)} | ${tableCell(classification.relevancia)} | ${tableCell(classification.tom)} |`
+  })
   return `## 10. BASE QUALIFICADA DE EVIDÊNCIAS MONITORADAS NO MÊS\n\n${
-    qualified.length ? qualified.map(evidenceLine).join('\n') : '_Nenhuma evidência qualificada._'
+    rows.length
+      ? ['| Nº | Data | Veículo | Título | Relevância | Tom |', '|---:|---|---|---|---|---|', ...rows].join('\n')
+      : '_Nenhuma evidência qualificada._'
   }`
 }
 
 export function buildAnnex(items: ReportEvidenceItem[]) {
   const annex = items.filter((item) => item.bucket === 'annex').sort((a, b) => a.position - b.position)
-  return `# ANEXO MONITORADO\n\nItens de contexto, baixa confiança e ruído preservados para auditoria. Não alimentaram diretamente a redação das seções 1–10.\n\n${
-    annex.length ? annex.map(evidenceLine).join('\n') : '_Nenhuma ocorrência no anexo._'
+  const pending = annex.filter((item) => item.classification_snapshot.editorial_review_state === 'pendente')
+  const confirmed = annex.filter((item) => item.classification_snapshot.editorial_review_state !== 'pendente')
+  const detailedLine = (item: ReportEvidenceItem, index: number) => {
+    const base = evidenceLine(item, index)
+    const classification = item.classification_snapshot
+    const detail = [
+      classification.central_message ? `Mensagem central: ${classification.central_message}` : null,
+      classification.impact_summary ? `Impacto: ${classification.impact_summary}` : null,
+      classification.strategic_effect ? `Efeito: ${classification.strategic_effect}` : null,
+    ]
+      .filter(Boolean)
+      .join(' · ')
+    return detail ? `${base}\n   - ${detail}` : base
+  }
+  return `# ANEXO MONITORADO\n\nTodas as ocorrências fora da base qualificada são preservadas para auditoria. Não alimentaram diretamente a seção 10.\n\n## Pendentes de conferência (${pending.length})\n\n${
+    pending.length ? pending.map(detailedLine).join('\n') : '_Nenhuma pendência._'
+  }\n\n## Contexto e ruído monitorados (${confirmed.length})\n\n${
+    confirmed.length ? confirmed.map(detailedLine).join('\n') : '_Nenhuma ocorrência._'
   }`
 }
 
@@ -315,7 +353,23 @@ function csvCell(value: unknown) {
 }
 
 export function evidenceCsv(items: ReportEvidenceItem[]) {
-  const header = ['bucket', 'position', 'article_id', 'vehicle', 'title', 'published_at', 'url', 'score', 'reason']
+  const header = [
+    'bucket',
+    'review_state',
+    'position',
+    'article_id',
+    'vehicle',
+    'title',
+    'published_at',
+    'url',
+    'score',
+    'reason',
+    'central_message',
+    'impact',
+    'strategic_effect',
+    'recommended_action',
+    'verification_status',
+  ]
   const rows = items
     .filter((item) => item.bucket !== 'excluded')
     .sort((a, b) => a.bucket.localeCompare(b.bucket) || a.position - b.position)
@@ -324,6 +378,7 @@ export function evidenceCsv(items: ReportEvidenceItem[]) {
       const classification = item.classification_snapshot
       return [
         item.bucket,
+        classification.editorial_review_state,
         item.position,
         item.article_id,
         article.publisher || article.source_name,
@@ -332,6 +387,11 @@ export function evidenceCsv(items: ReportEvidenceItem[]) {
         article.url,
         classification.editorial_score,
         classification.editorial_reason,
+        classification.central_message,
+        classification.impact_summary,
+        classification.strategic_effect,
+        classification.recommended_action,
+        classification.verification_status,
       ]
         .map(csvCell)
         .join(',')

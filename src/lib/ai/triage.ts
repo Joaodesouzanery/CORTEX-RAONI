@@ -1,4 +1,10 @@
-import type { ArticleSnapshot, ReportRole } from '@/types'
+import type {
+  ArticleSnapshot,
+  EditorialReviewState,
+  ReportRole,
+  StrategicEffect,
+  VerificationStatus,
+} from '@/types'
 
 export interface TriageDecision {
   article_id: string
@@ -6,6 +12,12 @@ export interface TriageDecision {
   editorial_score: number
   editorial_reason: string
   cluster_label: string
+  central_message: string
+  impact_summary: string
+  strategic_effect: StrategicEffect
+  recommended_action: string
+  verification_status: VerificationStatus
+  editorial_review_state: EditorialReviewState
 }
 
 function fallback(articles: ArticleSnapshot[]): TriageDecision[] {
@@ -15,6 +27,12 @@ function fallback(articles: ArticleSnapshot[]): TriageDecision[] {
     editorial_score: 45,
     editorial_reason: 'Triagem conservadora aplicada sem IA; requer revisão editorial.',
     cluster_label: 'Revisão pendente',
+    central_message: article.excerpt || article.title,
+    impact_summary: 'Impacto ainda não validado por análise editorial.',
+    strategic_effect: 'informativo',
+    recommended_action: 'Revisar a publicação antes do fechamento mensal.',
+    verification_status: article.content_status === 'integral' ? 'verificada' : 'parcial',
+    editorial_review_state: 'pendente',
   }))
 }
 
@@ -41,7 +59,14 @@ Classifique cada publicação sem eliminar itens. Use:
 - contexto: cobertura adjacente/baixa confiança, útil apenas no anexo;
 - ruido: sem impacto concreto, entretenimento, loteria, consumo, esporte ou exterior desconectado.
 Pontue de 0 a 100. Matéria principal não é escolhida por você. Veículos diferentes permanecem distintos.
-Responda somente JSON válido: [{"article_id":"uuid","report_role":"evidencia|contexto|ruido","editorial_score":0,"editorial_reason":"frase curta","cluster_label":"pauta"}].`,
+Para cada item, produza também uma ficha estratégica objetiva:
+- central_message: o fato/sinal factual principal, sem interpretação;
+- impact_summary: por que isso importa especificamente para o cliente;
+- strategic_effect: oportunidade, risco, misto ou informativo;
+- recommended_action: ação concreta de comunicação ou monitoramento;
+- verification_status: verificada quando há texto integral e fonte identificável, parcial quando há somente trecho, pendente quando os metadados são insuficientes;
+- editorial_review_state: pendente para baixa confiança, conflito ou possível menção direta; automático nos demais. Nunca marque como revisado.
+Responda somente JSON válido: [{"article_id":"uuid","report_role":"evidencia|contexto|ruido","editorial_score":0,"editorial_reason":"frase curta","cluster_label":"pauta","central_message":"fato","impact_summary":"impacto","strategic_effect":"oportunidade|risco|misto|informativo","recommended_action":"ação","verification_status":"verificada|parcial|pendente","editorial_review_state":"automatico|pendente"}].`,
     messages: [
       {
         role: 'user',
@@ -70,6 +95,21 @@ Responda somente JSON válido: [{"article_id":"uuid","report_role":"evidencia|co
         editorial_score: Math.max(0, Math.min(100, Math.round(decision.editorial_score))),
         editorial_reason: String(decision.editorial_reason || 'Classificação editorial por IA.').slice(0, 1000),
         cluster_label: String(decision.cluster_label || 'Sem cluster').slice(0, 200),
+        central_message: String(decision.central_message || article.excerpt || article.title).slice(0, 3000),
+        impact_summary: String(decision.impact_summary || 'Impacto não detalhado.').slice(0, 3000),
+        strategic_effect: ['oportunidade', 'risco', 'misto', 'informativo'].includes(decision.strategic_effect)
+          ? decision.strategic_effect
+          : 'informativo',
+        recommended_action: String(decision.recommended_action || 'Manter em monitoramento.').slice(0, 3000),
+        verification_status: ['verificada', 'parcial', 'pendente'].includes(decision.verification_status)
+          ? decision.verification_status
+          : article.content_status === 'integral'
+            ? 'verificada'
+            : 'parcial',
+        editorial_review_state:
+          decision.editorial_review_state === 'pendente'
+            ? ('pendente' as const)
+            : ('automatico' as const),
       }
     })
     return { decisions, source: 'ia' }
@@ -77,4 +117,3 @@ Responda somente JSON válido: [{"article_id":"uuid","report_role":"evidencia|co
     return { decisions: fallback(articles), source: 'regra' }
   }
 }
-

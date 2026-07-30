@@ -29,12 +29,11 @@ async function contextForDraft(supabase: ReturnType<typeof createClient>, draftI
       !item.classification_snapshot.triaged_at &&
       item.classification_snapshot.report_role_source !== 'humano'
   ).length
-  if (untriaged) throw new Error(`Conclua a triagem antes de gerar: ${untriaged} item(ns) ainda não foram triados.`)
   const lead = evidence.find((item) => item.article_id === draft.lead_article_id)
   if (!lead) throw new Error('A matéria principal não está mais na base. Atualize a escolha.')
   const qualified = evidenceArticles(evidence, draft.lead_article_id)
   if (!qualified.length) throw new Error('A base qualificada está vazia.')
-  return { draft, evidence, lead, qualified }
+  return { draft, evidence, lead, qualified, untriaged }
 }
 
 export async function POST(
@@ -50,7 +49,7 @@ export async function POST(
   if (!parsed.success) return NextResponse.json({ error: formatZodError(parsed.error) }, { status: 400 })
   const supabase = createClient()
   try {
-    const { draft, evidence, lead, qualified } = await contextForDraft(supabase, id)
+    const { draft, evidence, lead, qualified, untriaged } = await contextForDraft(supabase, id)
     if (draft.status === 'approved') throw new Error('A versão aprovada é imutável. Crie uma nova versão.')
     await supabase
       .from('report_sections')
@@ -68,6 +67,22 @@ export async function POST(
       .sort((a, b) => b[1] - a[1])
       .map(([cluster, count]) => `- ${cluster}: ${count} ocorrência(s)`)
       .join('\n')
+    const strategicCards = evidence
+      .filter((item) => item.bucket === 'qualified')
+      .sort((a, b) => a.position - b.position)
+      .map((item, index) => {
+        const classification = item.classification_snapshot
+        return [
+          `${index + 1}. ${item.article_snapshot.title}`,
+          `Veículo: ${item.article_snapshot.publisher || item.article_snapshot.source_name || 'não identificado'}`,
+          `Mensagem central: ${classification.central_message || item.article_snapshot.excerpt || item.article_snapshot.title}`,
+          `Impacto para o cliente: ${classification.impact_summary || 'não detalhado'}`,
+          `Efeito estratégico: ${classification.strategic_effect || 'informativo'}`,
+          `Ação sugerida: ${classification.recommended_action || 'manter em monitoramento'}`,
+          `Tema/pauta: ${classification.cluster_label || classification.tema || 'sem tema'}`,
+        ].join('\n')
+      })
+      .join('\n\n')
     const { data: reference } = await supabase
       .from('reference_reports')
       .select('title, extracted_text')
@@ -84,6 +99,10 @@ export async function POST(
       draft.monthly_instructions,
       parsed.data.instructions,
       leadInstruction,
+      `FICHAS ESTRATÉGICAS DA BASE QUALIFICADA — use-as como eixo analítico e cite somente fatos sustentados pelas publicações:\n${strategicCards}`,
+      untriaged
+        ? `AVISO DE COBERTURA: ${untriaged} item(ns) permanecem sem triagem completa e foram preservados no anexo; não os trate como evidência direta.`
+        : '',
       `ANEXO MONITORADO — use apenas como sinal agregado, nunca como evidência direta:\n${annexSummary || '- vazio'}`,
       reference?.extracted_text
         ? `REFERÊNCIA ESTRUTURAL ANTERIOR (${reference.title}) — use apenas como parâmetro de qualidade e estrutura; não trate como fato do mês:\n${reference.extracted_text.slice(0, 8000)}`

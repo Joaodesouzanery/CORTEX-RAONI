@@ -56,7 +56,7 @@ URLs assinadas de curta duração.
 ## Banco de dados
 
 Aplique, na ordem, todas as migrations versionadas em
-`supabase/migrations/` (atualmente `001` a `026`) pelo Supabase CLI ou SQL
+`supabase/migrations/` (atualmente `001` a `027`) pelo Supabase CLI ou SQL
 Editor. As migrations incluem clientes, classificações editoriais, alertas,
 acervo permanente, proveniências, importações, edições mensais e buckets.
 
@@ -69,6 +69,9 @@ referência não têm íntegras coletadas sem acesso autorizado.
 A `026_batch_imports_and_report_drafts.sql` acrescenta lotes persistentes,
 relatórios de referência, competência editorial de PDFs, triagem, preparação
 mensal versionada, seções editáveis e snapshots de marca.
+A `027_strategic_qualification_and_inbox.sql` permite selecionar vários
+clientes por lote, registra a ficha estratégica de cada publicação e preserva
+as linhas qualificadas extraídas de relatórios anteriores.
 
 ## Operação
 
@@ -95,16 +98,20 @@ progresso real por fonte e respeita o intervalo de dez minutos. Para recalcular
 todo o acervo após uma alteração de regra, execute manualmente o workflow com a
 opção `reclassify_archive`.
 
-### Importação de PDFs
+### Caixa de entrada e importação
 
-Em `/imports`, escolha cliente, competência e finalidade uma única vez, depois
-selecione vários PDFs. Dois arquivos são processados simultaneamente e a falha
-de um não interrompe os demais. Cada arquivo é enviado diretamente ao Storage
-privado e depois processado. O importador reconhece:
+Em `/imports`, marque manualmente todos os clientes, escolha competência e
+finalidade uma única vez e adicione PDFs, HTMLs, links ou textos recebidos por
+e-mail, WhatsApp e chat. Dois arquivos são processados simultaneamente e a
+falha de um não interrompe os demais. Cada entrada original é preservada no
+Storage privado. O importador reconhece:
 
 - cadernos com sumário e matérias paginadas, como os “Clipping ONS”;
 - matérias individuais impressas pelo navegador;
 - relatórios anteriores, armazenados como referência sem gerar falsas notícias;
+- relatórios HTML estruturados, cujas tabelas qualificadas formam uma base
+  histórica auditável;
+- páginas públicas e mensagens com uma ou várias notícias;
 - arquivos não reconhecidos, que ficam preservados com status de revisão.
 
 SHA-256 impede reenvio do mesmo arquivo. A identidade
@@ -114,8 +121,8 @@ permanece em `article_provenance`.
 
 O mês do lote é uma associação editorial em `article_period_assignments` e
 nunca substitui `published_at`. Cada matéria de um lote de notícias é
-classificada contra os cinco clientes e fica garantidamente vinculada ao
-cliente escolhido; ausência de regra contextual resulta em revisão, não
+classificada contra os cinco clientes e fica garantidamente vinculada a todos
+os clientes marcados; ausência de regra contextual resulta em revisão, não
 descarte. PDFs rasterizados oferecem OCR por IA sob demanda. Se a chave de IA
 estiver ausente ou o OCR falhar, o original privado permanece preservado.
 
@@ -125,7 +132,8 @@ Em `/reports/prepare`:
 
 1. escolha cliente e competência para montar a base completa no servidor;
 2. execute a triagem de todo o universo, em lotes pequenos;
-3. revise `Base qualificada`, `Anexo monitorado` e exclusões humanas;
+3. revise a ficha estratégica — mensagem central, impacto, risco/oportunidade,
+   ação recomendada e verificação — e separe base, anexo e exclusões humanas;
 4. escolha manualmente a matéria principal;
 5. gere, edite ou regenere individualmente as seções 1–9;
 6. finalize a versão, cuja seção 10 lista somente a base qualificada;
@@ -133,9 +141,11 @@ Em `/reports/prepare`:
 
 A matéria principal é colocada primeiro no contexto e deve constar nominalmente
 no Sumário Executivo e na seção 4.1. Atualizar a base não sobrescreve texto
-manual: seções prontas ficam marcadas como desatualizadas. O anexo preserva
-contexto, baixa confiança e ruído para auditoria, mas não alimenta diretamente
-a redação. Relatórios aprovados e snapshots de marca são imutáveis; mudanças
+manual: seções prontas ficam marcadas como desatualizadas. O anexo separa
+pendências de contexto/ruído e preserva ambos para auditoria, mas não alimenta
+diretamente a redação. A revisão é opcional: ao finalizar com pendências, o
+sistema pede confirmação e mantém todas no anexo. Relatórios aprovados e
+snapshots de marca são imutáveis; mudanças
 como CRTIVE LAB → SAUZ só afetam versões futuras.
 
 ### Fechamento mensal
@@ -199,6 +209,7 @@ src/app/api/report-drafts               base, triagem, seções e exports
 src/app/api/monthly-editions            criação, listagem e downloads
 src/app/api/internal/monthly-editions   lotes protegidos do worker
 src/lib/import/pdf-parser.ts            separação de cadernos e artigos
+src/lib/import/html-report.ts           recuperação de bases históricas HTML
 src/lib/monthly-editions.ts             universo, snapshots e versões
 scripts/render-monthly-clipping.mjs     PDF em duas passagens
 scripts/qa-news.mjs                     auditoria pós-rollout das contagens
@@ -206,4 +217,5 @@ supabase/migrations/023_*.sql           acervo e edições
 supabase/migrations/024_*.sql           fontes prioritárias
 supabase/migrations/025_*.sql           coleta rastreável e relevância
 supabase/migrations/026_*.sql           lotes e preparação mensal
+supabase/migrations/027_*.sql           caixa multicliente e ficha estratégica
 ```

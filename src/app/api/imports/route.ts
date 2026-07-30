@@ -130,7 +130,7 @@ export async function POST(req: Request) {
   const now = new Date()
   const prefix = `${now.getUTCFullYear()}/${String(now.getUTCMonth() + 1).padStart(2, '0')}`
   const id = crypto.randomUUID()
-  const storagePath = `${prefix}/${id}-${safeName || 'documento.pdf'}`
+  const storagePath = `${prefix}/${id}-${safeName || 'documento'}`
 
   const { data: document, error: insertError } = await supabase
     .from('source_documents')

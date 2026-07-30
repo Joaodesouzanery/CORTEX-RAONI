@@ -6,7 +6,15 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Download, RefreshCw, Sparkles, Star, Save, CheckCircle2 } from 'lucide-react'
-import type { Client, MonthlyReportDraft, ReportEvidenceItem, ReportSection } from '@/types'
+import type {
+  Client,
+  EditorialReviewState,
+  MonthlyReportDraft,
+  ReportEvidenceItem,
+  ReportSection,
+  StrategicEffect,
+  VerificationStatus,
+} from '@/types'
 
 const SECTION_LABELS = [
   'Sumário Executivo',
@@ -41,6 +49,15 @@ export default function ReportPreparationPage() {
   const [busy, setBusy] = useState('')
   const [error, setError] = useState('')
   const [triageProgress, setTriageProgress] = useState<{ done: number; remaining: number } | null>(null)
+  const [evidenceFilter, setEvidenceFilter] = useState<'all' | 'pending' | 'qualified' | 'annex'>('all')
+  const [editingArticleId, setEditingArticleId] = useState('')
+  const [qualification, setQualification] = useState({
+    central_message: '',
+    impact_summary: '',
+    strategic_effect: 'informativo' as StrategicEffect,
+    recommended_action: '',
+    verification_status: 'pendente' as VerificationStatus,
+  })
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
@@ -218,6 +235,45 @@ export default function ReportPreparationPage() {
     }
   }
 
+  function startQualification(item: ReportEvidenceItem) {
+    const classification = item.classification_snapshot
+    setEditingArticleId(item.article_id)
+    setQualification({
+      central_message: String(classification.central_message || item.article_snapshot.excerpt || item.article_snapshot.title),
+      impact_summary: String(classification.impact_summary || ''),
+      strategic_effect: (classification.strategic_effect as StrategicEffect) || 'informativo',
+      recommended_action: String(classification.recommended_action || ''),
+      verification_status: (classification.verification_status as VerificationStatus) || 'pendente',
+    })
+  }
+
+  async function saveQualification(item: ReportEvidenceItem) {
+    if (!draft) return
+    setBusy(`qualification-${item.article_id}`)
+    setError('')
+    try {
+      const res = await fetch('/api/articles/tag', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          article_id: item.article_id,
+          client_id: draft.client_id,
+          ...qualification,
+          editorial_review_state: 'revisado' as EditorialReviewState,
+        }),
+      })
+      const data = await res.json().catch(() => null)
+      if (!res.ok) throw new Error(data?.error || 'Falha ao salvar a ficha estratégica.')
+      await fetch(`/api/report-drafts/${draft.id}/refresh`, { method: 'POST' })
+      await loadDraft(draft.id)
+      setEditingArticleId('')
+    } catch (qualificationError) {
+      setError(qualificationError instanceof Error ? qualificationError.message : 'Falha ao salvar a ficha.')
+    } finally {
+      setBusy('')
+    }
+  }
+
   async function generateSection(section: number) {
     if (!draft) return
     setBusy(`generate-${section}`)
@@ -268,13 +324,27 @@ export default function ReportPreparationPage() {
     }
   }
 
-  async function finalize() {
+  async function finalize(confirmPending = false) {
     if (!draft) return
     setBusy('finalize')
     setError('')
     try {
-      const res = await fetch(`/api/report-drafts/${draft.id}/finalize`, { method: 'POST' })
+      const res = await fetch(`/api/report-drafts/${draft.id}/finalize`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ confirm_pending: confirmPending }),
+      })
       const data = await res.json().catch(() => null)
+      if (res.status === 409 && data?.code === 'PENDING_REVIEW') {
+        const confirmed = window.confirm(
+          `${data.pending_review} ocorrência(s) ainda estão pendentes. Elas serão preservadas no anexo. Deseja finalizar mesmo assim?`
+        )
+        if (confirmed) {
+          setBusy('')
+          await finalize(true)
+        }
+        return
+      }
       if (!res.ok) throw new Error(data?.error || 'Falha ao finalizar.')
       await loadDraft(draft.id)
       window.open(`/reports/${data.report.id}`, '_blank')
@@ -291,6 +361,10 @@ export default function ReportPreparationPage() {
       qualified: evidence.filter((item) => item.bucket === 'qualified').length,
       annex: evidence.filter((item) => item.bucket === 'annex').length,
       excluded: evidence.filter((item) => item.bucket === 'excluded').length,
+      pending: evidence.filter(
+        (item) =>
+          item.bucket !== 'excluded' && item.classification_snapshot.editorial_review_state === 'pendente'
+      ).length,
     }),
     [evidence]
   )
@@ -298,6 +372,12 @@ export default function ReportPreparationPage() {
     if (a.article_id === draft?.lead_article_id) return -1
     if (b.article_id === draft?.lead_article_id) return 1
     return a.bucket.localeCompare(b.bucket) || a.position - b.position
+  })
+  const visibleEvidence = orderedEvidence.filter((item) => {
+    if (evidenceFilter === 'pending') return item.classification_snapshot.editorial_review_state === 'pendente'
+    if (evidenceFilter === 'qualified') return item.bucket === 'qualified'
+    if (evidenceFilter === 'annex') return item.bucket === 'annex'
+    return true
   })
 
   return (
@@ -365,11 +445,12 @@ export default function ReportPreparationPage() {
 
       {draft && (
         <>
-          <div className="grid md:grid-cols-4 border border-gray-200 mb-4 divide-x">
+          <div className="grid md:grid-cols-5 border border-gray-200 mb-4 divide-x">
             <div className="p-4"><p className="text-xs text-gray-500">Base integral</p><p className="text-3xl">{evidence.length}</p></div>
             <div className="p-4"><p className="text-xs text-gray-500">Base qualificada</p><p className="text-3xl">{counts.qualified}</p></div>
             <div className="p-4"><p className="text-xs text-gray-500">Anexo monitorado</p><p className="text-3xl">{counts.annex}</p></div>
             <div className="p-4"><p className="text-xs text-gray-500">Excluídas manualmente</p><p className="text-3xl">{counts.excluded}</p></div>
+            <div className="p-4"><p className="text-xs text-gray-500">Pendentes de revisão</p><p className="text-3xl">{counts.pending}</p></div>
           </div>
           <div className="flex gap-2 flex-wrap mb-6">
             <Button variant="outline" onClick={refreshBase} disabled={!!busy}>
@@ -389,8 +470,25 @@ export default function ReportPreparationPage() {
               <h2 className="text-xl font-semibold">Base e matéria principal</h2>
               {!draft.lead_article_id && <span className="text-sm text-amber-700">Escolha obrigatória antes da geração</span>}
             </div>
+            <div className="flex gap-2 mb-2 flex-wrap">
+              {([
+                ['all', `Todas (${evidence.length})`],
+                ['pending', `Pendentes (${counts.pending})`],
+                ['qualified', `Base (${counts.qualified})`],
+                ['annex', `Anexo (${counts.annex})`],
+              ] as const).map(([value, label]) => (
+                <Button
+                  key={value}
+                  size="sm"
+                  variant={evidenceFilter === value ? 'default' : 'outline'}
+                  onClick={() => setEvidenceFilter(value)}
+                >
+                  {label}
+                </Button>
+              ))}
+            </div>
             <div className="border border-gray-200 divide-y max-h-[34rem] overflow-y-auto">
-              {orderedEvidence.map((item) => {
+              {visibleEvidence.map((item) => {
                 const article = item.article_snapshot
                 const isLead = item.article_id === draft.lead_article_id
                 return (
@@ -404,6 +502,18 @@ export default function ReportPreparationPage() {
                         {Boolean(item.classification_snapshot.editorial_reason) && (
                           <p className="text-xs text-gray-600 mt-1">{String(item.classification_snapshot.editorial_reason)}</p>
                         )}
+                        <p className="text-xs text-gray-600 mt-1">
+                          <strong>Mensagem:</strong>{' '}
+                          {String(item.classification_snapshot.central_message || 'Aguardando qualificação')}
+                        </p>
+                        <p className="text-xs text-gray-600 mt-1">
+                          <strong>Impacto:</strong>{' '}
+                          {String(item.classification_snapshot.impact_summary || 'Aguardando qualificação')}
+                          {' · '}<strong>Efeito:</strong>{' '}
+                          {String(item.classification_snapshot.strategic_effect || 'informativo')}
+                          {' · '}<strong>Revisão:</strong>{' '}
+                          {String(item.classification_snapshot.editorial_review_state || 'automático')}
+                        </p>
                       </div>
                       <div className="flex gap-1 flex-wrap justify-end">
                         <Button size="sm" variant={isLead ? 'default' : 'outline'} onClick={() => chooseLead(item.article_id)} disabled={!!busy || item.bucket === 'excluded'}>
@@ -413,8 +523,90 @@ export default function ReportPreparationPage() {
                         <Button size="sm" variant="outline" onClick={() => setRole(item, 'contexto')} disabled={!!busy}>Contexto</Button>
                         <Button size="sm" variant="outline" onClick={() => setRole(item, 'ruido')} disabled={!!busy}>Ruído</Button>
                         <Button size="sm" variant="outline" onClick={() => setRole(item, 'excluido')} disabled={!!busy}>Excluir</Button>
+                        <Button size="sm" variant="outline" onClick={() => startQualification(item)} disabled={!!busy}>
+                          Qualificar
+                        </Button>
                       </div>
                     </div>
+                    {editingArticleId === item.article_id && (
+                      <div className="border-t mt-3 pt-3 grid md:grid-cols-2 gap-3">
+                        <div>
+                          <Label>Mensagem central</Label>
+                          <Textarea
+                            value={qualification.central_message}
+                            onChange={(event) =>
+                              setQualification((current) => ({ ...current, central_message: event.target.value }))
+                            }
+                            rows={3}
+                          />
+                        </div>
+                        <div>
+                          <Label>Impacto para o cliente</Label>
+                          <Textarea
+                            value={qualification.impact_summary}
+                            onChange={(event) =>
+                              setQualification((current) => ({ ...current, impact_summary: event.target.value }))
+                            }
+                            rows={3}
+                          />
+                        </div>
+                        <div>
+                          <Label>Ação recomendada</Label>
+                          <Textarea
+                            value={qualification.recommended_action}
+                            onChange={(event) =>
+                              setQualification((current) => ({ ...current, recommended_action: event.target.value }))
+                            }
+                            rows={3}
+                          />
+                        </div>
+                        <div className="grid grid-cols-2 gap-2">
+                          <div>
+                            <Label>Efeito estratégico</Label>
+                            <select
+                              value={qualification.strategic_effect}
+                              onChange={(event) =>
+                                setQualification((current) => ({
+                                  ...current,
+                                  strategic_effect: event.target.value as StrategicEffect,
+                                }))
+                              }
+                              className="h-10 w-full border border-gray-300 bg-white px-2 text-sm"
+                            >
+                              <option value="oportunidade">Oportunidade</option>
+                              <option value="risco">Risco</option>
+                              <option value="misto">Misto</option>
+                              <option value="informativo">Informativo</option>
+                            </select>
+                          </div>
+                          <div>
+                            <Label>Verificação</Label>
+                            <select
+                              value={qualification.verification_status}
+                              onChange={(event) =>
+                                setQualification((current) => ({
+                                  ...current,
+                                  verification_status: event.target.value as VerificationStatus,
+                                }))
+                              }
+                              className="h-10 w-full border border-gray-300 bg-white px-2 text-sm"
+                            >
+                              <option value="verificada">Verificada</option>
+                              <option value="parcial">Parcial</option>
+                              <option value="pendente">Pendente</option>
+                            </select>
+                          </div>
+                          <div className="col-span-2 flex gap-2 items-end">
+                            <Button size="sm" onClick={() => saveQualification(item)} disabled={!!busy}>
+                              Salvar ficha
+                            </Button>
+                            <Button size="sm" variant="outline" onClick={() => setEditingArticleId('')}>
+                              Cancelar
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )
               })}
@@ -464,7 +656,7 @@ export default function ReportPreparationPage() {
               <a href={`/api/report-drafts/${draft.id}/export?format=text`}>
                 <Button variant="outline"><Download className="w-4 h-4 mr-2" />Handoff Claude Design</Button>
               </a>
-              <Button onClick={finalize} disabled={!!busy || draft.status === 'approved'}>
+              <Button onClick={() => finalize()} disabled={!!busy || draft.status === 'approved'}>
                 <CheckCircle2 className="w-4 h-4 mr-2" />{draft.status === 'approved' ? 'Versão aprovada' : 'Finalizar versão'}
               </Button>
             </div>

@@ -4,8 +4,10 @@ import { buildQualifiedSection, reportEvidenceItems } from '@/lib/report-drafts'
 
 export const dynamic = 'force-dynamic'
 
-export async function POST(_: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
+  const body = await req.json().catch(() => ({}))
+  const confirmPending = body?.confirm_pending === true
   const supabase = createClient()
   const [{ data: draft, error }, { data: sections }, evidence] = await Promise.all([
     supabase.from('monthly_report_drafts').select('*, clients(name)').eq('id', id).single(),
@@ -20,6 +22,20 @@ export async function POST(_: Request, { params }: { params: Promise<{ id: strin
     return NextResponse.json({ error: 'Gere ou edite todas as seções 1–9 antes de finalizar.' }, { status: 400 })
   }
   const items = evidence
+  const pendingReview = items.filter(
+    (item) =>
+      item.bucket !== 'excluded' && item.classification_snapshot.editorial_review_state === 'pendente'
+  ).length
+  if (pendingReview && !confirmPending) {
+    return NextResponse.json(
+      {
+        error: `${pendingReview} ocorrência(s) permanecem pendentes e serão mantidas no anexo.`,
+        code: 'PENDING_REVIEW',
+        pending_review: pendingReview,
+      },
+      { status: 409 }
+    )
+  }
   const lead = items.find((item) => item.article_id === draft.lead_article_id)
   if (!lead) return NextResponse.json({ error: 'A matéria principal não está na base atual.' }, { status: 400 })
   const leadTitle = lead.article_snapshot.title.toLocaleLowerCase('pt-BR')
@@ -43,6 +59,7 @@ export async function POST(_: Request, { params }: { params: Promise<{ id: strin
     qualified: qualifiedIds.length,
     annex: items.filter((item) => item.bucket === 'annex').length,
     excluded: items.filter((item) => item.bucket === 'excluded').length,
+    pending_review: pendingReview,
   }
   const { data: existing } = await supabase
     .from('reports')
@@ -62,6 +79,7 @@ export async function POST(_: Request, { params }: { params: Promise<{ id: strin
         evidence_counts: counts,
         base_version: draft.base_version,
         handoff: 'claude_design',
+        pending_review_confirmed: pendingReview > 0,
       },
       client_id: draft.client_id,
       draft_id: id,

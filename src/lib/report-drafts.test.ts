@@ -2,7 +2,11 @@ import { describe, expect, it } from 'vitest'
 import { buildAnnex, buildQualifiedSection, ensureLeadInSection } from './report-drafts'
 import type { ReportEvidenceItem } from '@/types'
 
-function evidence(bucket: ReportEvidenceItem['bucket'], id: string): ReportEvidenceItem {
+function evidence(
+  bucket: ReportEvidenceItem['bucket'],
+  id: string,
+  reviewState: 'automatico' | 'pendente' = 'automatico'
+): ReportEvidenceItem {
   return {
     id,
     draft_id: 'draft',
@@ -23,7 +27,14 @@ function evidence(bucket: ReportEvidenceItem['bucket'], id: string): ReportEvide
       source_name: 'CNN',
       source_categoria: 'imprensa',
     },
-    classification_snapshot: {},
+    classification_snapshot: {
+      relevancia: 'alta',
+      tom: 'neutro',
+      central_message: 'Sinal factual',
+      impact_summary: 'Impacto para o cliente',
+      strategic_effect: 'informativo',
+      editorial_review_state: reviewState,
+    },
     cluster_key: null,
     created_at: '2026-07-29T12:00:00Z',
   }
@@ -38,6 +49,16 @@ describe('monthly report evidence products', () => {
     expect(buildAnnex(items)).not.toContain('Um gol de placa')
   })
 
+  it('separates pending review from confirmed context without omitting either', () => {
+    const output = buildAnnex([
+      evidence('annex', 'pending', 'pendente'),
+      evidence('annex', 'confirmed', 'automatico'),
+    ])
+    expect(output).toContain('Pendentes de conferência (1)')
+    expect(output).toContain('Contexto e ruído monitorados (1)')
+    expect(output.match(/Loteria acumula/g)).toHaveLength(2)
+  })
+
   it('forces the manually selected lead into the executive summary and section 4.1', () => {
     const lead = evidence('qualified', 'lead')
     expect(ensureLeadInSection('## 1. SUMÁRIO EXECUTIVO\n\nTexto.', 1, lead)).toContain('Um gol de placa')
@@ -46,4 +67,3 @@ describe('monthly report evidence products', () => {
     expect(section4).toContain('Um gol de placa')
   })
 })
-

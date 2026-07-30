@@ -10,14 +10,27 @@ export async function GET(req: Request) {
   const params = new URL(req.url).searchParams
   let query = supabase
     .from('import_batches')
-    .select('*, clients(id, name)')
+    .select('*, clients(id, name), import_batch_clients(client_id, clients(id, name))')
     .order('created_at', { ascending: false })
     .limit(50)
-  if (params.get('client_id')) query = query.eq('client_id', params.get('client_id')!)
   if (params.get('period')) query = query.eq('period_month', periodMonth(params.get('period')!))
   const { data, error } = await query
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
-  return NextResponse.json(data || [])
+  const rows = (data || []).map((batch) => {
+    const links = Array.isArray(batch.import_batch_clients) ? batch.import_batch_clients : []
+    const selectedClients = links.flatMap((link: { client_id: string; clients?: unknown }) => {
+      const client = Array.isArray(link.clients) ? link.clients[0] : link.clients
+      return client ? [client] : []
+    })
+    return {
+      ...batch,
+      import_batch_clients: undefined,
+      client_ids: links.map((link: { client_id: string }) => link.client_id),
+      selected_clients: selectedClients,
+    }
+  })
+  const clientId = params.get('client_id')
+  return NextResponse.json(clientId ? rows.filter((batch) => batch.client_ids.includes(clientId)) : rows)
 }
 
 export async function POST(req: Request) {
@@ -26,10 +39,11 @@ export async function POST(req: Request) {
   if (!parsed.success) {
     return NextResponse.json({ error: formatZodError(parsed.error) }, { status: 400 })
   }
+  const primaryClientId = parsed.data.client_ids[0]
   const { data, error } = await supabase
     .from('import_batches')
     .insert({
-      client_id: parsed.data.client_id,
+      client_id: primaryClientId,
       period_month: periodMonth(parsed.data.period),
       intent: parsed.data.intent,
       total_files: parsed.data.total_files,
@@ -37,6 +51,15 @@ export async function POST(req: Request) {
     .select('*, clients(id, name)')
     .single()
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
-  return NextResponse.json(data, { status: 201 })
+  const { error: clientsError } = await supabase.from('import_batch_clients').insert(
+    parsed.data.client_ids.map((clientId) => ({
+      batch_id: data.id,
+      client_id: clientId,
+    }))
+  )
+  if (clientsError) {
+    await supabase.from('import_batches').delete().eq('id', data.id)
+    return NextResponse.json({ error: clientsError.message }, { status: 500 })
+  }
+  return NextResponse.json({ ...data, client_ids: parsed.data.client_ids }, { status: 201 })
 }
-

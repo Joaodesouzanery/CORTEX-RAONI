@@ -17,6 +17,10 @@ export type OcrStatus = 'not_requested' | 'pending' | 'processing' | 'complete' 
 export type EvidenceBucket = 'qualified' | 'annex' | 'excluded'
 export type ReportRole = 'evidencia' | 'contexto' | 'ruido'
 export type ReportRoleSource = 'regra' | 'ia' | 'humano'
+export type IntakeKind = 'file' | 'url' | 'text'
+export type StrategicEffect = 'oportunidade' | 'risco' | 'misto' | 'informativo'
+export type VerificationStatus = 'verificada' | 'parcial' | 'pendente'
+export type EditorialReviewState = 'automatico' | 'pendente' | 'revisado'
 export type ReportDraftStatus =
   | 'preparing'
   | 'triaging'
@@ -53,6 +57,13 @@ export interface ArticleTag {
   report_role_source?: ReportRoleSource | null
   triaged_at?: string | null
   triage_version?: number | null
+  central_message?: string | null
+  strategic_effect?: StrategicEffect | null
+  recommended_action?: string | null
+  verification_status?: VerificationStatus
+  editorial_review_state?: EditorialReviewState
+  qualified_at?: string | null
+  qualification_version?: number | null
   updated_at?: string
 }
 
@@ -251,12 +262,14 @@ export interface ImportBatchDocument {
   error: string | null
   created_at: string
   processed_at: string | null
+  input_kind?: IntakeKind
   source_documents?: ImportDocument
 }
 
 export interface ImportBatch {
   id: string
   client_id: string
+  client_ids?: string[]
   period_month: string
   intent: ImportIntent
   status: ImportBatchStatus
@@ -269,7 +282,14 @@ export interface ImportBatch {
   started_at: string | null
   completed_at: string | null
   clients?: Pick<Client, 'id' | 'name'>
+  selected_clients?: Array<Pick<Client, 'id' | 'name'>>
   documents?: ImportBatchDocument[]
+}
+
+export interface IntakeItem {
+  kind: Exclude<IntakeKind, 'file'>
+  value: string
+  label?: string
 }
 
 export interface ReferenceReport {
@@ -282,6 +302,19 @@ export interface ReferenceReport {
   status: 'ready' | 'ocr_pending' | 'review' | 'error'
   metadata: Record<string, unknown>
   created_at: string
+}
+
+export interface ReferenceReportItem {
+  id: string
+  reference_report_id: string
+  row_number: number
+  article_id: string | null
+  match_status: 'pending' | 'linked' | 'created' | 'ambiguous'
+  original_snapshot: Record<string, unknown>
+  classification_snapshot: Record<string, unknown>
+  match_confidence: number | null
+  created_at: string
+  reconciled_at: string | null
 }
 
 export interface ReportBrand {
