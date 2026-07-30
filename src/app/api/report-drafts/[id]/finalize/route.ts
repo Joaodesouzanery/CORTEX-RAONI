@@ -1,7 +1,14 @@
 import { NextResponse } from 'next/server'
 import { createAdminClient as createClient } from '@/lib/supabase/server'
 import { buildQualifiedSection, reportEvidenceItems } from '@/lib/report-drafts'
-import { buildAgendaSection } from '@/lib/report-quality'
+import {
+  auditReportTraceability,
+  buildAgendaSection,
+  buildMethodologyNote,
+  buildMethodologySnapshot,
+  buildThematicMatrix,
+  evidenceCitations,
+} from '@/lib/report-quality'
 import type { MonthlyReportTopic } from '@/types'
 
 export const dynamic = 'force-dynamic'
@@ -83,8 +90,33 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       (link) => link.topic_id === topic.id && qualifiedSet.has(link.article_id)
     ).length,
   })) as MonthlyReportTopic[]
+  const methodology = buildMethodologySnapshot(items)
+  const citations = evidenceCitations(items)
+  const traceabilityChecks = auditReportTraceability({
+    sections,
+    citations,
+    posture: draft.narrative_posture || 'consultivo_cauteloso',
+    clientName: draft.clients?.name || 'cliente',
+  })
+  const traceabilityBlocked = traceabilityChecks.filter((check) => check.status === 'blocked')
+  if (traceabilityBlocked.length) {
+    return NextResponse.json(
+      {
+        error: 'O texto ainda possui pendências de rastreabilidade ou postura narrativa.',
+        code: 'TRACEABILITY_CHECK_FAILED',
+        checks: traceabilityBlocked,
+      },
+      { status: 409 }
+    )
+  }
+  const analyticalSections = sections.map((section) =>
+    section.section_key === 2
+      ? `${section.content.trim()}\n\n${buildThematicMatrix(topics, items)}`
+      : section.content.trim()
+  )
   const mainContent = [
-    ...sections.map((section) => section.content.trim()),
+    buildMethodologyNote(methodology, draft.clients?.name || 'cliente'),
+    ...analyticalSections,
     buildAgendaSection(topics),
     buildQualifiedSection(items),
     '---',
@@ -118,6 +150,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
         pending_annex_review: pendingReview,
         agenda_topics: topics.length,
         quality_status: latestQuality.status,
+        narrative_posture: draft.narrative_posture || 'consultivo_cauteloso',
       },
       client_id: draft.client_id,
       draft_id: id,
@@ -126,14 +159,26 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       lead_article_id: draft.lead_article_id,
       brand_snapshot: draft.brand_snapshot,
       agenda_snapshot: topics,
-      quality_snapshot: latestQuality,
+      quality_snapshot: { ...latestQuality, traceability_checks: traceabilityChecks },
+      methodology_snapshot: methodology,
+      citation_snapshot: citations,
+      narrative_posture: draft.narrative_posture || 'consultivo_cauteloso',
     })
     .select()
     .single()
   if (reportError) return NextResponse.json({ error: reportError.message }, { status: 500 })
   await supabase
     .from('monthly_report_drafts')
-    .update({ status: 'approved', approved_at: new Date().toISOString(), updated_at: new Date().toISOString() })
+    .update({
+      status: 'approved',
+      methodology_snapshot: methodology,
+      quality_summary: {
+        ...(draft.quality_summary || {}),
+        traceability_checks: traceabilityChecks,
+      },
+      approved_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    })
     .eq('id', id)
   return NextResponse.json({ report, counts }, { status: 201 })
 }

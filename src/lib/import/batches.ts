@@ -41,7 +41,7 @@ export async function refreshImportBatch(supabase: SupabaseClient, batchId: stri
       completed_at: done ? new Date().toISOString() : null,
     })
     .eq('id', batchId)
-    .select('*, clients(id, name)')
+    .select('*, clients!import_batches_client_id_fkey(id, name)')
     .single()
   if (updateError) throw new Error(updateError.message)
   return updated

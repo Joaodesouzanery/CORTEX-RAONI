@@ -9,7 +9,14 @@ import type {
   ReportBrand,
   ReportEvidenceItem,
 } from '@/types'
-import { buildAgendaSection, deterministicQualityFlags, inferGeographicScope } from '@/lib/report-quality'
+import {
+  buildAgendaSection,
+  buildMethodologyNote,
+  buildMethodologySnapshot,
+  deterministicQualityFlags,
+  evidenceCitations,
+  inferGeographicScope,
+} from '@/lib/report-quality'
 
 type TaggedArticleRow = ArticleTag & {
   articles: Article & { sources?: { name: string; categoria?: string } }
@@ -197,6 +204,7 @@ function classificationSnapshot(row: TaggedArticleRow) {
     adjudication_version: row.adjudication_version,
     qa_source: row.qa_source,
     qa_checked_at: row.qa_checked_at,
+    source_verification_status: row.source_verification_status || 'nao_verificada',
   }
 }
 
@@ -253,6 +261,14 @@ export async function refreshDraftEvidence(
     annex: items.filter((item) => item.bucket === 'annex').length,
     excluded: items.filter((item) => item.bucket === 'excluded').length,
   }
+  const methodologySnapshot = buildMethodologySnapshot(
+    items.map((item, index) => ({
+      id: `${draft.id}-${index}`,
+      draft_id: draft.id,
+      created_at: now,
+      ...item,
+    }))
+  )
   const untriaged = items.filter(
     (item) =>
       item.bucket !== 'excluded' &&
@@ -268,6 +284,7 @@ export async function refreshDraftEvidence(
       quality_status: 'pending',
       quality_summary: {},
       quality_checked_at: null,
+      methodology_snapshot: methodologySnapshot,
       updated_at: now,
       error: null,
     })
@@ -279,6 +296,7 @@ export async function refreshDraftEvidence(
 }
 
 export function evidenceArticles(items: ReportEvidenceItem[], leadArticleId?: string | null): Article[] {
+  const citations = new Map(evidenceCitations(items).map((citation) => [citation.article_id, citation.code]))
   return items
     .filter((item) => item.bucket === 'qualified')
     .sort((a, b) => {
@@ -290,6 +308,7 @@ export function evidenceArticles(items: ReportEvidenceItem[], leadArticleId?: st
       ...item.article_snapshot,
       source_id: '',
       fetched_at: item.created_at,
+      evidence_code: citations.get(item.article_id),
       sources: item.article_snapshot.source_name
         ? { name: item.article_snapshot.source_name, categoria: item.article_snapshot.source_categoria }
         : undefined,
@@ -312,15 +331,16 @@ function tableCell(value: unknown) {
 
 export function buildQualifiedSection(items: ReportEvidenceItem[], sectionNumber = 11) {
   const qualified = items.filter((item) => item.bucket === 'qualified').sort((a, b) => a.position - b.position)
-  const rows = qualified.map((item, index) => {
+  const citations = new Map(evidenceCitations(items).map((citation) => [citation.article_id, citation.code]))
+  const rows = qualified.map((item) => {
     const article = item.article_snapshot
     const classification = item.classification_snapshot
     const date = article.published_at ? new Date(article.published_at).toLocaleDateString('pt-BR') : '—'
-    return `| ${index + 1} | ${tableCell(date)} | ${tableCell(article.publisher || article.source_name)} | ${tableCell(article.title)} | ${tableCell(classification.relevancia)} | ${tableCell(classification.tom)} |`
+    return `| [${citations.get(item.article_id)}] | ${tableCell(date)} | ${tableCell(article.publisher || article.source_name)} | ${tableCell(article.title)} | ${tableCell(classification.relevancia)} | ${tableCell(classification.tom)} | ${tableCell(classification.source_verification_status || 'nao_verificada')} |`
   })
   return `## ${sectionNumber}. BASE QUALIFICADA DE EVIDÊNCIAS MONITORADAS NO MÊS\n\n${
     rows.length
-      ? ['| Nº | Data | Veículo | Título | Relevância | Tom |', '|---:|---|---|---|---|---|', ...rows].join('\n')
+      ? ['| Evidência | Data | Veículo | Título | Relevância | Tom | Fonte |', '|---|---|---|---|---|---|---|', ...rows].join('\n')
       : '_Nenhuma evidência qualificada._'
   }`
 }
@@ -348,8 +368,14 @@ export function buildAnnex(items: ReportEvidenceItem[]) {
   }`
 }
 
-export function buildDossier(items: ReportEvidenceItem[], topics: MonthlyReportTopic[] = []) {
+export function buildDossier(
+  items: ReportEvidenceItem[],
+  topics: MonthlyReportTopic[] = [],
+  clientName = 'o cliente'
+) {
+  const methodology = buildMethodologySnapshot(items)
   return [
+    buildMethodologyNote(methodology, clientName),
     topics.length ? buildAgendaSection(topics) : '',
     buildQualifiedSection(items),
     '---',
@@ -362,12 +388,14 @@ export function buildDossier(items: ReportEvidenceItem[], topics: MonthlyReportT
 export function ensureLeadInSection(
   markdown: string,
   section: number,
-  lead: Pick<ReportEvidenceItem, 'article_snapshot'>
+  lead: Pick<ReportEvidenceItem, 'article_snapshot'>,
+  citationCode?: string
 ) {
   const title = lead.article_snapshot.title
   if (markdown.toLocaleLowerCase('pt-BR').includes(title.toLocaleLowerCase('pt-BR'))) return markdown
   const publisher = lead.article_snapshot.publisher || lead.article_snapshot.source_name || 'veículo não identificado'
-  const paragraph = `A matéria principal do mês, **“${title}”** (${publisher}), orienta a leitura estratégica desta seção.`
+  const citation = citationCode ? ` [${citationCode}]` : ''
+  const paragraph = `A matéria principal do mês, **“${title}”** (${publisher}), orienta a leitura estratégica desta seção.${citation}`
   if (section === 4) {
     const block = `### 4.1. Matéria principal — ${title}\n\n${paragraph}\n\n**Leitura estratégica:** Tratar este ativo como eixo central do posicionamento institucional do mês.`
     return markdown.replace(/(##\s+4[^\n]*\n)/i, `$1\n${block}\n\n`)
@@ -396,6 +424,7 @@ export function evidenceCsv(items: ReportEvidenceItem[]) {
     'strategic_effect',
     'recommended_action',
     'verification_status',
+    'source_verification_status',
     'editorial_confidence',
     'geographic_scope',
     'quality_flags',
@@ -422,6 +451,7 @@ export function evidenceCsv(items: ReportEvidenceItem[]) {
         classification.strategic_effect,
         classification.recommended_action,
         classification.verification_status,
+        classification.source_verification_status,
         classification.editorial_confidence,
         classification.geographic_scope,
         Array.isArray(classification.quality_flags) ? classification.quality_flags.join('|') : '',

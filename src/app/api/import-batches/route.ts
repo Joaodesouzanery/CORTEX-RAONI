@@ -10,7 +10,9 @@ export async function GET(req: Request) {
   const params = new URL(req.url).searchParams
   let query = supabase
     .from('import_batches')
-    .select('*, clients(id, name), import_batch_clients(client_id, clients(id, name))')
+    .select(
+      '*, clients!import_batches_client_id_fkey(id, name), import_batch_clients(client_id, clients!import_batch_clients_client_id_fkey(id, name))'
+    )
     .order('created_at', { ascending: false })
     .limit(50)
   if (params.get('period')) query = query.eq('period_month', periodMonth(params.get('period')!))
@@ -18,7 +20,7 @@ export async function GET(req: Request) {
   if (result.error?.message.includes('import_batch_clients')) {
     let fallback = supabase
       .from('import_batches')
-      .select('*, clients(id, name)')
+      .select('*, clients!import_batches_client_id_fkey(id, name)')
       .order('created_at', { ascending: false })
       .limit(50)
     if (params.get('period')) fallback = fallback.eq('period_month', periodMonth(params.get('period')!))
@@ -61,7 +63,7 @@ export async function POST(req: Request) {
       intent: parsed.data.intent,
       total_files: parsed.data.total_files,
     })
-    .select('*, clients(id, name)')
+    .select('*, clients!import_batches_client_id_fkey(id, name)')
     .single()
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
   const { error: clientsError } = await supabase.from('import_batch_clients').insert(

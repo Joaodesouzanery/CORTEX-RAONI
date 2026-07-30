@@ -11,6 +11,8 @@ ALTER TABLE article_client_tags ADD COLUMN IF NOT EXISTS quality_flags JSONB NOT
 ALTER TABLE article_client_tags ADD COLUMN IF NOT EXISTS adjudication_version INTEGER;
 ALTER TABLE article_client_tags ADD COLUMN IF NOT EXISTS qa_source TEXT;
 ALTER TABLE article_client_tags ADD COLUMN IF NOT EXISTS qa_checked_at TIMESTAMPTZ;
+ALTER TABLE article_client_tags ADD COLUMN IF NOT EXISTS source_verification_status TEXT
+  NOT NULL DEFAULT 'nao_verificada';
 
 DO $$ BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'act_editorial_confidence_check') THEN
@@ -27,6 +29,12 @@ DO $$ BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'act_qa_source_check') THEN
     ALTER TABLE article_client_tags ADD CONSTRAINT act_qa_source_check
       CHECK (qa_source IS NULL OR qa_source IN ('regra', 'ia', 'humano'));
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'act_source_verification_check') THEN
+    ALTER TABLE article_client_tags ADD CONSTRAINT act_source_verification_check
+      CHECK (source_verification_status IN (
+        'nao_verificada', 'parcial', 'documento_integral', 'fonte_original'
+      ));
   END IF;
 END $$;
 
@@ -154,11 +162,21 @@ ON CONFLICT (client_id, label) DO UPDATE SET
 ALTER TABLE monthly_report_drafts ADD COLUMN IF NOT EXISTS quality_status TEXT NOT NULL DEFAULT 'pending';
 ALTER TABLE monthly_report_drafts ADD COLUMN IF NOT EXISTS quality_summary JSONB NOT NULL DEFAULT '{}'::JSONB;
 ALTER TABLE monthly_report_drafts ADD COLUMN IF NOT EXISTS quality_checked_at TIMESTAMPTZ;
+ALTER TABLE monthly_report_drafts ADD COLUMN IF NOT EXISTS narrative_posture TEXT
+  NOT NULL DEFAULT 'consultivo_cauteloso';
+ALTER TABLE monthly_report_drafts ADD COLUMN IF NOT EXISTS methodology_snapshot JSONB
+  NOT NULL DEFAULT '{}'::JSONB;
 
 DO $$ BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'monthly_report_drafts_quality_status_check') THEN
     ALTER TABLE monthly_report_drafts ADD CONSTRAINT monthly_report_drafts_quality_status_check
       CHECK (quality_status IN ('pending', 'running', 'passed', 'blocked'));
+  END IF;
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'monthly_report_drafts_narrative_posture_check') THEN
+    ALTER TABLE monthly_report_drafts ADD CONSTRAINT monthly_report_drafts_narrative_posture_check
+      CHECK (narrative_posture IN (
+        'consultivo_cauteloso', 'executivo_assertivo', 'somente_descritivo'
+      ));
   END IF;
 END $$;
 
@@ -269,6 +287,9 @@ ALTER TABLE report_quality_checks ENABLE ROW LEVEL SECURITY;
 
 ALTER TABLE reports ADD COLUMN IF NOT EXISTS agenda_snapshot JSONB;
 ALTER TABLE reports ADD COLUMN IF NOT EXISTS quality_snapshot JSONB;
+ALTER TABLE reports ADD COLUMN IF NOT EXISTS methodology_snapshot JSONB;
+ALTER TABLE reports ADD COLUMN IF NOT EXISTS citation_snapshot JSONB;
+ALTER TABLE reports ADD COLUMN IF NOT EXISTS narrative_posture TEXT;
 
 -- Agenda inicial acordada para o SIMINERAL em julho de 2026. O INSERT só atua
 -- em preparações já existentes e nunca substitui tópicos criados pelo usuário.

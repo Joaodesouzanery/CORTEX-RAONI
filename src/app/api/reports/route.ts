@@ -12,10 +12,23 @@ export const maxDuration = 60
 
 export async function GET() {
   const supabase = createClient()
-  const { data, error } = await supabase
+  const result = await supabase
     .from('reports')
-    .select('id, prompt, article_ids, created_at, metadata, client_id, draft_id, period_month, version, lead_article_id, brand_snapshot, clients(name, logo_url)')
+    .select('id, prompt, article_ids, created_at, metadata, client_id, draft_id, period_month, version, lead_article_id, brand_snapshot, agenda_snapshot, quality_snapshot, methodology_snapshot, citation_snapshot, narrative_posture, clients(name, logo_url)')
     .order('created_at', { ascending: false })
+  if (
+    result.error?.message.includes('methodology_snapshot') ||
+    result.error?.message.includes('citation_snapshot') ||
+    result.error?.message.includes('narrative_posture')
+  ) {
+    const fallback = await supabase
+      .from('reports')
+      .select('id, prompt, article_ids, created_at, metadata, client_id, draft_id, period_month, version, lead_article_id, brand_snapshot, clients(name, logo_url)')
+      .order('created_at', { ascending: false })
+    if (fallback.error) return NextResponse.json({ error: fallback.error.message }, { status: 500 })
+    return NextResponse.json(fallback.data)
+  }
+  const { data, error } = result
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
   return NextResponse.json(data)
 }

@@ -1,5 +1,15 @@
 import { describe, expect, it } from 'vitest'
-import { buildAgendaSection, deterministicQualityFlags, evaluateReportQuality, inferGeographicScope } from './report-quality'
+import {
+  auditReportTraceability,
+  buildAgendaSection,
+  buildMethodologyNote,
+  buildMethodologySnapshot,
+  buildThematicMatrix,
+  deterministicQualityFlags,
+  evaluateReportQuality,
+  evidenceCitations,
+  inferGeographicScope,
+} from './report-quality'
 import type { MonthlyReportTopic, ReportEvidenceItem, ReportSection } from '@/types'
 
 function item(
@@ -35,6 +45,7 @@ function item(
       editorial_review_state: 'automatico',
       editorial_confidence: 0.96,
       qa_checked_at: '2026-07-30T12:00:00Z',
+      source_verification_status: 'fonte_original',
       ...classification,
     },
     cluster_key: null,
@@ -63,7 +74,7 @@ const sections: ReportSection[] = Array.from({ length: 9 }, (_, index) => ({
   id: `section-${index + 1}`,
   draft_id: 'draft',
   section_key: index + 1,
-  content: 'Texto',
+  content: '',
   status: 'generated',
   version: 1,
   generated_at: '2026-07-30T00:00:00Z',
@@ -131,6 +142,81 @@ describe('report quality gates', () => {
   it('builds the deterministic agenda as section 10', () => {
     expect(buildAgendaSection([topic])).toContain('## 10.')
     expect(buildAgendaSection([topic])).toContain('Mineração no Pará')
+  })
+
+  it('uses the complete server snapshot in the deterministic method note', () => {
+    const items = [
+      item('direct', 'qualified', { cita_cliente: true, source_verification_status: 'fonte_original' }),
+      item('context', 'annex', {
+        source_verification_status: 'nao_verificada',
+        editorial_review_state: 'pendente',
+      }),
+    ]
+    items[1].article_snapshot.content_status = 'parcial'
+    const snapshot = buildMethodologySnapshot(items)
+    expect(snapshot).toMatchObject({
+      monitored_total: 2,
+      direct_mentions: 1,
+      qualified_evidence: 1,
+      content_integral: 1,
+      content_partial: 1,
+      source_original_verified: 1,
+      source_unverified: 1,
+    })
+    expect(buildMethodologyNote(snapshot, 'SIMINERAL')).toContain('2 ocorrências monitoradas no servidor')
+  })
+
+  it('blocks uncited facts, invented evidence codes and assertive client mandates', () => {
+    const reportSections = sections.map((section) => ({
+      ...section,
+      content:
+        section.section_key === 1
+          ? '## 1. SUMÁRIO\n\nEm julho, o SIMINERAL deve liderar 4 agendas. [E999]'
+          : '',
+    }))
+    const checks = auditReportTraceability({
+      sections: reportSections,
+      citations: evidenceCitations([item('lead', 'qualified')]),
+      posture: 'consultivo_cauteloso',
+      clientName: 'SIMINERAL',
+    })
+    expect(checks.find((check) => check.key === 'citation_validity')?.count).toBe(1)
+    expect(checks.find((check) => check.key === 'narrative_posture')?.count).toBe(1)
+  })
+
+  it('accepts cited facts and keeps the thematic matrix deterministic', () => {
+    const reportSections = sections.map((section) => ({
+      ...section,
+      content:
+        section.section_key === 1
+          ? '## 1. SUMÁRIO\n\nEm julho, quatro pautas foram monitoradas. [E001]\n\n**Leitura estratégica:** Há oportunidade de aprofundar o tema.'
+          : '',
+    }))
+    const checks = auditReportTraceability({
+      sections: reportSections,
+      citations: evidenceCitations([item('lead', 'qualified')]),
+      posture: 'consultivo_cauteloso',
+      clientName: 'SIMINERAL',
+    })
+    expect(checks.every((check) => check.status === 'passed')).toBe(true)
+    const linkedTopic = {
+      ...topic,
+      evidence: [
+        {
+          topic_id: topic.id,
+          article_id: 'lead',
+          source: 'ia' as const,
+          confidence: 0.9,
+          reason: null,
+          human_confirmed: false,
+          created_at: '2026-07-30T00:00:00Z',
+          updated_at: '2026-07-30T00:00:00Z',
+        },
+      ],
+    }
+    expect(buildThematicMatrix([linkedTopic], [item('lead', 'qualified')])).toContain(
+      '| Mineração no Pará | 1 | 1 |'
+    )
   })
 })
 

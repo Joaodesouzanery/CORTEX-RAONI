@@ -39,7 +39,7 @@ function fallback(articles: ArticleSnapshot[]): TriageDecision[] {
       impact_summary: 'Impacto ainda não validado por análise editorial.',
       strategic_effect: 'informativo',
       recommended_action: 'Revisar a publicação antes do fechamento mensal.',
-      verification_status: article.content_status === 'integral' ? 'verificada' : 'parcial',
+      verification_status: 'pendente',
       editorial_review_state: 'pendente',
       editorial_confidence: 0,
       geographic_scope: geographicScope,
@@ -118,9 +118,7 @@ Responda somente JSON válido: [{"article_id":"uuid","report_role":"evidencia|co
         recommended_action: String(decision.recommended_action || 'Manter em monitoramento.').slice(0, 3000),
         verification_status: ['verificada', 'parcial', 'pendente'].includes(decision.verification_status)
           ? decision.verification_status
-          : article.content_status === 'integral'
-            ? 'verificada'
-            : 'parcial',
+          : 'pendente',
         editorial_review_state:
           decision.editorial_review_state === 'pendente'
             ? ('pendente' as const)

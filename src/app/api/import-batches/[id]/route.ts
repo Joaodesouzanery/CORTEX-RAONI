@@ -17,7 +17,7 @@ export async function GET(_: Request, { params }: { params: Promise<{ id: string
         .order('created_at'),
       supabase
         .from('import_batch_clients')
-        .select('client_id, clients(id, name)')
+        .select('client_id, clients!import_batch_clients_client_id_fkey(id, name)')
         .eq('batch_id', id),
     ])
     if (error || linksError) throw new Error(error?.message || linksError?.message)

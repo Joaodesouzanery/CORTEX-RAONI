@@ -1,4 +1,4 @@
-import type { Article } from '@/types'
+import type { Article, ReportPosture } from '@/types'
 import { REPORT_SECTION_GROUPS, type ReportSectionGroup } from '@/lib/report-sections'
 
 async function getAnthropicClient() {
@@ -24,6 +24,15 @@ A contratada responsável pela prestação dos serviços é a {contratante}.
 
 DIRETRIZ METODOLÓGICA FUNDAMENTAL:
 Atue como uma célula de inteligência reputacional de {cliente_setor}, não como um sistema de clipping. Identifique movimentos emergentes, detecte mudanças de narrativa, antecipe riscos futuros, identifique oportunidades de posicionamento e apoie a tomada de decisão da alta gestão.
+
+RASTREABILIDADE OBRIGATÓRIA:
+- Toda afirmação factual, número, data, atribuição, declaração ou descrição de acontecimento nas seções 1–8 deve terminar com uma ou mais citações no formato [E001].
+- Use exclusivamente os códigos fornecidos nos ARTIGOS MONITORADOS. Nunca invente um código.
+- Separe interpretação de fato com o marcador **Leitura estratégica:**.
+- Não diga que todas as fontes foram verificadas. A disponibilidade do texto e a conferência da publicação original são estados distintos.
+
+POSTURA NARRATIVA:
+{postura_narrativa}
 
 INTELIGÊNCIA DE SETOR E DIRECIONAMENTO DESTE CLIENTE:
 {direcionamento_cliente}
@@ -129,10 +138,13 @@ Sinal do mês: [evidência concreta observada]]
 
 ---
 
-## 10. BASE QUALIFICADA DE EVIDÊNCIAS MONITORADAS NO MÊS
+## 10. AGENDA MENSAL E TEMAS OBRIGATÓRIOS
 
-[Lista numerada de TODAS as matérias fornecidas no formato:
-N. **Veículo** — Título da matéria]
+[Montada deterministicamente pelo sistema; não a produza durante a geração parcial.]
+
+## 11. BASE QUALIFICADA DE EVIDÊNCIAS MONITORADAS NO MÊS
+
+[Montada deterministicamente pelo sistema; não a produza durante a geração parcial.]
 
 ---
 
@@ -353,6 +365,7 @@ export interface ReportClient {
   report_prompt?: string | null
   sector?: string | null
   contratante?: string | null
+  narrative_posture?: ReportPosture
 }
 
 const DEFAULT_CONTRATANTE = 'CRTIVE LAB DE INOVAÇÃO E TECNOLOGIA LTDA'
@@ -371,11 +384,18 @@ export function buildSystemPrompt(metadata?: ReportMetadata, client?: ReportClie
   const contratante = client?.contratante?.trim() || DEFAULT_CONTRATANTE
   const direcionamento =
     client?.report_prompt?.trim() || 'Seguir a metodologia padrão de inteligência reputacional, sem ênfase setorial pré-definida.'
+  const posture =
+    client?.narrative_posture === 'executivo_assertivo'
+      ? 'Executivo assertivo: recomendações diretas são permitidas, sem inventar compromissos já assumidos.'
+      : client?.narrative_posture === 'somente_descritivo'
+        ? 'Somente descritivo: apresente fatos, riscos e cenários; não recomende ações ao cliente.'
+        : 'Consultivo cauteloso: use “há oportunidade”, “pode avaliar” e “o cenário recomenda considerar”. Não escreva que o cliente “deve”, “precisa”, “deverá” ou “tem de” agir.'
 
   return MASTER_SYSTEM_PROMPT
     .replace(/\{cliente_nome\}/g, clienteNome)
     .replace(/\{cliente_setor\}/g, clienteSetor)
     .replace(/\{contratante\}/g, contratante)
+    .replace('{postura_narrativa}', posture)
     .replace('{direcionamento_cliente}', direcionamento)
     // The seeded sector intelligence (report_prompt) may contain a bare {cliente};
     // resolve it here, after it has been injected.
@@ -398,7 +418,7 @@ function buildInputContext(
   // legally available text; imported clipping PDFs therefore contribute their
   // íntegra instead of a short RSS excerpt.
   const articlesSummary = articles.map((a, i) =>
-    `## Artigo ${i + 1}: ${a.title}\nFonte: ${a.publisher || a.sources?.name || 'Desconhecida'} | Data: ${a.published_at || 'N/A'} | URL: ${a.url || 'sem URL'}\n\n${a.content || a.excerpt || '[Somente metadados disponíveis]'}`
+    `## [${a.evidence_code || `E${String(i + 1).padStart(3, '0')}`}] ${a.title}\nFonte: ${a.publisher || a.sources?.name || 'Desconhecida'} | Data: ${a.published_at || 'N/A'} | URL: ${a.url || 'sem URL'}\n\n${a.content || a.excerpt || '[Somente metadados disponíveis]'}`
   ).join('\n\n---\n\n')
 
   return `INPUT DO MÊS:

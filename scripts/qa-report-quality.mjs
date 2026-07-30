@@ -60,6 +60,11 @@ const flags = items.reduce((counts, article) => {
   for (const flag of article.tag?.quality_flags || []) counts[flag] = (counts[flag] || 0) + 1
   return counts
 }, {})
+const sourceVerification = items.reduce((counts, article) => {
+  const key = article.tag?.source_verification_status || 'nao_verificada'
+  counts[key] = (counts[key] || 0) + 1
+  return counts
+}, {})
 
 console.log(`# QA de qualificação — SIMINERAL ${period}\n`)
 console.log(`Gerado em ${new Date().toISOString()} para ${appUrl}.\n`)
@@ -69,6 +74,8 @@ console.log('\n## Escopo geográfico\n')
 console.log(JSON.stringify(geography, null, 2))
 console.log('\n## Indicadores de qualidade\n')
 console.log(JSON.stringify(flags, null, 2))
+console.log('\n## Conferência das fontes\n')
+console.log(JSON.stringify(sourceVerification, null, 2))
 console.log(`\nRuídos conhecidos promovidos como evidência: ${qualifiedNoise.length}.`)
 for (const article of qualifiedNoise.slice(0, 20)) console.log(`- ${article.title}`)
 

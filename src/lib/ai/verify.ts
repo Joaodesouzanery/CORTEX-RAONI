@@ -39,7 +39,7 @@ function conservativeFallback(inputs: EvidenceVerificationInput[]): EvidenceVeri
       accepted: false,
       report_role: 'contexto',
       editorial_confidence: 0,
-      verification_status: article.content_status === 'integral' ? 'verificada' : 'parcial',
+      verification_status: 'pendente',
       editorial_review_state: 'pendente',
       geographic_scope: geographicScope,
       quality_flags: deterministicQualityFlags(article, geographicScope),
@@ -157,9 +157,7 @@ Retorne apenas JSON: [{"article_id":"uuid","accepted":true,"report_role":"eviden
             rawDecision.verification_status === 'parcial' ||
             rawDecision.verification_status === 'pendente'
               ? rawDecision.verification_status
-              : input.article.content_status === 'integral'
-                ? 'verificada'
-                : 'parcial',
+              : 'pendente',
           editorial_review_state: exception || rawDecision.editorial_review_state === 'pendente' ? 'pendente' : 'automatico',
           geographic_scope: geographicScope,
           quality_flags: qualityFlags,
@@ -171,4 +169,3 @@ Retorne apenas JSON: [{"article_id":"uuid","accepted":true,"report_role":"eviden
     return { decisions: conservativeFallback(inputs), source: 'regra' }
   }
 }
-

@@ -255,7 +255,9 @@ async function linkClients(
             impact_summary: tag.impact_summary || 'Notícia adicionada manualmente e vinculada a este cliente.',
             strategic_effect: tag.strategic_effect || 'informativo',
             recommended_action: tag.recommended_action || 'Revisar o papel desta publicação no relatório.',
-            verification_status: article.content_status === 'integral' ? 'verificada' : 'parcial',
+            verification_status: 'pendente',
+            source_verification_status:
+              article.content_status === 'parcial' ? 'parcial' : 'nao_verificada',
             editorial_review_state: 'pendente',
             qualified_at: now,
             qualification_version: 1,
@@ -283,7 +285,9 @@ async function linkClients(
           central_message: article.excerpt || article.title,
           strategic_effect: 'informativo',
           recommended_action: 'Revisar mensagem, impacto e papel desta publicação no relatório.',
-          verification_status: article.content_status === 'integral' ? 'verificada' : 'parcial',
+          verification_status: 'pendente',
+          source_verification_status:
+            article.content_status === 'parcial' ? 'parcial' : 'nao_verificada',
           editorial_review_state: 'pendente',
           qualified_at: now,
           qualification_version: 1,

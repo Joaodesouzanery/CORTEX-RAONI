@@ -3,6 +3,7 @@ import { createAdminClient as createClient } from '@/lib/supabase/server'
 import { generateReportSection } from '@/lib/ai/claude'
 import { formatZodError, reportDraftSectionEditSchema, reportDraftSectionSchema } from '@/lib/validation'
 import { buildAnnex, ensureLeadInSection, evidenceArticles, reportEvidenceItems } from '@/lib/report-drafts'
+import { evidenceCitations } from '@/lib/report-quality'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
@@ -75,13 +76,17 @@ export async function POST(
       .sort((a, b) => b[1] - a[1])
       .map(([cluster, count]) => `- ${cluster}: ${count} ocorrência(s)`)
       .join('\n')
+    const citationByArticle = new Map(
+      evidenceCitations(evidence).map((citation) => [citation.article_id, citation.code])
+    )
     const strategicCards = evidence
       .filter((item) => item.bucket === 'qualified')
       .sort((a, b) => a.position - b.position)
       .map((item, index) => {
         const classification = item.classification_snapshot
+        const code = citationByArticle.get(item.article_id)
         return [
-          `${index + 1}. ${item.article_snapshot.title}`,
+          `${index + 1}. [${code}] ${item.article_snapshot.title}`,
           `Veículo: ${item.article_snapshot.publisher || item.article_snapshot.source_name || 'não identificado'}`,
           `Mensagem central: ${classification.central_message || item.article_snapshot.excerpt || item.article_snapshot.title}`,
           `Impacto para o cliente: ${classification.impact_summary || 'não detalhado'}`,
@@ -125,6 +130,7 @@ export async function POST(
     const client = {
       ...draft.clients,
       contratante: draft.brand_snapshot?.name || draft.clients.contratante,
+      narrative_posture: draft.narrative_posture || 'consultivo_cauteloso',
     }
     const { data: priorSections } = await supabase
       .from('report_sections')
@@ -148,7 +154,10 @@ export async function POST(
       client,
       prior
     )
-    if (section === 1 || section === 4) markdown = ensureLeadInSection(markdown, section, lead)
+    if (section === 1 || section === 4) {
+      const leadCode = citationByArticle.get(lead.article_id)
+      markdown = ensureLeadInSection(markdown, section, lead, leadCode)
+    }
     const now = new Date().toISOString()
     const { data: current } = await supabase
       .from('report_sections')

@@ -47,7 +47,7 @@ export async function GET(req: Request) {
       const strategicColumns =
         ', report_role, editorial_score, editorial_reason, cluster_label, report_role_source, triaged_at, triage_version, central_message, strategic_effect, recommended_action, verification_status, editorial_review_state, qualified_at, qualification_version'
       const qualityColumns =
-        ', editorial_confidence, geographic_scope, quality_flags, adjudication_version, qa_source, qa_checked_at'
+        ', editorial_confidence, geographic_scope, quality_flags, adjudication_version, qa_source, qa_checked_at, source_verification_status'
       const runQuery = (columns: string) => {
         let query = supabase
           .from('article_client_tags')
@@ -67,7 +67,10 @@ export async function GET(req: Request) {
         return query
       }
       let result = await runQuery(`${baseTagColumns}${strategicColumns}${qualityColumns}`)
-      if (result.error?.message.includes('editorial_confidence')) {
+      if (
+        result.error?.message.includes('editorial_confidence') ||
+        result.error?.message.includes('source_verification_status')
+      ) {
         result = await runQuery(`${baseTagColumns}${strategicColumns}`)
       }
       if (result.error?.message.includes('central_message') || result.error?.message.includes('report_role')) {
@@ -118,6 +121,7 @@ export async function GET(req: Request) {
               qualified_at: row.qualified_at,
               qualification_version: row.qualification_version,
               editorial_confidence: row.editorial_confidence,
+              source_verification_status: row.source_verification_status,
               geographic_scope: row.geographic_scope,
               quality_flags: row.quality_flags,
               adjudication_version: row.adjudication_version,

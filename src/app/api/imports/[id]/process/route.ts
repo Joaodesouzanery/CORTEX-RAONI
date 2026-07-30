@@ -253,7 +253,9 @@ async function attachBatchArticles(
           central_message: article.excerpt || article.title,
           strategic_effect: 'informativo',
           recommended_action: 'Revisar a aderência desta publicação antes do fechamento.',
-          verification_status: article.content_status === 'integral' ? 'verificada' : 'parcial',
+          verification_status: 'pendente',
+          source_verification_status:
+            article.content_status === 'integral' ? 'documento_integral' : 'parcial',
           editorial_review_state: 'pendente',
           qualification_version: 1,
         })
@@ -336,6 +338,7 @@ async function saveReferenceEvidence(
           strategic_effect: 'informativo',
           recommended_action: 'Usar como evidência histórica e revisar a leitura estratégica quando necessário.',
           verification_status: 'parcial',
+          source_verification_status: 'parcial',
           editorial_review_state: 'revisado',
           qualified_at: new Date().toISOString(),
           qualification_version: 1,
@@ -552,7 +555,12 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
               title: document.filename.replace(/\.(pdf|html?)$/i, ''),
               extracted_text: extractedText || null,
               status: extractedText ? 'ready' : 'ocr_pending',
-              metadata: { ...parsed.metadata, detected_type: parsed.documentType },
+              metadata: {
+                ...parsed.metadata,
+                detected_type: parsed.documentType,
+                reference_purpose: 'estrutura_e_qualidade',
+                factual_evidence: false,
+              },
             },
             { onConflict: 'client_id,period_month,source_document_id' }
           )

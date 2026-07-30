@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createAdminClient as createClient } from '@/lib/supabase/server'
-import { evaluateReportQuality } from '@/lib/report-quality'
+import { buildMethodologySnapshot, evaluateReportQuality } from '@/lib/report-quality'
 import { reportEvidenceItems } from '@/lib/report-drafts'
 import type { MonthlyReportTopic, ReportSection } from '@/types'
 
@@ -16,7 +16,7 @@ export async function POST(_: Request, { params }: { params: Promise<{ id: strin
     { data: topicLinks },
     { data: sections },
   ] = await Promise.all([
-    supabase.from('monthly_report_drafts').select('*').eq('id', id).single(),
+    supabase.from('monthly_report_drafts').select('*, clients(name)').eq('id', id).single(),
     reportEvidenceItems(supabase, id),
     supabase.from('monthly_report_topics').select('*').eq('draft_id', id).order('position'),
     supabase
@@ -78,8 +78,11 @@ export async function POST(_: Request, { params }: { params: Promise<{ id: strin
     leadArticleId: draft.lead_article_id,
     periodMonth: draft.period_month,
     assignedArticleIds: new Set((assignments || []).map((item) => item.article_id)),
+    narrativePosture: draft.narrative_posture || 'consultivo_cauteloso',
+    clientName: draft.clients?.name || 'cliente',
   })
   const now = new Date().toISOString()
+  const methodology = buildMethodologySnapshot(evidence)
   const summary = {
     ...result.funnel,
     blocking_checks: result.checks.filter((check) => check.status === 'blocked').length,
@@ -103,6 +106,7 @@ export async function POST(_: Request, { params }: { params: Promise<{ id: strin
       quality_status: result.status,
       quality_summary: summary,
       quality_checked_at: now,
+      methodology_snapshot: methodology,
       updated_at: now,
     })
     .eq('id', id)

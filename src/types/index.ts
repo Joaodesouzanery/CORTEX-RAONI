@@ -20,9 +20,15 @@ export type ReportRoleSource = 'regra' | 'ia' | 'humano'
 export type IntakeKind = 'file' | 'url' | 'text'
 export type StrategicEffect = 'oportunidade' | 'risco' | 'misto' | 'informativo'
 export type VerificationStatus = 'verificada' | 'parcial' | 'pendente'
+export type SourceVerificationStatus =
+  | 'nao_verificada'
+  | 'parcial'
+  | 'documento_integral'
+  | 'fonte_original'
 export type EditorialReviewState = 'automatico' | 'pendente' | 'revisado'
 export type EditorialConfidence = number
 export type GeographicScope = 'para' | 'amazonia' | 'brasil' | 'internacional' | 'indeterminado'
+export type ReportPosture = 'consultivo_cauteloso' | 'executivo_assertivo' | 'somente_descritivo'
 export type QualityFlag =
   | 'texto_insuficiente'
   | 'duplicata_exata'
@@ -85,6 +91,7 @@ export interface ArticleTag {
   adjudication_version?: number | null
   qa_source?: ReportRoleSource | null
   qa_checked_at?: string | null
+  source_verification_status?: SourceVerificationStatus
   updated_at?: string
 }
 
@@ -182,6 +189,8 @@ export interface Article {
   }>
   // Populated client-side by merging the active client's tags (not a DB column).
   tag?: ArticleTag | null
+  // Stable monthly evidence label used by generated report citations.
+  evidence_code?: string
 }
 
 export interface Report {
@@ -200,6 +209,9 @@ export interface Report {
   brand_snapshot?: ReportBrand | null
   agenda_snapshot?: MonthlyReportTopic[] | null
   quality_snapshot?: Record<string, unknown> | null
+  methodology_snapshot?: MethodologySnapshot | null
+  citation_snapshot?: EvidenceCitation[] | null
+  narrative_posture?: ReportPosture | null
 }
 
 export interface Client {
@@ -403,6 +415,8 @@ export interface MonthlyReportDraft {
     warning_checks?: number
   }
   quality_checked_at?: string | null
+  narrative_posture: ReportPosture
+  methodology_snapshot?: MethodologySnapshot
   clients?: Client
   evidence_items?: ReportEvidenceItem[]
   sections?: ReportSection[]
@@ -480,6 +494,31 @@ export interface QualificationFunnel {
   review: number
   annex: number
   excluded: number
+}
+
+export interface EvidenceCitation {
+  code: string
+  article_id: string
+  title: string
+  publisher: string
+  published_at: string | null
+  source_verification_status: SourceVerificationStatus
+}
+
+export interface MethodologySnapshot {
+  monitored_total: number
+  direct_mentions: number
+  qualified_evidence: number
+  annex_total: number
+  excluded_total: number
+  content_integral: number
+  content_partial: number
+  content_metadata_only: number
+  source_original_verified: number
+  source_document_integral: number
+  source_partial: number
+  source_unverified: number
+  generated_at: string
 }
 
 export interface ArticleProvenance {

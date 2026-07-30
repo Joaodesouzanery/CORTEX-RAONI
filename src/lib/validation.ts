@@ -77,6 +77,9 @@ export const articleTagSchema = z.object({
   strategic_effect: z.enum(['oportunidade', 'risco', 'misto', 'informativo']).nullish(),
   recommended_action: z.string().max(3000).nullish(),
   verification_status: z.enum(['verificada', 'parcial', 'pendente']).optional(),
+  source_verification_status: z
+    .enum(['nao_verificada', 'parcial', 'documento_integral', 'fonte_original'])
+    .optional(),
   editorial_review_state: z.enum(['automatico', 'pendente', 'revisado']).optional(),
   editorial_confidence: z.number().min(0).max(1).nullish(),
   geographic_scope: z.enum(['para', 'amazonia', 'brasil', 'internacional', 'indeterminado']).nullish(),
@@ -183,12 +186,19 @@ export const reportDraftCreateSchema = z.object({
   period: z.string().regex(/^\d{4}-\d{2}$/, 'Use o período YYYY-MM'),
   monthly_instructions: z.string().max(10000).optional().default(''),
   service_metrics: z.record(z.string(), z.number().int().min(0)).optional().default({}),
+  narrative_posture: z
+    .enum(['consultivo_cauteloso', 'executivo_assertivo', 'somente_descritivo'])
+    .optional()
+    .default('consultivo_cauteloso'),
   new_version: z.boolean().optional().default(false),
 })
 
 export const reportDraftUpdateSchema = z.object({
   monthly_instructions: z.string().max(10000),
   service_metrics: z.record(z.string(), z.number().int().min(0)),
+  narrative_posture: z
+    .enum(['consultivo_cauteloso', 'executivo_assertivo', 'somente_descritivo'])
+    .optional(),
 })
 
 export const reportDraftLeadSchema = z.object({

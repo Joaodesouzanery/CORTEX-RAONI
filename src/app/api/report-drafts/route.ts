@@ -3,10 +3,21 @@ import { createAdminClient as createClient } from '@/lib/supabase/server'
 import { formatZodError, reportDraftCreateSchema } from '@/lib/validation'
 import { monthBounds, refreshDraftEvidence, reportBrand } from '@/lib/report-drafts'
 import { SIMINERAL_JULY_2026_TOPICS } from '@/lib/monthly-agenda'
-import type { Client } from '@/types'
+import type { Client, ReportBrand } from '@/types'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
+
+function draftBrand(client: Client, period: string): ReportBrand {
+  const snapshot = reportBrand(client)
+  if (client.name !== 'SIMINERAL' || period !== '2026-07') return snapshot
+  const provisional =
+    'Referência provisória de julho/2026: a CRTIVE apoia, auxilia e subsidia; a diretoria do SIMINERAL mantém a coordenação institucional.'
+  return {
+    ...snapshot,
+    guidelines: [snapshot.guidelines, provisional].filter(Boolean).join('\n\n'),
+  }
+}
 
 export async function GET(req: Request) {
   const supabase = createClient()
@@ -28,7 +39,14 @@ export async function POST(req: Request) {
   const supabase = createClient()
   const parsed = reportDraftCreateSchema.safeParse(await req.json().catch(() => null))
   if (!parsed.success) return NextResponse.json({ error: formatZodError(parsed.error) }, { status: 400 })
-  const { client_id, period, monthly_instructions, service_metrics, new_version } = parsed.data
+  const {
+    client_id,
+    period,
+    monthly_instructions,
+    service_metrics,
+    narrative_posture,
+    new_version,
+  } = parsed.data
   const periodDate = monthBounds(period).date
   const { data: client, error: clientError } = await supabase.from('clients').select('*').eq('id', client_id).single()
   if (clientError || !client) {
@@ -54,6 +72,7 @@ export async function POST(req: Request) {
       .update({
         monthly_instructions,
         service_metrics,
+        narrative_posture,
         updated_at: new Date().toISOString(),
       })
       .eq('id', latest.id)
@@ -83,7 +102,8 @@ export async function POST(req: Request) {
       version: (latest?.version || 0) + 1,
       monthly_instructions,
       service_metrics,
-      brand_snapshot: reportBrand(client as Client),
+      narrative_posture,
+      brand_snapshot: draftBrand(client as Client, period),
       status: 'preparing',
     })
     .select()

@@ -75,6 +75,9 @@ as linhas qualificadas extraídas de relatórios anteriores.
 A `028_report_quality_and_monthly_agenda.sql` separa captura de evidência,
 adiciona a agenda obrigatória por competência, verificação independente,
 escopo geográfico, indicadores de ruído e portões auditáveis de fechamento.
+Ela também separa a validação editorial da conferência da publicação original,
+registra a postura narrativa e preserva os snapshots metodológico e de citações
+de cada versão aprovada.
 
 ## Operação
 
@@ -156,6 +159,25 @@ menção direta, matéria negativa/crítica ou pauta obrigatória entra no relat
 sem verificação independente ou decisão humana. Relatórios aprovados e
 snapshots de marca são imutáveis; mudanças
 como CRTIVE LAB → SAUZ só afetam versões futuras.
+
+O relatório começa com uma Nota de Método calculada sobre todo o snapshot do
+servidor — nunca sobre o limite de 100 itens da tela. As evidências recebem
+códigos estáveis (`[E001]`, `[E002]`...) e toda afirmação factual das seções
+analíticas deve apontar para um desses códigos. A matriz temática da seção 2,
+a agenda da seção 10 e a Base Qualificada da seção 11 são montadas
+deterministicamente. O fechamento bloqueia citações inexistentes, fatos sem
+fonte, generalizações indevidas sobre fontes verificadas e linguagem
+incompatível com a postura escolhida.
+
+Disponibilidade e conferência são estados independentes:
+
+- `integral`, `parcial` e `metadados` descrevem quanto texto está disponível;
+- `nao_verificada`, `parcial`, `documento_integral` e `fonte_original`
+  descrevem a conferência da origem.
+
+O padrão de novos relatórios é **consultivo cauteloso**. O sistema prefere
+“há oportunidade” e “pode avaliar” até que o cliente aprove uma postura
+executiva mais assertiva.
 
 ### Fechamento mensal
 

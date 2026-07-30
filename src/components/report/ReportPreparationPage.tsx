@@ -23,7 +23,9 @@ import type {
   MonthlyReportTopic,
   MonthlyReportDraft,
   ReportEvidenceItem,
+  ReportPosture,
   ReportSection,
+  SourceVerificationStatus,
   StrategicEffect,
   VerificationStatus,
 } from '@/types'
@@ -50,6 +52,8 @@ export default function ReportPreparationPage() {
   const [clientId, setClientId] = useState('')
   const [period, setPeriod] = useState(currentPeriod())
   const [instructions, setInstructions] = useState('')
+  const [narrativePosture, setNarrativePosture] =
+    useState<ReportPosture>('consultivo_cauteloso')
   const [metrics, setMetrics] = useState({
     reunioes_presenciais: 0,
     reunioes_virtuais: 0,
@@ -70,6 +74,7 @@ export default function ReportPreparationPage() {
     strategic_effect: 'informativo' as StrategicEffect,
     recommended_action: '',
     verification_status: 'pendente' as VerificationStatus,
+    source_verification_status: 'nao_verificada' as SourceVerificationStatus,
   })
   const [topicForm, setTopicForm] = useState({
     title: '',
@@ -99,6 +104,7 @@ export default function ReportPreparationPage() {
               setClientId(reportDraft.client_id)
               setPeriod(String(reportDraft.period_month).slice(0, 7))
               setInstructions(reportDraft.monthly_instructions || '')
+              setNarrativePosture(reportDraft.narrative_posture || 'consultivo_cauteloso')
               setMetrics((current) => ({ ...current, ...(reportDraft.service_metrics || {}) }))
               setSectionTexts(
                 Object.fromEntries(
@@ -121,6 +127,7 @@ export default function ReportPreparationPage() {
     setClientId(data.client_id)
     setPeriod(String(data.period_month).slice(0, 7))
     setInstructions(data.monthly_instructions || '')
+    setNarrativePosture(data.narrative_posture || 'consultivo_cauteloso')
     setMetrics((current) => ({ ...current, ...(data.service_metrics || {}) }))
     setSectionTexts(
       Object.fromEntries((data.sections || []).map((section) => [section.section_key, section.content || '']))
@@ -148,6 +155,7 @@ export default function ReportPreparationPage() {
           period,
           monthly_instructions: instructions,
           service_metrics: metrics,
+          narrative_posture: narrativePosture,
           new_version: newVersion,
         }),
       })
@@ -392,7 +400,11 @@ export default function ReportPreparationPage() {
     const res = await fetch(`/api/report-drafts/${draft.id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ monthly_instructions: instructions, service_metrics: metrics }),
+      body: JSON.stringify({
+        monthly_instructions: instructions,
+        service_metrics: metrics,
+        narrative_posture: narrativePosture,
+      }),
     })
     const data = await res.json().catch(() => null)
     if (!res.ok) throw new Error(data?.error || 'Falha ao salvar os dados do mês.')
@@ -477,6 +489,8 @@ export default function ReportPreparationPage() {
       strategic_effect: (classification.strategic_effect as StrategicEffect) || 'informativo',
       recommended_action: String(classification.recommended_action || ''),
       verification_status: (classification.verification_status as VerificationStatus) || 'pendente',
+      source_verification_status:
+        (classification.source_verification_status as SourceVerificationStatus) || 'nao_verificada',
     })
   }
 
@@ -604,6 +618,16 @@ export default function ReportPreparationPage() {
   )
   const topics = draft?.topics || []
   const latestQuality = draft?.quality_checks?.[0]
+  const citationCodes = useMemo(
+    () =>
+      new Map(
+        evidence
+          .filter((item) => item.bucket === 'qualified')
+          .sort((a, b) => a.position - b.position)
+          .map((item, index) => [item.article_id, `E${String(index + 1).padStart(3, '0')}`])
+      ),
+    [evidence]
+  )
   const orderedEvidence = [...evidence].sort((a, b) => {
     if (a.article_id === draft?.lead_article_id) return -1
     if (b.article_id === draft?.lead_article_id) return 1
@@ -651,15 +675,32 @@ export default function ReportPreparationPage() {
             {draft && <Button variant="outline" onClick={saveInputs} disabled={!!busy}>Salvar dados</Button>}
           </div>
         </div>
-        <div className="mt-4">
-          <Label>Instruções específicas do mês</Label>
-          <Textarea
-            value={instructions}
-            onChange={(event) => setInstructions(event.target.value)}
-            placeholder="Ex.: priorizar a operação bem-sucedida na Copa e preparar a Copa Feminina de 2027."
-            rows={3}
-            className="mt-1"
-          />
+        <div className="mt-4 grid gap-4 md:grid-cols-[1fr_18rem]">
+          <div>
+            <Label>Instruções específicas do mês</Label>
+            <Textarea
+              value={instructions}
+              onChange={(event) => setInstructions(event.target.value)}
+              placeholder="Ex.: priorizar a operação bem-sucedida na Copa e preparar a Copa Feminina de 2027."
+              rows={3}
+              className="mt-1"
+            />
+          </div>
+          <div>
+            <Label>Postura narrativa</Label>
+            <select
+              value={narrativePosture}
+              onChange={(event) => setNarrativePosture(event.target.value as ReportPosture)}
+              className="mt-1 h-10 w-full border border-gray-300 bg-white px-3 text-sm"
+            >
+              <option value="consultivo_cauteloso">Consultivo cauteloso</option>
+              <option value="executivo_assertivo">Executivo assertivo</option>
+              <option value="somente_descritivo">Somente descritivo</option>
+            </select>
+            <p className="mt-2 text-xs text-gray-500">
+              O padrão cauteloso evita atribuir decisões ou compromissos ainda não aprovados ao cliente.
+            </p>
+          </div>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-4">
           {Object.entries(metrics).map(([key, value]) => (
@@ -684,11 +725,21 @@ export default function ReportPreparationPage() {
           <div className="grid md:grid-cols-6 border border-gray-200 mb-4 divide-x">
             <div className="p-4"><p className="text-xs text-gray-500">Candidatas detectadas</p><p className="text-3xl">{evidence.length}</p></div>
             <div className="p-4"><p className="text-xs text-gray-500">Triadas</p><p className="text-3xl">{counts.triaged}</p></div>
-            <div className="p-4"><p className="text-xs text-gray-500">Verificadas</p><p className="text-3xl">{counts.verified}</p></div>
+            <div className="p-4"><p className="text-xs text-gray-500">Verificadas editorialmente</p><p className="text-3xl">{counts.verified}</p></div>
             <div className="p-4"><p className="text-xs text-gray-500">Base qualificada</p><p className="text-3xl">{counts.qualified}</p></div>
             <div className="p-4"><p className="text-xs text-gray-500">Anexo / ruído</p><p className="text-3xl">{counts.annex}</p></div>
             <div className="p-4"><p className="text-xs text-gray-500">Em revisão</p><p className="text-3xl">{counts.pending}</p></div>
           </div>
+          {draft.methodology_snapshot && (
+            <div className="mb-4 border border-gray-200 bg-gray-50 p-3 text-xs text-gray-600">
+              Universo integral: {draft.methodology_snapshot.monitored_total} · menções diretas:{' '}
+              {draft.methodology_snapshot.direct_mentions} · textos integrais:{' '}
+              {draft.methodology_snapshot.content_integral} · fontes originais conferidas:{' '}
+              {draft.methodology_snapshot.source_original_verified} · documentos integrais preservados:{' '}
+              {draft.methodology_snapshot.source_document_integral} · fontes não verificadas:{' '}
+              {draft.methodology_snapshot.source_unverified}
+            </div>
+          )}
           <div className="flex gap-2 flex-wrap mb-6">
             <Button variant="outline" onClick={refreshBase} disabled={!!busy}>
               <RefreshCw className="w-4 h-4 mr-2" />Atualizar base
@@ -852,6 +903,7 @@ export default function ReportPreparationPage() {
                       <div className="min-w-0">
                         <p className="font-medium">{article.title}</p>
                         <p className="text-xs text-gray-500 mt-1">
+                          {citationCodes.has(item.article_id) ? `[${citationCodes.get(item.article_id)}] · ` : ''}
                           {article.publisher || article.source_name || 'Veículo não identificado'} · {item.bucket} · nota {String(item.classification_snapshot.editorial_score ?? '—')}
                         </p>
                         <p className="text-xs text-gray-500 mt-1">
@@ -860,7 +912,8 @@ export default function ReportPreparationPage() {
                             ? '—'
                             : `${Math.round(Number(item.classification_snapshot.editorial_confidence) * 100)}%`}
                           {' · '}Escopo: {String(item.classification_snapshot.geographic_scope || 'indeterminado')}
-                          {' · '}Verificação: {String(item.classification_snapshot.verification_status || 'pendente')}
+                          {' · '}Verificação editorial: {String(item.classification_snapshot.verification_status || 'pendente')}
+                          {' · '}Fonte: {String(item.classification_snapshot.source_verification_status || 'nao_verificada')}
                         </p>
                         {Array.isArray(item.classification_snapshot.quality_flags) &&
                           item.classification_snapshot.quality_flags.length > 0 && (
@@ -949,7 +1002,7 @@ export default function ReportPreparationPage() {
                             </select>
                           </div>
                           <div>
-                            <Label>Verificação</Label>
+                            <Label>Verificação editorial</Label>
                             <select
                               value={qualification.verification_status}
                               onChange={(event) =>
@@ -963,6 +1016,25 @@ export default function ReportPreparationPage() {
                               <option value="verificada">Verificada</option>
                               <option value="parcial">Parcial</option>
                               <option value="pendente">Pendente</option>
+                            </select>
+                          </div>
+                          <div className="col-span-2">
+                            <Label>Conferência da fonte</Label>
+                            <select
+                              value={qualification.source_verification_status}
+                              onChange={(event) =>
+                                setQualification((current) => ({
+                                  ...current,
+                                  source_verification_status: event.target
+                                    .value as SourceVerificationStatus,
+                                }))
+                              }
+                              className="h-10 w-full border border-gray-300 bg-white px-2 text-sm"
+                            >
+                              <option value="nao_verificada">Não verificada</option>
+                              <option value="parcial">Fonte parcial</option>
+                              <option value="documento_integral">Documento integral preservado</option>
+                              <option value="fonte_original">Fonte original conferida</option>
                             </select>
                           </div>
                           <div className="col-span-2 flex gap-2 items-end">

@@ -1,12 +1,16 @@
 import type {
   ArticleSnapshot,
+  EvidenceCitation,
   GeographicScope,
+  MethodologySnapshot,
   MonthlyReportTopic,
   QualificationFunnel,
   QualityFlag,
   ReportEvidenceItem,
+  ReportPosture,
   ReportQualityCheckItem,
   ReportSection,
+  SourceVerificationStatus,
 } from '@/types'
 import { normalizeText } from '@/lib/relevance'
 
@@ -86,6 +90,203 @@ export function qualificationFunnel(items: ReportEvidenceItem[]): QualificationF
   }
 }
 
+function normalizedSourceVerification(item: ReportEvidenceItem): SourceVerificationStatus {
+  const value = item.classification_snapshot.source_verification_status
+  return value === 'fonte_original' ||
+    value === 'documento_integral' ||
+    value === 'parcial' ||
+    value === 'nao_verificada'
+    ? value
+    : 'nao_verificada'
+}
+
+export function evidenceCitations(items: ReportEvidenceItem[]): EvidenceCitation[] {
+  return items
+    .filter((item) => item.bucket === 'qualified')
+    .sort((a, b) => a.position - b.position)
+    .map((item, index) => ({
+      code: `E${String(index + 1).padStart(3, '0')}`,
+      article_id: item.article_id,
+      title: item.article_snapshot.title,
+      publisher:
+        item.article_snapshot.publisher ||
+        item.article_snapshot.source_name ||
+        'Veículo não identificado',
+      published_at: item.article_snapshot.published_at,
+      source_verification_status: normalizedSourceVerification(item),
+    }))
+}
+
+export function buildMethodologySnapshot(items: ReportEvidenceItem[]): MethodologySnapshot {
+  const sourceStatuses = items.map(normalizedSourceVerification)
+  return {
+    monitored_total: items.length,
+    direct_mentions: items.filter(
+      (item) => item.bucket !== 'excluded' && item.classification_snapshot.cita_cliente === true
+    ).length,
+    qualified_evidence: items.filter((item) => item.bucket === 'qualified').length,
+    annex_total: items.filter((item) => item.bucket === 'annex').length,
+    excluded_total: items.filter((item) => item.bucket === 'excluded').length,
+    content_integral: items.filter((item) => item.article_snapshot.content_status === 'integral').length,
+    content_partial: items.filter((item) => item.article_snapshot.content_status === 'parcial').length,
+    content_metadata_only: items.filter(
+      (item) => item.article_snapshot.content_status === 'metadados'
+    ).length,
+    source_original_verified: sourceStatuses.filter((status) => status === 'fonte_original').length,
+    source_document_integral: sourceStatuses.filter((status) => status === 'documento_integral').length,
+    source_partial: sourceStatuses.filter((status) => status === 'parcial').length,
+    source_unverified: sourceStatuses.filter((status) => status === 'nao_verificada').length,
+    generated_at: new Date().toISOString(),
+  }
+}
+
+export function buildMethodologyNote(snapshot: MethodologySnapshot, clientName: string) {
+  return [
+    '## NOTA DE MÉTODO',
+    '',
+    `O universo desta competência reúne **${snapshot.monitored_total} ocorrências monitoradas no servidor**, sem limitação aos itens carregados na interface. Após triagem e verificação editorial, **${snapshot.qualified_evidence}** compõem a Base Qualificada e **${snapshot.annex_total}** permanecem no Anexo Monitorado.`,
+    '',
+    `Foram identificadas **${snapshot.direct_mentions} menções diretas a ${clientName}**. As demais ocorrências qualificadas são inteligência setorial: ajudam a interpretar riscos e oportunidades, mas não equivalem a exposição nominal do cliente.`,
+    '',
+    `Quanto ao conteúdo disponível, há **${snapshot.content_integral} textos integrais**, **${snapshot.content_partial} conteúdos parciais** e **${snapshot.content_metadata_only} registros somente com metadados.** Quanto à conferência da origem, **${snapshot.source_original_verified} fontes originais** foram verificadas, **${snapshot.source_document_integral} documentos integrais** foram preservados, **${snapshot.source_partial} fontes** permanecem parciais e **${snapshot.source_unverified}** não tiveram a origem diretamente conferida.`,
+    '',
+    '_“Fonte verificada” descreve a conferência da publicação de origem; não representa validação independente de toda afirmação feita pelo veículo._',
+  ].join('\n')
+}
+
+function tableValue(value: unknown) {
+  return String(value ?? '—')
+    .replace(/\|/g, '\\|')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
+export function buildThematicMatrix(topics: MonthlyReportTopic[], items: ReportEvidenceItem[]) {
+  const qualified = new Map(
+    items.filter((item) => item.bucket === 'qualified').map((item) => [item.article_id, item])
+  )
+  const rows = [...topics]
+    .sort((a, b) => a.position - b.position)
+    .map((topic) => {
+      const linked = (topic.evidence || [])
+        .map((link) => qualified.get(link.article_id))
+        .filter((item): item is ReportEvidenceItem => Boolean(item))
+      const verified = linked.filter((item) =>
+        ['fonte_original', 'documento_integral'].includes(normalizedSourceVerification(item))
+      ).length
+      const tones = Array.from(
+        new Set(linked.map((item) => item.classification_snapshot.tom).filter(Boolean))
+      ).join(', ')
+      const scopes = Array.from(
+        new Set(linked.map((item) => item.classification_snapshot.geographic_scope).filter(Boolean))
+      ).join(', ')
+      const signal =
+        topic.coverage_status === 'covered'
+          ? 'Cobertura confirmada'
+          : topic.coverage_status === 'gap'
+            ? 'Lacuna reconhecida'
+            : 'Em revisão'
+      return `| ${tableValue(topic.title)} | ${linked.length} | ${verified} | ${tableValue(tones)} | ${tableValue(scopes)} | ${signal} |`
+    })
+  return [
+    '### Matriz temática verificada',
+    '',
+    '| Pauta | Evidências | Fontes conferidas | Tom | Geografia | Sinal do mês |',
+    '|---|---:|---:|---|---|---|',
+    ...rows,
+  ].join('\n')
+}
+
+function markdownParagraphs(content: string) {
+  return content
+    .split(/\n\s*\n/)
+    .map((paragraph) => paragraph.trim())
+    .filter(Boolean)
+}
+
+function isInterpretiveParagraph(paragraph: string) {
+  return /^\*\*(?:Leitura estratégica|Interpretação estratégica|Recomendação|Resposta recomendada):\*\*/i.test(
+    paragraph
+  )
+}
+
+function isFactualParagraph(paragraph: string, sectionKey: number) {
+  if (/^#{1,6}\s/.test(paragraph) || /^\|[\s:|-]+\|?$/.test(paragraph)) return false
+  if (/^\*\*[^*\n]+\*\*$/.test(paragraph) || isInterpretiveParagraph(paragraph)) return false
+  // Nas seções analíticas centrais, a ausência de um marcador explícito de
+  // interpretação significa que o parágrafo está apresentando evidência.
+  if (sectionKey <= 6) return true
+  return /(?:\d|%|R\$|segundo|de acordo|publicou|informou|registrou|apontou|anunciou|afirmou|declarou|dados|levantamento|pesquisa|no mês|em julho|durante o período|sinal do mês)/i.test(
+    paragraph
+  )
+}
+
+function escapeRegex(value: string) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
+export function auditReportTraceability(input: {
+  sections: ReportSection[]
+  citations: EvidenceCitation[]
+  posture: ReportPosture
+  clientName: string
+}): ReportQualityCheckItem[] {
+  const validCodes = new Set(input.citations.map((citation) => citation.code))
+  const invalid: string[] = []
+  const uncited: string[] = []
+  const sourceClaims: string[] = []
+  const postureViolations: string[] = []
+  const clientPattern = new RegExp(
+    `\\b(?:${escapeRegex(input.clientName)}|cliente|organização)\\s+(?:deve|precisa|deverá|tem de)\\b`,
+    'i'
+  )
+
+  for (const section of input.sections.filter(
+    (candidate) => candidate.section_key >= 1 && candidate.section_key <= 8 && candidate.content.trim()
+  )) {
+    for (const paragraph of markdownParagraphs(section.content)) {
+      const codes = Array.from(paragraph.matchAll(/\[(E\d{3})\]/g), (match) => match[1])
+      for (const code of codes) {
+        if (!validCodes.has(code)) invalid.push(`Seção ${section.section_key}: [${code}]`)
+      }
+      if (isFactualParagraph(paragraph, section.section_key) && !codes.length) {
+        uncited.push(`Seção ${section.section_key}: ${paragraph.slice(0, 140)}`)
+      }
+      if (/todas as fontes (?:foram |estão )?verificadas|fontes integralmente verificadas/i.test(paragraph)) {
+        sourceClaims.push(`Seção ${section.section_key}: ${paragraph.slice(0, 140)}`)
+      }
+      if (input.posture === 'consultivo_cauteloso' && clientPattern.test(paragraph)) {
+        postureViolations.push(`Seção ${section.section_key}: ${paragraph.slice(0, 140)}`)
+      }
+      if (
+        input.posture === 'consultivo_cauteloso' &&
+        /^-\s+(?:liderar|criar|estruturar|definir|posicionar|consolidar|ampliar|produzir|lançar|articular)\b/im.test(
+          paragraph
+        )
+      ) {
+        postureViolations.push(`Seção ${section.section_key}: ${paragraph.slice(0, 140)}`)
+      }
+    }
+  }
+
+  return [
+    check('citation_validity', 'Todas as citações apontam para evidências qualificadas', invalid.length, invalid),
+    check('factual_traceability', 'Afirmações factuais possuem citação de evidência', uncited.length, uncited),
+    check(
+      'source_claim_consistency',
+      'O texto não generaliza a verificação das fontes',
+      sourceClaims.length,
+      sourceClaims
+    ),
+    check(
+      'narrative_posture',
+      'A linguagem respeita a postura narrativa escolhida',
+      postureViolations.length,
+      postureViolations
+    ),
+  ]
+}
+
 function duplicateKey(item: ReportEvidenceItem) {
   const article = item.article_snapshot
   return [
@@ -112,6 +313,8 @@ export function evaluateReportQuality(input: {
   leadArticleId: string | null
   periodMonth: string
   assignedArticleIds?: Set<string>
+  narrativePosture?: ReportPosture
+  clientName?: string
 }): { status: 'passed' | 'blocked'; checks: ReportQualityCheckItem[]; funnel: QualificationFunnel } {
   const { items, topics, sections, leadArticleId, periodMonth } = input
   const assigned = input.assignedArticleIds || new Set<string>()
@@ -217,6 +420,12 @@ export function evaluateReportQuality(input: {
       exactDuplicates.reduce((sum, rows) => sum + rows.length - 1, 0),
       exactDuplicates.map((rows) => rows[0].article_snapshot.title)
     ),
+    ...auditReportTraceability({
+      sections,
+      citations: evidenceCitations(items),
+      posture: input.narrativePosture || 'consultivo_cauteloso',
+      clientName: input.clientName || 'cliente',
+    }),
   ]
   return {
     status: checks.some((item) => item.status === 'blocked') ? 'blocked' : 'passed',

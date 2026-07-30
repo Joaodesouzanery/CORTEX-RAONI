@@ -7,7 +7,12 @@ import {
   evidenceCsv,
   reportEvidenceItems,
 } from '@/lib/report-drafts'
-import { buildAgendaSection } from '@/lib/report-quality'
+import {
+  buildAgendaSection,
+  buildMethodologyNote,
+  buildMethodologySnapshot,
+  buildThematicMatrix,
+} from '@/lib/report-quality'
 import type { MonthlyReportTopic } from '@/types'
 
 export const dynamic = 'force-dynamic'
@@ -36,6 +41,12 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
       (link) => link.topic_id === topic.id && qualifiedSet.has(link.article_id)
     ).length,
   })) as MonthlyReportTopic[]
+  const methodology = buildMethodologySnapshot(evidence)
+  const analyticalSections = (sections || []).map((section) =>
+    section.section_key === 2
+      ? `${section.content}\n\n${buildThematicMatrix(topics, evidence)}`
+      : section.content
+  )
   const safeName = `${String(draft.clients?.name || 'cliente').replace(/[^a-z0-9]+/gi, '-')}-${draft.period_month.slice(0, 7)}`
   let content: string
   let contentType: string
@@ -50,7 +61,8 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     extension = 'md'
   } else if (format === 'text') {
     content = [
-      ...(sections || []).map((section) => section.content).filter(Boolean),
+      buildMethodologyNote(methodology, draft.clients?.name || 'cliente'),
+      ...analyticalSections.filter(Boolean),
       buildAgendaSection(topics),
       buildQualifiedSection(evidence),
       '---',
@@ -59,7 +71,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     contentType = 'text/markdown; charset=utf-8'
     extension = 'md'
   } else {
-    content = buildDossier(evidence, topics)
+    content = buildDossier(evidence, topics, draft.clients?.name || 'cliente')
     contentType = 'text/markdown; charset=utf-8'
     extension = 'md'
   }
