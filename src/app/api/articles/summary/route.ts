@@ -30,6 +30,9 @@ export async function GET(req: Request) {
   if (!clientId) return NextResponse.json({ error: 'client_id é obrigatório.' }, { status: 400 })
   const sourceId = params.get('source_id')
   const status = params.get('status')
+  const origin = params.get('origin')
+  const manualOnly = origin === 'manual'
+  if (origin && !manualOnly) return NextResponse.json({ error: 'Origem inválida.' }, { status: 400 })
   const days = Number.parseInt(params.get('days') || '')
   const after =
     params.get('published_after') ||
@@ -54,6 +57,7 @@ export async function GET(req: Request) {
       if (status && ['candidato', 'confirmado', 'revisao'].includes(status)) {
         query = query.eq('monitoring_status', status)
       }
+      if (manualOnly) query = query.eq('manual_intake', true)
       return query as unknown as PromiseLike<{
         data: SummaryRow[] | null
         error: { message: string } | null
@@ -100,8 +104,15 @@ export async function GET(req: Request) {
     }
     return NextResponse.json(response)
   } catch (error) {
+    const message = error instanceof Error ? error.message : 'Falha ao calcular o panorama.'
+    if (manualOnly && (message.includes('manual_intake') || message.includes('manual_received_at'))) {
+      return NextResponse.json(
+        { error: 'Aplique a migration 029 para usar o filtro “Enviadas por mim”.' },
+        { status: 409 }
+      )
+    }
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Falha ao calcular o panorama.' },
+      { error: message },
       { status: 500 }
     )
   }

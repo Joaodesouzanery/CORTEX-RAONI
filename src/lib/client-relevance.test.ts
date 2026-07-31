@@ -266,6 +266,8 @@ describe('contextual client relevance', () => {
         tema: 'decisão editorial',
         classification_source: 'humano',
         monitoring_status: 'excluido',
+        manual_intake: true,
+        manual_received_at: '2026-07-29T18:59:03.000Z',
       },
       evaluation!
     )
@@ -275,6 +277,8 @@ describe('contextual client relevance', () => {
       tema: 'decisão editorial',
       monitoring_status: 'excluido',
       classification_source: 'humano',
+      manual_intake: true,
+      manual_received_at: '2026-07-29T18:59:03.000Z',
     })
   })
 })

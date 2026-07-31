@@ -53,6 +53,7 @@ export default function NewsPage() {
   const [activeStatus, setActiveStatus] = useState<
     Exclude<MonitoringStatus, 'excluido'> | null
   >(null)
+  const [manualOnly, setManualOnly] = useState(false)
   const [tagsById, setTagsById] = useState<Map<string, ArticleTag>>(new Map())
   const [suggesting, setSuggesting] = useState(false)
   const [busySelection, setBusySelection] = useState(false)
@@ -98,6 +99,7 @@ export default function NewsPage() {
     if (cursor) query.set('cursor', cursor)
     if (activeClient) query.set('client_id', activeClient.id)
     if (activeStatus) query.set('status', activeStatus)
+    if (manualOnly && activeClient) query.set('origin', 'manual')
     if (activeSourceId) query.set('source_id', activeSourceId)
     if (activePeriod) query.set('days', String(activePeriod))
     if (dateFrom) query.set('published_after', new Date(`${dateFrom}T00:00:00-03:00`).toISOString())
@@ -172,7 +174,11 @@ export default function NewsPage() {
         const clientId = params.get('client')
         const period = Number.parseInt(params.get('period') || '')
         if ([1, 7, 15, 30].includes(period)) setActivePeriod(period)
-        if (clientId) setActiveClient(clientList.find((client) => client.id === clientId) || null)
+        if (clientId) {
+          const client = clientList.find((item) => item.id === clientId) || null
+          setActiveClient(client)
+          if (client && params.get('origin') === 'manual') setManualOnly(true)
+        }
       })
       .catch(() => {
         setClients([])
@@ -182,7 +188,7 @@ export default function NewsPage() {
 
   useEffect(() => {
     loadArticles(true)
-  }, [activeClient?.id, activeSourceId, activeStatus, activePeriod, dateFrom, dateTo])
+  }, [activeClient?.id, activeSourceId, activeStatus, manualOnly, activePeriod, dateFrom, dateTo])
 
   async function processRun(runId: string): Promise<FetchRun> {
     let latest: FetchRun | null = null
@@ -442,7 +448,11 @@ export default function NewsPage() {
         <span className="text-xs uppercase tracking-widest text-gray-500">Cliente:</span>
         <select
           value={activeClient?.id || ''}
-          onChange={(event) => setActiveClient(clients.find((client) => client.id === event.target.value) || null)}
+          onChange={(event) => {
+            const client = clients.find((item) => item.id === event.target.value) || null
+            setActiveClient(client)
+            if (!client) setManualOnly(false)
+          }}
           className="border border-gray-300 bg-white px-2 py-1 text-xs"
         >
           <option value="">Todos</option>
@@ -465,6 +475,20 @@ export default function NewsPage() {
             <option value="candidato">Candidatas</option>
             <option value="revisao">Em revisão</option>
           </select>
+        )}
+        {activeClient && (
+          <button
+            type="button"
+            aria-pressed={manualOnly}
+            onClick={() => setManualOnly((current) => !current)}
+            className={`border px-3 py-1 text-xs uppercase tracking-widest ${
+              manualOnly
+                ? 'border-black bg-black text-white'
+                : 'border-gray-300 bg-white text-gray-600 hover:border-black'
+            }`}
+          >
+            Enviadas por mim
+          </button>
         )}
       </div>
 

@@ -92,6 +92,8 @@ export interface ArticleTag {
   qa_source?: ReportRoleSource | null
   qa_checked_at?: string | null
   source_verification_status?: SourceVerificationStatus
+  manual_intake?: boolean
+  manual_received_at?: string | null
   updated_at?: string
 }
 

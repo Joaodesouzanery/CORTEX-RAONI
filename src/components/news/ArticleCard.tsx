@@ -18,6 +18,14 @@ export default function ArticleCard({ article, selected, onSelect, score }: Prop
       {/* Source + Date header */}
       <div className="flex items-center justify-between mb-2">
         <span className="text-xs uppercase tracking-widest text-gray-500 flex items-center gap-2">
+          {article.tag?.manual_intake && (
+            <span
+              className="border border-blue-200 bg-blue-50 px-1.5 py-0.5 text-[10px] tracking-normal text-blue-800"
+              title="Material adicionado pela área Importações"
+            >
+              Enviada por mim
+            </span>
+          )}
           {score != null && score > 0 && (
             <span
               className="bg-black text-white px-1.5 py-0.5 text-[10px] tracking-normal"

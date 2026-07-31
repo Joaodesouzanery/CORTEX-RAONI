@@ -18,6 +18,8 @@ export async function GET(req: Request) {
   const clientId = searchParams.get('client_id')
   const status = searchParams.get('status')
   const sourceId = searchParams.get('source_id')
+  const origin = searchParams.get('origin')
+  const manualOnly = origin === 'manual'
   const search = searchParams.get('search')
   const includeContent = searchParams.get('include_content') === 'true'
   const directOnly = searchParams.get('direct') === 'true'
@@ -28,6 +30,16 @@ export async function GET(req: Request) {
   const daysParam = searchParams.get('days')
   const publishedAfter = searchParams.get('published_after')
   const publishedBefore = searchParams.get('published_before')
+
+  if (origin && !manualOnly) {
+    return NextResponse.json({ error: 'Origem inválida.' }, { status: 400 })
+  }
+  if (manualOnly && (!paginated || !clientId)) {
+    return NextResponse.json(
+      { error: 'O filtro “Enviadas por mim” exige paginação e um cliente.' },
+      { status: 400 }
+    )
+  }
 
   if (paginated) {
     const offset = Math.max(0, Number.parseInt(cursorParam || '0') || 0)
@@ -48,7 +60,8 @@ export async function GET(req: Request) {
         ', report_role, editorial_score, editorial_reason, cluster_label, report_role_source, triaged_at, triage_version, central_message, strategic_effect, recommended_action, verification_status, editorial_review_state, qualified_at, qualification_version'
       const qualityColumns =
         ', editorial_confidence, geographic_scope, quality_flags, adjudication_version, qa_source, qa_checked_at, source_verification_status'
-      const runQuery = (columns: string) => {
+      const manualColumns = ', manual_intake, manual_received_at'
+      const runQuery = (columns: string, applyManualFilter = manualOnly) => {
         let query = supabase
           .from('article_client_tags')
           .select(`${columns}, articles!inner(${articleColumns})`, { count: 'exact' })
@@ -59,6 +72,7 @@ export async function GET(req: Request) {
         if (status && ['candidato', 'confirmado', 'revisao'].includes(status)) {
           query = query.eq('monitoring_status', status)
         }
+        if (applyManualFilter) query = query.eq('manual_intake', true)
         if (directOnly) query = query.eq('cita_cliente', true)
         if (cutoff) query = query.gte('articles.published_at', cutoff)
         if (publishedBefore) query = query.lte('articles.published_at', publishedBefore)
@@ -66,7 +80,19 @@ export async function GET(req: Request) {
         if (sourceId) query = query.eq('articles.article_provenance.source_id', sourceId)
         return query
       }
-      let result = await runQuery(`${baseTagColumns}${strategicColumns}${qualityColumns}`)
+      let result = await runQuery(`${baseTagColumns}${strategicColumns}${qualityColumns}${manualColumns}`)
+      if (
+        result.error?.message.includes('manual_intake') ||
+        result.error?.message.includes('manual_received_at')
+      ) {
+        if (manualOnly) {
+          return NextResponse.json(
+            { error: 'Aplique a migration 029 para usar o filtro “Enviadas por mim”.' },
+            { status: 409 }
+          )
+        }
+        result = await runQuery(`${baseTagColumns}${strategicColumns}${qualityColumns}`, false)
+      }
       if (
         result.error?.message.includes('editorial_confidence') ||
         result.error?.message.includes('source_verification_status')
@@ -122,6 +148,8 @@ export async function GET(req: Request) {
               qualification_version: row.qualification_version,
               editorial_confidence: row.editorial_confidence,
               source_verification_status: row.source_verification_status,
+              manual_intake: row.manual_intake === true,
+              manual_received_at: row.manual_received_at,
               geographic_scope: row.geographic_scope,
               quality_flags: row.quality_flags,
               adjudication_version: row.adjudication_version,

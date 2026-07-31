@@ -56,7 +56,7 @@ URLs assinadas de curta duração.
 ## Banco de dados
 
 Aplique, na ordem, todas as migrations versionadas em
-`supabase/migrations/` (atualmente `001` a `028`) pelo Supabase CLI ou SQL
+`supabase/migrations/` (atualmente `001` a `029`) pelo Supabase CLI ou SQL
 Editor. As migrations incluem clientes, classificações editoriais, alertas,
 acervo permanente, proveniências, importações, edições mensais e buckets.
 
@@ -78,6 +78,9 @@ escopo geográfico, indicadores de ruído e portões auditáveis de fechamento.
 Ela também separa a validação editorial da conferência da publicação original,
 registra a postura narrativa e preserva os snapshots metodológico e de citações
 de cada versão aprovada.
+A `029_manual_intake_filter.sql` marca por cliente as notícias recebidas por
+PDF, link ou texto e sustenta o filtro “Enviadas por mim” sem alterar a
+qualificação editorial.
 
 ## Operação
 
@@ -226,6 +229,7 @@ contagens integrais de 7, 15 e 30 dias:
 
 ```bash
 npm run qa:news -- https://seu-app.vercel.app
+npm run qa:manual-intake -- https://seu-app.vercel.app
 npm run qa:qualification -- https://seu-app.vercel.app 2026-07
 ```
 
@@ -251,4 +255,5 @@ supabase/migrations/025_*.sql           coleta rastreável e relevância
 supabase/migrations/026_*.sql           lotes e preparação mensal
 supabase/migrations/027_*.sql           caixa multicliente e ficha estratégica
 supabase/migrations/028_*.sql           agenda, verificação e portões de qualidade
+supabase/migrations/029_*.sql           diferenciação de notícias recebidas
 ```

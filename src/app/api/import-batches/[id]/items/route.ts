@@ -25,6 +25,10 @@ type ManualArticle = {
 
 type CheerioRoot = ReturnType<typeof cheerio.load>
 
+function missingManualIntakeColumn(message?: string) {
+  return Boolean(message?.includes('manual_intake') || message?.includes('manual_received_at'))
+}
+
 function meta($: CheerioRoot, ...selectors: string[]) {
   for (const selector of selectors) {
     const value = $(selector).first().attr('content')?.trim()
@@ -238,14 +242,42 @@ async function linkClients(
         },
         { onConflict: 'article_id,client_id,period_month,source_document_id' }
       )
-      const { data: tag } = await supabase
+      const tagResult = await supabase
         .from('article_client_tags')
         .select(
-          'classification_source, report_role_source, central_message, impact_summary, recommended_action, strategic_effect'
+          'classification_source, report_role_source, central_message, impact_summary, recommended_action, strategic_effect, manual_received_at'
         )
         .eq('article_id', article.id)
         .eq('client_id', clientId)
         .maybeSingle()
+      let tag = tagResult.data
+      let supportsManualIntake = true
+      if (missingManualIntakeColumn(tagResult.error?.message)) {
+        supportsManualIntake = false
+        const fallback = await supabase
+          .from('article_client_tags')
+          .select(
+            'classification_source, report_role_source, central_message, impact_summary, recommended_action, strategic_effect'
+          )
+          .eq('article_id', article.id)
+          .eq('client_id', clientId)
+          .maybeSingle()
+        if (fallback.error) throw new Error(fallback.error.message)
+        tag = fallback.data ? { ...fallback.data, manual_received_at: null } : null
+      } else if (tagResult.error) {
+        throw new Error(tagResult.error.message)
+      }
+      if (tag && supportsManualIntake) {
+        const { error: manualError } = await supabase
+          .from('article_client_tags')
+          .update({
+            manual_intake: true,
+            manual_received_at: tag.manual_received_at || now,
+          })
+          .eq('article_id', article.id)
+          .eq('client_id', clientId)
+        if (manualError) throw new Error(manualError.message)
+      }
       if (tag?.classification_source === 'humano' || tag?.report_role_source === 'humano') continue
       if (tag) {
         await supabase
@@ -289,6 +321,7 @@ async function linkClients(
           source_verification_status:
             article.content_status === 'parcial' ? 'parcial' : 'nao_verificada',
           editorial_review_state: 'pendente',
+          ...(supportsManualIntake ? { manual_intake: true, manual_received_at: now } : {}),
           qualified_at: now,
           qualification_version: 1,
         },

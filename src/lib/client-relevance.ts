@@ -177,6 +177,8 @@ export function mergeAutomatedEvaluation(
     match_reasons: evaluation.match_reasons,
     rule_version: evaluation.rule_version,
     classified_at: now,
+    manual_intake: existing?.manual_intake ?? false,
+    manual_received_at: existing?.manual_received_at ?? null,
     updated_at: human ? existing?.updated_at : now,
   }
 }

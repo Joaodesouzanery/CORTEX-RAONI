@@ -24,6 +24,10 @@ type Batch = {
   intent: 'noticias' | 'relatorio_referencia'
 }
 
+function missingManualIntakeColumn(message?: string) {
+  return Boolean(message?.includes('manual_intake') || message?.includes('manual_received_at'))
+}
+
 function applyStoredOcr(parsed: ParsedPdfDocument, document: Record<string, unknown>): ParsedPdfDocument {
   const ocrText = typeof document.ocr_text === 'string' ? cleanArticleText(document.ocr_text) : ''
   if (parsed.articles.length || !ocrText) return parsed
@@ -210,6 +214,7 @@ async function attachBatchArticles(
   articles: Article[]
 ) {
   if (articles.length) await classifyArticleBatch(supabase, articles)
+  const receivedAt = new Date().toISOString()
   for (const clientId of batch.client_ids) {
     for (const article of articles) {
       const { error: assignmentError } = await supabase.from('article_period_assignments').upsert(
@@ -223,12 +228,27 @@ async function attachBatchArticles(
       )
       if (assignmentError) throw new Error(assignmentError.message)
 
-      const { data: selectedTag } = await supabase
+      const selectedTagResult = await supabase
         .from('article_client_tags')
-        .select('article_id')
+        .select('article_id, manual_received_at')
         .eq('article_id', article.id)
         .eq('client_id', clientId)
         .maybeSingle()
+      let selectedTag = selectedTagResult.data
+      let supportsManualIntake = true
+      if (missingManualIntakeColumn(selectedTagResult.error?.message)) {
+        supportsManualIntake = false
+        const fallback = await supabase
+          .from('article_client_tags')
+          .select('article_id')
+          .eq('article_id', article.id)
+          .eq('client_id', clientId)
+          .maybeSingle()
+        if (fallback.error) throw new Error(fallback.error.message)
+        selectedTag = fallback.data ? { ...fallback.data, manual_received_at: null } : null
+      } else if (selectedTagResult.error) {
+        throw new Error(selectedTagResult.error.message)
+      }
       if (!selectedTag) {
         const { error: tagError } = await supabase.from('article_client_tags').insert({
           article_id: article.id,
@@ -257,8 +277,21 @@ async function attachBatchArticles(
           source_verification_status:
             article.content_status === 'integral' ? 'documento_integral' : 'parcial',
           editorial_review_state: 'pendente',
+          ...(supportsManualIntake
+            ? { manual_intake: true, manual_received_at: receivedAt }
+            : {}),
           qualification_version: 1,
         })
+        if (tagError) throw new Error(tagError.message)
+      } else if (supportsManualIntake) {
+        const { error: tagError } = await supabase
+          .from('article_client_tags')
+          .update({
+            manual_intake: true,
+            manual_received_at: selectedTag.manual_received_at || receivedAt,
+          })
+          .eq('article_id', article.id)
+          .eq('client_id', clientId)
         if (tagError) throw new Error(tagError.message)
       }
     }

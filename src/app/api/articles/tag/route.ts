@@ -15,10 +15,32 @@ export async function GET(req: Request) {
     'article_id, client_id, tom, relevancia, cita_cliente, tema, classification_source, confidence, impact_summary, monitoring_status, match_score, match_reasons, rule_version, classified_at, report_role, editorial_score, editorial_reason, cluster_label, report_role_source, triaged_at, triage_version, updated_at'
   const strategicColumns =
     ', central_message, strategic_effect, recommended_action, verification_status, source_verification_status, editorial_review_state, qualified_at, qualification_version, editorial_confidence, geographic_scope, quality_flags, adjudication_version, qa_source, qa_checked_at'
+  const manualColumns = ', manual_intake, manual_received_at'
   const result = await supabase
     .from('article_client_tags')
-    .select(`${baseColumns}${strategicColumns}`)
+    .select(`${baseColumns}${strategicColumns}${manualColumns}`)
     .eq('client_id', clientId)
+  if (
+    result.error?.message.includes('manual_intake') ||
+    result.error?.message.includes('manual_received_at')
+  ) {
+    const withoutManual = await supabase
+      .from('article_client_tags')
+      .select(`${baseColumns}${strategicColumns}`)
+      .eq('client_id', clientId)
+    if (
+      withoutManual.error?.message.includes('central_message') ||
+      withoutManual.error?.message.includes('source_verification_status')
+    ) {
+      const fallback = await supabase.from('article_client_tags').select(baseColumns).eq('client_id', clientId)
+      if (fallback.error) return NextResponse.json({ error: fallback.error.message }, { status: 500 })
+      return NextResponse.json(fallback.data)
+    }
+    if (withoutManual.error) {
+      return NextResponse.json({ error: withoutManual.error.message }, { status: 500 })
+    }
+    return NextResponse.json(withoutManual.data)
+  }
   if (
     result.error?.message.includes('central_message') ||
     result.error?.message.includes('source_verification_status')
@@ -105,14 +127,25 @@ export async function POST(req: Request) {
     row.adjudication_version = 2
   }
 
-  const { data, error } = await supabase
+  const columns =
+    'article_id, client_id, tom, relevancia, cita_cliente, tema, classification_source, confidence, impact_summary, monitoring_status, match_score, match_reasons, rule_version, classified_at, report_role, editorial_score, editorial_reason, cluster_label, report_role_source, triaged_at, triage_version, central_message, strategic_effect, recommended_action, verification_status, source_verification_status, editorial_review_state, qualified_at, qualification_version, editorial_confidence, geographic_scope, quality_flags, adjudication_version, qa_source, qa_checked_at, updated_at'
+  const result = await supabase
     .from('article_client_tags')
     .upsert(row, { onConflict: 'article_id,client_id' })
-    .select(
-      'article_id, client_id, tom, relevancia, cita_cliente, tema, classification_source, confidence, impact_summary, monitoring_status, match_score, match_reasons, rule_version, classified_at, report_role, editorial_score, editorial_reason, cluster_label, report_role_source, triaged_at, triage_version, central_message, strategic_effect, recommended_action, verification_status, source_verification_status, editorial_review_state, qualified_at, qualification_version, editorial_confidence, geographic_scope, quality_flags, adjudication_version, qa_source, qa_checked_at, updated_at'
-    )
+    .select(`${columns}, manual_intake, manual_received_at`)
     .single()
-
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
-  return NextResponse.json(data)
+  if (
+    result.error?.message.includes('manual_intake') ||
+    result.error?.message.includes('manual_received_at')
+  ) {
+    const fallback = await supabase
+      .from('article_client_tags')
+      .upsert(row, { onConflict: 'article_id,client_id' })
+      .select(columns)
+      .single()
+    if (fallback.error) return NextResponse.json({ error: fallback.error.message }, { status: 500 })
+    return NextResponse.json(fallback.data)
+  }
+  if (result.error) return NextResponse.json({ error: result.error.message }, { status: 500 })
+  return NextResponse.json(result.data)
 }
