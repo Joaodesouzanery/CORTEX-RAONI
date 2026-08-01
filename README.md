@@ -34,8 +34,9 @@ Variáveis da aplicação:
 | `NEXT_PUBLIC_SUPABASE_URL` | URL do projeto Supabase |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | chave pública do Supabase |
 | `SUPABASE_SERVICE_ROLE_KEY` | acesso administrativo das API routes |
+| `APP_URL` | URL pública usada pelos trabalhos retomáveis de preparação |
 | `CRON_SECRET` | bearer somente de alertas e fechamentos internos |
-| `ANTHROPIC_API_KEY` | classificação e relatórios por IA; opcional |
+| `ANTHROPIC_API_KEY` | triagem, verificação e redação; sem ela os trabalhos aguardam configuração |
 | `GITHUB_ACTIONS_TOKEN` | token restrito, com `Actions: write`, usado pelos botões de fechamento |
 | `GITHUB_REPOSITORY` | repositório no formato `organização/nome` |
 | `GITHUB_WORKFLOW_REF` | branch do workflow; padrão `main` |
@@ -56,7 +57,7 @@ URLs assinadas de curta duração.
 ## Banco de dados
 
 Aplique, na ordem, todas as migrations versionadas em
-`supabase/migrations/` (atualmente `001` a `029`) pelo Supabase CLI ou SQL
+`supabase/migrations/` (atualmente `001` a `030`) pelo Supabase CLI ou SQL
 Editor. As migrations incluem clientes, classificações editoriais, alertas,
 acervo permanente, proveniências, importações, edições mensais e buckets.
 
@@ -81,6 +82,9 @@ de cada versão aprovada.
 A `029_manual_intake_filter.sql` marca por cliente as notícias recebidas por
 PDF, link ou texto e sustenta o filtro “Enviadas por mim” sem alterar a
 qualificação editorial.
+A `030_continuous_report_automation.sql` cria memória editorial controlada,
+modelos permanentes de agenda, revisões da base, pautas agrupadas, sugestões de
+matéria principal, alertas operacionais e a fila retomável da automação mensal.
 
 ## Operação
 
@@ -151,7 +155,16 @@ Em `/reports/prepare`:
 7. gere, edite ou regenere individualmente as seções 1–9;
 8. finalize a versão: a seção 10 registra a agenda e a seção 11 contém somente
    a base qualificada;
-9. exporte dossiê Markdown, CSV integral, anexo e texto para o Claude Design.
+9. gere um pacote ZIP único para revisão no Claude e posterior diagramação no
+   Claude Design.
+
+Em `/clients`, o botão **Memória editorial** permite versionar eixos, critérios,
+linguagem, tópicos permanentes e exemplos explicitamente mantidos. Decisões
+somente da IA nunca entram nessa memória.
+
+O pacote contém instruções, rascunho, evidências integrais, anexo CSV, agenda e
+lacunas, comparação mensal, relatório anterior e briefing de design. Todos os
+arquivos vêm do mesmo snapshot do checklist.
 
 A matéria principal é colocada primeiro no contexto e deve constar nominalmente
 no Sumário Executivo e na seção 4.1. Atualizar a base não sobrescreve texto
@@ -181,6 +194,12 @@ Disponibilidade e conferência são estados independentes:
 O padrão de novos relatórios é **consultivo cauteloso**. O sistema prefere
 “há oportunidade” e “pode avaliar” até que o cliente aprove uma postura
 executiva mais assertiva.
+
+O workflow `.github/workflows/report-automation.yml` cria as preparações às
+00h15 de Brasília no primeiro dia do mês e as atualiza diariamente às 04h15.
+Dois consumidores processam lotes de menos de 45 segundos. Somente matérias
+novas ou alteradas voltam à triagem; ausência de `ANTHROPIC_API_KEY` deixa o
+trabalho em `waiting_configuration` e não promove nem rebaixa ocorrências.
 
 ### Fechamento mensal
 
@@ -244,6 +263,7 @@ src/app/api/imports                     upload e processamento
 src/app/api/report-drafts               base, triagem, seções e exports
 src/app/api/monthly-editions            criação, listagem e downloads
 src/app/api/internal/monthly-editions   lotes protegidos do worker
+src/app/api/internal/report-automation automação editorial retomável
 src/lib/import/pdf-parser.ts            separação de cadernos e artigos
 src/lib/import/html-report.ts           recuperação de bases históricas HTML
 src/lib/monthly-editions.ts             universo, snapshots e versões
@@ -256,4 +276,5 @@ supabase/migrations/026_*.sql           lotes e preparação mensal
 supabase/migrations/027_*.sql           caixa multicliente e ficha estratégica
 supabase/migrations/028_*.sql           agenda, verificação e portões de qualidade
 supabase/migrations/029_*.sql           diferenciação de notícias recebidas
+supabase/migrations/030_*.sql           memória e preparação contínua
 ```

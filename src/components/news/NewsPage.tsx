@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useMemo, useState } from 'react'
-import { CheckSquare, FilePlus2, FileText, RefreshCw, Sparkles } from 'lucide-react'
+import { CheckSquare, FilePlus2, RefreshCw, Sparkles } from 'lucide-react'
 import { useViewMode } from '@/hooks/useViewMode'
 import { useArticleSelection } from '@/hooks/useArticleSelection'
 import { useToast } from '@/hooks/use-toast'
@@ -11,7 +11,6 @@ import ArticleCardGrid from './ArticleCardGrid'
 import ArticleListView from './ArticleListView'
 import PanoramaPanel from './PanoramaPanel'
 import type { TagPatch } from './TagControls'
-import ReportBuilder from '@/components/report/ReportBuilder'
 import ClippingPdfButton from '@/components/report/ClippingPdfButton'
 import { Button } from '@/components/ui/button'
 import type {
@@ -42,7 +41,6 @@ export default function NewsPage() {
   const [loadError, setLoadError] = useState<string | null>(null)
   const [fetching, setFetching] = useState(false)
   const [fetchRun, setFetchRun] = useState<FetchRun | null>(null)
-  const [reportOpen, setReportOpen] = useState(false)
   const [activeSource, setActiveSource] = useState<string | null>(null)
   const [activePeriod, setActivePeriod] = useState<number | null>(30)
   const [dateFrom, setDateFrom] = useState('')
@@ -552,21 +550,8 @@ export default function NewsPage() {
             </button>
           )}
           <ClippingPdfButton articles={selectedArticles} clientId={activeClient?.id} clientName={activeClient?.name} logoUrl={activeClient?.logo_url} />
-          <button onClick={() => setReportOpen(true)} className="flex items-center gap-2 bg-black px-6 py-3 text-white shadow-xl">
-            <FileText className="h-4 w-4" /> Gerar Relatório ({selected.size})
-          </button>
         </div>
       )}
-
-      <ReportBuilder
-        open={reportOpen}
-        onClose={() => setReportOpen(false)}
-        articles={selectedArticles}
-        onReportGenerated={() => {}}
-        clientId={activeClient?.id}
-        clientName={activeClient?.name}
-        contratante={activeClient?.contratante}
-      />
     </div>
   )
 }

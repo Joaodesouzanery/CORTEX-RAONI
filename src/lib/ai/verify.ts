@@ -67,10 +67,10 @@ export async function verifyEvidenceBatch(
   topics: MonthlyReportTopic[]
 ): Promise<{ decisions: EvidenceVerificationDecision[]; source: 'ia' | 'regra' }> {
   if (!inputs.length) return { decisions: [], source: 'regra' }
-  if (!process.env.ANTHROPIC_API_KEY) return { decisions: conservativeFallback(inputs), source: 'regra' }
+  if (!process.env.ANTHROPIC_API_KEY) throw new Error('ANTHROPIC_API_KEY não configurada.')
 
   const { default: Anthropic } = await import('@anthropic-ai/sdk')
-  const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+  const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY, timeout: 35_000, maxRetries: 0 })
   const payload = inputs.map((input) => ({
     article_id: input.article.id,
     title: input.article.title,

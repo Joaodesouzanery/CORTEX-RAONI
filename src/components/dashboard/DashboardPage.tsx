@@ -70,6 +70,20 @@ export default function DashboardPage() {
 
   const rows = summary?.clients || []
 
+  async function acknowledgeAlert(id: string) {
+    await fetch(`/api/operational-alerts/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status: 'acknowledged' }),
+    })
+    setSummary((current) => current ? {
+      ...current,
+      operational_alerts: (current.operational_alerts || []).map((alert) =>
+        alert.id === id ? { ...alert, status: 'acknowledged' } : alert
+      ),
+    } : current)
+  }
+
   return (
     <div className="mx-auto max-w-screen-2xl px-6 py-8">
       <div className="mb-8 flex flex-wrap items-start justify-between gap-4">
@@ -107,6 +121,21 @@ export default function DashboardPage() {
       </div>
 
       {summary && <HealthBanner summary={summary} />}
+      {summary?.operational_alerts && summary.operational_alerts.length > 0 && (
+        <div className="mb-6 border border-amber-300 bg-amber-50 p-4">
+          <p className="flex items-center gap-2 text-sm font-medium text-amber-900">
+            <AlertTriangle className="h-4 w-4" /> Alertas operacionais ({summary.operational_alerts.length})
+          </p>
+          <div className="mt-2 grid gap-1 text-xs text-amber-800 md:grid-cols-2">
+            {summary.operational_alerts.slice(0, 8).map((alert) => (
+              <p key={alert.id} className="flex items-center justify-between gap-2">
+                <span>{alert.severity === 'critical' ? '●' : '○'} {alert.title}</span>
+                {alert.status === 'open' && <button className="underline" onClick={() => acknowledgeAlert(alert.id)}>Reconhecer</button>}
+              </p>
+            ))}
+          </div>
+        </div>
+      )}
 
       {loading ? (
         <p className="text-gray-400">Carregando contagens exatas…</p>

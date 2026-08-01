@@ -17,6 +17,7 @@ import {
   evidenceCitations,
   inferGeographicScope,
 } from '@/lib/report-quality'
+import { diffReportBase, reportBaseDigest } from '@/lib/report-automation-core'
 
 type TaggedArticleRow = ArticleTag & {
   articles: Article & { sources?: { name: string; categoria?: string } }
@@ -205,6 +206,8 @@ function classificationSnapshot(row: TaggedArticleRow) {
     qa_source: row.qa_source,
     qa_checked_at: row.qa_checked_at,
     source_verification_status: row.source_verification_status || 'nao_verificada',
+    manual_intake: row.manual_intake === true,
+    manual_received_at: row.manual_received_at || null,
   }
 }
 
@@ -238,53 +241,146 @@ export async function refreshDraftEvidence(
 ) {
   const rows = await monthlyTaggedArticles(supabase, draft.client_id, draft.period_month.slice(0, 7))
   const items = evidencePayload(rows)
-  const { data, error } = await supabase.rpc('replace_report_evidence', {
-    p_draft_id: draft.id,
-    p_items: items,
-  })
-  if (error) throw new Error(error.message)
   const now = new Date().toISOString()
-  const { data: sections } = await supabase
-    .from('report_sections')
-    .select('id, status')
-    .eq('draft_id', draft.id)
-    .in('status', ['generated', 'edited'])
-  if (sections?.length) {
-    await supabase
-      .from('report_sections')
-      .update({ status: 'stale', updated_at: now })
-      .in('id', sections.map((section) => section.id))
-  }
+  const currentItems = items.map((item, index) => ({
+    id: `${draft.id}-${index}`,
+    draft_id: draft.id,
+    created_at: now,
+    ...item,
+  })) as ReportEvidenceItem[]
+  const [previousItems, { data: currentDraft, error: draftError }] = await Promise.all([
+    reportEvidenceItems(supabase, draft.id),
+    supabase
+      .from('monthly_report_drafts')
+      .select('base_version, base_digest, status')
+      .eq('id', draft.id)
+      .single(),
+  ])
+  if (draftError || !currentDraft) throw new Error(draftError?.message || 'Preparação não encontrada.')
+  let digest = reportBaseDigest(currentItems)
+  const previousDigest = currentDraft.base_digest || (previousItems.length ? reportBaseDigest(previousItems) : null)
   const counts = {
     total: items.length,
     qualified: items.filter((item) => item.bucket === 'qualified').length,
     annex: items.filter((item) => item.bucket === 'annex').length,
     excluded: items.filter((item) => item.bucket === 'excluded').length,
   }
-  const methodologySnapshot = buildMethodologySnapshot(
-    items.map((item, index) => ({
-      id: `${draft.id}-${index}`,
-      draft_id: draft.id,
-      created_at: now,
-      ...item,
-    }))
-  )
-  const untriaged = items.filter(
+  let untriaged = items.filter(
     (item) =>
       item.bucket !== 'excluded' &&
       !item.classification_snapshot.triaged_at &&
       item.classification_snapshot.report_role_source !== 'humano'
   ).length
+
+  if (previousDigest === digest) {
+    const { data: unchanged, error: unchangedError } = await supabase
+      .from('monthly_report_drafts')
+      .update({
+        base_digest: digest,
+        base_refreshed_at: now,
+        automation_updated_at: now,
+        error: null,
+      })
+      .eq('id', draft.id)
+      .select()
+      .single()
+    if (unchangedError) throw new Error(unchangedError.message)
+    return { draft: unchanged, counts: { ...counts, untriaged }, inserted: 0, changed: false, delta: { added: [], removed: [], reclassified: [], content_changed: [], bucket_changes: [] } }
+  }
+
+  const delta = diffReportBase(previousItems, currentItems)
+  const retriageIds = delta.content_changed.map((item) => String(item.article_id))
+  if (retriageIds.length) {
+    await supabase
+      .from('article_client_tags')
+      .update({
+        triaged_at: null,
+        qa_checked_at: null,
+        adjudication_version: null,
+        editorial_review_state: 'pendente',
+        updated_at: now,
+      })
+      .eq('client_id', draft.client_id)
+      .in('article_id', retriageIds)
+      .or('report_role_source.neq.humano,report_role_source.is.null')
+    for (const item of currentItems) {
+      if (!retriageIds.includes(item.article_id) || item.classification_snapshot.report_role_source === 'humano') continue
+      item.classification_snapshot.triaged_at = null
+      item.classification_snapshot.qa_checked_at = null
+      item.classification_snapshot.adjudication_version = null
+      item.classification_snapshot.editorial_review_state = 'pendente'
+    }
+    digest = reportBaseDigest(currentItems)
+    untriaged = currentItems.filter(
+      (item) =>
+        item.bucket !== 'excluded' &&
+        !item.classification_snapshot.triaged_at &&
+        item.classification_snapshot.report_role_source !== 'humano'
+    ).length
+  }
+  const { data, error } = await supabase.rpc('replace_report_evidence', {
+    p_draft_id: draft.id,
+    p_items: items,
+  })
+  if (error) throw new Error(error.message)
+  const { data: sections } = await supabase
+    .from('report_sections')
+    .select('id, section_key, content, status')
+    .eq('draft_id', draft.id)
+    .in('status', ['generated', 'edited'])
+  if (sections?.length) {
+    const changedIds = new Set([
+      ...delta.removed.map((item) => String(item.article_id)),
+      ...delta.reclassified.map((item) => String(item.article_id)),
+      ...delta.content_changed.map((item) => String(item.article_id)),
+      ...delta.bucket_changes.map((item) => String(item.article_id)),
+    ])
+    const oldCodes = new Map(
+      evidenceCitations(previousItems).map((citation) => [citation.article_id, citation.code])
+    )
+    const codes = [...changedIds].map((id) => oldCodes.get(id)).filter(Boolean) as string[]
+    const staleSectionIds = sections
+      .filter((section) =>
+        section.section_key === 2 ||
+        codes.some((code) => new RegExp(`\\[${code}\\]`).test(section.content || ''))
+      )
+      .map((section) => section.id)
+    if (staleSectionIds.length) {
+      await supabase
+        .from('report_sections')
+        .update({ status: 'stale', updated_at: now })
+        .in('id', staleSectionIds)
+    }
+  }
+  const methodologySnapshot = buildMethodologySnapshot(
+    currentItems
+  )
+  const nextVersion = Number(currentDraft.base_version || 0) + 1
+  await supabase.from('report_base_revisions').upsert({
+    draft_id: draft.id,
+    from_version: Number(currentDraft.base_version || 0),
+    to_version: nextVersion,
+    previous_digest: previousDigest,
+    current_digest: digest,
+    added: delta.added,
+    removed: delta.removed,
+    reclassified: delta.reclassified,
+    content_changed: delta.content_changed,
+    bucket_changes: delta.bucket_changes,
+  }, { onConflict: 'draft_id,to_version' })
   const { data: updated, error: updateError } = await supabase
     .from('monthly_report_drafts')
     .update({
-      base_version: (draft.base_version || 0) + 1,
+      base_version: nextVersion,
+      base_digest: digest,
       base_refreshed_at: now,
-      status: sections?.length ? 'stale' : untriaged ? 'preparing' : 'ready',
+      status: sections?.some((section) => section.section_key === 2 || section.status === 'stale') ? 'stale' : untriaged ? 'preparing' : 'ready',
       quality_status: 'pending',
       quality_summary: {},
       quality_checked_at: null,
       methodology_snapshot: methodologySnapshot,
+      change_summary: { ...delta, since: now, base_version: nextVersion },
+      automation_updated_at: now,
       updated_at: now,
       error: null,
     })
@@ -292,7 +388,7 @@ export async function refreshDraftEvidence(
     .select()
     .single()
   if (updateError) throw new Error(updateError.message)
-  return { draft: updated, counts: { ...counts, untriaged }, inserted: Number(data || 0) }
+  return { draft: updated, counts: { ...counts, untriaged }, inserted: Number(data || 0), changed: true, delta }
 }
 
 export function evidenceArticles(items: ReportEvidenceItem[], leadArticleId?: string | null): Article[] {

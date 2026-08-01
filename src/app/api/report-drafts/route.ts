@@ -91,9 +91,38 @@ export async function POST(req: Request) {
         }))
       )
     }
+    if (!topicCount && !(client.name === 'SIMINERAL' && period === '2026-07')) {
+      const { data: templates } = await supabase
+        .from('client_report_topic_templates')
+        .select('position, title, rationale, inclusion_terms, exclusion_terms, required')
+        .eq('client_id', client_id)
+        .eq('active', true)
+        .order('position')
+      if (templates?.length) {
+        await supabase.from('monthly_report_topics').insert(
+          templates.map((topic) => ({ draft_id: latest.id, ...topic }))
+        )
+      }
+    }
     return NextResponse.json({ draft: updated, created: false })
   }
 
+  const [{ data: editorialProfile }, { data: memoryRows }] = await Promise.all([
+    supabase.from('client_editorial_profiles').select('*').eq('client_id', client_id).maybeSingle(),
+    supabase
+      .from('client_editorial_memory_items')
+      .select('id, kind, source, topic, reason, snapshot, updated_at')
+      .eq('client_id', client_id)
+      .eq('active', true)
+      .order('updated_at', { ascending: false })
+      .limit(40),
+  ])
+  const memorySnapshot = {
+    profile: editorialProfile || null,
+    inclusion_examples: (memoryRows || []).filter((item) => item.kind === 'evidencia').slice(0, 6),
+    exclusion_examples: (memoryRows || []).filter((item) => item.kind === 'contexto' || item.kind === 'ruido').slice(0, 6),
+    captured_at: new Date().toISOString(),
+  }
   const { data: draft, error } = await supabase
     .from('monthly_report_drafts')
     .insert({
@@ -104,6 +133,8 @@ export async function POST(req: Request) {
       service_metrics,
       narrative_posture,
       brand_snapshot: draftBrand(client as Client, period),
+      editorial_memory_snapshot: memorySnapshot,
+      automation_status: 'pending',
       status: 'preparing',
     })
     .select()
@@ -134,6 +165,15 @@ export async function POST(req: Request) {
   }
   if (!topicsToCreate.length && client.name === 'SIMINERAL' && period === '2026-07') {
     topicsToCreate = [...SIMINERAL_JULY_2026_TOPICS]
+  }
+  if (!topicsToCreate.length) {
+    const { data: templates } = await supabase
+      .from('client_report_topic_templates')
+      .select('position, title, rationale, inclusion_terms, exclusion_terms, required')
+      .eq('client_id', client_id)
+      .eq('active', true)
+      .order('position')
+    topicsToCreate = templates || []
   }
   if (topicsToCreate.length) {
     const { error: topicsError } = await supabase.from('monthly_report_topics').insert(

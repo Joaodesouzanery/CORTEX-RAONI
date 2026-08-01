@@ -4,12 +4,14 @@ import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import type { Client } from '@/types'
 import ClientForm from './ClientForm'
+import EditorialProfileEditor from './EditorialProfileEditor'
 
 export default function ClientsPage() {
   const [clients, setClients] = useState<Client[]>([])
   const [loading, setLoading] = useState(true)
   const [formOpen, setFormOpen] = useState(false)
   const [editing, setEditing] = useState<Client | null>(null)
+  const [editorialClient, setEditorialClient] = useState<Client | null>(null)
 
   useEffect(() => { loadClients() }, [])
 
@@ -80,6 +82,9 @@ export default function ClientsPage() {
                 ) : null}
               </div>
               <div className="flex gap-2 flex-shrink-0">
+                <Button variant="outline" size="sm" onClick={() => setEditorialClient(client)}>
+                  Memória editorial
+                </Button>
                 <Button
                   variant="outline"
                   size="sm"
@@ -107,6 +112,7 @@ export default function ClientsPage() {
         onClose={() => setFormOpen(false)}
         onSaved={onSaved}
       />
+      {editorialClient && <EditorialProfileEditor client={editorialClient} onClose={() => setEditorialClient(null)} />}
     </div>
   )
 }

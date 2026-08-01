@@ -5,7 +5,7 @@ import { refreshDraftEvidence, reportEvidenceItems } from '@/lib/report-drafts'
 import type { ArticleSnapshot, MonthlyReportTopic } from '@/types'
 
 export const dynamic = 'force-dynamic'
-export const maxDuration = 60
+export const maxDuration = 45
 
 export async function POST(_: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -28,6 +28,16 @@ export async function POST(_: Request, { params }: { params: Promise<{ id: strin
   }
   if (draft.status === 'approved') {
     return NextResponse.json({ error: 'A versão aprovada é imutável.' }, { status: 409 })
+  }
+  if (!process.env.ANTHROPIC_API_KEY) {
+    await supabase
+      .from('monthly_report_drafts')
+      .update({ automation_status: 'waiting_configuration', automation_updated_at: new Date().toISOString() })
+      .eq('id', id)
+    return NextResponse.json(
+      { error: 'Configure ANTHROPIC_API_KEY para executar a verificação. Nenhuma evidência foi alterada.', status: 'waiting_configuration' },
+      { status: 503 }
+    )
   }
   const evidenceById = new Map(evidence.map((item) => [item.article_id, item]))
   const evidenceIds = evidence.map((item) => item.article_id)

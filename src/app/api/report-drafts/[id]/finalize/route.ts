@@ -10,6 +10,7 @@ import {
   evidenceCitations,
 } from '@/lib/report-quality'
 import type { MonthlyReportTopic } from '@/types'
+import { buildDraftChecklist } from '@/lib/report-automation'
 
 export const dynamic = 'force-dynamic'
 
@@ -67,6 +68,13 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     )
   }
   const items = evidence
+  const checklist = await buildDraftChecklist(supabase, draft)
+  if (!checklist.ready) {
+    return NextResponse.json(
+      { error: 'Resolva o checklist final antes de aprovar.', code: 'APPROVAL_CHECKLIST_BLOCKED', checklist },
+      { status: 409 }
+    )
+  }
   const pendingReview = items.filter(
     (item) => item.bucket === 'annex' && item.classification_snapshot.editorial_review_state === 'pendente'
   ).length
@@ -151,6 +159,9 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
         agenda_topics: topics.length,
         quality_status: latestQuality.status,
         narrative_posture: draft.narrative_posture || 'consultivo_cauteloso',
+        editorial_memory_snapshot: draft.editorial_memory_snapshot || {},
+        comparison_snapshot: draft.comparison_snapshot || {},
+        approval_checklist: checklist,
       },
       client_id: draft.client_id,
       draft_id: id,
@@ -180,5 +191,27 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       updated_at: new Date().toISOString(),
     })
     .eq('id', id)
+  const now = new Date().toISOString()
+  const approvedMemory = items
+    .filter((item) => item.bucket === 'qualified')
+    .map((item) => ({
+      client_id: draft.client_id,
+      article_id: item.article_id,
+      kind: 'evidencia',
+      source: 'relatorio_aprovado',
+      topic: item.classification_snapshot.tema || null,
+      reason: item.classification_snapshot.editorial_reason || 'Evidência usada em relatório aprovado.',
+      snapshot: {
+        article: item.article_snapshot,
+        classification: item.classification_snapshot,
+        draft_id: id,
+        period_month: draft.period_month,
+        report_id: report.id,
+      },
+      updated_at: now,
+    }))
+  if (approvedMemory.length) {
+    await supabase.from('client_editorial_memory_items').upsert(approvedMemory, { onConflict: 'client_id,article_id,kind' })
+  }
   return NextResponse.json({ report, counts }, { status: 201 })
 }

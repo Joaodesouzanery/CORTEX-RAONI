@@ -13,6 +13,7 @@ import {
 } from '@/lib/alerts'
 import { sendEmail, emailEnabled } from '@/lib/email'
 import type { Article, Client, Tom, Relevancia } from '@/types'
+import { syncSourceOperationalAlerts } from '@/lib/report-automation'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
@@ -63,6 +64,7 @@ async function loadWindow(
 
 async function runCheck() {
   const supabase = createClient()
+  await syncSourceOperationalAlerts(supabase)
   const now = Date.now()
   const recentSince = new Date(now - WINDOW_HOURS * 3600_000).toISOString()
   const baselineSince = new Date(now - BASELINE_DAYS * 86400_000).toISOString()
@@ -128,23 +130,31 @@ async function runCheck() {
     })
   }
 
-  const active = digests.filter((d) => d.alerts.length > 0)
+  const [{ data: operationalAlerts }, active] = await Promise.all([
+    supabase.from('operational_alerts').select('title, severity, details').neq('status', 'resolved').order('last_seen_at', { ascending: false }).limit(50),
+    Promise.resolve(digests.filter((d) => d.alerts.length > 0)),
+  ])
   const summary = {
     period: PERIOD_LABEL,
     clients: clients.length,
     clientsWithAlerts: active.length,
     totalAlerts: active.reduce((n, d) => n + d.alerts.length, 0),
+    operationalAlerts: operationalAlerts || [],
     emailConfigured: emailEnabled(),
     email: null as null | { sent: boolean; skipped?: string; error?: string; id?: string },
     digests: active,
   }
 
-  if (hasAlerts(digests)) {
-    const subject = digestSubject(digests, PERIOD_LABEL)
+  if (hasAlerts(digests) || operationalAlerts?.length) {
+    const subject = operationalAlerts?.length && !hasAlerts(digests)
+      ? `CORTEX — ${operationalAlerts.length} alerta(s) operacional(is)`
+      : digestSubject(digests, PERIOD_LABEL)
+    const operationalText = (operationalAlerts || []).map((alert) => `- [${alert.severity}] ${alert.title}`).join('\n')
+    const operationalHtml = (operationalAlerts || []).map((alert) => `<li><strong>${alert.severity}</strong> — ${alert.title}</li>`).join('')
     summary.email = await sendEmail({
       subject,
-      html: renderDigestHtml(digests, PERIOD_LABEL),
-      text: renderDigestText(digests, PERIOD_LABEL),
+      html: `${renderDigestHtml(digests, PERIOD_LABEL)}${operationalHtml ? `<h2>Saúde das fontes</h2><ul>${operationalHtml}</ul>` : ''}`,
+      text: `${renderDigestText(digests, PERIOD_LABEL)}${operationalText ? `\n\nSAÚDE DAS FONTES\n${operationalText}` : ''}`,
     })
   }
   return NextResponse.json(summary)

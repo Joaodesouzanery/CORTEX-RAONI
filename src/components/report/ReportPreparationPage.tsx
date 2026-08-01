@@ -18,10 +18,14 @@ import {
   Star,
 } from 'lucide-react'
 import type {
+  ApprovalChecklist,
   Client,
   EditorialReviewState,
   MonthlyReportTopic,
+  LeadSuggestion,
   MonthlyReportDraft,
+  PeriodComparison,
+  ReportCluster,
   ReportEvidenceItem,
   ReportPosture,
   ReportSection,
@@ -66,7 +70,14 @@ export default function ReportPreparationPage() {
   const [error, setError] = useState('')
   const [triageProgress, setTriageProgress] = useState<{ done: number; remaining: number } | null>(null)
   const [verificationProgress, setVerificationProgress] = useState<{ done: number; remaining: number } | null>(null)
-  const [evidenceFilter, setEvidenceFilter] = useState<'all' | 'pending' | 'qualified' | 'annex'>('all')
+  const [evidenceFilter, setEvidenceFilter] = useState<'exceptions' | 'all' | 'pending' | 'qualified' | 'annex'>('exceptions')
+  const [reviewQueueCount, setReviewQueueCount] = useState(0)
+  const [reviewQueueIds, setReviewQueueIds] = useState<Set<string>>(new Set())
+  const [clusters, setClusters] = useState<ReportCluster[]>([])
+  const [leadSuggestions, setLeadSuggestions] = useState<LeadSuggestion[]>([])
+  const [comparison, setComparison] = useState<PeriodComparison | null>(null)
+  const [checklist, setChecklist] = useState<ApprovalChecklist | null>(null)
+  const [changes, setChanges] = useState<{ added: unknown[]; removed: unknown[]; reclassified: unknown[]; bucket_changes: unknown[] } | null>(null)
   const [editingArticleId, setEditingArticleId] = useState('')
   const [qualification, setQualification] = useState({
     central_message: '',
@@ -114,6 +125,7 @@ export default function ReportPreparationPage() {
                   ])
                 )
               )
+              void loadAutomationData(reportDraft.id)
             })
             .catch((loadError) => {
               setError(loadError instanceof Error ? loadError.message : 'Falha ao carregar a preparação.')
@@ -134,12 +146,69 @@ export default function ReportPreparationPage() {
     )
   }
 
+  async function loadAutomationData(id: string) {
+    const paths = ['review-queue', 'clusters', 'lead-suggestions', 'comparison', 'checklist', 'changes']
+    const results = await Promise.allSettled(
+      paths.map(async (path) => {
+        const response = await fetch(`/api/report-drafts/${id}/${path}`, { cache: 'no-store' })
+        const data = await response.json().catch(() => null)
+        if (!response.ok) throw new Error(data?.error || `Falha ao carregar ${path}.`)
+        return data
+      })
+    )
+    const value = (index: number) => results[index].status === 'fulfilled' ? results[index].value : null
+    setReviewQueueCount(Number(value(0)?.total || 0))
+    setReviewQueueIds(new Set((value(0)?.items || []).map((item: { article_id: string }) => item.article_id)))
+    setClusters(Array.isArray(value(1)) ? value(1) : [])
+    setLeadSuggestions(Array.isArray(value(2)) ? value(2) : [])
+    setComparison(value(3))
+    setChecklist(value(4))
+    setChanges(value(5)?.summary || null)
+  }
+
   async function loadDraft(id: string) {
     const res = await fetch(`/api/report-drafts/${id}`)
     const data = await res.json().catch(() => null)
     if (!res.ok) throw new Error(data?.error || 'Falha ao carregar a preparação.')
     applyDraft(data)
+    await loadAutomationData(id)
     return data as MonthlyReportDraft
+  }
+
+  async function completeReview() {
+    if (!draft) return
+    setBusy('checkpoint')
+    setError('')
+    try {
+      const response = await fetch(`/api/report-drafts/${draft.id}/review-checkpoint`, { method: 'POST' })
+      const data = await response.json().catch(() => null)
+      if (!response.ok) throw new Error(data?.error || 'Falha ao concluir a revisão.')
+      await loadDraft(draft.id)
+    } catch (checkpointError) {
+      setError(checkpointError instanceof Error ? checkpointError.message : 'Falha ao concluir a revisão.')
+    } finally {
+      setBusy('')
+    }
+  }
+
+  async function applyCluster(cluster: ReportCluster, role: 'evidencia' | 'contexto' | 'ruido') {
+    if (!draft) return
+    setBusy(`cluster-${cluster.cluster_key}`)
+    setError('')
+    try {
+      const response = await fetch(`/api/report-drafts/${draft.id}/clusters/${cluster.cluster_key}/apply`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ role, label: cluster.label, reason: cluster.suggestion_reason }),
+      })
+      const data = await response.json().catch(() => null)
+      if (!response.ok) throw new Error(data?.error || 'Falha ao confirmar a pauta.')
+      await loadDraft(draft.id)
+    } catch (clusterError) {
+      setError(clusterError instanceof Error ? clusterError.message : 'Falha ao confirmar a pauta.')
+    } finally {
+      setBusy('')
+    }
   }
 
   async function prepare(newVersion = false) {
@@ -634,6 +703,7 @@ export default function ReportPreparationPage() {
     return a.bucket.localeCompare(b.bucket) || a.position - b.position
   })
   const visibleEvidence = orderedEvidence.filter((item) => {
+    if (evidenceFilter === 'exceptions') return reviewQueueIds.has(item.article_id)
     if (evidenceFilter === 'pending') return item.classification_snapshot.editorial_review_state === 'pendente'
     if (evidenceFilter === 'qualified') return item.bucket === 'qualified'
     if (evidenceFilter === 'annex') return item.bucket === 'annex'
@@ -740,6 +810,34 @@ export default function ReportPreparationPage() {
               {draft.methodology_snapshot.source_unverified}
             </div>
           )}
+          <div className="mb-4 grid gap-3 md:grid-cols-4">
+            <div className="border border-gray-200 p-3">
+              <p className="text-xs uppercase text-gray-500">Automação</p>
+              <p className="mt-1 font-medium">{draft.automation_status || 'pending'}</p>
+              <p className="mt-1 text-xs text-gray-500">Base v{draft.base_version} · {draft.base_digest ? 'snapshot registrado' : 'aguardando snapshot'}</p>
+            </div>
+            <div className="border border-gray-200 p-3">
+              <p className="text-xs uppercase text-gray-500">Revisão necessária</p>
+              <p className="mt-1 text-2xl">{reviewQueueCount}</p>
+              <p className="mt-1 text-xs text-gray-500">A tela abre nesta fila por padrão.</p>
+            </div>
+            <div className="border border-gray-200 p-3">
+              <p className="text-xs uppercase text-gray-500">Desde a última revisão</p>
+              <p className="mt-1 text-sm">
+                +{changes?.added.length || 0} · −{changes?.removed.length || 0} · {changes?.reclassified.length || 0} reclassificadas
+              </p>
+              <Button className="mt-2" size="sm" variant="outline" onClick={completeReview} disabled={!!busy}>
+                Concluir revisão
+              </Button>
+            </div>
+            <div className="border border-gray-200 p-3">
+              <p className="text-xs uppercase text-gray-500">Comparação mensal</p>
+              <p className="mt-1 text-sm">
+                {comparison?.current_total ?? 0} atuais · {comparison?.previous_total ?? 0} anteriores
+              </p>
+              <p className="mt-1 text-xs text-gray-500">{comparison?.themes_new?.length || 0} tema(s) novo(s)</p>
+            </div>
+          </div>
           <div className="flex gap-2 flex-wrap mb-6">
             <Button variant="outline" onClick={refreshBase} disabled={!!busy}>
               <RefreshCw className="w-4 h-4 mr-2" />Atualizar base
@@ -757,10 +855,56 @@ export default function ReportPreparationPage() {
             <Button onClick={runQualityChecks} disabled={!!busy}>
               <CheckCircle2 className="w-4 h-4 mr-2" />Executar portões
             </Button>
-            <a href={`/api/report-drafts/${draft.id}/export?format=dossier`}><Button variant="outline"><Download className="w-4 h-4 mr-2" />Dossiê</Button></a>
-            <a href={`/api/report-drafts/${draft.id}/export?format=csv`}><Button variant="outline"><Download className="w-4 h-4 mr-2" />CSV integral</Button></a>
-            <a href={`/api/report-drafts/${draft.id}/export?format=annex`}><Button variant="outline">Anexo</Button></a>
+            <a href={`/api/report-drafts/${draft.id}/export?format=claude-package`}>
+              <Button><Download className="w-4 h-4 mr-2" />Gerar pacote para o Claude</Button>
+            </a>
           </div>
+
+          {leadSuggestions.length > 0 && (
+            <div className="mb-6 border border-gray-200 p-4">
+              <h2 className="text-xl font-semibold">Três sugestões de matéria principal</h2>
+              <p className="mt-1 text-xs text-gray-500">O sistema pontua e justifica; a escolha continua manual.</p>
+              <div className="mt-3 grid gap-3 md:grid-cols-3">
+                {leadSuggestions.map((suggestion) => {
+                  const article = (suggestion.snapshot.article || {}) as { title?: string; publisher?: string }
+                  return (
+                    <div key={suggestion.article_id} className="border border-gray-100 p-3">
+                      <p className="text-xs text-gray-500">#{suggestion.rank} · {suggestion.score.toFixed(0)} pontos</p>
+                      <p className="mt-1 font-medium">{article.title || suggestion.article_id}</p>
+                      <p className="mt-1 text-xs text-gray-500">{suggestion.rationale}</p>
+                      <Button className="mt-3" size="sm" variant={draft.lead_article_id === suggestion.article_id ? 'default' : 'outline'} onClick={() => chooseLead(suggestion.article_id)} disabled={!!busy}>
+                        {draft.lead_article_id === suggestion.article_id ? 'Escolhida' : 'Escolher'}
+                      </Button>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          )}
+
+          {clusters.some((cluster) => cluster.article_count > 1) && (
+            <div className="mb-6 border border-gray-200 p-4">
+              <h2 className="text-xl font-semibold">Pautas agrupadas</h2>
+              <p className="mt-1 text-xs text-gray-500">Veículos continuam separados no acervo. A decisão em lote exige sua confirmação.</p>
+              <div className="mt-3 space-y-2">
+                {clusters.filter((cluster) => cluster.article_count > 1).slice(0, 20).map((cluster) => (
+                  <div key={cluster.cluster_key} className="flex flex-wrap items-center justify-between gap-3 border border-gray-100 p-3">
+                    <div className="min-w-0 flex-1">
+                      <p className="font-medium">{cluster.human_label || cluster.label}</p>
+                      <p className="mt-1 text-xs text-gray-500">{cluster.article_count} publicações · {cluster.vehicle_count} veículos · sugestão: {cluster.suggested_role}</p>
+                    </div>
+                    <div className="flex gap-1">
+                      {(['evidencia', 'contexto', 'ruido'] as const).map((role) => (
+                        <Button key={role} size="sm" variant={cluster.human_role === role ? 'default' : 'outline'} onClick={() => applyCluster(cluster, role)} disabled={!!busy}>
+                          {role}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           <div className="mb-8 border border-gray-200 p-4">
             <div className="mb-3 flex items-start justify-between gap-4">
@@ -878,6 +1022,7 @@ export default function ReportPreparationPage() {
             </div>
             <div className="flex gap-2 mb-2 flex-wrap">
               {([
+                ['exceptions', `Revisão necessária (${reviewQueueCount})`],
                 ['all', `Todas (${evidence.length})`],
                 ['pending', `Pendentes (${counts.pending})`],
                 ['qualified', `Base (${counts.qualified})`],
@@ -1094,14 +1239,26 @@ export default function ReportPreparationPage() {
               <p className="text-sm text-gray-500">A seção 10 registra a agenda; a seção 11 contém somente evidências qualificadas. O anexo permanece separado.</p>
             </div>
             <div className="flex gap-2">
-              <a href={`/api/report-drafts/${draft.id}/export?format=text`}>
-                <Button variant="outline"><Download className="w-4 h-4 mr-2" />Handoff Claude Design</Button>
+              <a href={`/api/report-drafts/${draft.id}/export?format=claude-package`}>
+                <Button variant="outline"><Download className="w-4 h-4 mr-2" />Pacote Claude</Button>
               </a>
               <Button onClick={() => finalize()} disabled={!!busy || draft.status === 'approved' || draft.quality_status !== 'passed'}>
                 <CheckCircle2 className="w-4 h-4 mr-2" />{draft.status === 'approved' ? 'Versão aprovada' : 'Finalizar versão'}
               </Button>
             </div>
           </div>
+          {checklist && (
+            <div className={`mt-4 border p-4 ${checklist.ready ? 'border-emerald-300 bg-emerald-50' : 'border-amber-300 bg-amber-50'}`}>
+              <p className="font-semibold">Checklist final · {checklist.ready ? 'pronto para aprovação' : 'há pendências'}</p>
+              <div className="mt-2 grid gap-1 md:grid-cols-2">
+                {checklist.items.map((item) => (
+                  <p key={item.key} className="text-sm">
+                    {item.status === 'passed' ? '✓' : item.status === 'warning' ? '!' : '○'} {item.label}{item.detail ? ` — ${item.detail}` : ''}
+                  </p>
+                ))}
+              </div>
+            </div>
+          )}
         </>
       )}
     </div>

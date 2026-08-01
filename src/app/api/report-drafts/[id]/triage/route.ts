@@ -3,9 +3,32 @@ import { createAdminClient as createClient } from '@/lib/supabase/server'
 import { triageEvidence } from '@/lib/ai/triage'
 import { fetchAll, refreshDraftEvidence, reportEvidenceItems } from '@/lib/report-drafts'
 import type { ArticleSnapshot } from '@/types'
+import { normalizeText } from '@/lib/relevance'
 
 export const dynamic = 'force-dynamic'
-export const maxDuration = 60
+export const maxDuration = 45
+
+function selectMemoryExamples(
+  rows: Array<{ id?: string; kind: string; topic?: string | null; reason?: string; snapshot?: unknown }>,
+  batch: Array<{ article_snapshot: ArticleSnapshot }>,
+  kinds: string[]
+) {
+  const candidateTokens = new Set(
+    normalizeText(batch.map((item) => `${item.article_snapshot.title} ${item.article_snapshot.excerpt || ''}`).join(' '))
+      .split(/\s+/)
+      .filter((token) => token.length >= 5)
+  )
+  return rows
+    .filter((row) => kinds.includes(row.kind))
+    .map((row) => {
+      const text = normalizeText(`${row.topic || ''} ${row.reason || ''} ${JSON.stringify(row.snapshot || {})}`)
+      const score = [...candidateTokens].filter((token) => text.includes(token)).length
+      return { row, score }
+    })
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 6)
+    .map(({ row }) => row)
+}
 
 export async function POST(_: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -29,8 +52,18 @@ export async function POST(_: Request, { params }: { params: Promise<{ id: strin
       { status: 409 }
     )
   }
+  if (!process.env.ANTHROPIC_API_KEY) {
+    await supabase
+      .from('monthly_report_drafts')
+      .update({ automation_status: 'waiting_configuration', automation_updated_at: new Date().toISOString() })
+      .eq('id', id)
+    return NextResponse.json(
+      { error: 'Configure ANTHROPIC_API_KEY para executar a triagem. Nenhuma classificação foi alterada.', status: 'waiting_configuration' },
+      { status: 503 }
+    )
+  }
 
-  const [evidence, humanTags, triaged] = await Promise.all([
+  const [evidence, humanTags, triaged, { data: memoryRows }] = await Promise.all([
     reportEvidenceItems(supabase, id, false),
     fetchAll<{ article_id: string }>((from, to) =>
       supabase
@@ -48,6 +81,13 @@ export async function POST(_: Request, { params }: { params: Promise<{ id: strin
         .not('triaged_at', 'is', null)
         .range(from, to)
     ),
+    supabase
+      .from('client_editorial_memory_items')
+      .select('id, kind, source, topic, reason, snapshot, updated_at')
+      .eq('client_id', draft.client_id)
+      .eq('active', true)
+      .order('updated_at', { ascending: false })
+      .limit(40),
   ])
   const protectedIds = new Set(humanTags.map((tag) => tag.article_id))
   const candidates = evidence.filter((item) => !protectedIds.has(item.article_id))
@@ -60,9 +100,32 @@ export async function POST(_: Request, { params }: { params: Promise<{ id: strin
 
   await supabase.from('monthly_report_drafts').update({ status: 'triaging' }).eq('id', id)
   try {
+    const inclusionExamples = selectMemoryExamples(memoryRows || [], batch, ['evidencia'])
+    const exclusionExamples = selectMemoryExamples(memoryRows || [], batch, ['contexto', 'ruido'])
+    const priorBatches = Array.isArray(draft.editorial_memory_snapshot?.triage_batches)
+      ? draft.editorial_memory_snapshot.triage_batches
+      : []
+    await supabase.from('monthly_report_drafts').update({
+      editorial_memory_snapshot: {
+        ...(draft.editorial_memory_snapshot || {}),
+        triage_batches: [
+          ...priorBatches.slice(-49),
+          {
+            captured_at: new Date().toISOString(),
+            article_ids: batch.map((item) => item.article_id),
+            inclusion_example_ids: inclusionExamples.map((item) => item.id).filter(Boolean),
+            exclusion_example_ids: exclusionExamples.map((item) => item.id).filter(Boolean),
+          },
+        ],
+      },
+    }).eq('id', id)
     const result = await triageEvidence(
       batch.map((item) => item.article_snapshot as ArticleSnapshot),
-      draft.clients
+      draft.clients,
+      {
+        inclusion: inclusionExamples,
+        exclusion: exclusionExamples,
+      }
     )
     const now = new Date().toISOString()
     for (const decision of result.decisions) {

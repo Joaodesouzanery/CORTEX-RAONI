@@ -94,12 +94,21 @@ export async function GET(req: Request) {
     const empty = sources.filter(
       (source) => !source.last_fetch_error && !!source.last_fetched_at && source.last_fetch_count === 0
     )
-    const { data: latestRun } = await supabase
-      .from('fetch_runs')
-      .select('*')
-      .order('created_at', { ascending: false })
-      .limit(1)
-      .maybeSingle()
+    const [{ data: latestRun }, { data: operationalAlerts }] = await Promise.all([
+      supabase
+        .from('fetch_runs')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle(),
+      supabase
+        .from('operational_alerts')
+        .select('*')
+        .neq('status', 'resolved')
+        .order('severity', { ascending: true })
+        .order('last_seen_at', { ascending: false })
+        .limit(50),
+    ])
     const { data: oldest } = await supabase
       .from('articles')
       .select('published_at')
@@ -134,6 +143,7 @@ export async function GET(req: Request) {
         coverage_complete: (olderCount || 0) > 0,
         latest_run: latestRun || null,
       },
+      operational_alerts: operationalAlerts || [],
     })
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Falha ao montar o painel.'

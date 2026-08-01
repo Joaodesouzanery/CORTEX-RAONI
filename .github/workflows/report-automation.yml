@@ -1,0 +1,82 @@
+name: Preparação mensal contínua
+
+on:
+  schedule:
+    # 00h15 de Brasília no primeiro dia: garante as preparações do mês.
+    - cron: '15 3 1 * *'
+    # 04h15 de Brasília: atualiza mês corrente e anterior ainda aberto.
+    - cron: '15 7 * * *'
+  workflow_dispatch:
+    inputs:
+      period:
+        description: 'Período YYYY-MM (vazio = mês atual em Brasília)'
+        required: false
+        type: string
+      trigger:
+        description: 'Tipo de execução'
+        required: true
+        default: manual
+        type: choice
+        options:
+          - manual
+          - backfill
+      include_previous:
+        description: 'Atualizar também o mês anterior aberto'
+        required: true
+        default: true
+        type: boolean
+
+concurrency:
+  group: report-automation-${{ github.event.inputs.period || 'current' }}
+  cancel-in-progress: false
+
+jobs:
+  start:
+    runs-on: ubuntu-latest
+    outputs:
+      run_id: ${{ steps.start.outputs.run_id }}
+    steps:
+      - id: start
+        env:
+          APP_URL: ${{ secrets.APP_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+          PERIOD: ${{ github.event.inputs.period }}
+          MANUAL_TRIGGER: ${{ github.event.inputs.trigger }}
+          INCLUDE_PREVIOUS: ${{ github.event.inputs.include_previous }}
+        run: |
+          TRIGGER="${MANUAL_TRIGGER:-schedule}"
+          INCLUDE="${INCLUDE_PREVIOUS:-true}"
+          RESPONSE=$(curl --fail-with-body --silent --show-error \
+            --request POST "${APP_URL}/api/internal/report-automation/start" \
+            --header "Authorization: Bearer ${CRON_SECRET}" \
+            --header "Content-Type: application/json" \
+            --data "{\"period\":\"${PERIOD}\",\"trigger\":\"${TRIGGER}\",\"include_previous\":${INCLUDE}}")
+          RUN_ID=$(echo "$RESPONSE" | jq -r '.run_id')
+          test -n "$RUN_ID" && test "$RUN_ID" != "null"
+          echo "run_id=$RUN_ID" >> "$GITHUB_OUTPUT"
+
+  process:
+    needs: start
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        worker: [1, 2]
+    steps:
+      - env:
+          APP_URL: ${{ secrets.APP_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          for ATTEMPT in $(seq 1 300); do
+            RESPONSE=$(curl --fail-with-body --silent --show-error \
+              --request POST "${APP_URL}/api/internal/report-automation/process" \
+              --header "Authorization: Bearer ${CRON_SECRET}" \
+              --header "Content-Type: application/json" \
+              --data '{}')
+            echo "$RESPONSE" | jq -c '{job_id,stage,next_stage,complete,idle,status,error}'
+            IDLE=$(echo "$RESPONSE" | jq -r '.idle // false')
+            if [ "$IDLE" = "true" ]; then
+              break
+            fi
+            sleep 1
+          done

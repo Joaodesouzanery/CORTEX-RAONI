@@ -55,6 +55,13 @@ export type ReportSectionStatus = 'pending' | 'generating' | 'generated' | 'edit
 export type EditionStatus = 'rascunho' | 'classificando' | 'renderizando' | 'concluido' | 'erro'
 export type EditionSection = 'mencao_direta' | 'cobertura_setorial' | 'baixa_confianca'
 export type EditionVersion = number
+export type ReportAutomationStatus =
+  | 'pending'
+  | 'running'
+  | 'waiting_configuration'
+  | 'complete'
+  | 'partial'
+  | 'error'
 
 export interface ArticleTag {
   article_id: string
@@ -264,6 +271,7 @@ export interface DashboardSummary {
     coverage_complete: boolean
     latest_run: FetchRun | null
   }
+  operational_alerts?: OperationalAlert[]
 }
 
 export interface PaginatedArticles {
@@ -419,11 +427,181 @@ export interface MonthlyReportDraft {
   quality_checked_at?: string | null
   narrative_posture: ReportPosture
   methodology_snapshot?: MethodologySnapshot
+  base_digest?: string | null
+  comparison_snapshot?: PeriodComparison
+  change_summary?: Record<string, unknown>
+  editorial_memory_snapshot?: Record<string, unknown>
+  automation_status?: ReportAutomationStatus
+  automation_updated_at?: string | null
+  claude_package_base_version?: number | null
+  claude_package_generated_at?: string | null
   clients?: Client
   evidence_items?: ReportEvidenceItem[]
   sections?: ReportSection[]
   topics?: MonthlyReportTopic[]
   quality_checks?: ReportQualityCheck[]
+  clusters?: ReportCluster[]
+  lead_suggestions?: LeadSuggestion[]
+  latest_checkpoint?: ReviewCheckpoint | null
+  approval_checklist?: ApprovalChecklist
+}
+
+export interface ClientEditorialProfile {
+  client_id: string
+  version: number
+  permanent_axes: string[]
+  inclusion_guidelines: string
+  exclusion_guidelines: string
+  style_guidelines: string
+  default_posture: ReportPosture
+  active: boolean
+  updated_at: string
+}
+
+export interface EditorialMemoryItem {
+  id: string
+  client_id: string
+  article_id: string | null
+  kind: ReportRole | 'estilo'
+  source: 'humano' | 'relatorio_aprovado' | 'curado'
+  topic: string | null
+  reason: string
+  snapshot: Record<string, unknown>
+  active: boolean
+  created_at: string
+  updated_at: string
+}
+
+export interface ReportCluster {
+  id?: string
+  draft_id: string
+  cluster_key: string
+  label: string
+  representative_article_id: string | null
+  article_count: number
+  vehicle_count: number
+  direct_mentions: number
+  tone: Tom | null
+  confidence: number | null
+  suggested_role: ReportRole | null
+  suggestion_reason: string | null
+  human_role: ReportRole | null
+  human_label: string | null
+  human_decided_at: string | null
+  article_ids: string[]
+  created_at?: string
+  updated_at?: string
+}
+
+export interface BaseRevision {
+  id: string
+  draft_id: string
+  from_version: number
+  to_version: number
+  previous_digest: string | null
+  current_digest: string
+  added: Array<Record<string, unknown>>
+  removed: Array<Record<string, unknown>>
+  reclassified: Array<Record<string, unknown>>
+  bucket_changes: Array<Record<string, unknown>>
+  created_at: string
+}
+
+export interface ReviewCheckpoint {
+  id: string
+  draft_id: string
+  base_version: number
+  base_digest: string | null
+  snapshot: Record<string, unknown>
+  created_at: string
+}
+
+export interface LeadSuggestion {
+  id?: string
+  draft_id: string
+  base_version: number
+  article_id: string
+  rank: number
+  score: number
+  rationale: string
+  snapshot: Record<string, unknown>
+  created_at?: string
+}
+
+export interface PeriodComparison {
+  current_period?: string
+  previous_period?: string | null
+  current_total?: number
+  previous_total?: number
+  current_qualified?: number
+  previous_qualified?: number
+  current_direct_mentions?: number
+  previous_direct_mentions?: number
+  themes_new?: string[]
+  themes_recurring?: string[]
+  themes_absent?: string[]
+  sources_new?: string[]
+  generated_at?: string
+  [key: string]: unknown
+}
+
+export interface AutomationRun {
+  id: string
+  trigger: 'schedule' | 'manual' | 'backfill'
+  period_month: string
+  status: 'pending' | 'running' | 'complete' | 'partial' | 'error'
+  total_jobs: number
+  completed_jobs: number
+  failed_jobs: number
+  requested_at: string
+  started_at: string | null
+  finished_at: string | null
+  error: string | null
+}
+
+export interface AutomationJob {
+  id: string
+  run_id: string
+  client_id: string
+  draft_id: string | null
+  period_month: string
+  stage: string
+  status: 'pending' | 'running' | 'waiting_configuration' | 'complete' | 'error'
+  cursor: Record<string, unknown>
+  attempts: number
+  failure_count: number
+  processed_count: number
+  changed_count: number
+  error: string | null
+}
+
+export interface OperationalAlert {
+  id: string
+  fingerprint: string
+  kind: 'source_stale' | 'source_failed' | 'automation' | 'topic_gap'
+  severity: 'info' | 'warning' | 'critical'
+  status: 'open' | 'acknowledged' | 'resolved'
+  client_id: string | null
+  source_id: string | null
+  draft_id: string | null
+  title: string
+  details: Record<string, unknown>
+  first_seen_at: string
+  last_seen_at: string
+  acknowledged_at: string | null
+  resolved_at: string | null
+}
+
+export interface ApprovalChecklist {
+  base_version: number
+  generated_at: string
+  ready: boolean
+  items: Array<{
+    key: string
+    label: string
+    status: 'passed' | 'warning' | 'blocked'
+    detail?: string
+  }>
 }
 
 export interface MonthlyReportTopic {

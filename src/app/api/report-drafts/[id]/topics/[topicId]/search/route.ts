@@ -44,6 +44,7 @@ export async function POST(
         .from('report_sections')
         .update({ status: 'stale', updated_at: now })
         .eq('draft_id', id)
+        .eq('section_key', 2)
         .in('status', ['generated', 'edited']),
     ])
   }
@@ -112,14 +113,28 @@ export async function POST(
     .limit(1)
     .maybeSingle()
   let fetchRun = active
+  let stableSourceId: string | null = null
+  if (fetchRun) {
+    const { data: activeSource } = await supabase
+      .from('fetch_run_sources')
+      .select('source_id')
+      .eq('run_id', fetchRun.id)
+      .order('source_id')
+      .limit(1)
+      .maybeSingle()
+    stableSourceId = activeSource?.source_id || null
+  }
   if (!fetchRun) {
     const { data: links } = await supabase
       .from('client_sources')
       .select('source_id, sources!inner(active)')
       .eq('client_id', draft.client_id)
       .eq('sources.active', true)
+      .order('is_thematic', { ascending: false })
       .order('priority', { ascending: false })
-    const sourceIds = Array.from(new Set((links || []).map((link) => link.source_id)))
+      .limit(1)
+    const sourceIds = Array.from(new Set((links || []).map((link) => link.source_id))).slice(0, 1)
+    stableSourceId = sourceIds[0] || null
     if (sourceIds.length) {
       const { data: created, error: runError } = await supabase
         .from('fetch_runs')
@@ -169,6 +184,7 @@ export async function POST(
         inclusion_terms: topic.inclusion_terms,
         exclusion_terms: topic.exclusion_terms,
         configured_sources: true,
+        stable_source_id: stableSourceId,
       },
       fetch_run_id: fetchRun?.id || null,
       started_at: now,

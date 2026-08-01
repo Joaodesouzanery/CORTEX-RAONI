@@ -50,11 +50,12 @@ function fallback(articles: ArticleSnapshot[]): TriageDecision[] {
 
 export async function triageEvidence(
   articles: ArticleSnapshot[],
-  client: { name: string; sector: string | null; context: string | null }
+  client: { name: string; sector: string | null; context: string | null },
+  memory: { inclusion: unknown[]; exclusion: unknown[] } = { inclusion: [], exclusion: [] }
 ): Promise<{ decisions: TriageDecision[]; source: 'ia' | 'regra' }> {
-  if (!process.env.ANTHROPIC_API_KEY) return { decisions: fallback(articles), source: 'regra' }
+  if (!process.env.ANTHROPIC_API_KEY) throw new Error('ANTHROPIC_API_KEY não configurada.')
   const { default: Anthropic } = await import('@anthropic-ai/sdk')
-  const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+  const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY, timeout: 35_000, maxRetries: 0 })
   const input = articles.map((article) => ({
     id: article.id,
     title: article.title,
@@ -85,7 +86,7 @@ Responda somente JSON válido: [{"article_id":"uuid","report_role":"evidencia|co
     messages: [
       {
         role: 'user',
-        content: `${client.context || ''}\n\nPUBLICAÇÕES:\n${JSON.stringify(input)}`,
+        content: `${client.context || ''}\n\nEXEMPLOS APROVADOS DE INCLUSÃO (máximo 6):\n${JSON.stringify(memory.inclusion.slice(0, 6))}\n\nEXEMPLOS APROVADOS DE EXCLUSÃO (máximo 6):\n${JSON.stringify(memory.exclusion.slice(0, 6))}\n\nPUBLICAÇÕES:\n${JSON.stringify(input)}`,
       },
     ],
   })
