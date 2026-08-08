@@ -8,7 +8,6 @@ import {
   reportEvidenceItems,
 } from '@/lib/report-drafts'
 import {
-  buildAgendaSection,
   buildMethodologyNote,
   buildMethodologySnapshot,
   buildThematicMatrix,
@@ -16,6 +15,12 @@ import {
 import type { MonthlyReportTopic } from '@/types'
 import { createZip } from '@/lib/zip'
 import { buildDraftChecklist } from '@/lib/report-automation'
+import {
+  directivesPrompt,
+  lintEditorialDirectives,
+  editorialManifest,
+  visualBrief,
+} from '@/lib/editorial-directives'
 
 export const dynamic = 'force-dynamic'
 
@@ -50,7 +55,8 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
       : section.content
   )
   const safeName = `${String(draft.clients?.name || 'cliente').replace(/[^a-z0-9]+/gi, '-')}-${draft.period_month.slice(0, 7)}`
-  if (format === 'claude-package') {
+  if (format === 'claude-package' || format === 'claude-diagnostic') {
+    const packageKind = format === 'claude-diagnostic' ? 'diagnostic' : 'final'
     const [{ data: priorDraft }, checklist] = await Promise.all([
       supabase
         .from('monthly_report_drafts')
@@ -62,8 +68,18 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
         .order('version', { ascending: false })
         .limit(1)
         .maybeSingle(),
-      buildDraftChecklist(supabase, draft),
+      buildDraftChecklist(supabase, draft, { requirePackage: false }),
     ])
+    if (packageKind === 'final' && !checklist.ready) {
+      return NextResponse.json(
+        {
+          error: 'O pacote final só pode ser gerado depois que o checklist estiver pronto.',
+          code: 'CLAUDE_PACKAGE_CHECKLIST_BLOCKED',
+          checklist,
+        },
+        { status: 409 }
+      )
+    }
     const priorSections = priorDraft
       ? (await supabase.from('report_sections').select('*').eq('draft_id', priorDraft.id).order('section_key')).data || []
       : []
@@ -89,10 +105,15 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     const instructions = [
       '# INSTRUÇÕES PARA REVISÃO NO CLAUDE',
       '',
+      ...(packageKind === 'diagnostic'
+        ? ['> PACOTE DIAGNÓSTICO — BASE INCOMPLETA. NÃO USAR COMO VERSÃO FINAL PARA O CLIENTE.', '']
+        : []),
       `Cliente: **${draft.clients?.name || 'cliente'}**`,
       `Competência: **${draft.period_month.slice(0, 7)}**`,
       `Versão da base: **${draft.base_version}**`,
       `Postura narrativa: **${draft.narrative_posture || 'consultivo_cauteloso'}**`,
+      '',
+      directivesPrompt(draft.applied_editorial_snapshot, ['narrativa', 'terminologia', 'metrica', 'estrutura']),
       '',
       'Use somente as evidências [E001] etc. para afirmações factuais. Preserve a separação entre fato monitorado, leitura estratégica e recomendação. Não invente fontes, números ou compromissos do cliente. A decisão de matéria principal é humana.',
       '',
@@ -102,9 +123,8 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
       ...checklist.items.map((item) => `- [${item.status === 'passed' ? 'x' : ' '}] ${item.label}${item.detail ? ` — ${item.detail}` : ''}`),
     ].join('\n')
     const reportText = [
-      buildMethodologyNote(methodology, draft.clients?.name || 'cliente'),
+      buildMethodologyNote(methodology, draft.clients?.name || 'cliente', draft.applied_editorial_snapshot || null),
       ...analyticalSections.filter(Boolean),
-      buildAgendaSection(topics),
       buildQualifiedSection(evidence),
     ].join('\n\n')
     const gaps = topics.map((topic) => `- **${topic.title}** — ${topic.coverage_status}${topic.gap_reason ? `: ${topic.gap_reason}` : ''}`).join('\n')
@@ -121,8 +141,32 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
       `Rodapé: ${draft.brand_snapshot?.footer || '—'}`,
       `Diretrizes: ${draft.brand_snapshot?.guidelines || 'Preservar a identidade visual do relatório anterior.'}`,
       '',
+      visualBrief(draft.applied_editorial_snapshot),
+      '',
       'A diagramação deve preservar códigos de evidência, hierarquia das seções, nota metodológica e distinção visual entre fato, interpretação e recomendação.',
     ].join('\n')
+    const blockedDirectives = lintEditorialDirectives(
+      reportText,
+      draft.applied_editorial_snapshot || null
+    ).filter((check) => check.status === 'blocked')
+    if (blockedDirectives.length) {
+      return NextResponse.json(
+        { error: 'O relatório viola diretivas editoriais do cliente.', checks: blockedDirectives },
+        { status: 409 }
+      )
+    }
+    const packageAt = new Date().toISOString()
+    const manifest = {
+      kind: packageKind,
+      client_id: draft.client_id,
+      period_month: draft.period_month,
+      draft_id: draft.id,
+      base_version: draft.base_version,
+      base_digest: draft.base_digest,
+      evidence_count: evidence.filter((item) => item.bucket === 'qualified').length,
+      checklist_ready: checklist.ready,
+      generated_at: packageAt,
+    }
     const archive = createZip([
       { name: '00_INSTRUCOES.md', content: instructions },
       { name: '01_RASCUNHO_RELATORIO.md', content: reportText },
@@ -132,6 +176,8 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
       { name: '05_COMPARACAO_MENSAL.md', content: `# COMPARAÇÃO MENSAL\n\n\`\`\`json\n${comparison}\n\`\`\`` },
       { name: '06_RELATORIO_ANTERIOR.md', content: prior },
       { name: '07_BRIEFING_DESIGN.md', content: design },
+      { name: '08_MANIFESTO_EDITORIAL.json', content: editorialManifest(draft.applied_editorial_snapshot) },
+      { name: '09_MANIFESTO_DO_PACOTE.json', content: JSON.stringify(manifest, null, 2) },
     ])
     const { data: currentSnapshot } = await supabase
       .from('monthly_report_drafts')
@@ -148,12 +194,35 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
         { status: 409 }
       )
     }
-    const packageAt = new Date().toISOString()
-    await supabase.from('monthly_report_drafts').update({ claude_package_base_version: draft.base_version, claude_package_generated_at: packageAt, updated_at: packageAt }).eq('id', id)
+    const { error: packageError } = await supabase.from('report_package_exports').insert({
+      draft_id: draft.id,
+      base_version: draft.base_version,
+      export_kind: packageKind,
+      checklist_snapshot: checklist,
+      editorial_snapshot: draft.applied_editorial_snapshot || {},
+      manifest,
+    })
+    if (packageError) {
+      return NextResponse.json({ error: packageError.message }, { status: 500 })
+    }
+    await supabase
+      .from('monthly_report_drafts')
+      .update(
+        packageKind === 'final'
+          ? {
+              final_package_base_version: draft.base_version,
+              final_package_generated_at: packageAt,
+              claude_package_base_version: draft.base_version,
+              claude_package_generated_at: packageAt,
+              updated_at: packageAt,
+            }
+          : { diagnostic_package_generated_at: packageAt, updated_at: packageAt }
+      )
+      .eq('id', id)
     return new NextResponse(new Uint8Array(archive), {
       headers: {
         'Content-Type': 'application/zip',
-        'Content-Disposition': `attachment; filename="${safeName}-pacote-claude-v${draft.base_version}.zip"`,
+        'Content-Disposition': `attachment; filename="${safeName}-pacote-${packageKind}-v${draft.base_version}.zip"`,
         'Cache-Control': 'private, no-store',
       },
     })
@@ -171,9 +240,8 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     extension = 'md'
   } else if (format === 'text') {
     content = [
-      buildMethodologyNote(methodology, draft.clients?.name || 'cliente'),
+      buildMethodologyNote(methodology, draft.clients?.name || 'cliente', draft.applied_editorial_snapshot || null),
       ...analyticalSections.filter(Boolean),
-      buildAgendaSection(topics),
       buildQualifiedSection(evidence),
       '---',
       `*${draft.brand_snapshot?.footer || ''}*`,
@@ -181,7 +249,12 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     contentType = 'text/markdown; charset=utf-8'
     extension = 'md'
   } else {
-    content = buildDossier(evidence, topics, draft.clients?.name || 'cliente')
+    content = buildDossier(
+      evidence,
+      topics,
+      draft.clients?.name || 'cliente',
+      draft.applied_editorial_snapshot || null
+    )
     contentType = 'text/markdown; charset=utf-8'
     extension = 'md'
   }

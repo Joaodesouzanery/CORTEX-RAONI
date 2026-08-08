@@ -9,9 +9,10 @@ export type ClassificationSource = 'regra' | 'ia' | 'humano'
 export type MonitoringStatus = 'candidato' | 'confirmado' | 'revisao' | 'excluido'
 export type FetchRunStatus = 'pendente' | 'executando' | 'concluido' | 'parcial' | 'erro'
 export type FetchRunSourceStatus = 'pendente' | 'executando' | 'concluido' | 'erro'
-export type ImportDocumentType = 'caderno' | 'artigo' | 'relatorio' | 'desconhecido'
+export type ImportDocumentType = 'caderno' | 'artigo' | 'relatorio' | 'pacote' | 'desconhecido'
 export type ImportStatus = 'enviado' | 'processando' | 'concluido' | 'revisao' | 'erro'
 export type ImportIntent = 'noticias' | 'relatorio_referencia'
+export type ReferenceKind = 'historical' | 'quality_reference' | 'delivered_report' | 'diagnostic_package'
 export type ImportBatchStatus = 'pending' | 'processing' | 'complete' | 'partial' | 'error'
 export type OcrStatus = 'not_requested' | 'pending' | 'processing' | 'complete' | 'error'
 export type EvidenceBucket = 'qualified' | 'annex' | 'excluded'
@@ -62,6 +63,33 @@ export type ReportAutomationStatus =
   | 'complete'
   | 'partial'
   | 'error'
+export type DirectiveCategory =
+  | 'captacao'
+  | 'qualificacao'
+  | 'narrativa'
+  | 'terminologia'
+  | 'metrica'
+  | 'estrutura'
+  | 'visual'
+export type DirectiveSeverity = 'block' | 'warn' | 'prefer'
+export type DirectiveScope = 'permanent' | 'monthly'
+export type MetricVisibility = 'publica' | 'interna' | 'omitida'
+export type CaptureIntent =
+  | 'mencao_direta'
+  | 'eixo_permanente'
+  | 'agenda_mensal'
+  | 'institucional'
+  | 'busca_lacuna'
+  | 'ampla'
+export type RegulatoryCycleStage =
+  | 'publicacao'
+  | 'vacatio'
+  | 'vigencia'
+  | 'adequacao'
+  | 'reacao_setorial'
+  | 'disputa_judicial'
+export type ReportPackageKind = 'diagnostic' | 'final'
+export type MemorySuggestionStatus = 'pending' | 'accepted' | 'dismissed'
 
 export interface ArticleTag {
   article_id: string
@@ -221,6 +249,7 @@ export interface Report {
   methodology_snapshot?: MethodologySnapshot | null
   citation_snapshot?: EvidenceCitation[] | null
   narrative_posture?: ReportPosture | null
+  applied_editorial_snapshot?: AppliedEditorialSnapshot | null
 }
 
 export interface Client {
@@ -253,6 +282,17 @@ export interface DashboardClientSummary {
   review_count: number
   previous_total: number
   variation_percent: number | null
+  readiness?: {
+    draft_id: string | null
+    period: string
+    verified_evidence: number
+    qualified_evidence: number
+    pending_exceptions: number
+    covered_topics: number
+    required_topics: number
+    recognized_gaps: number
+    ready: boolean
+  }
 }
 
 export interface DashboardSummary {
@@ -327,6 +367,7 @@ export interface ImportBatch {
   client_ids?: string[]
   period_month: string
   intent: ImportIntent
+  reference_kind?: ReferenceKind
   status: ImportBatchStatus
   total_files: number
   completed_files: number
@@ -357,6 +398,8 @@ export interface ReferenceReport {
   status: 'ready' | 'ocr_pending' | 'review' | 'error'
   metadata: Record<string, unknown>
   created_at: string
+  draft_id?: string | null
+  reference_kind?: ReferenceKind
 }
 
 export interface ReferenceReportItem {
@@ -431,10 +474,15 @@ export interface MonthlyReportDraft {
   comparison_snapshot?: PeriodComparison
   change_summary?: Record<string, unknown>
   editorial_memory_snapshot?: Record<string, unknown>
+  applied_editorial_snapshot?: AppliedEditorialSnapshot
+  editorial_snapshot_version?: number
   automation_status?: ReportAutomationStatus
   automation_updated_at?: string | null
   claude_package_base_version?: number | null
   claude_package_generated_at?: string | null
+  diagnostic_package_generated_at?: string | null
+  final_package_base_version?: number | null
+  final_package_generated_at?: string | null
   clients?: Client
   evidence_items?: ReportEvidenceItem[]
   sections?: ReportSection[]
@@ -456,6 +504,160 @@ export interface ClientEditorialProfile {
   default_posture: ReportPosture
   active: boolean
   updated_at: string
+}
+
+export interface PhrasePolicy {
+  phrase: string
+  replacements: string[]
+  allow_literal_quote: boolean
+}
+
+export interface VisualDirection {
+  instruction: string
+  queries: string[]
+  avoid: string[]
+}
+
+export interface EditorialDirective {
+  id: string
+  client_id: string
+  directive_key: string
+  category: DirectiveCategory
+  title: string
+  instruction: string
+  rationale: string
+  severity: DirectiveSeverity
+  scope: DirectiveScope
+  period_month: string | null
+  source: 'cliente' | 'operador' | 'relatorio_aprovado' | 'curado'
+  phrase: string | null
+  replacements: string[]
+  metric_visibility: MetricVisibility | null
+  allow_literal_quote: boolean
+  examples: Record<string, unknown>
+  version: number
+  active: boolean
+  created_at: string
+  updated_at: string
+}
+
+export interface ClientFeedback {
+  id: string
+  client_id: string
+  draft_id: string | null
+  report_id: string | null
+  reference_report_id: string | null
+  directive_id: string | null
+  category: DirectiveCategory
+  feedback: string
+  before_text: string | null
+  after_text: string | null
+  status: 'pending' | 'applied' | 'dismissed'
+  promoted: boolean
+  created_at: string
+  resolved_at: string | null
+}
+
+export interface AppliedEditorialSnapshot {
+  profile_version: number
+  profile?: {
+    permanent_axes: string[]
+    inclusion_guidelines: string
+    exclusion_guidelines: string
+    style_guidelines: string
+    default_posture: ReportPosture
+  } | null
+  directives: EditorialDirective[]
+  captured_at: string
+  digest: string
+}
+
+export interface ClientSourceCaptureIntent {
+  id: string
+  client_id: string
+  source_id: string | null
+  topic_template_id: string | null
+  intent: CaptureIntent
+  cycle_stage: RegulatoryCycleStage | null
+  label: string
+  query_snapshot: Record<string, unknown>
+  active: boolean
+  created_at: string
+  updated_at: string
+}
+
+export interface ReportPackageExport {
+  id: string
+  draft_id: string
+  base_version: number
+  export_kind: ReportPackageKind
+  checklist_snapshot: ApprovalChecklist
+  editorial_snapshot: AppliedEditorialSnapshot | Record<string, never>
+  manifest: Record<string, unknown>
+  created_at: string
+}
+
+export interface ReferenceReportComparison {
+  id: string
+  draft_id: string
+  reference_report_id: string
+  diagnostic_reference_report_id: string | null
+  package_export_id: string | null
+  status: 'pending' | 'ready' | 'review' | 'error'
+  summary: DeliveryComparisonSummary
+  compared_at: string
+}
+
+export interface DeliveryComparisonSummary {
+  reference_title?: string
+  added_topics: string[]
+  factual_claims_without_base: string[]
+  narrative_signals_added: string[]
+  visual_signals_added: string[]
+  missing_in_reference: string[]
+  added_metrics: string[]
+  remaining_placeholders: string[]
+  lead_changed: boolean
+  package_base_version?: number | null
+  notes: string[]
+}
+
+export interface ReportMemorySuggestion {
+  id: string
+  comparison_id: string
+  client_id: string
+  category: DirectiveCategory
+  title: string
+  suggestion: string
+  evidence: Record<string, unknown>
+  status: MemorySuggestionStatus
+  directive_id: string | null
+  created_at: string
+  resolved_at: string | null
+}
+
+export interface CaptureCoverageSummary {
+  client_id: string
+  period: string
+  monitored: number
+  qualified: number
+  direct_mentions: number
+  integral: number
+  partial: number
+  pending_topics: number
+  source_alerts: number
+  by_intent: Array<{
+    intent: CaptureIntent
+    sources: number
+    monitored: number
+    qualified: number
+  }>
+  by_cycle_stage: Array<{
+    stage: RegulatoryCycleStage
+    sources: number
+    monitored: number
+    qualified: number
+  }>
 }
 
 export interface EditorialMemoryItem {

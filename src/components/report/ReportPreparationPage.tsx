@@ -19,7 +19,9 @@ import {
 } from 'lucide-react'
 import type {
   ApprovalChecklist,
+  CaptureCoverageSummary,
   Client,
+  DirectiveCategory,
   EditorialReviewState,
   MonthlyReportTopic,
   LeadSuggestion,
@@ -28,6 +30,8 @@ import type {
   ReportCluster,
   ReportEvidenceItem,
   ReportPosture,
+  ReferenceReportComparison,
+  ReportMemorySuggestion,
   ReportSection,
   SourceVerificationStatus,
   StrategicEffect,
@@ -77,6 +81,11 @@ export default function ReportPreparationPage() {
   const [leadSuggestions, setLeadSuggestions] = useState<LeadSuggestion[]>([])
   const [comparison, setComparison] = useState<PeriodComparison | null>(null)
   const [checklist, setChecklist] = useState<ApprovalChecklist | null>(null)
+  const [revisionSuggestions, setRevisionSuggestions] = useState<Array<{ section_key: number; before_text: string; after_text: string }>>([])
+  const [deliveryComparisons, setDeliveryComparisons] = useState<
+    Array<ReferenceReportComparison & { report_memory_suggestions?: ReportMemorySuggestion[]; reference_reports?: { title?: string } }>
+  >([])
+  const [captureCoverage, setCaptureCoverage] = useState<CaptureCoverageSummary | null>(null)
   const [changes, setChanges] = useState<{ added: unknown[]; removed: unknown[]; reclassified: unknown[]; bucket_changes: unknown[] } | null>(null)
   const [editingArticleId, setEditingArticleId] = useState('')
   const [qualification, setQualification] = useState({
@@ -93,6 +102,13 @@ export default function ReportPreparationPage() {
     inclusion_terms: '',
     exclusion_terms: '',
   })
+  const [feedbackForm, setFeedbackForm] = useState<{
+    category: DirectiveCategory
+    feedback: string
+    promote: boolean
+    before_text?: string
+    after_text?: string
+  }>({ category: 'narrativa', feedback: '', promote: true })
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
@@ -134,6 +150,14 @@ export default function ReportPreparationPage() {
       })
   }, [])
 
+  useEffect(() => {
+    if (!clientId || !period) return
+    fetch(`/api/clients/${clientId}/capture-coverage?period=${period}`, { cache: 'no-store' })
+      .then((response) => (response.ok ? response.json() : null))
+      .then((data) => setCaptureCoverage(data))
+      .catch(() => setCaptureCoverage(null))
+  }, [clientId, period])
+
   function applyDraft(data: MonthlyReportDraft) {
     setDraft(data)
     setClientId(data.client_id)
@@ -147,7 +171,7 @@ export default function ReportPreparationPage() {
   }
 
   async function loadAutomationData(id: string) {
-    const paths = ['review-queue', 'clusters', 'lead-suggestions', 'comparison', 'checklist', 'changes']
+    const paths = ['review-queue', 'clusters', 'lead-suggestions', 'comparison', 'checklist', 'changes', 'feedback', 'delivery-comparison']
     const results = await Promise.allSettled(
       paths.map(async (path) => {
         const response = await fetch(`/api/report-drafts/${id}/${path}`, { cache: 'no-store' })
@@ -164,6 +188,28 @@ export default function ReportPreparationPage() {
     setComparison(value(3))
     setChecklist(value(4))
     setChanges(value(5)?.summary || null)
+    setRevisionSuggestions(Array.isArray(value(6)?.suggestions) ? value(6).suggestions : [])
+    setDeliveryComparisons(Array.isArray(value(7)) ? value(7) : [])
+  }
+
+  async function reviewMemorySuggestions(suggestionIds: string[], action: 'accept' | 'dismiss') {
+    if (!draft || !suggestionIds.length) return
+    setBusy(`memory-${action}`)
+    setError('')
+    try {
+      const response = await fetch(`/api/report-drafts/${draft.id}/delivery-comparison`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ suggestion_ids: suggestionIds, action }),
+      })
+      const data = await response.json().catch(() => null)
+      if (!response.ok) throw new Error(data?.error || 'Falha ao revisar o aprendizado sugerido.')
+      await loadDraft(draft.id)
+    } catch (reviewError) {
+      setError(reviewError instanceof Error ? reviewError.message : 'Falha ao revisar a sugestão.')
+    } finally {
+      setBusy('')
+    }
   }
 
   async function loadDraft(id: string) {
@@ -173,6 +219,27 @@ export default function ReportPreparationPage() {
     applyDraft(data)
     await loadAutomationData(id)
     return data as MonthlyReportDraft
+  }
+
+  async function submitFeedback() {
+    if (!draft || !feedbackForm.feedback.trim()) return
+    setBusy('feedback')
+    setError('')
+    try {
+      const response = await fetch(`/api/report-drafts/${draft.id}/feedback`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(feedbackForm),
+      })
+      const data = await response.json().catch(() => null)
+      if (!response.ok) throw new Error(data?.error || 'Falha ao registrar feedback.')
+      setFeedbackForm({ category: 'narrativa', feedback: '', promote: true })
+      await loadDraft(draft.id)
+    } catch (feedbackError) {
+      setError(feedbackError instanceof Error ? feedbackError.message : 'Falha ao registrar feedback.')
+    } finally {
+      setBusy('')
+    }
   }
 
   async function completeReview() {
@@ -661,6 +728,38 @@ export default function ReportPreparationPage() {
     }
   }
 
+  async function downloadClaudePackage(kind: 'diagnostic' | 'final') {
+    if (!draft) return
+    setBusy(`package-${kind}`)
+    setError('')
+    try {
+      const format = kind === 'diagnostic' ? 'claude-diagnostic' : 'claude-package'
+      const response = await fetch(`/api/report-drafts/${draft.id}/export?format=${format}`)
+      if (!response.ok) {
+        const data = await response.json().catch(() => null)
+        const blocked = data?.checklist?.items
+          ?.filter((item: { status?: string }) => item.status === 'blocked')
+          .map((item: { label?: string }) => item.label)
+          .join('; ')
+        throw new Error(blocked || data?.error || 'Falha ao gerar o pacote.')
+      }
+      const blob = await response.blob()
+      const disposition = response.headers.get('content-disposition') || ''
+      const filename = disposition.match(/filename="?([^";]+)"?/i)?.[1] || `pacote-${kind}.zip`
+      const url = URL.createObjectURL(blob)
+      const anchor = document.createElement('a')
+      anchor.href = url
+      anchor.download = filename
+      anchor.click()
+      URL.revokeObjectURL(url)
+      await loadDraft(draft.id)
+    } catch (packageError) {
+      setError(packageError instanceof Error ? packageError.message : 'Falha ao gerar o pacote.')
+    } finally {
+      setBusy('')
+    }
+  }
+
   const evidence = useMemo(() => draft?.evidence_items || [], [draft?.evidence_items])
   const counts = useMemo(
     () => ({
@@ -709,6 +808,9 @@ export default function ReportPreparationPage() {
     if (evidenceFilter === 'annex') return item.bucket === 'annex'
     return true
   })
+  const finalPackageReady = Boolean(
+    checklist && checklist.items.filter((item) => item.key !== 'package').every((item) => item.status !== 'blocked')
+  )
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-8">
@@ -838,6 +940,18 @@ export default function ReportPreparationPage() {
               <p className="mt-1 text-xs text-gray-500">{comparison?.themes_new?.length || 0} tema(s) novo(s)</p>
             </div>
           </div>
+          {captureCoverage?.by_cycle_stage?.length ? (
+            <div className="mb-4 border border-gray-200 p-3">
+              <p className="text-xs uppercase text-gray-500">Cobertura do ciclo regulatório</p>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {captureCoverage.by_cycle_stage.map((stage) => (
+                  <span key={stage.stage} className="border border-gray-200 px-2 py-1 text-xs">
+                    {stage.stage.replace('_', ' ')} · {stage.qualified} evidência(s) / {stage.monitored} monitorada(s)
+                  </span>
+                ))}
+              </div>
+            </div>
+          ) : null}
           <div className="flex gap-2 flex-wrap mb-6">
             <Button variant="outline" onClick={refreshBase} disabled={!!busy}>
               <RefreshCw className="w-4 h-4 mr-2" />Atualizar base
@@ -855,10 +969,76 @@ export default function ReportPreparationPage() {
             <Button onClick={runQualityChecks} disabled={!!busy}>
               <CheckCircle2 className="w-4 h-4 mr-2" />Executar portões
             </Button>
-            <a href={`/api/report-drafts/${draft.id}/export?format=claude-package`}>
-              <Button><Download className="w-4 h-4 mr-2" />Gerar pacote para o Claude</Button>
-            </a>
+            <Button variant="outline" onClick={() => downloadClaudePackage('diagnostic')} disabled={!!busy}>
+              <Download className="w-4 h-4 mr-2" />Pacote diagnóstico
+            </Button>
+            <Button onClick={() => downloadClaudePackage('final')} disabled={!!busy || !finalPackageReady}>
+              <Download className="w-4 h-4 mr-2" />Pacote final para o Claude
+            </Button>
           </div>
+
+          <div className="mb-6 border border-gray-200 p-4">
+            <h2 className="text-xl font-semibold">Feedback do cliente</h2>
+            <p className="mt-1 text-xs text-gray-500">Registre a correção na camada certa. Somente regras confirmadas por você entram na memória permanente.</p>
+            <div className="mt-3 grid gap-2 md:grid-cols-[12rem_1fr_auto_auto]">
+              <select className="h-10 border border-gray-300 bg-white px-2 text-sm" value={feedbackForm.category} onChange={(event) => setFeedbackForm((current) => ({ ...current, category: event.target.value as DirectiveCategory }))}>
+                <option value="captacao">Captação</option><option value="qualificacao">Qualificação</option><option value="narrativa">Narrativa</option><option value="terminologia">Terminologia</option><option value="metrica">Métrica</option><option value="estrutura">Estrutura</option><option value="visual">Design</option>
+              </select>
+              <Input placeholder="Ex.: não usar ‘calmaria operacional’ no relatório do ONS" value={feedbackForm.feedback} onChange={(event) => setFeedbackForm((current) => ({ ...current, feedback: event.target.value }))} />
+              <label className="flex h-10 items-center gap-2 border border-gray-200 px-3 text-xs"><input type="checkbox" checked={feedbackForm.promote} onChange={(event) => setFeedbackForm((current) => ({ ...current, promote: event.target.checked }))} />Regra permanente</label>
+              <Button onClick={submitFeedback} disabled={!!busy || !feedbackForm.feedback.trim()}>Registrar</Button>
+            </div>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {(draft.applied_editorial_snapshot?.directives || []).map((item) => <span key={item.id} className="border border-gray-200 px-2 py-1 text-[11px] uppercase text-gray-600">{item.category} · {item.title}</span>)}
+            </div>
+            {revisionSuggestions.length > 0 && <div className="mt-3 border-t pt-3"><p className="text-xs font-medium text-gray-600">Alterações humanas que podem virar regra</p><div className="mt-2 flex flex-wrap gap-2">{revisionSuggestions.map((suggestion) => <Button key={suggestion.section_key} size="sm" variant="outline" onClick={() => setFeedbackForm({ category: 'narrativa', feedback: `Revisão humana recorrente identificada na seção ${suggestion.section_key}. Descreva aqui a regra antes de registrar.`, promote: false, before_text: suggestion.before_text, after_text: suggestion.after_text })}>Seção {suggestion.section_key}</Button>)}</div></div>}
+          </div>
+
+          {deliveryComparisons.length > 0 && (
+            <div className="mb-6 border border-gray-200 p-4">
+              <h2 className="text-xl font-semibold">Diferenças entre CORTEX e relatório entregue</h2>
+              <p className="mt-1 text-xs text-gray-500">
+                O sistema sugere aprendizados, mas nada entra na memória permanente sem sua confirmação.
+              </p>
+              <div className="mt-4 space-y-4">
+                {deliveryComparisons.map((comparison) => {
+                  const pending = (comparison.report_memory_suggestions || []).filter((item) => item.status === 'pending')
+                  return (
+                    <div key={comparison.id} className="border border-gray-100 p-3">
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <p className="font-medium">{comparison.reference_reports?.title || comparison.summary.reference_title || 'Relatório entregue'}</p>
+                          <p className="text-xs text-gray-500">Comparado em {new Date(comparison.compared_at).toLocaleString('pt-BR')}</p>
+                        </div>
+                        {pending.length > 0 && (
+                          <div className="flex gap-2">
+                            <Button size="sm" variant="outline" onClick={() => reviewMemorySuggestions(pending.map((item) => item.id), 'dismiss')} disabled={!!busy}>Descartar sugestões</Button>
+                            <Button size="sm" onClick={() => reviewMemorySuggestions(pending.map((item) => item.id), 'accept')} disabled={!!busy}>Confirmar todas</Button>
+                          </div>
+                        )}
+                      </div>
+                      <div className="mt-3 grid gap-3 md:grid-cols-2 text-sm">
+                        <div><p className="text-xs uppercase text-gray-500">Acrescentado na entrega</p><p>{comparison.summary.added_topics?.join(' · ') || 'Nenhum tema detectado'}</p></div>
+                        <div><p className="text-xs uppercase text-gray-500">Campos pendentes</p><p>{comparison.summary.remaining_placeholders?.join(' · ') || 'Nenhum'}</p></div>
+                        <div><p className="text-xs uppercase text-gray-500">Fatos sem correspondência na base</p><p>{comparison.summary.factual_claims_without_base?.slice(0, 5).join(' · ') || 'Nenhum detectado'}</p></div>
+                        <div><p className="text-xs uppercase text-gray-500">Sinais narrativos/visuais acrescentados</p><p>{[...(comparison.summary.narrative_signals_added || []), ...(comparison.summary.visual_signals_added || [])].join(' · ') || 'Nenhum detectado'}</p></div>
+                      </div>
+                      {pending.length > 0 && (
+                        <div className="mt-3 space-y-2">
+                          {pending.map((suggestion) => (
+                            <div key={suggestion.id} className="flex items-start justify-between gap-3 bg-gray-50 p-2">
+                              <div><p className="text-sm font-medium">{suggestion.title}</p><p className="text-xs text-gray-600">{suggestion.suggestion}</p></div>
+                              <div className="flex gap-1"><Button size="sm" variant="outline" onClick={() => reviewMemorySuggestions([suggestion.id], 'dismiss')} disabled={!!busy}>Ignorar</Button><Button size="sm" onClick={() => reviewMemorySuggestions([suggestion.id], 'accept')} disabled={!!busy}>Confirmar</Button></div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          )}
 
           {leadSuggestions.length > 0 && (
             <div className="mb-6 border border-gray-200 p-4">
@@ -1236,12 +1416,12 @@ export default function ReportPreparationPage() {
           <div className="border border-black p-4 mt-6 flex justify-between items-center gap-4">
             <div>
               <p className="font-semibold">Texto final no CORTEX</p>
-              <p className="text-sm text-gray-500">A seção 10 registra a agenda; a seção 11 contém somente evidências qualificadas. O anexo permanece separado.</p>
+              <p className="text-sm text-gray-500">A agenda permanece interna. O relatório público usa as seções 1–9 e a Base Qualificada na seção 10; o anexo fica separado.</p>
             </div>
             <div className="flex gap-2">
-              <a href={`/api/report-drafts/${draft.id}/export?format=claude-package`}>
-                <Button variant="outline"><Download className="w-4 h-4 mr-2" />Pacote Claude</Button>
-              </a>
+              <Button variant="outline" onClick={() => downloadClaudePackage('final')} disabled={!!busy || !finalPackageReady}>
+                <Download className="w-4 h-4 mr-2" />Pacote final Claude
+              </Button>
               <Button onClick={() => finalize()} disabled={!!busy || draft.status === 'approved' || draft.quality_status !== 'passed'}>
                 <CheckCircle2 className="w-4 h-4 mr-2" />{draft.status === 'approved' ? 'Versão aprovada' : 'Finalizar versão'}
               </Button>

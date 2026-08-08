@@ -7,6 +7,7 @@ import type {
   EvidenceBucket,
   MonthlyReportTopic,
   ReportBrand,
+  AppliedEditorialSnapshot,
   ReportEvidenceItem,
 } from '@/types'
 import {
@@ -425,7 +426,7 @@ function tableCell(value: unknown) {
     .trim()
 }
 
-export function buildQualifiedSection(items: ReportEvidenceItem[], sectionNumber = 11) {
+export function buildQualifiedSection(items: ReportEvidenceItem[], sectionNumber = 10) {
   const qualified = items.filter((item) => item.bucket === 'qualified').sort((a, b) => a.position - b.position)
   const citations = new Map(evidenceCitations(items).map((citation) => [citation.article_id, citation.code]))
   const rows = qualified.map((item) => {
@@ -467,11 +468,12 @@ export function buildAnnex(items: ReportEvidenceItem[]) {
 export function buildDossier(
   items: ReportEvidenceItem[],
   topics: MonthlyReportTopic[] = [],
-  clientName = 'o cliente'
+  clientName = 'o cliente',
+  editorial?: AppliedEditorialSnapshot | null
 ) {
   const methodology = buildMethodologySnapshot(items)
   return [
-    buildMethodologyNote(methodology, clientName),
+    buildMethodologyNote(methodology, clientName, editorial),
     topics.length ? buildAgendaSection(topics) : '',
     buildQualifiedSection(items),
     '---',

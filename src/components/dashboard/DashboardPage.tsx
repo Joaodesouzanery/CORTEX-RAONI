@@ -152,11 +152,10 @@ export default function DashboardPage() {
             client,
             total,
             triaged_count,
-            qualified_count,
             annex_count,
             pending_count,
-            direct_mentions,
             variation_percent,
+            readiness,
           }) => (
             <div key={client.id} className="flex flex-col gap-3 border border-gray-200 p-5">
               <div className="flex items-center gap-3">
@@ -171,19 +170,19 @@ export default function DashboardPage() {
               <div className="flex items-end justify-between gap-4">
                 <div>
                   <div>
-                    <span className="text-4xl font-light tabular-nums">{total}</span>
-                    <span className="ml-1 text-xs text-gray-500">candidatas detectadas</span>
+                    <span className="text-4xl font-light tabular-nums">{readiness?.verified_evidence || 0}</span>
+                    <span className="ml-1 text-xs text-gray-500">evidências verificadas</span>
                   </div>
                   <p className="mt-1 text-[11px] text-gray-500">
-                    {triaged_count} triadas · {qualified_count} evidências · {pending_count} pendentes
-                    {variation_percent != null && ` · ${variation_percent >= 0 ? '+' : ''}${variation_percent}%`}
+                    {readiness?.qualified_evidence || 0} qualificadas · {readiness?.covered_topics || 0}/{readiness?.required_topics || 0} tópicos cobertos · {readiness?.pending_exceptions || 0} exceções
                   </p>
                   <p className="mt-1 text-[11px] text-gray-400">
-                    {direct_mentions} menções diretas · {annex_count} em contexto/ruído
+                    {total} candidatas · {triaged_count} triadas · {pending_count} pendentes · {annex_count} no anexo
+                    {variation_percent != null && ` · ${variation_percent >= 0 ? '+' : ''}${variation_percent}%`}
                   </p>
                 </div>
-                <Link href={`/news?client=${client.id}&period=${periodDays}`} className="whitespace-nowrap text-sm hover:underline">
-                  Ver notícias ↗
+                <Link href={readiness?.draft_id ? `/reports/prepare?draft=${readiness.draft_id}` : `/reports/prepare?client=${client.id}&period=${readiness?.period || ''}`} className="whitespace-nowrap text-sm hover:underline">
+                  Preparação ↗
                 </Link>
               </div>
             </div>

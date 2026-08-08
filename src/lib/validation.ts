@@ -142,7 +142,7 @@ export const importInitSchema = z.object({
     .trim()
     .min(1)
     .max(255)
-    .refine((v) => /\.(pdf|html?)$/i.test(v), 'Envie um PDF ou HTML'),
+    .refine((v) => /\.(pdf|html?|zip)$/i.test(v), 'Envie um PDF, HTML ou pacote ZIP'),
   size: z
     .number()
     .int()
@@ -158,6 +158,7 @@ export const importBatchCreateSchema = z
     client_id: z.string().uuid('Cliente inválido').optional(),
     period: z.string().regex(/^\d{4}-\d{2}$/, 'Use o período YYYY-MM'),
     intent: z.enum(['noticias', 'relatorio_referencia']),
+    reference_kind: z.enum(['historical', 'quality_reference', 'delivered_report', 'diagnostic_package']).optional(),
     total_files: z.number().int().min(1).max(100),
   })
   .refine((value) => Boolean(value.client_ids?.length || value.client_id), {
@@ -207,6 +208,10 @@ export const reportDraftLeadSchema = z.object({
 
 export const reportDraftItemsSchema = z.object({
   article_ids: z.array(z.string().uuid('Matéria inválida')).min(1).max(500),
+  editorial_reason: z.string().trim().min(10).max(1000).optional(),
+  cycle_stage: z
+    .enum(['publicacao', 'vacatio', 'vigencia', 'adequacao', 'reacao_setorial', 'disputa_judicial'])
+    .optional(),
 })
 
 export const reportDraftSectionSchema = z.object({

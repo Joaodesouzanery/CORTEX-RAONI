@@ -3,7 +3,6 @@ import { createAdminClient as createClient } from '@/lib/supabase/server'
 import { buildQualifiedSection, reportEvidenceItems } from '@/lib/report-drafts'
 import {
   auditReportTraceability,
-  buildAgendaSection,
   buildMethodologyNote,
   buildMethodologySnapshot,
   buildThematicMatrix,
@@ -11,6 +10,7 @@ import {
 } from '@/lib/report-quality'
 import type { MonthlyReportTopic } from '@/types'
 import { buildDraftChecklist } from '@/lib/report-automation'
+import { lintEditorialDirectives } from '@/lib/editorial-directives'
 
 export const dynamic = 'force-dynamic'
 
@@ -25,6 +25,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     { data: topicRows },
     { data: topicLinks },
     { data: latestQuality },
+    { data: deliveryComparisons },
+    { data: finalPackage },
   ] = await Promise.all([
     supabase.from('monthly_report_drafts').select('*, clients(name)').eq('id', id).single(),
     supabase.from('report_sections').select('*').eq('draft_id', id).order('section_key'),
@@ -38,6 +40,19 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       .from('report_quality_checks')
       .select('*')
       .eq('draft_id', id)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle(),
+    supabase
+      .from('reference_report_comparisons')
+      .select('id, reference_report_id, summary, status, compared_at')
+      .eq('draft_id', id)
+      .order('compared_at', { ascending: false }),
+    supabase
+      .from('report_package_exports')
+      .select('id, base_version, export_kind, checklist_snapshot, editorial_snapshot, manifest, created_at')
+      .eq('draft_id', id)
+      .eq('export_kind', 'final')
       .order('created_at', { ascending: false })
       .limit(1)
       .maybeSingle(),
@@ -106,7 +121,13 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     posture: draft.narrative_posture || 'consultivo_cauteloso',
     clientName: draft.clients?.name || 'cliente',
   })
-  const traceabilityBlocked = traceabilityChecks.filter((check) => check.status === 'blocked')
+  const directiveChecks = lintEditorialDirectives(
+    sections.map((section) => section.content).join('\n\n'),
+    draft.applied_editorial_snapshot || null
+  )
+  const traceabilityBlocked = [...traceabilityChecks, ...directiveChecks].filter(
+    (check) => check.status === 'blocked'
+  )
   if (traceabilityBlocked.length) {
     return NextResponse.json(
       {
@@ -123,9 +144,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       : section.content.trim()
   )
   const mainContent = [
-    buildMethodologyNote(methodology, draft.clients?.name || 'cliente'),
+    buildMethodologyNote(methodology, draft.clients?.name || 'cliente', draft.applied_editorial_snapshot || null),
     ...analyticalSections,
-    buildAgendaSection(topics),
     buildQualifiedSection(items),
     '---',
     `*${draft.brand_snapshot?.footer || draft.brand_snapshot?.name || draft.clients?.name || ''}*`,
@@ -162,6 +182,9 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
         editorial_memory_snapshot: draft.editorial_memory_snapshot || {},
         comparison_snapshot: draft.comparison_snapshot || {},
         approval_checklist: checklist,
+        applied_editorial_snapshot: draft.applied_editorial_snapshot || {},
+        delivery_comparison_snapshot: deliveryComparisons || [],
+        package_export_snapshot: finalPackage || {},
       },
       client_id: draft.client_id,
       draft_id: id,
@@ -170,10 +193,11 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       lead_article_id: draft.lead_article_id,
       brand_snapshot: draft.brand_snapshot,
       agenda_snapshot: topics,
-      quality_snapshot: { ...latestQuality, traceability_checks: traceabilityChecks },
+      quality_snapshot: { ...latestQuality, traceability_checks: [...traceabilityChecks, ...directiveChecks] },
       methodology_snapshot: methodology,
       citation_snapshot: citations,
       narrative_posture: draft.narrative_posture || 'consultivo_cauteloso',
+      applied_editorial_snapshot: draft.applied_editorial_snapshot || {},
     })
     .select()
     .single()
@@ -185,7 +209,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       methodology_snapshot: methodology,
       quality_summary: {
         ...(draft.quality_summary || {}),
-        traceability_checks: traceabilityChecks,
+        traceability_checks: [...traceabilityChecks, ...directiveChecks],
       },
       approved_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),

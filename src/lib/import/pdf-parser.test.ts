@@ -123,6 +123,28 @@ describe.skipIf(![...realFiles, ...individualFiles].every((filename) => existsSy
   }
 )
 
+const deliveredReports = [
+  'ONS Relatório Julho 2026.pdf',
+  'SINDIFOR Relatório Julho 2026.pdf',
+  'CCEE Relatório Julho 2026.pdf',
+  'DAQ Relatório Julho 2026.pdf',
+  'SIMINERAL Relatório Julho 2026.pdf',
+]
+
+describe.skipIf(!deliveredReports.every((filename) => existsSync(`${downloads}/${filename}`)))(
+  'delivered July reports stay outside the news archive',
+  () => {
+    for (const filename of deliveredReports) {
+      it(`recognizes ${filename} only as a report reference`, async () => {
+        const parsed = await parsePdf(new Uint8Array(readFileSync(`${downloads}/${filename}`)), filename)
+        expect(parsed.documentType).toBe('relatorio')
+        expect(parsed.articles).toHaveLength(0)
+        expect(parsed.referenceText?.length || 0).toBeGreaterThan(500)
+      }, 30000)
+    }
+  }
+)
+
 describe.skipIf(!existsSync(`${downloads}/Claude.pdf`))('reference report regression', () => {
   it('never imports Claude.pdf as a news article', async () => {
     const parsed = await parsePdf(new Uint8Array(readFileSync(`${downloads}/Claude.pdf`)), 'Claude.pdf')

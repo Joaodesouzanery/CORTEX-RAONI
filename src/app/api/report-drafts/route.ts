@@ -4,6 +4,7 @@ import { formatZodError, reportDraftCreateSchema } from '@/lib/validation'
 import { monthBounds, refreshDraftEvidence, reportBrand } from '@/lib/report-drafts'
 import { SIMINERAL_JULY_2026_TOPICS } from '@/lib/monthly-agenda'
 import type { Client, ReportBrand } from '@/types'
+import { loadEditorialSnapshot, syncDraftEditorialSnapshot } from '@/lib/editorial-directives'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
@@ -16,6 +17,32 @@ function draftBrand(client: Client, period: string): ReportBrand {
   return {
     ...snapshot,
     guidelines: [snapshot.guidelines, provisional].filter(Boolean).join('\n\n'),
+  }
+}
+
+async function syncTopicTemplates(
+  supabase: ReturnType<typeof createClient>,
+  draftId: string,
+  clientId: string
+) {
+  const [{ data: existing }, { data: templates, error }] = await Promise.all([
+    supabase.from('monthly_report_topics').select('title, position').eq('draft_id', draftId),
+    supabase
+      .from('client_report_topic_templates')
+      .select('title, rationale, inclusion_terms, exclusion_terms, required')
+      .eq('client_id', clientId)
+      .eq('active', true)
+      .order('position'),
+  ])
+  if (error) throw new Error(error.message)
+  const titles = new Set((existing || []).map((topic) => topic.title))
+  let position = Math.max(0, ...(existing || []).map((topic) => Number(topic.position || 0)))
+  const missing = (templates || [])
+    .filter((topic) => !titles.has(topic.title))
+    .map((topic) => ({ draft_id: draftId, ...topic, position: ++position }))
+  if (missing.length) {
+    const { error: insertError } = await supabase.from('monthly_report_topics').insert(missing)
+    if (insertError) throw new Error(insertError.message)
   }
 }
 
@@ -79,6 +106,10 @@ export async function POST(req: Request) {
       .select()
       .single()
     if (updateError) return NextResponse.json({ error: updateError.message }, { status: 500 })
+    const appliedEditorialSnapshot = await syncDraftEditorialSnapshot(supabase, {
+      ...latest,
+      applied_editorial_snapshot: latest.applied_editorial_snapshot,
+    })
     const { count: topicCount } = await supabase
       .from('monthly_report_topics')
       .select('id', { count: 'exact', head: true })
@@ -104,7 +135,13 @@ export async function POST(req: Request) {
         )
       }
     }
-    return NextResponse.json({ draft: updated, created: false })
+    await syncTopicTemplates(supabase, latest.id, client_id)
+    return NextResponse.json({
+      draft: appliedEditorialSnapshot
+        ? { ...updated, applied_editorial_snapshot: appliedEditorialSnapshot, editorial_snapshot_version: appliedEditorialSnapshot.profile_version }
+        : updated,
+      created: false,
+    })
   }
 
   const [{ data: editorialProfile }, { data: memoryRows }] = await Promise.all([
@@ -123,6 +160,7 @@ export async function POST(req: Request) {
     exclusion_examples: (memoryRows || []).filter((item) => item.kind === 'contexto' || item.kind === 'ruido').slice(0, 6),
     captured_at: new Date().toISOString(),
   }
+  const appliedEditorialSnapshot = await loadEditorialSnapshot(supabase, client_id, period)
   const { data: draft, error } = await supabase
     .from('monthly_report_drafts')
     .insert({
@@ -134,6 +172,8 @@ export async function POST(req: Request) {
       narrative_posture,
       brand_snapshot: draftBrand(client as Client, period),
       editorial_memory_snapshot: memorySnapshot,
+      applied_editorial_snapshot: appliedEditorialSnapshot,
+      editorial_snapshot_version: appliedEditorialSnapshot.profile_version,
       automation_status: 'pending',
       status: 'preparing',
     })
@@ -189,6 +229,7 @@ export async function POST(req: Request) {
     )
     if (topicsError) return NextResponse.json({ error: topicsError.message }, { status: 500 })
   }
+  await syncTopicTemplates(supabase, draft.id, client_id)
 
   try {
     const refreshed = await refreshDraftEvidence(supabase, draft)

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createAdminClient as createClient } from '@/lib/supabase/server'
+import { syncDraftEditorialSnapshot } from '@/lib/editorial-directives'
 
 export const dynamic = 'force-dynamic'
 
@@ -84,6 +85,12 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
       else await supabase.from('client_report_topic_templates').upsert(row, { onConflict: 'client_id,position' })
     }
   }
+  const { data: openDrafts } = await supabase
+    .from('monthly_report_drafts')
+    .select('*')
+    .eq('client_id', id)
+    .neq('status', 'approved')
+  for (const draft of openDrafts || []) await syncDraftEditorialSnapshot(supabase, draft)
   return NextResponse.json(profile)
 }
 

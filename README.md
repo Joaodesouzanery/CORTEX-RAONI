@@ -57,7 +57,7 @@ URLs assinadas de curta duração.
 ## Banco de dados
 
 Aplique, na ordem, todas as migrations versionadas em
-`supabase/migrations/` (atualmente `001` a `030`) pelo Supabase CLI ou SQL
+`supabase/migrations/` (atualmente `001` a `031`) pelo Supabase CLI ou SQL
 Editor. As migrations incluem clientes, classificações editoriais, alertas,
 acervo permanente, proveniências, importações, edições mensais e buckets.
 
@@ -85,6 +85,9 @@ qualificação editorial.
 A `030_continuous_report_automation.sql` cria memória editorial controlada,
 modelos permanentes de agenda, revisões da base, pautas agrupadas, sugestões de
 matéria principal, alertas operacionais e a fila retomável da automação mensal.
+A `031_editorial_directives_and_report_feedback.sql` separa diretivas por
+camada, pacotes diagnóstico/final, comparação com relatórios entregues e
+captação por estágio do ciclo regulatório.
 
 ## Operação
 
@@ -153,18 +156,20 @@ Em `/reports/prepare`:
    ação recomendada e verificação — e separe base, anexo e exclusões humanas;
 6. escolha manualmente a matéria principal e execute os portões de qualidade;
 7. gere, edite ou regenere individualmente as seções 1–9;
-8. finalize a versão: a seção 10 registra a agenda e a seção 11 contém somente
-   a base qualificada;
-9. gere um pacote ZIP único para revisão no Claude e posterior diagramação no
-   Claude Design.
+8. mantenha a agenda e as lacunas no checklist interno; o relatório público
+   usa as seções 1–9 e a Base Qualificada na seção 10;
+9. use o pacote diagnóstico durante o trabalho e gere o pacote final para o
+   Claude somente depois de todos os portões aprovados.
 
 Em `/clients`, o botão **Memória editorial** permite versionar eixos, critérios,
 linguagem, tópicos permanentes e exemplos explicitamente mantidos. Decisões
 somente da IA nunca entram nessa memória.
 
-O pacote contém instruções, rascunho, evidências integrais, anexo CSV, agenda e
-lacunas, comparação mensal, relatório anterior e briefing de design. Todos os
-arquivos vêm do mesmo snapshot do checklist.
+O pacote contém instruções, rascunho, evidências integrais, anexo CSV, agenda
+interna e lacunas, comparação mensal, relatório anterior, briefing de design e
+manifesto do snapshot. O pacote diagnóstico vem marcado como incompleto; o
+pacote final é bloqueado se houver triagem, evidência, agenda, matéria
+principal, seção, citação, indicador de serviço ou placeholder pendente.
 
 A matéria principal é colocada primeiro no contexto e deve constar nominalmente
 no Sumário Executivo e na seção 4.1. Atualizar a base não sobrescreve texto
@@ -180,7 +185,7 @@ O relatório começa com uma Nota de Método calculada sobre todo o snapshot do
 servidor — nunca sobre o limite de 100 itens da tela. As evidências recebem
 códigos estáveis (`[E001]`, `[E002]`...) e toda afirmação factual das seções
 analíticas deve apontar para um desses códigos. A matriz temática da seção 2,
-a agenda da seção 10 e a Base Qualificada da seção 11 são montadas
+a agenda interna e a Base Qualificada da seção 10 são montadas
 deterministicamente. O fechamento bloqueia citações inexistentes, fatos sem
 fonte, generalizações indevidas sobre fontes verificadas e linguagem
 incompatível com a postura escolhida.
@@ -277,4 +282,5 @@ supabase/migrations/027_*.sql           caixa multicliente e ficha estratégica
 supabase/migrations/028_*.sql           agenda, verificação e portões de qualidade
 supabase/migrations/029_*.sql           diferenciação de notícias recebidas
 supabase/migrations/030_*.sql           memória e preparação contínua
+supabase/migrations/031_*.sql           feedback, artefatos e captação orientada
 ```

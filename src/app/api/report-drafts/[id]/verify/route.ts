@@ -84,7 +84,12 @@ export async function POST(_: Request, { params }: { params: Promise<{ id: strin
 
   try {
     await supabase.from('monthly_report_drafts').update({ quality_status: 'running' }).eq('id', id)
-    const result = await verifyEvidenceBatch(input, draft.clients, (topicRows || []) as MonthlyReportTopic[])
+    const result = await verifyEvidenceBatch(
+      input,
+      draft.clients,
+      (topicRows || []) as MonthlyReportTopic[],
+      draft.applied_editorial_snapshot || null
+    )
     const now = new Date().toISOString()
     for (const decision of result.decisions) {
       const { error: updateError } = await supabase

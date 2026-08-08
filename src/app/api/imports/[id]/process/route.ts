@@ -11,7 +11,9 @@ import { normalizeText } from '@/lib/relevance'
 import { classifyArticleBatch } from '@/lib/classification'
 import { refreshImportBatch } from '@/lib/import/batches'
 import { parseHtmlReferenceReport, type ParsedReferenceEvidence } from '@/lib/import/html-report'
-import type { Article } from '@/types'
+import { parseClaudePackage } from '@/lib/import/claude-package'
+import { compareReferenceToDraft } from '@/lib/report-delivery-comparison'
+import type { Article, ReferenceKind } from '@/types'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
@@ -22,6 +24,7 @@ type Batch = {
   client_ids: string[]
   period_month: string
   intent: 'noticias' | 'relatorio_referencia'
+  reference_kind: ReferenceKind
 }
 
 function missingManualIntakeColumn(message?: string) {
@@ -84,7 +87,7 @@ async function resolveBatch(
   if (!requestedBatchId) return null
   const { data } = await supabase
     .from('import_batches')
-    .select('id, client_id, period_month, intent')
+    .select('id, client_id, period_month, intent, reference_kind')
     .eq('id', requestedBatchId)
     .single()
   if (!data) throw new Error('Lote de importação não encontrado.')
@@ -104,6 +107,44 @@ async function resolveBatch(
     ...data,
     client_ids: selectedClients?.length ? selectedClients.map((row) => row.client_id) : [data.client_id],
   } as Batch
+}
+
+async function referenceDraftId(
+  supabase: ReturnType<typeof createClient>,
+  clientId: string,
+  periodMonth: string
+) {
+  const { data } = await supabase
+    .from('monthly_report_drafts')
+    .select('id, status, version')
+    .eq('client_id', clientId)
+    .eq('period_month', periodMonth)
+    .order('version', { ascending: false })
+  const rows = data || []
+  return rows.find((draft) => draft.status !== 'approved')?.id ||
+    rows.find((draft) => draft.status === 'approved')?.id ||
+    rows[0]?.id ||
+    null
+}
+
+async function compareDeliveredReference(
+  supabase: ReturnType<typeof createClient>,
+  draftId: string | null,
+  referenceId: string,
+  referenceKind: ReferenceKind
+) {
+  if (!draftId || referenceKind !== 'delivered_report') return
+  try {
+    await compareReferenceToDraft(supabase, draftId, referenceId)
+  } catch (error) {
+    await supabase
+      .from('reference_reports')
+      .update({
+        status: 'review',
+      })
+      .eq('id', referenceId)
+    console.error('Falha ao comparar relatório entregue:', error)
+  }
 }
 
 async function findOrSaveArticle(
@@ -494,6 +535,69 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     if (downloadError || !file) throw new Error(downloadError?.message || 'Não foi possível baixar o documento.')
     const bytes = new Uint8Array(await file.arrayBuffer())
 
+    if (/\.zip$/i.test(document.filename)) {
+      if (!batch || batch.intent !== 'relatorio_referencia') {
+        throw new Error('Pacotes ZIP devem ser enviados como relatório de referência.')
+      }
+      const parsedPackage = parseClaudePackage(bytes)
+      for (const clientId of batch.client_ids) {
+        const draftId = await referenceDraftId(supabase, clientId, batch.period_month)
+        const baseVersion = Number(document.filename.match(/(?:^|[-_])v(\d+)(?:\.|[-_]|$)/i)?.[1] || 0) || null
+        const { error: referenceError } = await supabase.from('reference_reports').upsert(
+          {
+            client_id: clientId,
+            period_month: batch.period_month,
+            source_document_id: id,
+            title: document.filename.replace(/\.zip$/i, ''),
+            extracted_text: parsedPackage.extractedText,
+            status: 'ready',
+            metadata: {
+              ...parsedPackage.metadata,
+              base_version: baseVersion,
+              files: parsedPackage.files,
+              checklist: parsedPackage.checklist,
+              factual_evidence: false,
+            },
+            draft_id: draftId,
+            reference_kind: 'diagnostic_package',
+          },
+          { onConflict: 'client_id,period_month,source_document_id' }
+        )
+        if (referenceError) throw new Error(referenceError.message)
+        if (draftId) {
+          const { data: delivered } = await supabase
+            .from('reference_reports')
+            .select('id')
+            .eq('draft_id', draftId)
+            .eq('reference_kind', 'delivered_report')
+            .order('created_at', { ascending: false })
+            .limit(1)
+            .maybeSingle()
+          if (delivered) await compareDeliveredReference(supabase, draftId, delivered.id, 'delivered_report')
+        }
+      }
+      const { data: updated, error: updateError } = await supabase
+        .from('source_documents')
+        .update({
+          document_type: 'pacote',
+          status: 'concluido',
+          imported_article_count: 0,
+          metadata: { ...parsedPackage.metadata, files: parsedPackage.files },
+          processed_at: new Date().toISOString(),
+        })
+        .eq('id', id)
+        .select()
+        .single()
+      if (updateError) throw new Error(updateError.message)
+      await supabase
+        .from('import_batch_documents')
+        .update({ status: 'complete', article_count: 0, processed_at: new Date().toISOString() })
+        .eq('batch_id', batch.id)
+        .eq('document_id', id)
+      const updatedBatch = await refreshImportBatch(supabase, batch.id)
+      return NextResponse.json({ document: updated, articles: 0, reference: true, package: true, batch: updatedBatch })
+    }
+
     if (/\.html?$/i.test(document.filename)) {
       if (!batch || batch.intent !== 'relatorio_referencia') {
         throw new Error('Relatórios HTML devem ser enviados com a finalidade "Relatório anterior".')
@@ -508,6 +612,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
 
       let articleCount = 0
       for (const clientId of batch.client_ids) {
+        const draftId = await referenceDraftId(supabase, clientId, batch.period_month)
         const { data: reference, error: referenceError } = await supabase
           .from('reference_reports')
           .upsert(
@@ -519,6 +624,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
               extracted_text: parsedHtml.extractedText,
               status: 'ready',
               metadata: parsedHtml.metadata,
+              draft_id: draftId,
+              reference_kind: batch.reference_kind,
             },
             { onConflict: 'client_id,period_month,source_document_id' }
           )
@@ -536,6 +643,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
           importSource.id
         )
         articleCount = Math.max(articleCount, saved.length)
+        await compareDeliveredReference(supabase, draftId, reference.id, batch.reference_kind)
       }
       const { data: updated, error: updateError } = await supabase
         .from('source_documents')
@@ -580,7 +688,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
         const extractedText =
           parsed.referenceText || parsed.articles.map((article) => article.content).filter(Boolean).join('\n\n')
         for (const clientId of batch.client_ids) {
-          await supabase.from('reference_reports').upsert(
+          const draftId = await referenceDraftId(supabase, clientId, batch.period_month)
+          const { data: reference, error: referenceError } = await supabase.from('reference_reports').upsert(
             {
               client_id: clientId,
               period_month: batch.period_month,
@@ -594,9 +703,13 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
                 reference_purpose: 'estrutura_e_qualidade',
                 factual_evidence: false,
               },
+              draft_id: draftId,
+              reference_kind: batch.reference_kind,
             },
             { onConflict: 'client_id,period_month,source_document_id' }
-          )
+          ).select('id').single()
+          if (referenceError || !reference) throw new Error(referenceError?.message || 'Falha ao salvar referência.')
+          await compareDeliveredReference(supabase, draftId, reference.id, batch.reference_kind)
         }
       }
       const noText = !(parsed.referenceText || parsed.articles.some((article) => article.content))

@@ -80,6 +80,7 @@ export async function POST(_: Request, { params }: { params: Promise<{ id: strin
     assignedArticleIds: new Set((assignments || []).map((item) => item.article_id)),
     narrativePosture: draft.narrative_posture || 'consultivo_cauteloso',
     clientName: draft.clients?.name || 'cliente',
+    editorialSnapshot: draft.applied_editorial_snapshot || null,
   })
   const now = new Date().toISOString()
   const methodology = buildMethodologySnapshot(evidence)

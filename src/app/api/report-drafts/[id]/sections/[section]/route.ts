@@ -4,6 +4,7 @@ import { generateReportSection } from '@/lib/ai/claude'
 import { formatZodError, reportDraftSectionEditSchema, reportDraftSectionSchema } from '@/lib/validation'
 import { buildAnnex, ensureLeadInSection, evidenceArticles, reportEvidenceItems } from '@/lib/report-drafts'
 import { evidenceCitations } from '@/lib/report-quality'
+import { directivesPrompt, lintEditorialDirectives } from '@/lib/editorial-directives'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
@@ -111,6 +112,12 @@ export async function POST(
     const prompt = [
       draft.monthly_instructions,
       parsed.data.instructions,
+      directivesPrompt(draft.applied_editorial_snapshot, [
+        'narrativa',
+        'terminologia',
+        'metrica',
+        'estrutura',
+      ]),
       leadInstruction,
       `AGENDA MENSAL OBRIGATÓRIA — trate estes temas explicitamente quando forem pertinentes à seção e não invente cobertura ausente:\n${topics
         .map((topic) => `- ${topic.title}: ${topic.coverage_status}${topic.rationale ? ` — ${topic.rationale}` : ''}`)
@@ -158,6 +165,13 @@ export async function POST(
       const leadCode = citationByArticle.get(lead.article_id)
       markdown = ensureLeadInSection(markdown, section, lead, leadCode)
     }
+    const directiveBlocks = lintEditorialDirectives(
+      markdown,
+      draft.applied_editorial_snapshot || null
+    ).filter((check) => check.status === 'blocked')
+    if (directiveBlocks.length) {
+      throw new Error(`A seção gerada viola diretivas do cliente: ${directiveBlocks.map((check) => check.label).join('; ')}`)
+    }
     const now = new Date().toISOString()
     const { data: current } = await supabase
       .from('report_sections')
@@ -179,6 +193,13 @@ export async function POST(
       .select()
       .single()
     if (saveError) throw new Error(saveError.message)
+    await supabase.from('report_section_revisions').insert({
+      draft_id: id,
+      section_key: section,
+      version: saved.version,
+      origin: 'ia',
+      content: saved.content,
+    })
     await supabase
       .from('monthly_report_drafts')
       .update({ status: 'review', updated_at: now, error: null })
@@ -204,10 +225,20 @@ export async function PUT(
   const parsed = reportDraftSectionEditSchema.safeParse(await req.json().catch(() => null))
   if (!parsed.success) return NextResponse.json({ error: formatZodError(parsed.error) }, { status: 400 })
   const supabase = createClient()
-  const { data: draft } = await supabase.from('monthly_report_drafts').select('status').eq('id', id).single()
+  const { data: draft } = await supabase.from('monthly_report_drafts').select('status, applied_editorial_snapshot').eq('id', id).single()
   if (!draft) return NextResponse.json({ error: 'Preparação não encontrada.' }, { status: 404 })
   if (draft.status === 'approved') {
     return NextResponse.json({ error: 'A versão aprovada é imutável.' }, { status: 409 })
+  }
+  const directiveBlocks = lintEditorialDirectives(
+    parsed.data.content,
+    draft.applied_editorial_snapshot || null
+  ).filter((check) => check.status === 'blocked')
+  if (directiveBlocks.length) {
+    return NextResponse.json(
+      { error: 'O texto viola diretivas editoriais do cliente.', checks: directiveBlocks },
+      { status: 409 }
+    )
   }
   const now = new Date().toISOString()
   const { data: current } = await supabase
@@ -229,6 +260,13 @@ export async function PUT(
     .select()
     .single()
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  await supabase.from('report_section_revisions').insert({
+    draft_id: id,
+    section_key: section,
+    version: data.version,
+    origin: 'humano',
+    content: data.content,
+  })
   await supabase.from('monthly_report_drafts').update({ status: 'review', updated_at: now }).eq('id', id)
   return NextResponse.json({ section: data })
 }

@@ -46,6 +46,14 @@ export async function GET(req: Request) {
   const now = new Date()
   const cutoff = new Date(now.getTime() - days * 86400000).toISOString()
   const previousStart = new Date(now.getTime() - days * 2 * 86400000).toISOString()
+  const currentPeriod = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'America/Sao_Paulo',
+    year: 'numeric',
+    month: '2-digit',
+  })
+    .format(now)
+    .slice(0, 7)
+  const currentPeriodDate = `${currentPeriod}-01`
 
   const [{ data: clientRows, error: clientsError }, { data: sourceRows, error: sourcesError }] = await Promise.all([
     supabase.from('clients').select('*').eq('active', true).order('name', { ascending: true }),
@@ -57,7 +65,7 @@ export async function GET(req: Request) {
   try {
     const clients: DashboardClientSummary[] = await Promise.all(
       ((clientRows as Client[]) || []).map(async (client) => {
-        const [total, direct, review, previous, triaged, qualified, annex, pending] = await Promise.all([
+        const [total, direct, review, previous, triaged, qualified, annex, pending, draftResult] = await Promise.all([
           monitoredCount(supabase, client.id, cutoff),
           monitoredCount(supabase, client.id, cutoff, undefined, 'direct'),
           monitoredCount(supabase, client.id, cutoff, undefined, 'review'),
@@ -66,7 +74,63 @@ export async function GET(req: Request) {
           monitoredCount(supabase, client.id, cutoff, undefined, 'qualified'),
           monitoredCount(supabase, client.id, cutoff, undefined, 'annex'),
           monitoredCount(supabase, client.id, cutoff, undefined, 'pending'),
+          supabase
+            .from('monthly_report_drafts')
+            .select('id, quality_status, status')
+            .eq('client_id', client.id)
+            .eq('period_month', currentPeriodDate)
+            .neq('status', 'approved')
+            .order('version', { ascending: false })
+            .limit(1)
+            .maybeSingle(),
         ])
+        const readinessDraft = draftResult.data
+        let readiness = {
+          draft_id: readinessDraft?.id || null,
+          period: currentPeriod,
+          verified_evidence: 0,
+          qualified_evidence: 0,
+          pending_exceptions: 0,
+          covered_topics: 0,
+          required_topics: 0,
+          recognized_gaps: 0,
+          ready: false,
+        }
+        if (readinessDraft) {
+          const [{ data: evidenceRows }, { data: topicRows }, { count: reviewQueue }] = await Promise.all([
+            supabase
+              .from('report_evidence_items')
+              .select('bucket, classification_snapshot')
+              .eq('draft_id', readinessDraft.id),
+            supabase
+              .from('monthly_report_topics')
+              .select('required, coverage_status, gap_acknowledged_at')
+              .eq('draft_id', readinessDraft.id),
+            supabase
+              .from('report_evidence_items')
+              .select('id', { count: 'exact', head: true })
+              .eq('draft_id', readinessDraft.id)
+              .neq('bucket', 'excluded')
+              .eq('classification_snapshot->>editorial_review_state', 'pendente'),
+          ])
+          const qualifiedRows = (evidenceRows || []).filter((item) => item.bucket === 'qualified')
+          const requiredRows = (topicRows || []).filter((topic) => topic.required)
+          readiness = {
+            draft_id: readinessDraft.id,
+            period: currentPeriod,
+            verified_evidence: qualifiedRows.filter((item) => {
+              const classification = item.classification_snapshot as Record<string, unknown>
+              return classification.editorial_review_state === 'revisado' ||
+                (classification.verification_status === 'verificada' && Boolean(classification.qa_checked_at))
+            }).length,
+            qualified_evidence: qualifiedRows.length,
+            pending_exceptions: reviewQueue || 0,
+            covered_topics: requiredRows.filter((topic) => topic.coverage_status === 'covered').length,
+            required_topics: requiredRows.length,
+            recognized_gaps: requiredRows.filter((topic) => topic.coverage_status === 'gap' && topic.gap_acknowledged_at).length,
+            ready: readinessDraft.quality_status === 'passed',
+          }
+        }
         return {
           client,
           total,
@@ -78,6 +142,7 @@ export async function GET(req: Request) {
           review_count: review,
           previous_total: previous,
           variation_percent: previous > 0 ? Math.round(((total - previous) / previous) * 1000) / 10 : null,
+          readiness,
         }
       })
     )

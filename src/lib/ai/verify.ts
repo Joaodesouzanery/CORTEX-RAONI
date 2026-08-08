@@ -5,8 +5,10 @@ import type {
   QualityFlag,
   ReportRole,
   VerificationStatus,
+  AppliedEditorialSnapshot,
 } from '@/types'
 import { deterministicQualityFlags, inferGeographicScope } from '@/lib/report-quality'
+import { directivesPrompt } from '@/lib/editorial-directives'
 
 export interface EvidenceVerificationInput {
   article: ArticleSnapshot
@@ -64,7 +66,8 @@ const ALLOWED_FLAGS: QualityFlag[] = [
 export async function verifyEvidenceBatch(
   inputs: EvidenceVerificationInput[],
   client: { name: string; sector: string | null; context: string | null },
-  topics: MonthlyReportTopic[]
+  topics: MonthlyReportTopic[],
+  editorial?: AppliedEditorialSnapshot | null
 ): Promise<{ decisions: EvidenceVerificationDecision[]; source: 'ia' | 'regra' }> {
   if (!inputs.length) return { decisions: [], source: 'regra' }
   if (!process.env.ANTHROPIC_API_KEY) throw new Error('ANTHROPIC_API_KEY não configurada.')
@@ -100,6 +103,7 @@ export async function verifyEvidenceBatch(
 Não repita cegamente a primeira classificação. Confirme se o texto sustenta um impacto específico e útil para o cliente.
 Aceite como evidencia somente com confiança >= 0,85. Palavra-chave ampla, bolsa, cotação, criptomoeda, produto/equipamento, energia nuclear desconectada e exterior sem consequência local não são evidência.
 Para SIMINERAL, Pará/Amazônia são o eixo. Pautas nacionais e internacionais exigem consequência demonstrável para o setor mineral paraense.
+${directivesPrompt(editorial, ['qualificacao'])}
 Se houver apenas trecho, ambiguidade, menção direta, tom negativo/crítico ou item de agenda obrigatória, marque editorial_review_state como pendente.
 Retorne apenas JSON: [{"article_id":"uuid","accepted":true,"report_role":"evidencia|contexto|ruido","editorial_confidence":0.9,"verification_status":"verificada|parcial|pendente","editorial_review_state":"automatico|pendente","geographic_scope":"para|amazonia|brasil|internacional|indeterminado","quality_flags":[],"reason":"..."}].`,
     messages: [

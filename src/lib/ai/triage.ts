@@ -6,8 +6,10 @@ import type {
   ReportRole,
   StrategicEffect,
   VerificationStatus,
+  AppliedEditorialSnapshot,
 } from '@/types'
 import { deterministicQualityFlags, inferGeographicScope } from '@/lib/report-quality'
+import { directivesPrompt } from '@/lib/editorial-directives'
 
 export interface TriageDecision {
   article_id: string
@@ -51,7 +53,8 @@ function fallback(articles: ArticleSnapshot[]): TriageDecision[] {
 export async function triageEvidence(
   articles: ArticleSnapshot[],
   client: { name: string; sector: string | null; context: string | null },
-  memory: { inclusion: unknown[]; exclusion: unknown[] } = { inclusion: [], exclusion: [] }
+  memory: { inclusion: unknown[]; exclusion: unknown[] } = { inclusion: [], exclusion: [] },
+  editorial?: AppliedEditorialSnapshot | null
 ): Promise<{ decisions: TriageDecision[]; source: 'ia' | 'regra' }> {
   if (!process.env.ANTHROPIC_API_KEY) throw new Error('ANTHROPIC_API_KEY não configurada.')
   const { default: Anthropic } = await import('@anthropic-ai/sdk')
@@ -75,6 +78,8 @@ Não promova uma matéria apenas porque contém uma palavra ampla do setor. Pont
 geographic_scope deve ser para, amazonia, brasil, internacional ou indeterminado.
 quality_flags pode conter: texto_insuficiente, possivel_mercado_financeiro, ambiguidade_criptomoeda, energia_nuclear_desconectada, equipamento_comercial, exterior_sem_impacto_local ou divergencia_de_classificacao.
 Para SIMINERAL, priorize Pará/Amazônia, menções institucionais, regulação mineral, ANM/CFEM/licenciamento, minerais críticos, sustentabilidade, comunidades e infraestrutura. Brasil ou exterior só são evidência se houver impacto estratégico concreto para o setor mineral paraense. Bolsa, cotação, criptomoeda, produto/equipamento e exterior desconectado são contexto ou ruído.
+Avalie separadamente impacto específico, aderência à agenda, geografia, qualidade da fonte, texto disponível, valor reputacional e representatividade da pauta. Explique de forma auditável por que entrou ou ficou no anexo.
+${directivesPrompt(editorial, ['captacao', 'qualificacao'])}
 Para cada item, produza também uma ficha estratégica objetiva:
 - central_message: o fato/sinal factual principal, sem interpretação;
 - impact_summary: por que isso importa especificamente para o cliente;

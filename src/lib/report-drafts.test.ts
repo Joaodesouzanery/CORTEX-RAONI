@@ -41,9 +41,9 @@ function evidence(
 }
 
 describe('monthly report evidence products', () => {
-  it('keeps qualified evidence in section 11 and noise only in the annex', () => {
+  it('keeps qualified evidence in public section 10 and noise only in the annex', () => {
     const items = [evidence('qualified', 'lead'), evidence('annex', 'noise')]
-    expect(buildQualifiedSection(items)).toContain('## 11.')
+    expect(buildQualifiedSection(items)).toContain('## 10.')
     expect(buildQualifiedSection(items)).toContain('[E001]')
     expect(buildQualifiedSection(items)).toContain('Um gol de placa')
     expect(buildQualifiedSection(items)).not.toContain('Loteria')

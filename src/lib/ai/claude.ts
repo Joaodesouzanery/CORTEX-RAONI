@@ -138,11 +138,7 @@ Sinal do mês: [evidência concreta observada]]
 
 ---
 
-## 10. AGENDA MENSAL E TEMAS OBRIGATÓRIOS
-
-[Montada deterministicamente pelo sistema; não a produza durante a geração parcial.]
-
-## 11. BASE QUALIFICADA DE EVIDÊNCIAS MONITORADAS NO MÊS
+## 10. BASE QUALIFICADA DE EVIDÊNCIAS MONITORADAS NO MÊS
 
 [Montada deterministicamente pelo sistema; não a produza durante a geração parcial.]
 

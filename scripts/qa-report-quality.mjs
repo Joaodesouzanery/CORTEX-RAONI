@@ -80,5 +80,12 @@ console.log(`\nRuídos conhecidos promovidos como evidência: ${qualifiedNoise.l
 for (const article of qualifiedNoise.slice(0, 20)) console.log(`- ${article.title}`)
 
 const inconsistent = summary.total !== items.length
-if (qualifiedNoise.length || inconsistent) process.exit(1)
+const emptyTriage = summary.total > 0 && Number(summary.funnel?.triaged || 0) === 0
+const emptyQualifiedBase = summary.total > 0 && Number(summary.funnel?.qualified || 0) === 0
+const noVerifiedSource = summary.total > 0 &&
+  Number(sourceVerification.fonte_original || 0) + Number(sourceVerification.documento_integral || 0) === 0
+if (emptyTriage) console.error('\nFalha: nenhuma ocorrência foi triada; o funil ainda não sustenta um relatório.')
+if (emptyQualifiedBase) console.error('Falha: a Base Qualificada está vazia.')
+if (noVerifiedSource) console.error('Falha: nenhuma evidência possui fonte ou documento integral verificado.')
+if (qualifiedNoise.length || inconsistent || emptyTriage || emptyQualifiedBase || noVerifiedSource) process.exit(1)
 console.log('\nQA aprovado: funil integral e nenhum ruído conhecido promovido automaticamente.')

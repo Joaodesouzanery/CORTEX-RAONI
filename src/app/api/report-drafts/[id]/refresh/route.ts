@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createAdminClient as createClient } from '@/lib/supabase/server'
 import { refreshDraftEvidence } from '@/lib/report-drafts'
+import { syncDraftEditorialSnapshot } from '@/lib/editorial-directives'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
@@ -14,6 +15,8 @@ export async function POST(_: Request, { params }: { params: Promise<{ id: strin
     return NextResponse.json({ error: 'A versão aprovada é imutável. Crie uma nova versão.' }, { status: 409 })
   }
   try {
+    const applied = await syncDraftEditorialSnapshot(supabase, draft)
+    if (applied) draft.applied_editorial_snapshot = applied
     return NextResponse.json(await refreshDraftEvidence(supabase, draft))
   } catch (refreshError) {
     return NextResponse.json(
@@ -22,4 +25,3 @@ export async function POST(_: Request, { params }: { params: Promise<{ id: strin
     )
   }
 }
-

@@ -11,11 +11,13 @@ import type {
   ReportQualityCheckItem,
   ReportSection,
   SourceVerificationStatus,
+  AppliedEditorialSnapshot,
 } from '@/types'
 import { normalizeText } from '@/lib/relevance'
+import { lintEditorialDirectives, metricVisibility } from '@/lib/editorial-directives'
 
-const PARA_TERMS =
-  /\b(para|carajas|belem|parauapebas|maraba|canaa dos carajas|oriximina|juruti|trombetas|barcarena)\b/
+const PARA_ENTITIES =
+  /\b(carajas|belem|parauapebas|maraba|canaa dos carajas|oriximina|juruti|trombetas|barcarena|tapajos|xingu)\b/
 const AMAZON_TERMS = /\b(amazonia|amazonico|amazonica|bioma amazonico)\b/
 const BRAZIL_TERMS = /\b(brasil|brasileiro|brasileira|nacional|governo federal|anm|cfem|mme)\b/
 const FOREIGN_TERMS =
@@ -36,7 +38,14 @@ export function articleQualityText(article: Pick<ArticleSnapshot, 'title' | 'exc
 
 export function inferGeographicScope(article: Pick<ArticleSnapshot, 'title' | 'excerpt' | 'content'>): GeographicScope {
   const text = articleQualityText(article)
-  if (PARA_TERMS.test(text)) return 'para'
+  const raw = [article.title, article.excerpt, article.content]
+    .filter(Boolean)
+    .join(' ')
+    .toLocaleLowerCase('pt-BR')
+  // `normalizeText` removes accents, so an isolated `para` could be either the
+  // state or the Portuguese preposition. The state name is accepted only from
+  // the original accented text; unaccented matching requires a local entity.
+  if (/(?:^|[^\p{L}])pará(?:$|[^\p{L}])/u.test(raw) || PARA_ENTITIES.test(text)) return 'para'
   if (AMAZON_TERMS.test(text)) return 'amazonia'
   if (BRAZIL_TERMS.test(text)) return 'brasil'
   if (FOREIGN_TERMS.test(text)) return 'internacional'
@@ -62,7 +71,7 @@ export function deterministicQualityFlags(
   if (/\b(caminhao|escavadeira|mangueira|equipamento|mining equipment|caterpillar|komatsu)\b/.test(text)) {
     flags.add('equipamento_comercial')
   }
-  if (scope === 'internacional' && !/\b(brasil|para|amazonia|carajas|cadeia brasileira|setor brasileiro)\b/.test(text)) {
+  if (scope === 'internacional' && !/\b(brasil|amazonia|carajas|cadeia brasileira|setor brasileiro)\b/.test(text)) {
     flags.add('exterior_sem_impacto_local')
   }
   return Array.from(flags)
@@ -140,13 +149,20 @@ export function buildMethodologySnapshot(items: ReportEvidenceItem[]): Methodolo
   }
 }
 
-export function buildMethodologyNote(snapshot: MethodologySnapshot, clientName: string) {
+export function buildMethodologyNote(
+  snapshot: MethodologySnapshot,
+  clientName: string,
+  editorial?: AppliedEditorialSnapshot | null
+) {
+  const directMentions = metricVisibility(editorial, 'mencoes-diretas') === 'publica'
+    ? `Foram identificadas **${snapshot.direct_mentions} menções diretas a ${clientName}**. As demais ocorrências qualificadas são inteligência setorial: ajudam a interpretar riscos e oportunidades, mas não equivalem a exposição nominal do cliente.`
+    : `O universo combina inteligência setorial e inserções específicas sobre ${clientName}, permitindo interpretar riscos, oportunidades e movimentos do ambiente sem reduzir a análise à exposição nominal da entidade.`
   return [
     '## NOTA DE MÉTODO',
     '',
     `O universo desta competência reúne **${snapshot.monitored_total} ocorrências monitoradas no servidor**, sem limitação aos itens carregados na interface. Após triagem e verificação editorial, **${snapshot.qualified_evidence}** compõem a Base Qualificada e **${snapshot.annex_total}** permanecem no Anexo Monitorado.`,
     '',
-    `Foram identificadas **${snapshot.direct_mentions} menções diretas a ${clientName}**. As demais ocorrências qualificadas são inteligência setorial: ajudam a interpretar riscos e oportunidades, mas não equivalem a exposição nominal do cliente.`,
+    directMentions,
     '',
     `Quanto ao conteúdo disponível, há **${snapshot.content_integral} textos integrais**, **${snapshot.content_partial} conteúdos parciais** e **${snapshot.content_metadata_only} registros somente com metadados.** Quanto à conferência da origem, **${snapshot.source_original_verified} fontes originais** foram verificadas, **${snapshot.source_document_integral} documentos integrais** foram preservados, **${snapshot.source_partial} fontes** permanecem parciais e **${snapshot.source_unverified}** não tiveram a origem diretamente conferida.`,
     '',
@@ -315,6 +331,7 @@ export function evaluateReportQuality(input: {
   assignedArticleIds?: Set<string>
   narrativePosture?: ReportPosture
   clientName?: string
+  editorialSnapshot?: AppliedEditorialSnapshot | null
 }): { status: 'passed' | 'blocked'; checks: ReportQualityCheckItem[]; funnel: QualificationFunnel } {
   const { items, topics, sections, leadArticleId, periodMonth } = input
   const assigned = input.assignedArticleIds || new Set<string>()
@@ -426,6 +443,13 @@ export function evaluateReportQuality(input: {
       posture: input.narrativePosture || 'consultivo_cauteloso',
       clientName: input.clientName || 'cliente',
     }),
+    ...lintEditorialDirectives(
+      sections
+        .filter((section) => section.content.trim())
+        .map((section) => section.content)
+        .join('\n\n'),
+      input.editorialSnapshot
+    ),
   ]
   return {
     status: checks.some((item) => item.status === 'blocked') ? 'blocked' : 'passed',
@@ -437,10 +461,10 @@ export function evaluateReportQuality(input: {
 export function buildAgendaSection(topics: MonthlyReportTopic[]) {
   const rows = [...topics].sort((a, b) => a.position - b.position)
   return [
-    '## 10. AGENDA MENSAL E TEMAS OBRIGATÓRIOS',
+    '# AGENDA EDITORIAL INTERNA E LACUNAS',
     '',
     ...rows.flatMap((topic) => [
-      `### 10.${topic.position}. ${topic.title}`,
+      `## ${topic.position}. ${topic.title}`,
       '',
       topic.coverage_status === 'covered'
         ? `**Cobertura:** confirmada em ${topic.evidence_count || topic.evidence?.length || 0} publicação(ões).`

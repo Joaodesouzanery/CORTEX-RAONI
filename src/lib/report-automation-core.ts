@@ -235,18 +235,33 @@ export function approvalChecklist(input: {
   invalidCitations: number
   comparisonReady: boolean
   packageCurrent?: boolean
+  requirePackage?: boolean
+  qualifiedCount?: number
+  unverifiedQualified?: number
+  placeholders?: number
+  serviceMetricsReady?: boolean
+  qualityReady?: boolean
 }): ApprovalChecklist {
   const untriaged = input.items.filter((item) => item.bucket !== 'excluded' && !item.classification_snapshot.triaged_at && item.classification_snapshot.report_role_source !== 'humano').length
+  const incompleteSections = input.sections.length !== 9 || input.sections.some(
+    (section) => !String(section.content || '').trim() || ['pending', 'stale', 'error'].includes(section.status)
+  )
   const items: ApprovalChecklist['items'] = [
     { key: 'base', label: 'Base atualizada', status: input.draft.base_digest ? 'passed' : 'blocked' },
     { key: 'triage', label: 'Triagem completa', status: untriaged ? 'blocked' : 'passed', detail: untriaged ? `${untriaged} item(ns) sem triagem` : undefined },
+    { key: 'evidence', label: 'Base qualificada com evidências verificadas', status: !input.qualifiedCount || input.unverifiedQualified ? 'blocked' : 'passed', detail: !input.qualifiedCount ? 'Nenhuma evidência qualificada' : input.unverifiedQualified ? `${input.unverifiedQualified} evidência(s) sem verificação` : undefined },
     { key: 'exceptions', label: 'Exceções resolvidas', status: input.unresolvedExceptions ? 'blocked' : 'passed', detail: input.unresolvedExceptions ? `${input.unresolvedExceptions} pendência(s)` : undefined },
     { key: 'agenda', label: 'Agenda coberta ou lacunas reconhecidas', status: input.uncoveredRequiredTopics ? 'blocked' : 'passed' },
     { key: 'lead', label: 'Matéria principal escolhida', status: input.draft.lead_article_id ? 'passed' : 'blocked' },
     { key: 'comparison', label: 'Comparação mensal produzida', status: input.comparisonReady ? 'passed' : 'blocked' },
-    { key: 'sections', label: 'Seções atuais', status: input.sections.some((section) => ['pending', 'stale', 'error'].includes(section.status)) ? 'blocked' : 'passed' },
+    { key: 'sections', label: 'Seções 1–9 completas e atuais', status: incompleteSections ? 'blocked' : 'passed', detail: incompleteSections ? `${input.sections.length} de 9 seção(ões) persistidas; revise conteúdo vazio ou desatualizado` : undefined },
+    { key: 'placeholders', label: 'Sem campos pendentes no texto', status: input.placeholders ? 'blocked' : 'passed', detail: input.placeholders ? `${input.placeholders} placeholder(s) como [A PREENCHER]` : undefined },
+    { key: 'service_metrics', label: 'Indicadores de serviço confirmados', status: input.serviceMetricsReady ? 'passed' : 'blocked' },
+    { key: 'quality', label: 'Portões de qualidade executados na base atual', status: input.qualityReady ? 'passed' : 'blocked' },
     { key: 'citations', label: 'Citações válidas', status: input.invalidCitations ? 'blocked' : 'passed' },
-    { key: 'package', label: 'Pacote Claude disponível', status: (input.packageCurrent ?? (input.draft.claude_package_base_version === input.draft.base_version)) ? 'passed' : 'blocked' },
+    ...(input.requirePackage === false
+      ? []
+      : [{ key: 'package', label: 'Pacote final para o Claude disponível', status: (input.packageCurrent ?? (input.draft.final_package_base_version === input.draft.base_version)) ? 'passed' as const : 'blocked' as const }]),
   ]
   return { base_version: input.draft.base_version, generated_at: new Date().toISOString(), ready: items.every((item) => item.status !== 'blocked'), items }
 }

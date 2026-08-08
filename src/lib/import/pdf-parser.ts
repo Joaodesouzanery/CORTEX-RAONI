@@ -324,6 +324,13 @@ function looksLikeRasterizedReport(text: string, pageCount: number): boolean {
   return sparse && pageMarkers && editorialMarker
 }
 
+function looksLikeDeliveredReportFilename(filename: string, pageCount: number) {
+  if (pageCount < 5) return false
+  const normalized = normalizeText(filename.replace(/\.pdf$/i, ''))
+  return /\brelatorio\b/.test(normalized) &&
+    /\b(?:janeiro|fevereiro|marco|abril|maio|junho|julho|agosto|setembro|outubro|novembro|dezembro|20\d{2})\b/.test(normalized)
+}
+
 export async function parsePdf(data: Uint8Array, filename: string): Promise<ParsedPdfDocument> {
   // Load the Node canvas shim before pdf-parse. Besides supplying DOMMatrix in
   // serverless runtimes, the dynamic import keeps initialization failures
@@ -346,6 +353,17 @@ export async function parsePdf(data: Uint8Array, filename: string): Promise<Pars
       author: info.info?.Author || null,
       producer: info.info?.Producer || null,
       toc_entries: tocResult.tocCount,
+    }
+
+    if (looksLikeDeliveredReportFilename(filename, textResult.total)) {
+      return {
+        documentType: 'relatorio',
+        pageCount: textResult.total,
+        metadata,
+        referenceText: cleanArticleText(textResult.text),
+        articles: [],
+        warnings: ['Relatório final reconhecido pelo nome e pela paginação; nenhuma notícia foi criada.'],
+      }
     }
 
     if (looksLikeRasterizedReport(textResult.text, textResult.total)) {

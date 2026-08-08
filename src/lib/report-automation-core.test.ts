@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
+  approvalChecklist,
   buildReportClusters,
   comparePeriods,
   diffReportBase,
@@ -7,7 +8,7 @@ import {
   leadSuggestions,
   reportBaseDigest,
 } from './report-automation-core'
-import type { ReportEvidenceItem } from '@/types'
+import type { MonthlyReportDraft, ReportEvidenceItem, ReportSection } from '@/types'
 import { previousPeriod, saoPauloPeriod } from './report-automation'
 
 function item(
@@ -53,6 +54,105 @@ function item(
 }
 
 describe('continuous report automation', () => {
+  it('blocks a final package when the base has no verified evidence', () => {
+    const draft = {
+      id: 'draft',
+      base_version: 3,
+      base_digest: 'digest',
+      lead_article_id: null,
+      final_package_base_version: null,
+    } as MonthlyReportDraft
+    const reportSections = Array.from({ length: 9 }, (_, index) => ({
+      section_key: index + 1,
+      status: 'generated',
+      content: `Seção ${index + 1} revisada.`,
+    })) as ReportSection[]
+    const checklist = approvalChecklist({
+      draft,
+      items: [item('a', 'Notícia ainda não triada', { triaged_at: null, report_role_source: null })],
+      sections: reportSections,
+      unresolvedExceptions: 1,
+      uncoveredRequiredTopics: 1,
+      invalidCitations: 0,
+      comparisonReady: true,
+      qualifiedCount: 0,
+      unverifiedQualified: 0,
+      placeholders: 0,
+      serviceMetricsReady: false,
+      qualityReady: false,
+      requirePackage: false,
+    })
+    expect(checklist.ready).toBe(false)
+    expect(checklist.items.find((entry) => entry.key === 'evidence')?.status).toBe('blocked')
+  })
+
+  it('blocks the SINDINFOR-style handoff with untriaged candidates and no evidence', () => {
+    const draft = {
+      id: 'draft',
+      base_version: 3,
+      base_digest: 'digest',
+      lead_article_id: null,
+    } as MonthlyReportDraft
+    const sections = Array.from({ length: 9 }, (_, index) => ({
+      section_key: index + 1,
+      status: 'generated',
+      content: `Seção ${index + 1} revisada.`,
+    })) as ReportSection[]
+    const candidates = Array.from({ length: 125 }, (_, index) =>
+      item(String(index), `Candidata ${index}`, { triaged_at: null, report_role_source: null })
+    )
+    const checklist = approvalChecklist({
+      draft,
+      items: candidates,
+      sections,
+      unresolvedExceptions: 125,
+      uncoveredRequiredTopics: 1,
+      invalidCitations: 0,
+      comparisonReady: true,
+      qualifiedCount: 0,
+      unverifiedQualified: 0,
+      placeholders: 0,
+      serviceMetricsReady: true,
+      qualityReady: false,
+      requirePackage: false,
+    })
+    expect(checklist.ready).toBe(false)
+    expect(checklist.items.find((entry) => entry.key === 'triage')?.detail).toContain('125')
+    expect(checklist.items.find((entry) => entry.key === 'agenda')?.status).toBe('blocked')
+    expect(checklist.items.find((entry) => entry.key === 'lead')?.status).toBe('blocked')
+  })
+
+  it('blocks unresolved placeholders such as the CCEE delivery marker', () => {
+    const checklist = approvalChecklist({
+      draft: {
+        id: 'draft',
+        base_version: 1,
+        base_digest: 'digest',
+        lead_article_id: 'a',
+      } as MonthlyReportDraft,
+      items: [item('a', 'Evidência verificada', {
+        verification_status: 'verificada',
+        qa_checked_at: '2026-07-31T12:00:00Z',
+      }, 'qualified')],
+      sections: Array.from({ length: 9 }, (_, index) => ({
+        section_key: index + 1,
+        status: 'generated',
+        content: `Seção ${index + 1} revisada.`,
+      })) as ReportSection[],
+      unresolvedExceptions: 0,
+      uncoveredRequiredTopics: 0,
+      invalidCitations: 0,
+      comparisonReady: true,
+      qualifiedCount: 1,
+      unverifiedQualified: 0,
+      placeholders: 1,
+      serviceMetricsReady: true,
+      qualityReady: true,
+      requirePackage: false,
+    })
+    expect(checklist.items.find((entry) => entry.key === 'placeholders')?.status).toBe('blocked')
+  })
+
   it('uses the São Paulo month boundary and handles January', () => {
     expect(saoPauloPeriod(new Date('2026-08-01T02:59:59Z'))).toBe('2026-07')
     expect(saoPauloPeriod(new Date('2026-08-01T03:00:00Z'))).toBe('2026-08')

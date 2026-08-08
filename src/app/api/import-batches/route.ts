@@ -61,6 +61,10 @@ export async function POST(req: Request) {
       client_id: primaryClientId,
       period_month: periodMonth(parsed.data.period),
       intent: parsed.data.intent,
+      reference_kind:
+        parsed.data.intent === 'relatorio_referencia'
+          ? parsed.data.reference_kind || 'historical'
+          : 'historical',
       total_files: parsed.data.total_files,
     })
     .select('*, clients!import_batches_client_id_fkey(id, name)')

@@ -125,7 +125,8 @@ export async function POST(_: Request, { params }: { params: Promise<{ id: strin
       {
         inclusion: inclusionExamples,
         exclusion: exclusionExamples,
-      }
+      },
+      draft.applied_editorial_snapshot || null
     )
     const now = new Date().toISOString()
     for (const decision of result.decisions) {

@@ -30,9 +30,14 @@ async function readClientPeriod(clientId, days, options = {}) {
     const query = new URLSearchParams({
       paginated: 'true',
       client_id: clientId,
-      days: String(days),
       limit: '200',
     })
+    if (options.generatedAt) {
+      const end = new Date(options.generatedAt)
+      query.set('published_after', new Date(end.getTime() - days * 86400000).toISOString())
+    } else {
+      query.set('days', String(days))
+    }
     if (options.direct) query.set('direct', 'true')
     if (options.includeContent) query.set('include_content', 'true')
     if (cursor) query.set('cursor', cursor)
@@ -79,9 +84,13 @@ const primary = summaries.find((summary) => summary.period_days === 30)
 const checks = []
 
 for (const row of primary.clients) {
-  const articles = await readClientPeriod(row.client.id, 30)
+  const articles = await readClientPeriod(row.client.id, 30, { generatedAt: primary.generated_at })
   const directArticles = row.direct_mentions
-    ? await readClientPeriod(row.client.id, 30, { direct: true, includeContent: true })
+    ? await readClientPeriod(row.client.id, 30, {
+        direct: true,
+        includeContent: true,
+        generatedAt: primary.generated_at,
+      })
     : []
   const falsePositives = knownFalsePositives(
     row.client.name,

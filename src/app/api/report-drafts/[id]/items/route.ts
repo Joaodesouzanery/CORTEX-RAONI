@@ -40,6 +40,10 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     client_id: draft.client_id,
     period_month: draft.period_month,
     source_document_id: document.id,
+    editorial_reason:
+      parsed.data.editorial_reason ||
+      'Matéria adicionada manualmente à competência para sustentar o ciclo editorial do mês.',
+    cycle_stage: parsed.data.cycle_stage || null,
   }))
   const { error: assignmentError } = await supabase
     .from('article_period_assignments')

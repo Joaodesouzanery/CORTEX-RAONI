@@ -16,6 +16,7 @@ import {
   exceptionPriority,
   leadSuggestions,
 } from '@/lib/report-automation-core'
+import { loadEditorialSnapshot, syncDraftEditorialSnapshot } from '@/lib/editorial-directives'
 
 export function saoPauloPeriod(date = new Date()) {
   const parts = new Intl.DateTimeFormat('en-CA', {
@@ -34,22 +35,25 @@ export function previousPeriod(period: string) {
 }
 
 async function seedDraftTopics(supabase: SupabaseClient, draftId: string, clientId: string) {
-  const { count } = await supabase
-    .from('monthly_report_topics')
-    .select('id', { count: 'exact', head: true })
-    .eq('draft_id', draftId)
-  if (count) return
-  const { data: templates, error } = await supabase
-    .from('client_report_topic_templates')
-    .select('position, title, rationale, inclusion_terms, exclusion_terms, required')
-    .eq('client_id', clientId)
-    .eq('active', true)
-    .order('position')
+  const [{ data: existing }, { data: templates, error }] = await Promise.all([
+    supabase.from('monthly_report_topics').select('title, position').eq('draft_id', draftId),
+    supabase
+      .from('client_report_topic_templates')
+      .select('title, rationale, inclusion_terms, exclusion_terms, required')
+      .eq('client_id', clientId)
+      .eq('active', true)
+      .order('position'),
+  ])
   if (error) throw new Error(error.message)
-  if (templates?.length) {
+  const titles = new Set((existing || []).map((topic) => topic.title))
+  let position = Math.max(0, ...(existing || []).map((topic) => Number(topic.position || 0)))
+  const missing = (templates || [])
+    .filter((topic) => !titles.has(topic.title))
+    .map((topic) => ({ draft_id: draftId, ...topic, position: ++position }))
+  if (missing.length) {
     const { error: insertError } = await supabase
       .from('monthly_report_topics')
-      .insert(templates.map((topic) => ({ draft_id: draftId, ...topic })))
+      .insert(missing)
     if (insertError) throw new Error(insertError.message)
   }
 }
@@ -88,6 +92,11 @@ export async function ensureMonthlyDraft(
   if (existingError) throw new Error(existingError.message)
   if (existing) {
     await seedDraftTopics(supabase, existing.id, client.id)
+    const applied = await syncDraftEditorialSnapshot(supabase, existing as MonthlyReportDraft)
+    if (applied) {
+      existing.applied_editorial_snapshot = applied
+      existing.editorial_snapshot_version = applied.profile_version
+    }
     return existing as MonthlyReportDraft
   }
 
@@ -100,6 +109,7 @@ export async function ensureMonthlyDraft(
     .limit(1)
     .maybeSingle()
   const snapshot = await memorySnapshot(supabase, client.id)
+  const appliedEditorialSnapshot = await loadEditorialSnapshot(supabase, client.id, period)
   const { data: draft, error } = await supabase
     .from('monthly_report_drafts')
     .insert({
@@ -110,6 +120,8 @@ export async function ensureMonthlyDraft(
       brand_snapshot: reportBrand(client),
       narrative_posture: (snapshot.profile as { default_posture?: string } | null)?.default_posture || 'consultivo_cauteloso',
       editorial_memory_snapshot: snapshot,
+      applied_editorial_snapshot: appliedEditorialSnapshot,
+      editorial_snapshot_version: appliedEditorialSnapshot.profile_version,
       automation_status: 'pending',
     })
     .select()
@@ -231,7 +243,11 @@ export async function draftExceptions(supabase: SupabaseClient, draftId: string)
     .sort((a, b) => Number(a.priority) - Number(b.priority) || a.item.position - b.item.position)
 }
 
-export async function buildDraftChecklist(supabase: SupabaseClient, draft: MonthlyReportDraft): Promise<ApprovalChecklist> {
+export async function buildDraftChecklist(
+  supabase: SupabaseClient,
+  draft: MonthlyReportDraft,
+  options: { requirePackage?: boolean } = {}
+): Promise<ApprovalChecklist> {
   const [items, { data: sections }, { data: topics }, exceptions, { data: quality }] = await Promise.all([
     reportEvidenceItems(supabase, draft.id),
     supabase.from('report_sections').select('*').eq('draft_id', draft.id).order('section_key'),
@@ -242,13 +258,36 @@ export async function buildDraftChecklist(supabase: SupabaseClient, draft: Month
   const invalidCitations = ((quality?.checks || []) as Array<{ key?: string; status?: string; count?: number }>)
     .filter((check) => check.status === 'blocked' && ['citation_validity', 'uncited_facts'].includes(String(check.key)))
     .reduce((sum, check) => sum + Number(check.count || 1), 0)
-  const packageGeneratedAt = draft.claude_package_generated_at
-    ? new Date(draft.claude_package_generated_at).getTime()
+  const packageGeneratedAt = draft.final_package_generated_at
+    ? new Date(draft.final_package_generated_at).getTime()
     : 0
   const latestMaterialUpdate = Math.max(
     new Date(draft.updated_at).getTime(),
     ...(sections || []).map((section) => new Date(section.updated_at).getTime()),
     ...(topics || []).map((topic) => new Date(topic.updated_at).getTime())
+  )
+  const qualified = items.filter((item) => item.bucket === 'qualified')
+  const unverifiedQualified = qualified.filter((item) => {
+    const classification = item.classification_snapshot
+    return classification.editorial_review_state !== 'revisado' &&
+      !(
+        classification.verification_status === 'verificada' &&
+        Boolean(classification.qa_checked_at)
+      )
+  }).length
+  const placeholderPattern = /\[(?:A\s+PREENCHER|PENDENTE|INSERIR|COMPLETAR)[^\]]*\]/gi
+  const placeholders = (sections || []).reduce(
+    (sum, section) => sum + (section.content.match(placeholderPattern)?.length || 0),
+    0
+  )
+  const requiredMetrics = [
+    'reunioes_presenciais',
+    'reunioes_virtuais',
+    'orientacoes',
+    'acoes_imprensa',
+  ]
+  const serviceMetricsReady = requiredMetrics.every(
+    (key) => typeof draft.service_metrics?.[key] === 'number' && Number.isFinite(draft.service_metrics[key])
   )
   return approvalChecklist({
     draft,
@@ -259,15 +298,21 @@ export async function buildDraftChecklist(supabase: SupabaseClient, draft: Month
     invalidCitations,
     comparisonReady: Boolean(draft.comparison_snapshot && Object.keys(draft.comparison_snapshot).length),
     packageCurrent:
-      draft.claude_package_base_version === draft.base_version &&
+      draft.final_package_base_version === draft.base_version &&
       packageGeneratedAt >= latestMaterialUpdate,
+    requirePackage: options.requirePackage,
+    qualifiedCount: qualified.length,
+    unverifiedQualified,
+    placeholders,
+    serviceMetricsReady,
+    qualityReady: draft.quality_status === 'passed' && Boolean(quality?.checks),
   })
 }
 
 export async function syncSourceOperationalAlerts(supabase: SupabaseClient) {
   const { data: sources, error } = await supabase
     .from('sources')
-    .select('id, name, priority, last_success_at, last_fetch_error, active')
+    .select('id, name, priority, last_success_at, last_fetch_error, active, client_sources(client_id, priority, clients!inner(active))')
     .eq('active', true)
   if (error) throw new Error(error.message)
   const { data: existingAlerts } = await supabase
@@ -279,28 +324,38 @@ export async function syncSourceOperationalAlerts(supabase: SupabaseClient) {
   const now = Date.now()
   const openFingerprints = new Set<string>()
   for (const source of sources || []) {
-    const thresholdHours = Number(source.priority || 0) >= 80 ? 8 : 24
+    const links = Array.isArray(source.client_sources) && source.client_sources.length
+      ? source.client_sources.filter((link) => {
+          const client = Array.isArray(link.clients) ? link.clients[0] : link.clients
+          return client?.active !== false
+        })
+      : [{ client_id: null, priority: source.priority }]
+    for (const link of links) {
+    const priority = Number(link.priority ?? source.priority ?? 0)
+    const thresholdHours = priority >= 80 ? 8 : 24
     const ageHours = source.last_success_at ? (now - new Date(source.last_success_at).getTime()) / 3_600_000 : Infinity
     const stale = ageHours >= thresholdHours
     const failed = Boolean(source.last_fetch_error)
     if (!stale && !failed) continue
     const kind = failed ? 'source_failed' : 'source_stale'
-    const fingerprint = `${kind}:${source.id}`
+    const fingerprint = `${kind}:${source.id}:${link.client_id || 'global'}`
     const prior = existingByFingerprint.get(fingerprint)
     openFingerprints.add(fingerprint)
     await supabase.from('operational_alerts').upsert({
       fingerprint,
       kind,
-      severity: Number(source.priority || 0) >= 80 ? 'critical' : 'warning',
+      severity: priority >= 80 ? 'critical' : 'warning',
       status: prior?.status === 'acknowledged' ? 'acknowledged' : 'open',
+      client_id: link.client_id,
       source_id: source.id,
       title: failed ? `Falha na fonte ${source.name}` : `Fonte atrasada: ${source.name}`,
-      details: { priority: source.priority, threshold_hours: thresholdHours, age_hours: Number.isFinite(ageHours) ? Math.round(ageHours * 10) / 10 : null, error: source.last_fetch_error },
+      details: { priority, threshold_hours: thresholdHours, age_hours: Number.isFinite(ageHours) ? Math.round(ageHours * 10) / 10 : null, error: source.last_fetch_error },
       last_seen_at: new Date().toISOString(),
       resolved_at: null,
       acknowledged_at: prior?.acknowledged_at || null,
       updated_at: new Date().toISOString(),
     }, { onConflict: 'fingerprint' })
+    }
   }
   const resolved = (existingAlerts || []).filter((alert) => !openFingerprints.has(alert.fingerprint)).map((alert) => alert.id)
   if (resolved.length) {

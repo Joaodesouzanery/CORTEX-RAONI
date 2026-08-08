@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { createClient } from '@/lib/supabase/client'
 import { sha256Bytes } from '@/lib/archive'
-import type { Client, ImportBatch, ImportDocument, ImportIntent } from '@/types'
+import type { Client, ImportBatch, ImportDocument, ImportIntent, ReferenceKind } from '@/types'
 
 type FileProgress = {
   filename: string
@@ -37,6 +37,7 @@ export default function ImportsPage() {
   const [clientIds, setClientIds] = useState<string[]>([])
   const [period, setPeriod] = useState(currentPeriod())
   const [intent, setIntent] = useState<ImportIntent>('noticias')
+  const [referenceKind, setReferenceKind] = useState<ReferenceKind>('historical')
   const [progress, setProgress] = useState<FileProgress[]>([])
   const [running, setRunning] = useState(false)
   const [error, setError] = useState('')
@@ -75,7 +76,7 @@ export default function ImportsPage() {
     let documentId: string | null = null
     let attemptedProcessing = false
     try {
-      if (!/\.(pdf|html?)$/i.test(file.name)) throw new Error('Envie um PDF ou HTML.')
+      if (!/\.(pdf|html?|zip)$/i.test(file.name)) throw new Error('Envie um PDF, HTML ou pacote ZIP.')
       updateFile(file.name, { status: 'working', label: 'Calculando SHA-256…' })
       const bytes = await file.arrayBuffer()
       const sha256 = await sha256Bytes(bytes)
@@ -97,7 +98,11 @@ export default function ImportsPage() {
           init.upload.token,
           file,
           {
-            contentType: /\.html?$/i.test(file.name) ? 'text/html' : 'application/pdf',
+            contentType: /\.html?$/i.test(file.name)
+              ? 'text/html'
+              : /\.zip$/i.test(file.name)
+                ? 'application/zip'
+                : 'application/pdf',
             upsert: Boolean(init.upload.upsert),
           }
         )
@@ -155,7 +160,13 @@ export default function ImportsPage() {
       const batchRes = await fetch('/api/import-batches', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ client_ids: clientIds, period, intent, total_files: selected.length }),
+        body: JSON.stringify({
+          client_ids: clientIds,
+          period,
+          intent,
+          reference_kind: intent === 'relatorio_referencia' ? referenceKind : undefined,
+          total_files: selected.length,
+        }),
       })
       const batch = await batchRes.json().catch(() => null)
       if (!batchRes.ok) throw new Error(batch?.error || 'Falha ao criar o lote.')
@@ -267,7 +278,7 @@ export default function ImportsPage() {
       </div>
 
       <div className="border border-gray-200 p-4 mb-6">
-        <div className="grid md:grid-cols-3 gap-4">
+        <div className="grid md:grid-cols-4 gap-4">
           <div className="md:col-span-1">
             <Label>Clientes do lote</Label>
             <div className="mt-1 border border-gray-300 p-2 space-y-1 max-h-36 overflow-y-auto">
@@ -314,6 +325,23 @@ export default function ImportsPage() {
               <option value="relatorio_referencia">Relatório anterior — somente referência</option>
             </select>
           </div>
+          {intent === 'relatorio_referencia' && (
+            <div>
+              <Label htmlFor="reference-kind">Tipo de referência</Label>
+              <select
+                id="reference-kind"
+                value={referenceKind}
+                onChange={(event) => setReferenceKind(event.target.value as ReferenceKind)}
+                className="mt-1 h-10 w-full border border-gray-300 bg-white px-3 text-sm"
+                disabled={running}
+              >
+                <option value="historical">Relatório anterior</option>
+                <option value="quality_reference">Referência de estrutura/qualidade</option>
+                <option value="delivered_report">Relatório final entregue</option>
+                <option value="diagnostic_package">Pacote diagnóstico do CORTEX</option>
+              </select>
+            </div>
+          )}
         </div>
         <div className="flex gap-2 mt-4 flex-wrap">
           <Button onClick={() => inputRef.current?.click()} disabled={running || !clientIds.length || !period}>
@@ -323,7 +351,7 @@ export default function ImportsPage() {
           <input
             ref={inputRef}
             type="file"
-            accept="application/pdf,text/html,.pdf,.html,.htm"
+            accept="application/pdf,text/html,application/zip,.pdf,.html,.htm,.zip"
             multiple
             className="hidden"
             onChange={(event) => uploadFiles(event.target.files)}
@@ -421,7 +449,15 @@ export default function ImportsPage() {
                   {' · '}{batch.period_month.slice(0, 7)}
                 </p>
                 <p className="text-xs text-gray-500 mt-1">
-                  {batch.intent === 'noticias' ? 'Notícias' : 'Relatório de referência'} · {batch.completed_files} concluído(s)
+                  {batch.intent === 'noticias'
+                    ? 'Notícias'
+                    : batch.reference_kind === 'delivered_report'
+                      ? 'Relatório final entregue'
+                    : batch.reference_kind === 'quality_reference'
+                      ? 'Referência de qualidade'
+                      : batch.reference_kind === 'diagnostic_package'
+                        ? 'Pacote diagnóstico'
+                      : 'Relatório anterior'} · {batch.completed_files} concluído(s)
                   · {batch.review_files} em revisão · {batch.failed_files} falha(s) · {batch.article_count} matéria(s)
                 </p>
               </div>

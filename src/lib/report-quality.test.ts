@@ -139,9 +139,27 @@ describe('report quality gates', () => {
     expect(result.checks.find((check) => check.key === 'sections_current')?.status).toBe('warning')
   })
 
-  it('builds the deterministic agenda as section 10', () => {
-    expect(buildAgendaSection([topic])).toContain('## 10.')
+  it('builds the agenda as an internal, unnumbered product', () => {
+    expect(buildAgendaSection([topic])).toContain('# AGENDA EDITORIAL INTERNA')
+    expect(buildAgendaSection([topic])).not.toContain('## 10.')
     expect(buildAgendaSection([topic])).toContain('Mineração no Pará')
+  })
+
+  it('never mistakes the Portuguese preposition para for the state Pará', () => {
+    expect(
+      inferGeographicScope({
+        title: 'Empresa lança ferramenta para organizar equipes',
+        excerpt: 'Solução para empresas de tecnologia.',
+        content: 'A novidade foi criada para reduzir retrabalho em equipes de software.',
+      })
+    ).toBe('indeterminado')
+    expect(
+      inferGeographicScope({
+        title: 'Mineração sustentável avança no Pará',
+        excerpt: null,
+        content: 'O projeto está localizado no Estado do Pará.',
+      })
+    ).toBe('para')
   })
 
   it('uses the complete server snapshot in the deterministic method note', () => {
