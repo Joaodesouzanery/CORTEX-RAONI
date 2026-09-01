@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createAdminClient as createClient } from '@/lib/supabase/server'
 import { triageEvidence, type TriageDecision } from '@/lib/ai/triage'
-import { ruleBasedTriageDecisions } from '@/lib/ai/rule-triage'
+import { ruleBasedTriageDecisions, RULE_TRIAGE_VERSION } from '@/lib/ai/rule-triage'
 import { fetchAll, refreshDraftEvidence, reportEvidenceItems } from '@/lib/report-drafts'
 import type { ArticleSnapshot } from '@/types'
 import { normalizeText } from '@/lib/relevance'
@@ -65,16 +65,19 @@ export async function POST(_: Request, { params }: { params: Promise<{ id: strin
         .or('report_role_source.eq.humano,editorial_review_state.eq.revisado')
         .range(from, to)
     ),
-    // Rule-based decisions ('regra') are provisional — always eligible for
-    // re-triage as the ruleset improves or once AI becomes available. Only
-    // 'ia' and 'humano' decisions are treated as settled.
+    // Rule-based decisions ('regra') are provisional: a row is only treated
+    // as settled once it was written under the CURRENT rule version. That
+    // lets a ruleset change (bump RULE_TRIAGE_VERSION) get picked up on the
+    // next "Triar todo o universo" without a manual DB reset, while still
+    // converging — a row re-triaged under the current version is excluded
+    // from the next batch instead of being reconsidered on every call.
     fetchAll<{ article_id: string }>((from, to) =>
       supabase
         .from('article_client_tags')
         .select('article_id')
         .eq('client_id', draft.client_id)
         .not('triaged_at', 'is', null)
-        .neq('report_role_source', 'regra')
+        .or(`report_role_source.neq.regra,triage_version.gte.${RULE_TRIAGE_VERSION}`)
         .range(from, to)
     ),
     supabase
@@ -144,7 +147,7 @@ export async function POST(_: Request, { params }: { params: Promise<{ id: strin
           cluster_label: decision.cluster_label,
           report_role_source: result.source,
           triaged_at: now,
-          triage_version: 1,
+          triage_version: result.source === 'regra' ? RULE_TRIAGE_VERSION : 1,
           central_message: decision.central_message,
           impact_summary: decision.impact_summary,
           strategic_effect: decision.strategic_effect,

@@ -2,6 +2,13 @@ import type { ArticleSnapshot, ReportEvidenceItem } from '@/types'
 import { deterministicQualityFlags, inferGeographicScope } from '@/lib/report-quality'
 import type { TriageDecision } from '@/lib/ai/triage'
 
+// Bump this whenever ruleBasedTriageDecisions's logic changes, so the triage
+// route knows to re-evaluate 'regra' rows written under an older version
+// instead of treating them as settled forever — or, just as important,
+// instead of re-evaluating EVERY 'regra' row on EVERY run, which never
+// converges (the same batch keeps coming back as "not yet triaged").
+export const RULE_TRIAGE_VERSION = 2
+
 // Keeps the monthly pipeline moving when ANTHROPIC_API_KEY is not configured.
 // evaluateClientArticle (src/lib/client-relevance.ts) already sets
 // monitoring_status='confirmado' for two cases: a direct client-name mention,
