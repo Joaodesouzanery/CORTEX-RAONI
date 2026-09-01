@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useMemo, useState } from 'react'
-import { CheckSquare, FilePlus2, RefreshCw, Sparkles } from 'lucide-react'
+import { CheckSquare, FileDown, FilePlus2, RefreshCw, Sparkles } from 'lucide-react'
 import { useViewMode } from '@/hooks/useViewMode'
 import { useArticleSelection } from '@/hooks/useArticleSelection'
 import { useToast } from '@/hooks/use-toast'
@@ -390,6 +390,14 @@ export default function NewsPage() {
             <Button variant="outline" size="sm" onClick={runSuggestTags} disabled={suggesting || !pendingTag.length}>
               <Sparkles className={`mr-2 h-4 w-4 ${suggesting ? 'animate-pulse' : ''}`} />
               {suggesting ? 'Sugerindo…' : `Sugerir tags (${pendingTag.length})`}
+            </Button>
+          )}
+          {activeClient && (
+            <Button variant="outline" size="sm" asChild>
+              <a href={`/api/articles/export?${summaryQuery()}`} download>
+                <FileDown className="mr-2 h-4 w-4" />
+                {`Exportar CSV (${total})`}
+              </a>
             </Button>
           )}
           <ViewToggle mode={mode} onToggle={toggle} />
