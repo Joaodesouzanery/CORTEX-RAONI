@@ -65,12 +65,16 @@ export async function POST(_: Request, { params }: { params: Promise<{ id: strin
         .or('report_role_source.eq.humano,editorial_review_state.eq.revisado')
         .range(from, to)
     ),
+    // Rule-based decisions ('regra') are provisional — always eligible for
+    // re-triage as the ruleset improves or once AI becomes available. Only
+    // 'ia' and 'humano' decisions are treated as settled.
     fetchAll<{ article_id: string }>((from, to) =>
       supabase
         .from('article_client_tags')
         .select('article_id')
         .eq('client_id', draft.client_id)
         .not('triaged_at', 'is', null)
+        .neq('report_role_source', 'regra')
         .range(from, to)
     ),
     supabase
