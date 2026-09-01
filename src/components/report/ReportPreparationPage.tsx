@@ -760,6 +760,36 @@ export default function ReportPreparationPage() {
     }
   }
 
+  // Plain evidence CSV (article-level, all buckets) — unlike the Claude
+  // packages above, this never blocks on the approval checklist. It's for
+  // "just give me the qualified/triaged news list", independent of whether
+  // the narrative sections (1-9) have been written or generated.
+  async function downloadEvidenceCsv() {
+    if (!draft) return
+    setBusy('csv')
+    setError('')
+    try {
+      const response = await fetch(`/api/report-drafts/${draft.id}/export?format=csv`)
+      if (!response.ok) {
+        const data = await response.json().catch(() => null)
+        throw new Error(data?.error || 'Falha ao gerar o CSV.')
+      }
+      const blob = await response.blob()
+      const disposition = response.headers.get('content-disposition') || ''
+      const filename = disposition.match(/filename="?([^";]+)"?/i)?.[1] || 'evidencias.csv'
+      const url = URL.createObjectURL(blob)
+      const anchor = document.createElement('a')
+      anchor.href = url
+      anchor.download = filename
+      anchor.click()
+      URL.revokeObjectURL(url)
+    } catch (csvError) {
+      setError(csvError instanceof Error ? csvError.message : 'Falha ao gerar o CSV.')
+    } finally {
+      setBusy('')
+    }
+  }
+
   const evidence = useMemo(() => draft?.evidence_items || [], [draft?.evidence_items])
   const counts = useMemo(
     () => ({
@@ -968,6 +998,9 @@ export default function ReportPreparationPage() {
             </Button>
             <Button onClick={runQualityChecks} disabled={!!busy}>
               <CheckCircle2 className="w-4 h-4 mr-2" />Executar portões
+            </Button>
+            <Button variant="outline" onClick={downloadEvidenceCsv} disabled={!!busy}>
+              <Download className="w-4 h-4 mr-2" />Exportar CSV ({evidence.length})
             </Button>
             <Button variant="outline" onClick={() => downloadClaudePackage('diagnostic')} disabled={!!busy}>
               <Download className="w-4 h-4 mr-2" />Pacote diagnóstico
@@ -1419,6 +1452,9 @@ export default function ReportPreparationPage() {
               <p className="text-sm text-gray-500">A agenda permanece interna. O relatório público usa as seções 1–9 e a Base Qualificada na seção 10; o anexo fica separado.</p>
             </div>
             <div className="flex gap-2">
+              <Button variant="outline" onClick={downloadEvidenceCsv} disabled={!!busy}>
+                <Download className="w-4 h-4 mr-2" />Exportar CSV ({evidence.length})
+              </Button>
               <Button variant="outline" onClick={() => downloadClaudePackage('final')} disabled={!!busy || !finalPackageReady}>
                 <Download className="w-4 h-4 mr-2" />Pacote final Claude
               </Button>
