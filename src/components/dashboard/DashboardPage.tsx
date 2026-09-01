@@ -152,6 +152,7 @@ export default function DashboardPage() {
             client,
             total,
             triaged_count,
+            qualified_count,
             annex_count,
             pending_count,
             variation_percent,
@@ -170,15 +171,15 @@ export default function DashboardPage() {
               <div className="flex items-end justify-between gap-4">
                 <div>
                   <div>
-                    <span className="text-4xl font-light tabular-nums">{readiness?.verified_evidence || 0}</span>
-                    <span className="ml-1 text-xs text-gray-500">evidências verificadas</span>
+                    <span className="text-4xl font-light tabular-nums">{qualified_count}</span>
+                    <span className="ml-1 text-xs text-gray-500">evidências qualificadas (30 dias)</span>
                   </div>
-                  <p className="mt-1 text-[11px] text-gray-500">
-                    {readiness?.qualified_evidence || 0} qualificadas · {readiness?.covered_topics || 0}/{readiness?.required_topics || 0} tópicos cobertos · {readiness?.pending_exceptions || 0} exceções
-                  </p>
                   <p className="mt-1 text-[11px] text-gray-400">
                     {total} candidatas · {triaged_count} triadas · {pending_count} pendentes · {annex_count} no anexo
                     {variation_percent != null && ` · ${variation_percent >= 0 ? '+' : ''}${variation_percent}%`}
+                  </p>
+                  <p className="mt-1 text-[11px] text-gray-500">
+                    Preparação de {readiness?.period}: {readiness?.verified_evidence || 0} verificadas · {readiness?.qualified_evidence || 0} qualificadas · {readiness?.covered_topics || 0}/{readiness?.required_topics || 0} tópicos cobertos · {readiness?.pending_exceptions || 0} exceções
                   </p>
                   {readiness && ['waiting_configuration', 'error'].includes(readiness.automation_status || '') && (
                     <p className="mt-2 border border-amber-200 bg-amber-50 px-2 py-1 text-[11px] text-amber-800">
