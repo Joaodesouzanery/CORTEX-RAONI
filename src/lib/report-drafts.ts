@@ -319,11 +319,24 @@ export async function refreshDraftEvidence(
         item.classification_snapshot.report_role_source !== 'humano'
     ).length
   }
-  const { data, error } = await supabase.rpc('replace_report_evidence', {
-    p_draft_id: draft.id,
-    p_items: items,
-  })
-  if (error) throw new Error(error.message)
+  // A single replace_report_evidence RPC call times out in Postgres once a
+  // client has ~1000+ candidate articles (SIMINERAL, ONS), because the whole
+  // delete+insert runs as one statement over a multi-MB JSONB payload. Doing
+  // the delete once and the insert in bounded chunks keeps each statement
+  // small; a refresh is always safe to re-run from source data, so a
+  // mid-chunk failure just gets corrected by the next successful refresh.
+  const { error: deleteError } = await supabase.from('report_evidence_items').delete().eq('draft_id', draft.id)
+  if (deleteError) throw new Error(deleteError.message)
+  // Postgres generates its own id for each row; the placeholder id on
+  // currentItems (used only for in-memory diffing above) is not a real UUID.
+  const insertRows = currentItems.map(({ id: _placeholderId, ...row }) => row)
+  const INSERT_CHUNK_SIZE = 200
+  for (let offset = 0; offset < insertRows.length; offset += INSERT_CHUNK_SIZE) {
+    const { error: insertError } = await supabase
+      .from('report_evidence_items')
+      .insert(insertRows.slice(offset, offset + INSERT_CHUNK_SIZE))
+    if (insertError) throw new Error(insertError.message)
+  }
   const { data: sections } = await supabase
     .from('report_sections')
     .select('id, section_key, content, status')
@@ -389,7 +402,7 @@ export async function refreshDraftEvidence(
     .select()
     .single()
   if (updateError) throw new Error(updateError.message)
-  return { draft: updated, counts: { ...counts, untriaged }, inserted: Number(data || 0), changed: true, delta }
+  return { draft: updated, counts: { ...counts, untriaged }, inserted: currentItems.length, changed: true, delta }
 }
 
 export function evidenceArticles(items: ReportEvidenceItem[], leadArticleId?: string | null): Article[] {
