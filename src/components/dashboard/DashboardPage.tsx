@@ -180,6 +180,12 @@ export default function DashboardPage() {
                     {total} candidatas · {triaged_count} triadas · {pending_count} pendentes · {annex_count} no anexo
                     {variation_percent != null && ` · ${variation_percent >= 0 ? '+' : ''}${variation_percent}%`}
                   </p>
+                  {readiness && ['waiting_configuration', 'error'].includes(readiness.automation_status || '') && (
+                    <p className="mt-2 border border-amber-200 bg-amber-50 px-2 py-1 text-[11px] text-amber-800">
+                      Automação {readiness.automation_status === 'waiting_configuration' ? 'aguardando configuração' : 'com erro'}
+                      {readiness.automation_error ? `: ${readiness.automation_error}` : ''}
+                    </p>
+                  )}
                 </div>
                 <Link href={readiness?.draft_id ? `/reports/prepare?draft=${readiness.draft_id}` : `/reports/prepare?client=${client.id}&period=${readiness?.period || ''}`} className="whitespace-nowrap text-sm hover:underline">
                   Preparação ↗

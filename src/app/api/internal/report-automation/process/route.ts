@@ -83,7 +83,7 @@ export async function POST(req: Request) {
     } else if (job.stage === 'clusters') {
       processed = (await syncDraftClusters(supabase, draft.id)).length
     } else if (job.stage === 'triage' || job.stage === 'verify') {
-      if (!process.env.ANTHROPIC_API_KEY) {
+      if (job.stage === 'verify' && !process.env.ANTHROPIC_API_KEY) {
         await Promise.all([
           supabase.from('report_automation_jobs').update({ status: 'waiting_configuration', error: 'ANTHROPIC_API_KEY não configurada.', locked_at: null, updated_at: new Date().toISOString() }).eq('id', job.id),
           supabase.from('monthly_report_drafts').update({ automation_status: 'waiting_configuration', automation_updated_at: new Date().toISOString() }).eq('id', draft.id),

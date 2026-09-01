@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createAdminClient as createClient } from '@/lib/supabase/server'
-import { triageEvidence } from '@/lib/ai/triage'
+import { triageEvidence, type TriageDecision } from '@/lib/ai/triage'
+import { ruleBasedTriageDecisions } from '@/lib/ai/rule-triage'
 import { fetchAll, refreshDraftEvidence, reportEvidenceItems } from '@/lib/report-drafts'
 import type { ArticleSnapshot } from '@/types'
 import { normalizeText } from '@/lib/relevance'
@@ -52,16 +53,7 @@ export async function POST(_: Request, { params }: { params: Promise<{ id: strin
       { status: 409 }
     )
   }
-  if (!process.env.ANTHROPIC_API_KEY) {
-    await supabase
-      .from('monthly_report_drafts')
-      .update({ automation_status: 'waiting_configuration', automation_updated_at: new Date().toISOString() })
-      .eq('id', id)
-    return NextResponse.json(
-      { error: 'Configure ANTHROPIC_API_KEY para executar a triagem. Nenhuma classificação foi alterada.', status: 'waiting_configuration' },
-      { status: 503 }
-    )
-  }
+  const useAi = Boolean(process.env.ANTHROPIC_API_KEY)
 
   const [evidence, humanTags, triaged, { data: memoryRows }] = await Promise.all([
     reportEvidenceItems(supabase, id, false),
@@ -100,34 +92,43 @@ export async function POST(_: Request, { params }: { params: Promise<{ id: strin
 
   await supabase.from('monthly_report_drafts').update({ status: 'triaging' }).eq('id', id)
   try {
-    const inclusionExamples = selectMemoryExamples(memoryRows || [], batch, ['evidencia'])
-    const exclusionExamples = selectMemoryExamples(memoryRows || [], batch, ['contexto', 'ruido'])
-    const priorBatches = Array.isArray(draft.editorial_memory_snapshot?.triage_batches)
-      ? draft.editorial_memory_snapshot.triage_batches
-      : []
-    await supabase.from('monthly_report_drafts').update({
-      editorial_memory_snapshot: {
-        ...(draft.editorial_memory_snapshot || {}),
-        triage_batches: [
-          ...priorBatches.slice(-49),
-          {
-            captured_at: new Date().toISOString(),
-            article_ids: batch.map((item) => item.article_id),
-            inclusion_example_ids: inclusionExamples.map((item) => item.id).filter(Boolean),
-            exclusion_example_ids: exclusionExamples.map((item) => item.id).filter(Boolean),
-          },
-        ],
-      },
-    }).eq('id', id)
-    const result = await triageEvidence(
-      batch.map((item) => item.article_snapshot as ArticleSnapshot),
-      draft.clients,
-      {
-        inclusion: inclusionExamples,
-        exclusion: exclusionExamples,
-      },
-      draft.applied_editorial_snapshot || null
-    )
+    let result: { decisions: TriageDecision[]; source: 'ia' | 'regra' }
+    if (useAi) {
+      const inclusionExamples = selectMemoryExamples(memoryRows || [], batch, ['evidencia'])
+      const exclusionExamples = selectMemoryExamples(memoryRows || [], batch, ['contexto', 'ruido'])
+      const priorBatches = Array.isArray(draft.editorial_memory_snapshot?.triage_batches)
+        ? draft.editorial_memory_snapshot.triage_batches
+        : []
+      await supabase.from('monthly_report_drafts').update({
+        editorial_memory_snapshot: {
+          ...(draft.editorial_memory_snapshot || {}),
+          triage_batches: [
+            ...priorBatches.slice(-49),
+            {
+              captured_at: new Date().toISOString(),
+              article_ids: batch.map((item) => item.article_id),
+              inclusion_example_ids: inclusionExamples.map((item) => item.id).filter(Boolean),
+              exclusion_example_ids: exclusionExamples.map((item) => item.id).filter(Boolean),
+            },
+          ],
+        },
+      }).eq('id', id)
+      result = await triageEvidence(
+        batch.map((item) => item.article_snapshot as ArticleSnapshot),
+        draft.clients,
+        {
+          inclusion: inclusionExamples,
+          exclusion: exclusionExamples,
+        },
+        draft.applied_editorial_snapshot || null
+      )
+    } else {
+      result = { decisions: ruleBasedTriageDecisions(batch), source: 'regra' }
+      await supabase
+        .from('monthly_report_drafts')
+        .update({ automation_status: 'partial', automation_updated_at: new Date().toISOString() })
+        .eq('id', id)
+    }
     const now = new Date().toISOString()
     for (const decision of result.decisions) {
       const { error: updateError } = await supabase
@@ -152,8 +153,8 @@ export async function POST(_: Request, { params }: { params: Promise<{ id: strin
           geographic_scope: decision.geographic_scope,
           quality_flags: decision.quality_flags,
           adjudication_version: 1,
-          qa_source: null,
-          qa_checked_at: null,
+          qa_source: result.source === 'regra' ? 'regra' : null,
+          qa_checked_at: result.source === 'regra' ? now : null,
         })
         .eq('article_id', decision.article_id)
         .eq('client_id', draft.client_id)

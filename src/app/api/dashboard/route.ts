@@ -76,7 +76,7 @@ export async function GET(req: Request) {
           monitoredCount(supabase, client.id, cutoff, undefined, 'pending'),
           supabase
             .from('monthly_report_drafts')
-            .select('id, quality_status, status')
+            .select('id, quality_status, status, automation_status')
             .eq('client_id', client.id)
             .eq('period_month', currentPeriodDate)
             .neq('status', 'approved')
@@ -95,9 +95,12 @@ export async function GET(req: Request) {
           required_topics: 0,
           recognized_gaps: 0,
           ready: false,
+          automation_status: null,
+          automation_error: null,
         }
         if (readinessDraft) {
-          const [{ data: evidenceRows }, { data: topicRows }, { count: reviewQueue }] = await Promise.all([
+          const stuck = ['waiting_configuration', 'error'].includes(readinessDraft.automation_status)
+          const [{ data: evidenceRows }, { data: topicRows }, { count: reviewQueue }, { data: latestJob }] = await Promise.all([
             supabase
               .from('report_evidence_items')
               .select('bucket, classification_snapshot')
@@ -112,6 +115,16 @@ export async function GET(req: Request) {
               .eq('draft_id', readinessDraft.id)
               .neq('bucket', 'excluded')
               .eq('classification_snapshot->>editorial_review_state', 'pendente'),
+            stuck
+              ? supabase
+                  .from('report_automation_jobs')
+                  .select('error')
+                  .eq('draft_id', readinessDraft.id)
+                  .not('error', 'is', null)
+                  .order('updated_at', { ascending: false })
+                  .limit(1)
+                  .maybeSingle()
+              : Promise.resolve({ data: null }),
           ])
           const qualifiedRows = (evidenceRows || []).filter((item) => item.bucket === 'qualified')
           const requiredRows = (topicRows || []).filter((topic) => topic.required)
@@ -129,6 +142,8 @@ export async function GET(req: Request) {
             required_topics: requiredRows.length,
             recognized_gaps: requiredRows.filter((topic) => topic.coverage_status === 'gap' && topic.gap_acknowledged_at).length,
             ready: readinessDraft.quality_status === 'passed',
+            automation_status: readinessDraft.automation_status,
+            automation_error: latestJob?.error || null,
           }
         }
         return {

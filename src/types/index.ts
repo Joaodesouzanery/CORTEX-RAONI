@@ -292,6 +292,8 @@ export interface DashboardClientSummary {
     required_topics: number
     recognized_gaps: number
     ready: boolean
+    automation_status: string | null
+    automation_error: string | null
   }
 }
 
