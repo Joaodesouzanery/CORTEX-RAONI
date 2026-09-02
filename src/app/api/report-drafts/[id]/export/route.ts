@@ -230,10 +230,13 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
   let content: string
   let contentType: string
   let extension: string
+  let formatLabel: string = format
   if (format === 'csv') {
-    content = evidenceCsv(evidence)
+    const bucketFilter = new URL(req.url).searchParams.get('bucket')
+    content = evidenceCsv(bucketFilter ? evidence.filter((item) => item.bucket === bucketFilter) : evidence)
     contentType = 'text/csv; charset=utf-8'
     extension = 'csv'
+    if (bucketFilter) formatLabel = `${format}-${bucketFilter}`
   } else if (format === 'annex') {
     content = buildAnnex(evidence)
     contentType = 'text/markdown; charset=utf-8'
@@ -261,7 +264,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
   return new NextResponse(`\uFEFF${content}`, {
     headers: {
       'Content-Type': contentType,
-      'Content-Disposition': `attachment; filename="${safeName}-${format}.${extension}"`,
+      'Content-Disposition': `attachment; filename="${safeName}-${formatLabel}.${extension}"`,
       'Cache-Control': 'private, no-store',
     },
   })
