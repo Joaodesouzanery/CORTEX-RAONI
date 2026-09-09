@@ -7,8 +7,8 @@ import { Toaster } from '@/components/ui/toaster'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'CORTEX',
-  description: 'Inteligência de notícias',
+  title: 'CORTEX — Inteligência de Comunicação',
+  description: 'Inteligência de notícias, reputação e comunicação estratégica.',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -16,9 +16,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="pt-BR">
       <body className={inter.className}>
         <Navbar />
-        <main className="min-h-screen bg-white">
-          {children}
-        </main>
+        <main className="min-h-screen bg-white">{children}</main>
         <Toaster />
       </body>
     </html>
