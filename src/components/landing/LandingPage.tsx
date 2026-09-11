@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowDown, ArrowUpRight, Check, Circle } from 'lucide-react'
+import HeroCarousel from '@/components/landing/HeroCarousel'
 
 const benefits = [
   {
@@ -164,19 +165,12 @@ function PlanCard({ annual = false }: { annual?: boolean }) {
 export default function LandingPage() {
   return (
     <div className="overflow-hidden bg-[#efeee9] text-[#111512]">
-      <section className="relative min-h-[760px] bg-[#0b0e0c] text-white lg:min-h-[860px]">
-        <Image
-          src="/images/landing/cortex-hero.jpg"
-          alt="Ambiente de análise estratégica com arquitetura de vidro e luzes de dados"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-[60%_center]"
-        />
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,8,6,.82)_0%,rgba(5,8,6,.48)_47%,rgba(5,8,6,.18)_100%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,8,6,.34)_0%,transparent_42%,rgba(5,8,6,.88)_100%)]" />
+      <section className="relative isolate min-h-[760px] bg-[#0b0e0c] text-white lg:min-h-[860px]">
+        <HeroCarousel />
+        <div className="absolute inset-0 z-[1] bg-[linear-gradient(90deg,rgba(5,8,6,.86)_0%,rgba(5,8,6,.52)_47%,rgba(5,8,6,.2)_100%)]" />
+        <div className="absolute inset-0 z-[1] bg-[linear-gradient(180deg,rgba(5,8,6,.38)_0%,transparent_42%,rgba(5,8,6,.9)_100%)]" />
 
-        <header className="relative z-10 mx-auto flex max-w-[1240px] items-center justify-between px-6 py-7 lg:px-10">
+        <header className="relative z-20 mx-auto flex max-w-[1240px] items-center justify-between px-6 py-7 lg:px-10">
           <Link href="/" className="transition-opacity hover:opacity-70" aria-label="CORTEX — início">
             <BrandMark inverse />
           </Link>
@@ -206,23 +200,10 @@ export default function LandingPage() {
           </Link>
         </header>
 
-        <div className="relative z-10 mx-auto flex min-h-[650px] max-w-[1240px] items-center px-6 pb-20 pt-20 lg:px-10">
-          <div className="max-w-4xl">
-            <p className="mb-7 text-[10px] uppercase tracking-[0.24em] text-[#b7d8c8]">Inteligência de comunicação</p>
-            <h1 className="max-w-4xl text-[clamp(3.2rem,7.6vw,7.5rem)] font-light leading-[0.92] tracking-[-0.065em]">
-              Transforme sinais em decisões estratégicas.
-            </h1>
-            <p className="mt-9 max-w-xl text-sm leading-6 text-white/62 sm:text-base sm:leading-7">
-              Inteligência de notícias e reputação para antecipar riscos, revelar oportunidades e orientar cada
-              movimento.
-            </p>
-          </div>
-        </div>
-
         <a
           href="#plataforma"
           aria-label="Ir para a seção Plataforma"
-          className="absolute bottom-8 right-6 z-10 grid h-9 w-9 place-items-center rounded-full border border-white/25 text-white/65 transition-colors hover:border-white/60 hover:text-white lg:right-10"
+          className="absolute bottom-8 right-6 z-20 grid h-9 w-9 place-items-center rounded-full border border-white/25 text-white/65 transition-colors hover:border-white/60 hover:text-white lg:right-10"
         >
           <ArrowDown className="h-3.5 w-3.5" />
         </a>
@@ -243,8 +224,8 @@ export default function LandingPage() {
           <div className="mt-24 grid auto-rows-[210px] grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
             <div className="relative overflow-hidden sm:row-span-2">
               <Image
-                src="/images/landing/cortex-signals.jpg"
-                alt="Fragmentos de informação convergindo em uma estrutura organizada"
+                src="/images/landing/cortex-sector-mining.jpg"
+                alt="Operação de mineração com veículos de grande porte"
                 fill
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 className="object-cover"
@@ -425,8 +406,8 @@ export default function LandingPage() {
           </div>
           <div className="relative min-h-[360px] overflow-hidden">
             <Image
-              src="/images/landing/cortex-signals.jpg"
-              alt="Camadas de informação sendo organizadas em um padrão estratégico"
+              src="/images/landing/cortex-sector-energy.jpg"
+              alt="Linhas de transmissão atravessando uma paisagem aberta"
               fill
               sizes="(max-width: 768px) 100vw, 45vw"
               className="object-cover"
