@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowDown, ArrowUpRight, Check, Circle } from 'lucide-react'
 import HeroCarousel from '@/components/landing/HeroCarousel'
+import CortexLogo from '@/components/brand/CortexLogo'
 
 const benefits = [
   {
@@ -75,22 +76,6 @@ const planFeatures = [
   'Relatórios e evidências rastreáveis',
   'Memória editorial por cliente',
 ]
-
-function BrandMark({ inverse = false }: { inverse?: boolean }) {
-  return (
-    <span className="inline-flex items-center gap-2.5" aria-label="CORTEX">
-      <span
-        className={`grid h-5 w-5 place-items-center rounded-full border ${
-          inverse ? 'border-white/50' : 'border-[#0d342a]/40'
-        }`}
-        aria-hidden="true"
-      >
-        <span className={`h-2 w-2 rounded-full ${inverse ? 'bg-[#b7d8c8]' : 'bg-[#174d3d]'}`} />
-      </span>
-      <span className="text-[13px] font-semibold tracking-[0.18em]">CORTEX</span>
-    </span>
-  )
-}
 
 function SectionLabel({ children, light = false }: { children: React.ReactNode; light?: boolean }) {
   return (
@@ -172,7 +157,7 @@ export default function LandingPage() {
 
         <header className="relative z-20 mx-auto flex max-w-[1240px] items-center justify-between px-6 py-7 lg:px-10">
           <Link href="/" className="transition-opacity hover:opacity-70" aria-label="CORTEX — início">
-            <BrandMark inverse />
+            <CortexLogo variant="light" />
           </Link>
           <nav
             className="hidden items-center gap-8 text-[10px] tracking-[0.08em] text-white/65 md:flex"
@@ -203,7 +188,7 @@ export default function LandingPage() {
         <a
           href="#plataforma"
           aria-label="Ir para a seção Plataforma"
-          className="absolute bottom-8 right-6 z-20 grid h-9 w-9 place-items-center rounded-full border border-white/25 text-white/65 transition-colors hover:border-white/60 hover:text-white lg:right-10"
+          className="absolute bottom-8 right-6 z-20 hidden h-9 w-9 place-items-center rounded-full border border-white/25 text-white/65 transition-colors hover:border-white/60 hover:text-white sm:grid lg:right-10"
         >
           <ArrowDown className="h-3.5 w-3.5" />
         </a>
@@ -281,60 +266,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className="bg-[#f4f2ed] py-24 sm:py-32">
-        <div className="mx-auto max-w-[1060px] px-6 lg:px-10">
-          <div className="text-center">
-            <SectionLabel>Prova social</SectionLabel>
-            <h2 className="text-4xl font-light tracking-[-0.045em] sm:text-5xl">O que nossos clientes dizem</h2>
-          </div>
-          <div className="mt-14 grid min-h-[390px] border border-black/10 md:grid-cols-[0.9fr_1.1fr]">
-            <div className="relative min-h-[300px] overflow-hidden">
-              <Image
-                src="/images/landing/cortex-collaboration.jpg"
-                alt="Profissionais em uma sessão de análise estratégica"
-                fill
-                sizes="(max-width: 768px) 100vw, 45vw"
-                className="object-cover"
-              />
-            </div>
-            <div className="flex flex-col justify-between bg-[#ded8ce] p-8 sm:p-12">
-              <p className="text-[10px] uppercase tracking-[0.2em] text-black/40">Espaço reservado</p>
-              <div>
-                <p className="max-w-lg text-2xl font-light leading-tight tracking-[-0.025em] sm:text-3xl">
-                  Depoimento de cliente será inserido aqui após aprovação.
-                </p>
-                <p className="mt-8 text-xs leading-5 text-black/45">
-                  Nome, cargo e organização
-                  <br />a definir.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="py-24 text-center sm:py-32">
-            <h3 className="text-3xl font-light leading-tight tracking-[-0.04em] sm:text-4xl">
-              Construído para decisões
-              <br />
-              que não podem esperar.
-            </h3>
-            <p className="mx-auto mt-5 max-w-md text-sm leading-6 text-black/45">
-              Espaço reservado para organizações que confiam no CORTEX.
-            </p>
-            <div className="mx-auto mt-12 grid max-w-4xl grid-cols-2 border-y border-black/10 sm:grid-cols-4">
-              {['Logo 01', 'Logo 02', 'Logo 03', 'Logo 04'].map((logo) => (
-                <div
-                  key={logo}
-                  className="grid h-24 place-items-center border-black/10 text-[9px] uppercase tracking-[0.18em] text-black/30 sm:border-r sm:last:border-r-0"
-                >
-                  {logo}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="como-funciona" className="scroll-mt-16 bg-[#f4f2ed] pb-28 sm:pb-40">
+      <section id="como-funciona" className="scroll-mt-16 bg-[#f4f2ed] pb-28 pt-24 sm:pb-40 sm:pt-32">
         <div className="mx-auto max-w-[1060px] px-6 lg:px-10">
           <div className="flex flex-col justify-between gap-8 border-t border-black/15 pt-10 sm:flex-row sm:items-end">
             <div>
@@ -393,7 +325,7 @@ export default function LandingPage() {
       <section className="bg-[#f4f2ed] py-24 sm:py-36">
         <div className="mx-auto grid min-h-[430px] max-w-[1060px] bg-[#0b0e0c] text-white md:grid-cols-[1.1fr_0.9fr]">
           <div className="flex flex-col justify-between p-8 sm:p-12">
-            <BrandMark inverse />
+            <CortexLogo variant="light" size="large" />
             <div className="mt-24">
               <h2 className="max-w-lg text-4xl font-light leading-[1.02] tracking-[-0.05em] sm:text-5xl">
                 Menos ruído. Mais clareza para agir.
@@ -420,7 +352,7 @@ export default function LandingPage() {
         <div className="mx-auto max-w-[1060px] border-t border-black/10 px-6 pt-10 lg:px-10">
           <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-[1.4fr_0.8fr_0.8fr]">
             <div>
-              <BrandMark />
+              <CortexLogo size="large" />
               <p className="mt-5 max-w-xs text-xs leading-5 text-black/42">
                 Inteligência de notícias, reputação e comunicação estratégica.
               </p>

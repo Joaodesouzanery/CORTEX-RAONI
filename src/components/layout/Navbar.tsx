@@ -2,6 +2,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
+import CortexLogo from '@/components/brand/CortexLogo'
 
 export default function Navbar() {
   const pathname = usePathname()
@@ -21,8 +22,8 @@ export default function Navbar() {
   return (
     <nav className="border-b border-gray-200 bg-white sticky top-0 z-50">
       <div className="max-w-screen-2xl mx-auto px-6 py-4 flex items-center justify-between">
-        <Link href="/news" className="text-xl font-bold tracking-widest uppercase">
-          CORTEX
+        <Link href="/news" aria-label="CORTEX — notícias" className="transition-opacity hover:opacity-70">
+          <CortexLogo size="compact" />
         </Link>
         <div className="flex items-center gap-8">
           {links.map((link) => (

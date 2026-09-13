@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .font-brand {
+    font-family: var(--font-space-grotesk), sans-serif;
+  }
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
