@@ -14,6 +14,7 @@ import {
 import { sendEmail, emailEnabled } from '@/lib/email'
 import type { Article, Client, Tom, Relevancia } from '@/types'
 import { syncSourceOperationalAlerts } from '@/lib/report-automation'
+import { internalAuthorized } from '@/lib/internal-auth'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
@@ -160,21 +161,16 @@ async function runCheck() {
   return NextResponse.json(summary)
 }
 
-function authorized(req: Request): boolean {
-  const secret = process.env.CRON_SECRET
-  if (!secret) return true // open when no secret configured (dev)
-  return req.headers.get('authorization') === `Bearer ${secret}`
-}
-
 export async function GET(req: Request) {
-  if (!authorized(req)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  if (!internalAuthorized(req)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   return runCheck()
 }
 
+// O POST tinha um escape `{"manual": true}` que pulava a checagem inteira, e um
+// authorized() local que devolvia `true` quando CRON_SECRET não estava
+// configurado. Os dois foram removidos: era um bypass de autenticação completo,
+// encoberto apenas pelo matcher do middleware.
 export async function POST(req: Request) {
-  if (!authorized(req)) {
-    const body = await req.json().catch(() => ({}))
-    if (!body?.manual) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
+  if (!internalAuthorized(req)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   return runCheck()
 }

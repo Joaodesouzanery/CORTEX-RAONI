@@ -63,6 +63,7 @@ function aliasesFor(name: string): string[] {
   if (name === 'ONS') return ['ONS', 'Operador Nacional do Sistema Elétrico', 'Operador Nacional do Sistema']
   if (name === 'CCEE') return ['CCEE', 'Câmara de Comercialização de Energia Elétrica', 'Câmara de Comercialização']
   if (name.startsWith('DAQ')) return ['DAQ', 'Diretoria de Infraestrutura Aquaviária', 'DNIT']
+  if (name.startsWith('ANTAQ')) return ['ANTAQ', 'Agência Nacional de Transportes Aquaviários']
   if (name === 'SINDINFOR') return ['SINDINFOR', 'Sindicato da Indústria de Software e da Tecnologia da Informação']
   if (name === 'SIMINERAL') return ['SIMINERAL', 'Sindicato das Indústrias Minerais do Estado do Pará']
   return [name]

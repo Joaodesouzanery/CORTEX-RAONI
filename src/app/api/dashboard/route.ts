@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createAdminClient as createClient } from '@/lib/supabase/server'
-import type { Client, DashboardClientSummary, Source } from '@/types'
+import type { ApprovalChecklist, Client, DashboardClientSummary, Source } from '@/types'
 
 export const dynamic = 'force-dynamic'
 
@@ -76,7 +76,7 @@ export async function GET(req: Request) {
           monitoredCount(supabase, client.id, cutoff, undefined, 'pending'),
           supabase
             .from('monthly_report_drafts')
-            .select('id, quality_status, status, automation_status')
+            .select('id, quality_status, status, automation_status, automation_blocking_reason, lead_article_id, lead_source, service_metrics, service_metrics_source, auto_sections, base_version, quality_summary')
             .eq('client_id', client.id)
             .eq('period_month', currentPeriodDate)
             .neq('status', 'approved')
@@ -85,7 +85,7 @@ export async function GET(req: Request) {
             .maybeSingle(),
         ])
         const readinessDraft = draftResult.data
-        let readiness = {
+        let readiness: NonNullable<DashboardClientSummary['readiness']> = {
           draft_id: readinessDraft?.id || null,
           period: currentPeriod,
           verified_evidence: 0,
@@ -97,10 +97,28 @@ export async function GET(req: Request) {
           ready: false,
           automation_status: null,
           automation_error: null,
+          stage: null,
+          blocking_reason: null,
+          lead_source: 'ausente',
+          lead_suggestion: null,
+          service_metrics: {},
+          service_metrics_source: 'ausente',
+          auto_sections: false,
+          sections_done: 0,
+          package_ready: false,
+          checklist_blocked_keys: [],
         }
         if (readinessDraft) {
           const stuck = ['waiting_configuration', 'error'].includes(readinessDraft.automation_status)
-          const [{ data: evidenceRows }, { data: topicRows }, { count: reviewQueue }, { data: latestJob }] = await Promise.all([
+          const [
+            { data: evidenceRows },
+            { data: topicRows },
+            { count: reviewQueue },
+            { data: latestJob },
+            { data: currentJob },
+            { count: sectionsDone },
+            { data: leadSuggestion },
+          ] = await Promise.all([
             supabase
               .from('report_evidence_items')
               .select('bucket, classification_snapshot')
@@ -125,7 +143,32 @@ export async function GET(req: Request) {
                   .limit(1)
                   .maybeSingle()
               : Promise.resolve({ data: null }),
+            supabase
+              .from('report_automation_jobs')
+              .select('stage, status')
+              .eq('draft_id', readinessDraft.id)
+              .order('updated_at', { ascending: false })
+              .limit(1)
+              .maybeSingle(),
+            supabase
+              .from('report_sections')
+              .select('id', { count: 'exact', head: true })
+              .eq('draft_id', readinessDraft.id)
+              .in('status', ['generated', 'edited']),
+            // Só interessa exibir a sugestão quando ninguém confirmou ainda.
+            readinessDraft.lead_source === 'sugestao' && readinessDraft.lead_article_id
+              ? supabase
+                  .from('report_lead_suggestions')
+                  .select('article_id, rationale, snapshot')
+                  .eq('draft_id', readinessDraft.id)
+                  .eq('article_id', readinessDraft.lead_article_id)
+                  .order('base_version', { ascending: false })
+                  .limit(1)
+                  .maybeSingle()
+              : Promise.resolve({ data: null }),
           ])
+          const checklist = (readinessDraft.quality_summary as { approval_checklist?: ApprovalChecklist } | null)
+            ?.approval_checklist
           const qualifiedRows = (evidenceRows || []).filter((item) => item.bucket === 'qualified')
           const requiredRows = (topicRows || []).filter((topic) => topic.required)
           readiness = {
@@ -144,6 +187,26 @@ export async function GET(req: Request) {
             ready: readinessDraft.quality_status === 'passed',
             automation_status: readinessDraft.automation_status,
             automation_error: latestJob?.error || null,
+            stage: currentJob?.stage || null,
+            blocking_reason: readinessDraft.automation_blocking_reason || null,
+            lead_source: readinessDraft.lead_source || (readinessDraft.lead_article_id ? 'humano' : 'ausente'),
+            lead_suggestion: leadSuggestion
+              ? {
+                  article_id: leadSuggestion.article_id,
+                  title: String(
+                    (leadSuggestion.snapshot as { article?: { title?: string } } | null)?.article?.title || 'sem título'
+                  ),
+                  rationale: leadSuggestion.rationale,
+                }
+              : null,
+            service_metrics: (readinessDraft.service_metrics || {}) as Record<string, number>,
+            service_metrics_source: readinessDraft.service_metrics_source || 'ausente',
+            auto_sections: Boolean(readinessDraft.auto_sections),
+            sections_done: sectionsDone || 0,
+            package_ready: Boolean(checklist?.ready),
+            checklist_blocked_keys: (checklist?.items || [])
+              .filter((item) => item.status === 'blocked')
+              .map((item) => item.key),
           }
         }
         return {

@@ -33,7 +33,16 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     .eq('client_id', id)
     .order('category')
     .order('title')
-  if (period) query = query.or(`scope.eq.permanent,period_month.eq.${period.slice(0, 7)}-01`)
+  // Mesma classe do published_after: `.or()` recebe filtro cru. O slice(0,7)
+  // limitava o payload a 7 caracteres, mas 7 já bastam para abrir um novo ramo
+  // OR com uma vírgula. Validar o formato antes de interpolar.
+  if (period) {
+    if (!/^\d{4}-\d{2}$/.test(period.slice(0, 7))) {
+      return NextResponse.json({ error: 'period inválido; use AAAA-MM.' }, { status: 400 })
+    }
+    // safe-filter-ok: o formato AAAA-MM foi validado por regex logo acima.
+    query = query.or(`scope.eq.permanent,period_month.eq.${period.slice(0, 7)}-01`)
+  }
   const [{ data, error }, { data: feedback }] = await Promise.all([
     query,
     supabase

@@ -1,7 +1,15 @@
+import { bearerMatches } from '@/lib/constant-time'
+
+/**
+ * Autoriza as rotas de worker (`/api/internal/**`).
+ *
+ * Antes devolvia `true` quando CRON_SECRET não estava configurado e
+ * NODE_ENV !== 'production' — ou seja, ABERTO em dev e em teste. Isso só não
+ * era explorável porque o middleware devolve 503 antes; bastava uma edição no
+ * matcher para virar bypass real. Segredo ausente agora nega sempre.
+ */
 export function internalAuthorized(req: Request): boolean {
-  const secret = process.env.CRON_SECRET
-  if (!secret) return process.env.NODE_ENV !== 'production'
-  return req.headers.get('authorization') === `Bearer ${secret}`
+  return bearerMatches(req.headers.get('authorization'), process.env.CRON_SECRET)
 }
 
 export async function dispatchMonthlyWorkflow(input: {

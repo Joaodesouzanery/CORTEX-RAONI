@@ -1,14 +1,18 @@
 import * as cheerio from 'cheerio'
 import type { FetchedArticle } from './rss'
 import { BROWSER_USER_AGENT, FETCH_TIMEOUTS } from './constants'
+import { readCappedText, safeFetch } from '@/lib/safe-fetch'
 
 export async function scrapeOpenGraph(pageUrl: string): Promise<FetchedArticle | null> {
   try {
-    const res = await fetch(pageUrl, {
+    const res = await safeFetch(pageUrl, {
       headers: { 'User-Agent': BROWSER_USER_AGENT },
-      signal: AbortSignal.timeout(FETCH_TIMEOUTS.scrapePage),
+      timeoutMs: FETCH_TIMEOUTS.scrapePage,
     })
-    const html = await res.text()
+    // Antes o status nunca era conferido: uma página de manutenção 503 virava
+    // HTML sem og:tags e o run era registrado como sucesso com 0 itens.
+    if (!res.ok) return null
+    const html = await readCappedText(res)
     const $ = cheerio.load(html)
 
     const get = (prop: string) =>
@@ -32,18 +36,32 @@ export async function scrapeOpenGraph(pageUrl: string): Promise<FetchedArticle |
 
 export async function scrapeSite(siteUrl: string): Promise<FetchedArticle[]> {
   try {
-    const res = await fetch(siteUrl, {
+    const res = await safeFetch(siteUrl, {
       headers: { 'User-Agent': BROWSER_USER_AGENT },
-      signal: AbortSignal.timeout(FETCH_TIMEOUTS.scrapeSite),
+      timeoutMs: FETCH_TIMEOUTS.scrapeSite,
     })
-    const html = await res.text()
+    if (!res.ok) return []
+    const html = await readCappedText(res)
     const $ = cheerio.load(html)
 
     const articleLinks: string[] = []
     $('a[href]').each((_, el) => {
       const href = $(el).attr('href') || ''
-      const full = href.startsWith('http') ? href : new URL(href, siteUrl).href
-      if (full.startsWith(siteUrl) && full !== siteUrl && !articleLinks.includes(full)) {
+      let full: string
+      try {
+        full = href.startsWith('http') ? new URL(href).href : new URL(href, siteUrl).href
+      } catch {
+        return
+      }
+      // Comparar por HOST, não por prefixo de string: com prefixo,
+      // siteUrl "http://exemplo.com" casava "http://exemplo.com.interno/".
+      let sameHost = false
+      try {
+        sameHost = new URL(full).host === new URL(siteUrl).host
+      } catch {
+        sameHost = false
+      }
+      if (sameHost && full !== siteUrl && !articleLinks.includes(full)) {
         articleLinks.push(full)
       }
     })

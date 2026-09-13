@@ -7,6 +7,7 @@
 // Server-only (uses Buffer + cheerio). Imported by /api/reports/dossier.
 
 import { BROWSER_USER_AGENT } from './constants'
+import { readCappedText, safeFetch } from '@/lib/safe-fetch'
 
 const GN_HOST = 'news.google.'
 
@@ -53,6 +54,7 @@ async function getGoogleNewsParams(
   timeoutMs: number
 ): Promise<{ id: string; sig: string; ts: string } | null> {
   try {
+    // safe-fetch-ok: host fixo news.google.com, não vem de entrada de terceiro.
     const res = await fetch(`https://news.google.com/rss/articles/${id}`, {
       headers: { 'User-Agent': BROWSER_USER_AGENT },
       signal: AbortSignal.timeout(timeoutMs),
@@ -82,6 +84,7 @@ async function batchDecode(
       params.sig,
     ]
     const body = 'f.req=' + encodeURIComponent(JSON.stringify([[['Fbv4je', JSON.stringify(inner)]]]))
+    // safe-fetch-ok: host fixo news.google.com, não vem de entrada de terceiro.
     const res = await fetch('https://news.google.com/_/DotsSplashUi/data/batchexecute', {
       method: 'POST',
       headers: {
@@ -172,16 +175,17 @@ export async function fetchArticleText(link: string, timeoutMs = 7000): Promise<
     target = real
   }
   try {
-    const res = await fetch(target, {
+    // `target` pode vir do batchexecute do Google News, ou seja, é decidido pela
+    // resposta de um terceiro. Vale a mesma guarda das outras saídas.
+    const res = await safeFetch(target, {
       headers: { 'User-Agent': BROWSER_USER_AGENT },
-      redirect: 'follow',
-      signal: AbortSignal.timeout(timeoutMs),
+      timeoutMs,
     })
     if (!res.ok) return null
     // Guard against binary (images/PDF): only parse real HTML, never return
     // garbage extracted from non-text bytes.
     if (!/html/i.test(res.headers.get('content-type') || '')) return null
-    return await extractMainText(await res.text())
+    return await extractMainText(await readCappedText(res))
   } catch {
     return null
   }

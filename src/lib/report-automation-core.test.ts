@@ -212,3 +212,99 @@ describe('continuous report automation', () => {
     expect(result.themes_absent).toEqual(['CFEM'])
   })
 })
+
+describe('procedência das decisões que a máquina só sugere', () => {
+  const verifiedEvidence = () =>
+    item('a', 'Evidência verificada', {
+      verification_status: 'verificada',
+      qa_checked_at: '2026-07-31T12:00:00Z',
+      editorial_review_state: 'revisado',
+    }, 'qualified')
+
+  const greenSections = () =>
+    Array.from({ length: 9 }, (_, index) => ({
+      section_key: index + 1,
+      status: 'generated',
+      content: `Seção ${index + 1} revisada.`,
+    })) as ReportSection[]
+
+  /** Checklist sem nenhuma pendência, para isolar o efeito de cada procedência. */
+  function green(overrides: Partial<Parameters<typeof approvalChecklist>[0]> = {}) {
+    return approvalChecklist({
+      draft: {
+        id: 'draft',
+        base_version: 1,
+        base_digest: 'digest',
+        lead_article_id: 'a',
+        lead_source: 'humano',
+        service_metrics_source: 'humano',
+      } as MonthlyReportDraft,
+      items: [verifiedEvidence()],
+      sections: greenSections(),
+      unresolvedExceptions: 0,
+      uncoveredRequiredTopics: 0,
+      invalidCitations: 0,
+      comparisonReady: true,
+      qualifiedCount: 1,
+      unverifiedQualified: 0,
+      placeholders: 0,
+      serviceMetricsReady: true,
+      qualityReady: true,
+      requirePackage: false,
+      ...overrides,
+    })
+  }
+
+  it('é a referência: tudo confirmado passa', () => {
+    const checklist = green()
+    expect(checklist.ready).toBe(true)
+    expect(checklist.items.find((entry) => entry.key === 'lead')?.status).toBe('passed')
+    expect(checklist.items.find((entry) => entry.key === 'service_metrics')?.status).toBe('passed')
+  })
+
+  it('matéria principal apenas sugerida vira ressalva, não bloqueio', () => {
+    const checklist = green({ leadSource: 'sugestao' })
+    const lead = checklist.items.find((entry) => entry.key === 'lead')
+    expect(lead?.status).toBe('warning')
+    expect(lead?.detail).toContain('Sugerida pela automação')
+    // Ressalva não pode travar o pacote: ready é "nenhum item bloqueado".
+    expect(checklist.ready).toBe(true)
+  })
+
+  it('indicadores herdados viram ressalva, não bloqueio', () => {
+    const checklist = green({ serviceMetricsReady: false, serviceMetricsSource: 'herdado' })
+    const metrics = checklist.items.find((entry) => entry.key === 'service_metrics')
+    expect(metrics?.status).toBe('warning')
+    expect(metrics?.detail).toContain('Herdados do período anterior')
+    expect(checklist.ready).toBe(true)
+  })
+
+  it('indicadores ausentes continuam bloqueando', () => {
+    const checklist = green({ serviceMetricsReady: false, serviceMetricsSource: 'ausente' })
+    expect(checklist.items.find((entry) => entry.key === 'service_metrics')?.status).toBe('blocked')
+    expect(checklist.ready).toBe(false)
+  })
+
+  it('matéria principal ausente continua bloqueando', () => {
+    const checklist = green({
+      draft: {
+        id: 'draft',
+        base_version: 1,
+        base_digest: 'digest',
+        lead_article_id: null,
+        service_metrics_source: 'humano',
+      } as MonthlyReportDraft,
+    })
+    expect(checklist.items.find((entry) => entry.key === 'lead')?.status).toBe('blocked')
+    expect(checklist.ready).toBe(false)
+  })
+
+  it('placeholder de indicador não confirmado ainda segura a entrega', () => {
+    // A rede de segurança quando os números são herdados: a seção 9 sai com
+    // [A PREENCHER] e o item `placeholders` bloqueia o finalize.
+    const checklist = green({ serviceMetricsReady: false, serviceMetricsSource: 'herdado', placeholders: 1 })
+    expect(checklist.items.find((entry) => entry.key === 'service_metrics')?.status).toBe('warning')
+    expect(checklist.items.find((entry) => entry.key === 'placeholders')?.status).toBe('blocked')
+    expect(checklist.ready).toBe(false)
+  })
+})

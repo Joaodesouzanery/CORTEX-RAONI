@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { existsSync, readFileSync } from 'node:fs'
+import { deflateRawSync } from 'node:zlib'
 import { createZip } from '@/lib/zip'
 import { parseClaudePackage } from './claude-package'
 
@@ -40,5 +41,45 @@ describe.skipIf(!existsSync(realPackage))('SINDINFOR July diagnostic package reg
       checklist_ready: false,
     })
     expect(parsed.checklist.pending.length).toBeGreaterThanOrEqual(5)
+  })
+})
+
+describe('resistência a bomba de descompressão', () => {
+  /**
+   * Monta um ZIP de uma entrada só, com o cabeçalho local forjado: o campo de
+   * tamanho descomprimido é DECLARADO por quem monta o arquivo, não medido.
+   * Era exatamente nele que o parser confiava antes de passar o teto ao zlib.
+   */
+  function forgedZip(name: string, payload: Buffer, declaredSize: number) {
+    const compressed = deflateRawSync(payload)
+    const nameBytes = Buffer.from(name, 'utf8')
+    const header = Buffer.alloc(30)
+    header.writeUInt32LE(0x04034b50, 0)
+    header.writeUInt16LE(20, 4) // version
+    header.writeUInt16LE(0, 6) // flags — sem descritor de dados
+    header.writeUInt16LE(8, 8) // método deflate
+    header.writeUInt32LE(compressed.length, 18)
+    header.writeUInt32LE(declaredSize, 22) // <- o número mentiroso
+    header.writeUInt16LE(nameBytes.length, 26)
+    header.writeUInt16LE(0, 28)
+    return Buffer.concat([header, nameBytes, compressed])
+  }
+
+  it('não estoura a memória com um size declarado como 1', () => {
+    // 64 MB de zeros comprimem para poucos KB. Declarado como 1 byte, passava
+    // pelo `size <= 10MB` e ia inteiro para o inflateRawSync sem teto.
+    const bomb = forgedZip('00_INSTRUCOES.md', Buffer.alloc(64 * 1024 * 1024, 0x41), 1)
+    expect(bomb.length).toBeLessThan(200 * 1024) // o arquivo em si é pequeno
+    // A entrada é descartada pelo teto do zlib, então o pacote fica sem
+    // arquivos textuais reconhecíveis e falha de forma limpa.
+    expect(() => parseClaudePackage(new Uint8Array(bomb))).toThrow(
+      /não contém arquivos textuais/i
+    )
+  })
+
+  it('continua lendo um pacote legítimo comprimido', () => {
+    const ok = forgedZip('00_INSTRUCOES.md', Buffer.from('- [x] Base atualizada\n', 'utf8'), 22)
+    const parsed = parseClaudePackage(new Uint8Array(ok))
+    expect(parsed.checklist.passed).toEqual(['Base atualizada'])
   })
 })

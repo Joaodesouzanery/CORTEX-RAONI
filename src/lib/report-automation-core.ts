@@ -241,6 +241,10 @@ export function approvalChecklist(input: {
   placeholders?: number
   serviceMetricsReady?: boolean
   qualityReady?: boolean
+  /** 'herdado' = copiado do mês anterior, ainda sem confirmação humana. */
+  serviceMetricsSource?: 'ausente' | 'herdado' | 'humano'
+  /** 'sugestao' = a máquina preencheu o slot; ninguém confirmou ainda. */
+  leadSource?: 'ausente' | 'sugestao' | 'humano'
 }): ApprovalChecklist {
   const untriaged = input.items.filter((item) => item.bucket !== 'excluded' && !item.classification_snapshot.triaged_at && item.classification_snapshot.report_role_source !== 'humano').length
   const incompleteSections = input.sections.length !== 9 || input.sections.some(
@@ -252,11 +256,40 @@ export function approvalChecklist(input: {
     { key: 'evidence', label: 'Base qualificada com evidências verificadas', status: !input.qualifiedCount || input.unverifiedQualified ? 'blocked' : 'passed', detail: !input.qualifiedCount ? 'Nenhuma evidência qualificada' : input.unverifiedQualified ? `${input.unverifiedQualified} evidência(s) sem verificação` : undefined },
     { key: 'exceptions', label: 'Exceções resolvidas', status: input.unresolvedExceptions ? 'blocked' : 'passed', detail: input.unresolvedExceptions ? `${input.unresolvedExceptions} pendência(s)` : undefined },
     { key: 'agenda', label: 'Agenda coberta ou lacunas reconhecidas', status: input.uncoveredRequiredTopics ? 'blocked' : 'passed' },
-    { key: 'lead', label: 'Matéria principal escolhida', status: input.draft.lead_article_id ? 'passed' : 'blocked' },
+    {
+      key: 'lead',
+      label: 'Matéria principal escolhida',
+      // Uma sugestão da máquina não é uma escolha editorial, mas também não
+      // deve travar o pacote: vira ressalva, e o Painel pede a confirmação.
+      status: !input.draft.lead_article_id
+        ? 'blocked'
+        : (input.leadSource ?? input.draft.lead_source ?? 'humano') === 'humano'
+          ? 'passed'
+          : 'warning',
+      detail:
+        input.draft.lead_article_id && (input.leadSource ?? input.draft.lead_source) === 'sugestao'
+          ? 'Sugerida pela automação; confirme antes de finalizar'
+          : undefined,
+    },
     { key: 'comparison', label: 'Comparação mensal produzida', status: input.comparisonReady ? 'passed' : 'blocked' },
     { key: 'sections', label: 'Seções 1–9 completas e atuais', status: incompleteSections ? 'blocked' : 'passed', detail: incompleteSections ? `${input.sections.length} de 9 seção(ões) persistidas; revise conteúdo vazio ou desatualizado` : undefined },
     { key: 'placeholders', label: 'Sem campos pendentes no texto', status: input.placeholders ? 'blocked' : 'passed', detail: input.placeholders ? `${input.placeholders} placeholder(s) como [A PREENCHER]` : undefined },
-    { key: 'service_metrics', label: 'Indicadores de serviço confirmados', status: input.serviceMetricsReady ? 'passed' : 'blocked' },
+    {
+      key: 'service_metrics',
+      label: 'Indicadores de serviço confirmados',
+      // Herdados do mês anterior seguram o relatório por outro caminho: o
+      // prompt da seção 9 emite [A PREENCHER] e o item `placeholders` bloqueia
+      // o finalize. Aqui basta a ressalva.
+      status: input.serviceMetricsReady
+        ? 'passed'
+        : (input.serviceMetricsSource ?? input.draft.service_metrics_source) === 'herdado'
+          ? 'warning'
+          : 'blocked',
+      detail:
+        !input.serviceMetricsReady && (input.serviceMetricsSource ?? input.draft.service_metrics_source) === 'herdado'
+          ? 'Herdados do período anterior; confirme os números do mês'
+          : undefined,
+    },
     { key: 'quality', label: 'Portões de qualidade executados na base atual', status: input.qualityReady ? 'passed' : 'blocked' },
     { key: 'citations', label: 'Citações válidas', status: input.invalidCitations ? 'blocked' : 'passed' },
     ...(input.requirePackage === false

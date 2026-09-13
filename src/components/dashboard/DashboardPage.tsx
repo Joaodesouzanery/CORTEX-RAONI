@@ -1,12 +1,16 @@
 'use client'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
-import { AlertTriangle, FileText, RefreshCw } from 'lucide-react'
+import { AlertTriangle, Download, FileText, Play, RefreshCw } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import ClientAutomationCard from '@/components/dashboard/ClientAutomationCard'
+import ExceptionQueueDrawer from '@/components/dashboard/ExceptionQueueDrawer'
 import type { DashboardSummary } from '@/types'
 
 const PERIODS = [7, 15, 30] as const
+
+/** Teto de iterações do laço de tick, espelhando o do "Buscar Notícias". */
+const MAX_TICKS = 120
 
 function HealthBanner({ summary }: { summary: DashboardSummary }) {
   const { health } = summary
@@ -47,6 +51,11 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true)
   const [loadError, setLoadError] = useState<string | null>(null)
   const [periodDays, setPeriodDays] = useState<number>(30)
+  const [running, setRunning] = useState('')
+  const [progress, setProgress] = useState<string>('')
+  const [actionError, setActionError] = useState('')
+  const [drawer, setDrawer] = useState<{ draftId: string; clientId: string; clientName: string } | null>(null)
+  const cancelled = useRef(false)
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -84,6 +93,127 @@ export default function DashboardPage() {
     } : current)
   }
 
+  /**
+   * Drena a fila da automação até `{ idle: true }`.
+   *
+   * Mesmo formato do processRun() do "Buscar Notícias": iterações limitadas e
+   * parada no primeiro estado terminal. O claim é escopado por cliente para o
+   * botão de um card não drenar a fila de outro.
+   */
+  const drain = useCallback(async (clientId?: string, runId?: string | null) => {
+    for (let tick = 0; tick < MAX_TICKS; tick++) {
+      if (cancelled.current) return
+      const res = await fetch('/api/report-automation/process', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        // Só o primeiro tick despausa: nos seguintes, um parque novo precisa
+        // ser respeitado, senão o laço gira contra a mesma pendência.
+        body: JSON.stringify({ client_id: clientId || null, run_id: runId || null, resume: tick === 0 }),
+      })
+      const data = await res.json().catch(() => null)
+      if (!res.ok) throw new Error(data?.error || 'Falha ao avançar a automação.')
+      if (data?.idle) return
+      // Parou por decisão humana ou falta de configuração: nada a ganhar
+      // insistindo, o card já vai mostrar o que falta.
+      if (data?.status === 'waiting_review' || data?.status === 'waiting_configuration') return
+      if (data?.status === 'error') throw new Error(data?.error || 'A automação parou com erro.')
+      setProgress(`${data?.stage || 'processando'} → ${data?.next_stage || '…'}`)
+    }
+  }, [])
+
+  const runAutomation = useCallback(
+    async (clientId?: string, label = 'todos os clientes') => {
+      cancelled.current = false
+      setRunning(clientId || 'all')
+      setActionError('')
+      setProgress(`iniciando ${label}`)
+      try {
+        const res = await fetch('/api/report-automation/runs', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ client_ids: clientId ? [clientId] : undefined }),
+        })
+        const data = await res.json().catch(() => null)
+        if (!res.ok) throw new Error(data?.error || 'Falha ao iniciar a preparação.')
+        if (!data?.run_id) {
+          setProgress('')
+          setActionError(
+            data?.skipped
+              ? 'Preparação concluída há menos de 10 minutos. Aguarde antes de repetir.'
+              : 'Nenhum cliente elegível para preparar agora.'
+          )
+          return
+        }
+        await drain(clientId, data.run_id)
+      } catch (runError) {
+        setActionError(runError instanceof Error ? runError.message : 'Falha na preparação.')
+      } finally {
+        setRunning('')
+        setProgress('')
+        await load()
+      }
+    },
+    [drain, load]
+  )
+
+  const continueAutomation = useCallback(
+    async (clientId?: string) => {
+      cancelled.current = false
+      setRunning(clientId || 'all')
+      setActionError('')
+      try {
+        await drain(clientId)
+      } catch (continueError) {
+        setActionError(continueError instanceof Error ? continueError.message : 'Falha ao continuar.')
+      } finally {
+        setRunning('')
+        setProgress('')
+        await load()
+      }
+    },
+    [drain, load]
+  )
+
+  /** Coleta as notícias sem sair do Painel, reaproveitando o cooldown de 10 min. */
+  const collect = useCallback(async () => {
+    cancelled.current = false
+    setRunning('collect')
+    setActionError('')
+    setProgress('iniciando coleta')
+    try {
+      const res = await fetch('/api/fetch-runs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ trigger_type: 'manual' }),
+      })
+      const data = await res.json().catch(() => null)
+      if (!res.ok) throw new Error(data?.error || 'Falha ao iniciar a coleta.')
+      if (data?.cooldown) {
+        setActionError('Coleta executada há menos de 10 minutos. Aguarde para repetir.')
+        return
+      }
+      const runId = data?.run?.id
+      if (!runId) throw new Error('Coleta sem execução associada.')
+      for (let tick = 0; tick < MAX_TICKS; tick++) {
+        if (cancelled.current) return
+        const step = await fetch(`/api/fetch-runs/${runId}/process`, { method: 'POST' })
+        const stepData = await step.json().catch(() => null)
+        if (!step.ok) throw new Error(stepData?.error || 'Falha ao processar a coleta.')
+        const status = stepData?.run?.status
+        setProgress(`coletando (${stepData?.run?.inserted_count ?? 0} novas)`)
+        if (['concluido', 'parcial', 'erro'].includes(status)) break
+      }
+    } catch (collectError) {
+      setActionError(collectError instanceof Error ? collectError.message : 'Falha na coleta.')
+    } finally {
+      setRunning('')
+      setProgress('')
+      await load()
+    }
+  }, [load])
+
+  useEffect(() => () => { cancelled.current = true }, [])
+
   return (
     <div className="mx-auto max-w-screen-2xl px-6 py-8">
       <div className="mb-8 flex flex-wrap items-start justify-between gap-4">
@@ -91,13 +221,21 @@ export default function DashboardPage() {
           <h1 className="text-5xl font-light tracking-tight">Painel</h1>
           <p className="mt-1 text-xs text-gray-400">Cobertura monitorada por cliente, sem truncamento</p>
         </div>
-        <div className="flex gap-2">
-          <Button variant="outline" onClick={load} disabled={loading}>
+        <div className="flex flex-wrap gap-2">
+          <Button variant="outline" onClick={load} disabled={loading || Boolean(running)}>
             <RefreshCw className={`mr-2 h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
             Atualizar
           </Button>
+          <Button variant="outline" onClick={collect} disabled={Boolean(running)}>
+            <Download className={`mr-2 h-4 w-4 ${running === 'collect' ? 'animate-pulse' : ''}`} />
+            Coletar notícias
+          </Button>
+          <Button onClick={() => runAutomation()} disabled={Boolean(running) || rows.length === 0}>
+            <Play className="mr-2 h-4 w-4" />
+            Preparar mês (todos)
+          </Button>
           <Link href="/reports/prepare">
-            <Button disabled={loading || rows.length === 0}>
+            <Button variant="outline" disabled={loading || rows.length === 0}>
               <FileText className="mr-2 h-4 w-4" />
               Preparação mensal
             </Button>
@@ -119,6 +257,24 @@ export default function DashboardPage() {
           </button>
         ))}
       </div>
+
+      {Boolean(running) && (
+        <div className="mb-4 flex items-center gap-2 border border-gray-300 bg-gray-50 px-4 py-2 text-sm">
+          <RefreshCw className="h-4 w-4 animate-spin" />
+          <span>{progress || 'processando…'}</span>
+          <button
+            className="ml-auto text-xs underline"
+            onClick={() => {
+              cancelled.current = true
+            }}
+          >
+            Interromper
+          </button>
+        </div>
+      )}
+      {actionError && (
+        <div className="mb-4 border border-amber-300 bg-amber-50 px-4 py-2 text-sm text-amber-900">{actionError}</div>
+      )}
 
       {summary && <HealthBanner summary={summary} />}
       {summary?.operational_alerts && summary.operational_alerts.length > 0 && (
@@ -148,55 +304,43 @@ export default function DashboardPage() {
         <p className="py-24 text-center text-gray-400">Nenhum cliente ativo encontrado.</p>
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {rows.map(({
-            client,
-            total,
-            triaged_count,
-            qualified_count,
-            annex_count,
-            pending_count,
-            variation_percent,
-            readiness,
-          }) => (
-            <div key={client.id} className="flex flex-col gap-3 border border-gray-200 p-5">
-              <div className="flex items-center gap-3">
-                {client.logo_url && (
-                  <Image src={client.logo_url} alt={client.name} width={64} height={32} unoptimized className="h-8 w-16 object-contain" />
-                )}
-                <div className="min-w-0">
-                  <p className="truncate font-semibold">{client.name}</p>
-                  {client.sector && <p className="truncate text-xs text-gray-500">{client.sector}</p>}
-                </div>
-              </div>
-              <div className="flex items-end justify-between gap-4">
-                <div>
-                  <div>
-                    <span className="text-4xl font-light tabular-nums">{qualified_count}</span>
-                    <span className="ml-1 text-xs text-gray-500">evidências qualificadas (30 dias)</span>
-                  </div>
-                  <p className="mt-1 text-[11px] text-gray-400">
-                    {total} candidatas · {triaged_count} triadas · {pending_count} pendentes · {annex_count} no anexo
-                    {variation_percent != null && ` · ${variation_percent >= 0 ? '+' : ''}${variation_percent}%`}
-                  </p>
-                  <p className="mt-1 text-[11px] text-gray-500">
-                    Preparação de {readiness?.period}: {readiness?.verified_evidence || 0} verificadas · {readiness?.qualified_evidence || 0} qualificadas · {readiness?.covered_topics || 0}/{readiness?.required_topics || 0} tópicos cobertos · {readiness?.pending_exceptions || 0} exceções
-                  </p>
-                  {readiness && ['waiting_configuration', 'error'].includes(readiness.automation_status || '') && (
-                    <p className="mt-2 border border-amber-200 bg-amber-50 px-2 py-1 text-[11px] text-amber-800">
-                      Automação {readiness.automation_status === 'waiting_configuration' ? 'aguardando configuração' : 'com erro'}
-                      {readiness.automation_error ? `: ${readiness.automation_error}` : ''}
-                    </p>
-                  )}
-                </div>
-                <Link href={readiness?.draft_id ? `/reports/prepare?draft=${readiness.draft_id}` : `/reports/prepare?client=${client.id}&period=${readiness?.period || ''}`} className="whitespace-nowrap text-sm hover:underline">
-                  Preparação ↗
-                </Link>
-              </div>
-            </div>
+          {rows.map((row) => (
+            <ClientAutomationCard
+              key={row.client.id}
+              row={row}
+              busy={Boolean(running)}
+              onPrepare={() => runAutomation(row.client.id, row.client.name)}
+              onContinue={() => continueAutomation(row.client.id)}
+              onOpenExceptions={() =>
+                row.readiness?.draft_id &&
+                setDrawer({
+                  draftId: row.readiness.draft_id,
+                  clientId: row.client.id,
+                  clientName: row.client.name,
+                })
+              }
+              onChanged={() => continueAutomation(row.client.id)}
+            />
           ))}
         </div>
       )}
 
+      {drawer && (
+        <ExceptionQueueDrawer
+          draftId={drawer.draftId}
+          clientId={drawer.clientId}
+          clientName={drawer.clientName}
+          onClose={() => {
+            setDrawer(null)
+            load()
+          }}
+          onDrained={() => {
+            const clientId = drawer.clientId
+            setDrawer(null)
+            continueAutomation(clientId)
+          }}
+        />
+      )}
     </div>
   )
 }

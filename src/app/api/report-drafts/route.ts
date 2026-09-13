@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import { createAdminClient as createClient } from '@/lib/supabase/server'
 import { formatZodError, reportDraftCreateSchema } from '@/lib/validation'
 import { monthBounds, refreshDraftEvidence, reportBrand } from '@/lib/report-drafts'
-import { SIMINERAL_JULY_2026_TOPICS } from '@/lib/monthly-agenda'
+import { SIMINERAL_JULY_2026_TOPICS, seedDraftTopics } from '@/lib/monthly-agenda'
 import type { Client, ReportBrand } from '@/types'
 import { loadEditorialSnapshot, syncDraftEditorialSnapshot } from '@/lib/editorial-directives'
 
@@ -17,32 +17,6 @@ function draftBrand(client: Client, period: string): ReportBrand {
   return {
     ...snapshot,
     guidelines: [snapshot.guidelines, provisional].filter(Boolean).join('\n\n'),
-  }
-}
-
-async function syncTopicTemplates(
-  supabase: ReturnType<typeof createClient>,
-  draftId: string,
-  clientId: string
-) {
-  const [{ data: existing }, { data: templates, error }] = await Promise.all([
-    supabase.from('monthly_report_topics').select('title, position').eq('draft_id', draftId),
-    supabase
-      .from('client_report_topic_templates')
-      .select('title, rationale, inclusion_terms, exclusion_terms, required')
-      .eq('client_id', clientId)
-      .eq('active', true)
-      .order('position'),
-  ])
-  if (error) throw new Error(error.message)
-  const titles = new Set((existing || []).map((topic) => topic.title))
-  let position = Math.max(0, ...(existing || []).map((topic) => Number(topic.position || 0)))
-  const missing = (templates || [])
-    .filter((topic) => !titles.has(topic.title))
-    .map((topic) => ({ draft_id: draftId, ...topic, position: ++position }))
-  if (missing.length) {
-    const { error: insertError } = await supabase.from('monthly_report_topics').insert(missing)
-    if (insertError) throw new Error(insertError.message)
   }
 }
 
@@ -135,7 +109,7 @@ export async function POST(req: Request) {
         )
       }
     }
-    await syncTopicTemplates(supabase, latest.id, client_id)
+    await seedDraftTopics(supabase, latest.id, client_id, period)
     return NextResponse.json({
       draft: appliedEditorialSnapshot
         ? { ...updated, applied_editorial_snapshot: appliedEditorialSnapshot, editorial_snapshot_version: appliedEditorialSnapshot.profile_version }
@@ -229,7 +203,7 @@ export async function POST(req: Request) {
     )
     if (topicsError) return NextResponse.json({ error: topicsError.message }, { status: 500 })
   }
-  await syncTopicTemplates(supabase, draft.id, client_id)
+  await seedDraftTopics(supabase, draft.id, client_id, period)
 
   try {
     const refreshed = await refreshDraftEvidence(supabase, draft)

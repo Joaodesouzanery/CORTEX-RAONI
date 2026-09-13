@@ -60,9 +60,18 @@ export type ReportAutomationStatus =
   | 'pending'
   | 'running'
   | 'waiting_configuration'
+  /** Tudo que era da máquina está feito; falta decisão humana. */
+  | 'waiting_review'
   | 'complete'
   | 'partial'
   | 'error'
+
+/** Procedência de uma decisão que a máquina sugere mas só a pessoa confirma. */
+export type DecisionSource = 'ausente' | 'sugestao' | 'humano'
+export type ServiceMetricsSource = 'ausente' | 'herdado' | 'humano'
+
+/** Item que parou a automação, para o card do Painel renderizar a ação certa. */
+export type AutomationBlockingReason = 'exceptions' | 'service_metrics' | 'lead' | 'agenda' | 'quality'
 export type DirectiveCategory =
   | 'captacao'
   | 'qualificacao'
@@ -294,6 +303,17 @@ export interface DashboardClientSummary {
     ready: boolean
     automation_status: string | null
     automation_error: string | null
+    /** Estágio corrente do job na máquina de estados, para a faixa de progresso. */
+    stage: string | null
+    blocking_reason: AutomationBlockingReason | null
+    lead_source: DecisionSource
+    lead_suggestion: { article_id: string; title: string; rationale: string } | null
+    service_metrics: Record<string, number>
+    service_metrics_source: ServiceMetricsSource
+    auto_sections: boolean
+    sections_done: number
+    package_ready: boolean
+    checklist_blocked_keys: string[]
   }
 }
 
@@ -480,6 +500,12 @@ export interface MonthlyReportDraft {
   editorial_snapshot_version?: number
   automation_status?: ReportAutomationStatus
   automation_updated_at?: string | null
+  automation_blocking_reason?: AutomationBlockingReason | null
+  lead_source?: DecisionSource
+  lead_suggested_at?: string | null
+  service_metrics_source?: ServiceMetricsSource
+  service_metrics_source_period?: string | null
+  auto_sections?: boolean
   claude_package_base_version?: number | null
   claude_package_generated_at?: string | null
   diagnostic_package_generated_at?: string | null

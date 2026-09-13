@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { useToast } from '@/hooks/use-toast'
 import { renderDigestText, type ClientDigest, type AlertSeverity, type AlertType } from '@/lib/alerts'
 import { Bell, Copy, RefreshCw } from 'lucide-react'
+import { safeExternalUrl } from '@/lib/url'
 
 type Digest = ClientDigest & { recipient?: string | null }
 
@@ -129,9 +130,13 @@ export default function AlertsPage() {
                       <ul className="pl-4 flex flex-col gap-1">
                         {a.items.map((it, j) => (
                           <li key={j} className="text-sm leading-snug">
-                            <a href={it.url} target="_blank" rel="noopener noreferrer" className="text-teal-800 hover:underline">
-                              {it.title}
-                            </a>
+                            {safeExternalUrl(it.url) ? (
+                              <a href={safeExternalUrl(it.url)!} target="_blank" rel="noopener noreferrer" className="text-teal-800 hover:underline">
+                                {it.title}
+                              </a>
+                            ) : (
+                              <span>{it.title}</span>
+                            )}
                             <span className="text-gray-400">
                               {' '}— {it.veiculo}
                               {it.published_at ? ` · ${new Date(it.published_at).toLocaleDateString('pt-BR')}` : ''}

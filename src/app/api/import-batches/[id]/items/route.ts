@@ -1,13 +1,12 @@
 import { NextResponse } from 'next/server'
 import * as cheerio from 'cheerio'
-import { lookup } from 'node:dns/promises'
-import { isIP } from 'node:net'
 import { createAdminClient as createClient } from '@/lib/supabase/server'
 import { canonicalArticleFingerprint, cleanArticleText, inferContentStatus } from '@/lib/archive'
 import { classifyArticleBatch } from '@/lib/classification'
 import { refreshImportBatch } from '@/lib/import/batches'
 import { formatZodError, importBatchItemsSchema } from '@/lib/validation'
 import type { Article, ContentStatus } from '@/types'
+import { readCappedText, safeFetch } from '@/lib/safe-fetch'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
@@ -38,23 +37,16 @@ function meta($: CheerioRoot, ...selectors: string[]) {
 }
 
 async function articleFromUrl(url: string): Promise<ManualArticle> {
-  let parsedUrl = new URL(url)
-  let response: Response | null = null
-  for (let redirect = 0; redirect < 4; redirect += 1) {
-    await assertPublicUrl(parsedUrl)
-    response = await fetch(parsedUrl.toString(), {
-      headers: { 'User-Agent': 'CORTEX/1.0 (+monitoramento editorial autorizado)' },
-      signal: AbortSignal.timeout(12_000),
-      redirect: 'manual',
-    })
-    if (![301, 302, 303, 307, 308].includes(response.status)) break
-    const location = response.headers.get('location')
-    if (!location) break
-    parsedUrl = new URL(location, parsedUrl)
-  }
-  if (!response) throw new Error('Não foi possível acessar a página.')
+  // A guarda e o laço de redirecionamento viviam aqui; foram extraídos para
+  // src/lib/safe-fetch.ts porque eram a única proteção do repo e os outros
+  // cinco caminhos de saída não tinham nenhuma.
+  const response = await safeFetch(url, {
+    headers: { 'User-Agent': 'CORTEX/1.0 (+monitoramento editorial autorizado)' },
+    timeoutMs: 12_000,
+  })
   if (!response.ok) throw new Error(`A página retornou HTTP ${response.status}.`)
-  const html = await response.text()
+  const parsedUrl = new URL(response.url || url)
+  const html = await readCappedText(response)
   const $ = cheerio.load(html)
   $('script, style, nav, aside, footer, form, noscript, svg').remove()
   const title =
@@ -83,36 +75,6 @@ async function articleFromUrl(url: string): Promise<ManualArticle> {
     excerpt: cleanArticleText(description).slice(0, 1000),
     content,
     content_status: inferContentStatus(content),
-  }
-}
-
-function privateAddress(address: string) {
-  const normalized = address.toLowerCase().replace(/^::ffff:/, '')
-  if (normalized === '::1' || normalized === '::' || normalized.startsWith('fe80:')) return true
-  if (normalized.startsWith('fc') || normalized.startsWith('fd')) return true
-  const parts = normalized.split('.').map(Number)
-  if (parts.length !== 4 || parts.some((part) => !Number.isInteger(part))) return false
-  return (
-    parts[0] === 10 ||
-    parts[0] === 127 ||
-    (parts[0] === 169 && parts[1] === 254) ||
-    (parts[0] === 172 && parts[1] >= 16 && parts[1] <= 31) ||
-    (parts[0] === 192 && parts[1] === 168) ||
-    parts[0] === 0
-  )
-}
-
-async function assertPublicUrl(url: URL) {
-  if (!['http:', 'https:'].includes(url.protocol) || url.username || url.password) {
-    throw new Error('Use uma URL pública HTTP/HTTPS sem credenciais.')
-  }
-  const hostname = url.hostname.replace(/^\[|\]$/g, '').toLowerCase()
-  if (!hostname || hostname === 'localhost' || hostname.endsWith('.local')) {
-    throw new Error('Endereço local não é permitido.')
-  }
-  const addresses = isIP(hostname) ? [{ address: hostname }] : await lookup(hostname, { all: true })
-  if (!addresses.length || addresses.some((item) => privateAddress(item.address))) {
-    throw new Error('O link aponta para uma rede privada ou reservada.')
   }
 }
 

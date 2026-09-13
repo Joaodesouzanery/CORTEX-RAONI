@@ -5,6 +5,7 @@ import { reportCreateSchema, formatZodError } from '@/lib/validation'
 import { fetchArticleText } from '@/lib/fetcher/extract'
 import { computePanorama, type PanoramaRow } from '@/lib/panorama'
 import type { Article, Tom, Relevancia, SourceCategoria } from '@/types'
+import { csvCell } from '@/lib/csv'
 
 const TOM_LABEL: Record<Tom, string> = {
   positivo: 'Positivo',
@@ -56,9 +57,6 @@ const veiculoOf = (a: { publisher?: string | null; sources?: { name?: string } |
 const isInstitucional = (a: { sources?: { name?: string } | null }) =>
   (a.sources?.name || '').startsWith('Institucional')
 
-function csvCell(v: string): string {
-  return `"${(v || '').replace(/"/g, '""')}"`
-}
 
 const HANDOFF = `## HANDOFF DE DESIGN (cole no Claude Design junto do relatório final)
 

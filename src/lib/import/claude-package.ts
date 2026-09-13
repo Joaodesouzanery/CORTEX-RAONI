@@ -14,10 +14,15 @@ function safeEntryName(name: string) {
   return !name.includes('..') && !name.startsWith('/') && !name.includes('\\')
 }
 
+/** Teto por entrada e para o pacote inteiro, imposto pelo descompressor. */
+const MAX_ENTRY_BYTES = 10 * 1024 * 1024
+const MAX_TOTAL_BYTES = 40 * 1024 * 1024
+
 export function parseClaudePackage(bytes: Uint8Array): ParsedClaudePackage {
   const buffer = Buffer.from(bytes)
   const entries: Array<{ name: string; content: string; size: number }> = []
   let offset = 0
+  let inflatedTotal = 0
   while (offset + 30 <= buffer.length && buffer.readUInt32LE(offset) === 0x04034b50) {
     const flags = buffer.readUInt16LE(offset + 6)
     const method = buffer.readUInt16LE(offset + 8)
@@ -31,10 +36,32 @@ export function parseClaudePackage(bytes: Uint8Array): ParsedClaudePackage {
     const dataEnd = dataStart + compressedSize
     if (dataEnd > buffer.length) throw new Error('Pacote ZIP truncado.')
     const name = buffer.subarray(nameStart, nameStart + nameLength).toString('utf8')
-    if (safeEntryName(name) && /\.(?:md|csv|json|txt)$/i.test(name) && size <= 10 * 1024 * 1024) {
+    if (safeEntryName(name) && /\.(?:md|csv|json|txt)$/i.test(name) && size <= MAX_ENTRY_BYTES) {
       const compressed = buffer.subarray(dataStart, dataEnd)
-      const raw = method === 0 ? compressed : method === 8 ? inflateRawSync(compressed) : null
-      if (raw) entries.push({ name, content: raw.toString('utf8'), size })
+      // `size` vem do cabeçalho local do ZIP — é declarado por quem montou o
+      // arquivo, não medido. Um pacote pode dizer `size: 1` e trazer 1 MB que
+      // infla para 10 GB. Por isso o teto vai para o zlib, que aborta durante a
+      // descompressão, em vez de confiar no número declarado.
+      let raw: Buffer | null = null
+      if (method === 0) {
+        raw = Buffer.from(compressed)
+      } else if (method === 8) {
+        try {
+          raw = inflateRawSync(compressed, {
+            maxOutputLength: Math.min(MAX_ENTRY_BYTES, MAX_TOTAL_BYTES - inflatedTotal),
+          })
+        } catch {
+          // Entrada acima do teto ou corrompida: pula, não derruba o pacote.
+          raw = null
+        }
+      }
+      if (raw) {
+        inflatedTotal += raw.length
+        if (inflatedTotal > MAX_TOTAL_BYTES) {
+          throw new Error('Pacote ZIP excede o tamanho máximo descomprimido permitido.')
+        }
+        entries.push({ name, content: raw.toString('utf8'), size: raw.length })
+      }
     }
     offset = dataEnd
   }

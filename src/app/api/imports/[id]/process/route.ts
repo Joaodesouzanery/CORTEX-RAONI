@@ -155,29 +155,35 @@ async function findOrSaveArticle(
 ): Promise<Article> {
   const fingerprint = await canonicalArticleFingerprint(item)
   let existing: Article | null = null
-  const { data: byFingerprint } = await supabase
+  // Os tres lookups abaixo SAO a deduplicacao desta rota — o caminho de import
+  // nao passa pelo pg_advisory_xact_lock do RPC ingest_source_articles. Um erro
+  // engolido aqui vira "nao encontrei" e insere uma DUPLICATA em vez de falhar.
+  const { data: byFingerprint, error: fingerprintError } = await supabase
     .from('articles')
     .select('*')
     .eq('canonical_fingerprint', fingerprint)
     .order('fetched_at', { ascending: true })
     .limit(1)
     .maybeSingle()
+  if (fingerprintError) throw new Error(`Dedupe por fingerprint falhou: ${fingerprintError.message}`)
   existing = byFingerprint as Article | null
   if (!existing && item.url) {
-    const { data } = await supabase.from('articles').select('*').eq('url', item.url).maybeSingle()
+    const { data, error } = await supabase.from('articles').select('*').eq('url', item.url).maybeSingle()
+    if (error) throw new Error(`Dedupe por URL falhou: ${error.message}`)
     existing = data as Article | null
   }
   if (!existing && item.published_at) {
     const day = item.published_at.slice(0, 10)
     const start = `${day}T00:00:00.000Z`
     const end = new Date(new Date(start).getTime() + 86_400_000).toISOString()
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from('articles')
       .select('*')
       .eq('title', item.title)
       .gte('published_at', start)
       .lt('published_at', end)
       .limit(10)
+    if (error) throw new Error(`Dedupe por título+data falhou: ${error.message}`)
     existing =
       ((data as Article[] | null) || []).find((candidate) => {
         const publisher = normalizeText(item.publisher || '')

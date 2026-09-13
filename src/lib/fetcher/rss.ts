@@ -1,5 +1,7 @@
 import Parser from 'rss-parser'
 import { BROWSER_USER_AGENT, FETCH_TIMEOUTS } from './constants'
+import { safeExternalUrl } from '@/lib/url'
+import { readCappedText, safeFetch } from '@/lib/safe-fetch'
 
 const parser = new Parser({
   customFields: {
@@ -57,13 +59,12 @@ export function stripPublisherSuffix(title: string, publisher: string | null): s
 // Fetch RSS as raw bytes, detect charset from XML declaration, decode correctly,
 // then replace the encoding declaration so xml2js doesn't attempt to re-decode.
 async function fetchFeedString(url: string): Promise<string> {
-  const res = await fetch(url, {
+  const res = await safeFetch(url, {
     headers: {
       'User-Agent': BROWSER_USER_AGENT,
       Accept: 'application/rss+xml, application/xml, text/xml, */*',
     },
-    redirect: 'follow',
-    signal: AbortSignal.timeout(FETCH_TIMEOUTS.rss),
+    timeoutMs: FETCH_TIMEOUTS.rss,
   })
   if (!res.ok) throw new Error(`HTTP ${res.status}`)
   const buffer = await res.arrayBuffer()
@@ -124,14 +125,13 @@ export function getMediaUrl(field: MediaValue | MediaValue[] | null | undefined)
 // tries several metadata tags before falling back to the first in-content image.
 export async function fetchOgImage(articleUrl: string): Promise<string | null> {
   try {
-    const res = await fetch(articleUrl, {
+    const res = await safeFetch(articleUrl, {
       headers: { 'User-Agent': BROWSER_USER_AGENT },
-      redirect: 'follow',
-      signal: AbortSignal.timeout(FETCH_TIMEOUTS.ogImage),
+      timeoutMs: FETCH_TIMEOUTS.ogImage,
     })
     if (!res.ok) return null
     const finalUrl = res.url || articleUrl // after any redirects (Google News → outlet)
-    const html = await res.text()
+    const html = await readCappedText(res)
     const { load } = await import('cheerio')
     const $ = load(html)
 
@@ -188,7 +188,10 @@ export async function fetchRSS(feedUrl: string): Promise<FetchedArticle[]> {
 
     return {
       title,
-      url: item.link || '',
+      // Esquema validado já na entrada: um <link> com javascript: viraria XSS
+      // armazenado ao ser renderizado como href. `feedUrl` como base resolve
+      // as formas //host/path que alguns feeds usam legitimamente.
+      url: safeExternalUrl(item.link, feedUrl) || '',
       image_url: imageUrl,
       excerpt,
       content: contentEncoded || item.content || null,

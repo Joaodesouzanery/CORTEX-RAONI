@@ -60,9 +60,13 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   if (draft.status === 'approved') {
     return NextResponse.json({ error: 'A versão aprovada é imutável.' }, { status: 409 })
   }
+  // Quem edita os indicadores por esta rota é uma pessoa: é isso que promove
+  // números herdados do mês anterior a números confirmados do mês.
+  const patch: Record<string, unknown> = { ...parsed.data, updated_at: new Date().toISOString() }
+  if (parsed.data.service_metrics) patch.service_metrics_source = 'humano'
   const { data, error } = await supabase
     .from('monthly_report_drafts')
-    .update({ ...parsed.data, updated_at: new Date().toISOString() })
+    .update(patch)
     .eq('id', id)
     .select()
     .single()

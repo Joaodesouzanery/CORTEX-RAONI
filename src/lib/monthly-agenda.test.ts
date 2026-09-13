@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { topicMatchesArticle } from './monthly-agenda'
+import { PROVISIONAL_RATIONALE, deriveProvisionalTopics, topicMatchesArticle } from './monthly-agenda'
 
 const article = (title: string) => ({ title, excerpt: null, content: null })
 
@@ -42,5 +42,38 @@ describe('monthly agenda matching', () => {
     }
     expect(topicMatchesArticle(topic, article('Programa de turismo sustentável na Amazônia')).matched).toBe(false)
     expect(topicMatchesArticle(topic, article('Mineração em Carajás e desenvolvimento amazônico')).matched).toBe(true)
+  })
+})
+
+describe('agenda provisória para cliente sem templates', () => {
+  it('deriva um tópico por eixo permanente, nunca obrigatório', () => {
+    const topics = deriveProvisionalTopics(
+      ['navegação de cabotagem', 'regulação portuária'],
+      ['ANTAQ'],
+      'ANTAQ'
+    )
+    expect(topics.map((topic) => topic.title)).toEqual(['navegação de cabotagem', 'regulação portuária'])
+    // Obrigatoriedade fabricada por máquina bloquearia o fechamento do mês.
+    expect(topics.every((topic) => topic.required === false)).toBe(true)
+    expect(topics[0].inclusion_terms).toEqual(['navegação de cabotagem'])
+    expect(topics[0].rationale).toBe(PROVISIONAL_RATIONALE)
+  })
+
+  it('cai para um tópico guarda-chuva com as keywords quando não há eixos', () => {
+    const topics = deriveProvisionalTopics([], ['porto', 'hidrovia', 'cabotagem'], 'ANTAQ')
+    expect(topics).toHaveLength(1)
+    expect(topics[0].title).toBe('Cobertura geral — ANTAQ')
+    expect(topics[0].inclusion_terms).toEqual(['porto', 'hidrovia', 'cabotagem'])
+    expect(topics[0].required).toBe(false)
+  })
+
+  it('limita o guarda-chuva a 12 termos', () => {
+    const keywords = Array.from({ length: 30 }, (_, index) => `termo-${index}`)
+    expect(deriveProvisionalTopics([], keywords, 'X')[0].inclusion_terms).toHaveLength(12)
+  })
+
+  it('ignora entradas vazias e não devolve nada quando não há do que derivar', () => {
+    expect(deriveProvisionalTopics(['  ', ''], ['   '], 'X')).toEqual([])
+    expect(deriveProvisionalTopics([], [], null)).toEqual([])
   })
 })

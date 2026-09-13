@@ -46,7 +46,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   if (tagError) return NextResponse.json({ error: tagError.message }, { status: 500 })
   await supabase
     .from('monthly_report_drafts')
-    .update({ lead_article_id: parsed.data.article_id, updated_at: now })
+    .update({ lead_article_id: parsed.data.article_id, lead_source: 'humano', updated_at: now })
     .eq('id', id)
   return NextResponse.json(await refreshDraftEvidence(supabase, { ...draft, lead_article_id: parsed.data.article_id }))
 }

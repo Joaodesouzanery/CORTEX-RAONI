@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { formatDate } from '@/lib/utils'
 import type { Article } from '@/types'
 import { cn } from '@/lib/utils'
+import { safeExternalUrl } from '@/lib/url'
 
 interface Props {
   article: Article
@@ -72,10 +73,11 @@ export default function ArticleCard({ article, selected, onSelect, score }: Prop
       {/* Excerpt */}
       {article.excerpt && <p className="text-sm text-gray-600 line-clamp-3 mb-3 flex-1">{article.excerpt}</p>}
 
-      {/* Read link */}
-      {article.url ? (
+      {/* Read link — o href passa pelo validador: linhas gravadas antes da
+          correção na ingestão podem conter javascript:, e o React não sanitiza. */}
+      {safeExternalUrl(article.url) ? (
         <a
-          href={article.url}
+          href={safeExternalUrl(article.url)!}
           target="_blank"
           rel="noopener noreferrer"
           className="text-sm text-black hover:underline mt-auto"

@@ -4,6 +4,7 @@ import { formatDate } from '@/lib/utils'
 import type { Article, ArticleTag } from '@/types'
 import { cn } from '@/lib/utils'
 import TagControls, { type TagPatch } from './TagControls'
+import { safeExternalUrl } from '@/lib/url'
 
 interface Props {
   article: Article
@@ -83,9 +84,9 @@ export default function ArticleListItem({ article, selected, onSelect, score, cl
         </span>
         <h3 className="font-bold text-sm leading-snug line-clamp-2 mb-1">{article.title}</h3>
         {article.excerpt && <p className="text-sm text-gray-500 line-clamp-2">{article.excerpt}</p>}
-        {article.url ? (
+        {safeExternalUrl(article.url) ? (
           <a
-            href={article.url}
+            href={safeExternalUrl(article.url)!}
             target="_blank"
             rel="noopener noreferrer"
             className="text-xs text-black hover:underline mt-1"

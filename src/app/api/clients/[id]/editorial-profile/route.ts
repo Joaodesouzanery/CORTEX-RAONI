@@ -55,7 +55,13 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
   if (Array.isArray(body.topics)) {
     const topicIds = body.topics.map((topic: { id?: string }) => topic.id).filter(Boolean)
     let remove = supabase.from('client_report_topic_templates').delete().eq('client_id', id)
-    if (topicIds.length) remove = remove.not('id', 'in', `(${topicIds.join(',')})`)
+    // Lista `in.(...)` crua num DELETE: um id malformado corromperia o
+    // conjunto de exclusão e apagaria templates que deviam ser preservados.
+    // Só UUIDs entram.
+    const safeTopicIds = topicIds.filter((id: string) =>
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)
+    )
+    if (safeTopicIds.length) remove = remove.not('id', 'in', `(${safeTopicIds.join(',')})`)
     const { error: removeError } = await remove
     if (removeError) return NextResponse.json({ error: removeError.message }, { status: 500 })
     for (let index = 0; index < body.topics.length; index += 1) {

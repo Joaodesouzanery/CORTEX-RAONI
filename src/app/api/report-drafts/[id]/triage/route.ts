@@ -77,6 +77,7 @@ export async function POST(_: Request, { params }: { params: Promise<{ id: strin
         .select('article_id')
         .eq('client_id', draft.client_id)
         .not('triaged_at', 'is', null)
+        // safe-filter-ok: RULE_TRIAGE_VERSION é constante de compilação.
         .or(`report_role_source.neq.regra,triage_version.gte.${RULE_TRIAGE_VERSION}`)
         .range(from, to)
     ),

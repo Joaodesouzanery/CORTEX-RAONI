@@ -233,12 +233,25 @@ export async function GET(req: Request) {
     const days = parseInt(daysParam)
     if (Number.isFinite(days) && days > 0) cutoff = new Date(Date.now() - days * 86400000).toISOString()
   } else if (publishedAfter) {
-    cutoff = publishedAfter
+    // `.or()` recebe uma STRING DE FILTRO CRUA — o postgrest-js não escapa
+    // nada. Interpolar o parâmetro direto dava um oráculo booleano sobre
+    // qualquer coluna, inclusive articles.content:
+    //   ?published_after=2099-01-01,content.ilike.*segredo*
+    // A defesa não é sanitizar a string, é reconstruí-la: só uma data que o
+    // Date consegue parsear passa, e o que vai para o filtro é o ISO gerado
+    // pela máquina, que não tem como conter vírgula ou ponto extra.
+    const parsedAfter = new Date(publishedAfter)
+    if (!Number.isFinite(parsedAfter.getTime())) {
+      return NextResponse.json({ error: 'published_after inválido; use uma data ISO.' }, { status: 400 })
+    }
+    cutoff = parsedAfter.toISOString()
   }
   if (cutoff) {
     // Strip milliseconds: PostgREST .or() parses each branch as field.op.value on
     // dots, so an internal "." (the ".000Z") would corrupt the value.
     const safe = cutoff.replace(/\.\d{3}Z$/, 'Z')
+    // safe-filter-ok: `cutoff` é sempre um ISO gerado por toISOString() acima,
+    // nunca a string do usuário — não há como conter vírgula ou ponto extra.
     query = query.or(`published_at.gte.${safe},published_at.is.null`)
   }
 

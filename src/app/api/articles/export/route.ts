@@ -1,13 +1,10 @@
 import { NextResponse } from 'next/server'
 import { createAdminClient as createClient } from '@/lib/supabase/server'
 import { fetchAll } from '@/lib/report-drafts'
+import { csvCell } from '@/lib/csv'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
-
-function csvCell(value: unknown) {
-  return `"${String(value ?? '').replace(/"/g, '""')}"`
-}
 
 type JoinedArticle = Record<string, unknown>
 type ClientArticleRow = Record<string, unknown> & {

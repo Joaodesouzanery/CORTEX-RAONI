@@ -1,0 +1,20 @@
+# Sete advisories se acumularam sem ninguém olhar, incluindo um crítico no
+# `next`. Isto é a vigilância que faltava.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      # Agrupa patch/minor num PR só para não afogar a fila de revisão; major
+      # vem separado, porque major merece leitura individual.
+      dev-e-patches:
+        patterns: ['*']
+        update-types: [minor, patch]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly

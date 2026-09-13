@@ -1,11 +1,23 @@
 import { NextResponse } from 'next/server'
 import { createAdminClient as createClient } from '@/lib/supabase/server'
 import { articleTagSchema, formatZodError } from '@/lib/validation'
+import { fetchAll } from '@/lib/report-drafts'
 
 export const dynamic = 'force-dynamic'
 
-// GET /api/articles/tag?client_id=…  → every tag for that client (small table;
-// the curation UI merges these into the loaded articles by article_id).
+// GET /api/articles/tag?client_id=…  → every tag for that client.
+//
+// NÃO é uma tabela pequena: é uma linha por (matéria × cliente) sobre o acervo
+// inteiro. A versão anterior fazia um `.select()` sem `.range()`, e o PostgREST
+// corta em ~1000 linhas SEM erro — acima disso a UI de curadoria passava a
+// mostrar matéria etiquetada como não-etiquetada, em quatro telas. Agora pagina
+// com o `fetchAll` que já existe em report-drafts.ts.
+//
+// A escada de degradação por mensagem de erro abaixo compensa deriva de schema
+// (ambientes onde as migrations 027/029 ainda não rodaram). Ela é dívida
+// conhecida — não copie o padrão para rotas novas — mas foi preservada aqui.
+// Como ela precisa INSPECIONAR o erro para escolher o conjunto de colunas, a
+// escolha é feita numa sondagem barata e só depois a listagem pagina.
 export async function GET(req: Request) {
   const supabase = createClient()
   const clientId = new URL(req.url).searchParams.get('client_id')
@@ -16,43 +28,64 @@ export async function GET(req: Request) {
   const strategicColumns =
     ', central_message, strategic_effect, recommended_action, verification_status, source_verification_status, editorial_review_state, qualified_at, qualification_version, editorial_confidence, geographic_scope, quality_flags, adjudication_version, qa_source, qa_checked_at'
   const manualColumns = ', manual_intake, manual_received_at'
-  const result = await supabase
-    .from('article_client_tags')
-    .select(`${baseColumns}${strategicColumns}${manualColumns}`)
-    .eq('client_id', clientId)
-  if (
-    result.error?.message.includes('manual_intake') ||
-    result.error?.message.includes('manual_received_at')
-  ) {
-    const withoutManual = await supabase
-      .from('article_client_tags')
-      .select(`${baseColumns}${strategicColumns}`)
-      .eq('client_id', clientId)
-    if (
-      withoutManual.error?.message.includes('central_message') ||
-      withoutManual.error?.message.includes('source_verification_status')
-    ) {
-      const fallback = await supabase.from('article_client_tags').select(baseColumns).eq('client_id', clientId)
-      if (fallback.error) return NextResponse.json({ error: fallback.error.message }, { status: 500 })
-      return NextResponse.json(fallback.data)
-    }
-    if (withoutManual.error) {
-      return NextResponse.json({ error: withoutManual.error.message }, { status: 500 })
-    }
-    return NextResponse.json(withoutManual.data)
-  }
-  if (
-    result.error?.message.includes('central_message') ||
-    result.error?.message.includes('source_verification_status')
-  ) {
-    const fallback = await supabase.from('article_client_tags').select(baseColumns).eq('client_id', clientId)
-    if (fallback.error) return NextResponse.json({ error: fallback.error.message }, { status: 500 })
-    return NextResponse.json(fallback.data)
-  }
-  const { data, error } = result
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
-  return NextResponse.json(data)
+  const MISSING_MANUAL = ['manual_intake', 'manual_received_at']
+  const MISSING_STRATEGIC = ['central_message', 'source_verification_status']
+  const mentions = (message: string | undefined, columns: string[]) =>
+    Boolean(message) && columns.some((column) => message!.includes(column))
+
+  // Sondagem: uma linha só, para descobrir qual conjunto de colunas o banco
+  // aceita, sem pagar a listagem inteira em cada tentativa.
+  const candidates = [
+    `${baseColumns}${strategicColumns}${manualColumns}`,
+    `${baseColumns}${strategicColumns}`,
+    baseColumns,
+  ]
+  let columns = ''
+  let probeError: string | null = null
+  for (const candidate of candidates) {
+    const probe = await supabase
+      .from('article_client_tags')
+      .select(candidate)
+      .eq('client_id', clientId)
+      .limit(1)
+    if (!probe.error) {
+      columns = candidate
+      probeError = null
+      break
+    }
+    probeError = probe.error.message
+    // Só degrada quando o erro é a ausência daquelas colunas. Qualquer outra
+    // falha (conexão, permissão) propaga — degradar ali devolveria 200 com
+    // forma reduzida e esconderia o problema.
+    const isSchemaDrift =
+      mentions(probe.error.message, MISSING_MANUAL) || mentions(probe.error.message, MISSING_STRATEGIC)
+    if (!isSchemaDrift) break
+  }
+  if (!columns) {
+    return NextResponse.json({ error: probeError || 'Falha ao ler etiquetas.' }, { status: 500 })
+  }
+
+  try {
+    // `columns` é montado em runtime, então o supabase-js não consegue inferir
+    // a forma da linha e devolve GenericStringError[]. Cast explícito, no
+    // estilo `as unknown as` já usado no repo (report-drafts.ts, fetch-run.ts).
+    const rows = await fetchAll<Record<string, unknown>>(
+      (from, to) =>
+        supabase
+          .from('article_client_tags')
+          .select(columns)
+          .eq('client_id', clientId)
+          .range(from, to) as unknown as PromiseLike<{
+          data: Record<string, unknown>[] | null
+          error: { message: string } | null
+        }>
+    )
+    return NextResponse.json(rows)
+  } catch (listError) {
+    const message = listError instanceof Error ? listError.message : 'Falha ao ler etiquetas.'
+    return NextResponse.json({ error: message }, { status: 500 })
+  }
 }
 
 // POST /api/articles/tag  → upsert one (article, client) reputational reading.

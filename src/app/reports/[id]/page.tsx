@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/server'
 import ReportViewer from '@/components/report/ReportViewer'
 import ReportPdfButton from '@/components/report/ReportPdfButton'
 import { formatDate } from '@/lib/utils'
@@ -8,7 +8,12 @@ export const dynamic = 'force-dynamic'
 
 export default async function ReportPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
-  const supabase = await createClient()
+  // Era o ÚNICO lugar do app que usava o cliente anon (o resto das 76 rotas usa
+  // createAdminClient). Como funcionava em produção, provava que `anon` tinha
+  // SELECT em `reports` e `clients` com RLS desligado — e a chave anon vai no
+  // bundle do navegador. Trocar aqui é pré-requisito da migration 035: com RLS
+  // ligado, esta página passaria a devolver notFound().
+  const supabase = createAdminClient()
   const { data: report } = await supabase
     .from('reports')
     .select('*, clients(logo_url)')

@@ -117,8 +117,14 @@ export function evaluateClientArticle(
 
   // A thematic feed is evidence, not permission to include an obvious road
   // story in DAQ. The contextual hard guard wins over source membership.
+  // Para a ANTAQ a guarda não é sobre a consulta de hoje: é proteção contra
+  // alguém marcar amanhã um feed largo (Portos e Navios, Agência Infra) como
+  // temático. Custo ~zero, porque toda matéria genuína aciona a regra direta.
+  // `startsWith` e não `===`: se o curador digitar o nome por extenso na UI,
+  // uma comparação exata desligaria a guarda em silêncio.
   const sourceRequiresContext =
     client.name.startsWith('DAQ') ||
+    client.name.startsWith('ANTAQ') ||
     client.name === 'SIMINERAL' ||
     client.name === 'SINDINFOR'
   if (

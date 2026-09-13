@@ -9,7 +9,14 @@ export default defineConfig([
     rules: {
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/no-empty-object-type': 'off',
-      '@typescript-eslint/no-unused-vars': 'warn',
+      // `ignoreRestSiblings` cobre o idioma de omitir campo por destructuring
+      // (`const { id: _drop, ...row } = x`), que o repo usa de propósito em
+      // report-drafts.ts. Sem isso, o único aviso do projeto derrubava
+      // `npm run lint --max-warnings=0` e portanto o gate inteiro do CI.
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        { ignoreRestSiblings: true, argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+      ],
       'react-hooks/immutability': 'off',
       'react-hooks/purity': 'off',
       'react-hooks/set-state-in-effect': 'off',

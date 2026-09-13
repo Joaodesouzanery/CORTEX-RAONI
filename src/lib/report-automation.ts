@@ -17,6 +17,7 @@ import {
   leadSuggestions,
 } from '@/lib/report-automation-core'
 import { loadEditorialSnapshot, syncDraftEditorialSnapshot } from '@/lib/editorial-directives'
+import { seedDraftTopics } from '@/lib/monthly-agenda'
 
 export function saoPauloPeriod(date = new Date()) {
   const parts = new Intl.DateTimeFormat('en-CA', {
@@ -34,30 +35,6 @@ export function previousPeriod(period: string) {
   return month === 1 ? `${year - 1}-12` : `${year}-${String(month - 1).padStart(2, '0')}`
 }
 
-async function seedDraftTopics(supabase: SupabaseClient, draftId: string, clientId: string) {
-  const [{ data: existing }, { data: templates, error }] = await Promise.all([
-    supabase.from('monthly_report_topics').select('title, position').eq('draft_id', draftId),
-    supabase
-      .from('client_report_topic_templates')
-      .select('title, rationale, inclusion_terms, exclusion_terms, required')
-      .eq('client_id', clientId)
-      .eq('active', true)
-      .order('position'),
-  ])
-  if (error) throw new Error(error.message)
-  const titles = new Set((existing || []).map((topic) => topic.title))
-  let position = Math.max(0, ...(existing || []).map((topic) => Number(topic.position || 0)))
-  const missing = (templates || [])
-    .filter((topic) => !titles.has(topic.title))
-    .map((topic) => ({ draft_id: draftId, ...topic, position: ++position }))
-  if (missing.length) {
-    const { error: insertError } = await supabase
-      .from('monthly_report_topics')
-      .insert(missing)
-    if (insertError) throw new Error(insertError.message)
-  }
-}
-
 async function memorySnapshot(supabase: SupabaseClient, clientId: string) {
   const [{ data: profile }, { data: rows }] = await Promise.all([
     supabase.from('client_editorial_profiles').select('*').eq('client_id', clientId).maybeSingle(),
@@ -72,6 +49,37 @@ async function memorySnapshot(supabase: SupabaseClient, clientId: string) {
   const include = (rows || []).filter((row) => row.kind === 'evidencia').slice(0, 6)
   const exclude = (rows || []).filter((row) => row.kind === 'contexto' || row.kind === 'ruido').slice(0, 6)
   return { profile: profile || null, inclusion_examples: include, exclusion_examples: exclude, captured_at: new Date().toISOString() }
+}
+
+const REQUIRED_SERVICE_METRICS = [
+  'reunioes_presenciais',
+  'reunioes_virtuais',
+  'orientacoes',
+  'acoes_imprensa',
+] as const
+
+/**
+ * Copia os indicadores de serviço do período anterior como ponto de partida.
+ *
+ * Marcados como 'herdado': são sugestão, não fato do mês. Enquanto não forem
+ * confirmados por uma pessoa, a seção 9 imprime [A PREENCHER] em vez dos
+ * números, e o item `placeholders` do checklist segura o finalize.
+ */
+async function inheritedServiceMetrics(supabase: SupabaseClient, clientId: string, period: string) {
+  const { data: prior } = await supabase
+    .from('monthly_report_drafts')
+    .select('service_metrics, period_month')
+    .eq('client_id', clientId)
+    .eq('period_month', monthBounds(previousPeriod(period)).date)
+    .order('version', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+  const metrics = (prior?.service_metrics || {}) as Record<string, number>
+  const complete = REQUIRED_SERVICE_METRICS.every(
+    (key) => typeof metrics[key] === 'number' && Number.isFinite(metrics[key])
+  )
+  if (!complete) return { metrics: {}, source: 'ausente' as const, period: null }
+  return { metrics, source: 'herdado' as const, period: prior?.period_month || null }
 }
 
 export async function ensureMonthlyDraft(
@@ -91,7 +99,7 @@ export async function ensureMonthlyDraft(
     .maybeSingle()
   if (existingError) throw new Error(existingError.message)
   if (existing) {
-    await seedDraftTopics(supabase, existing.id, client.id)
+    await seedDraftTopics(supabase, existing.id, client.id, period)
     const applied = await syncDraftEditorialSnapshot(supabase, existing as MonthlyReportDraft)
     if (applied) {
       existing.applied_editorial_snapshot = applied
@@ -110,6 +118,7 @@ export async function ensureMonthlyDraft(
     .maybeSingle()
   const snapshot = await memorySnapshot(supabase, client.id)
   const appliedEditorialSnapshot = await loadEditorialSnapshot(supabase, client.id, period)
+  const inherited = await inheritedServiceMetrics(supabase, client.id, period)
   const { data: draft, error } = await supabase
     .from('monthly_report_drafts')
     .insert({
@@ -123,6 +132,9 @@ export async function ensureMonthlyDraft(
       applied_editorial_snapshot: appliedEditorialSnapshot,
       editorial_snapshot_version: appliedEditorialSnapshot.profile_version,
       automation_status: 'pending',
+      service_metrics: inherited.metrics,
+      service_metrics_source: inherited.source,
+      service_metrics_source_period: inherited.period,
     })
     .select()
     .single()
@@ -131,7 +143,7 @@ export async function ensureMonthlyDraft(
     Array.from({ length: 9 }, (_, index) => ({ draft_id: draft.id, section_key: index + 1 }))
   )
   if (sectionsError) throw new Error(sectionsError.message)
-  await seedDraftTopics(supabase, draft.id, client.id)
+  await seedDraftTopics(supabase, draft.id, client.id, period)
   return draft as MonthlyReportDraft
 }
 
@@ -286,9 +298,12 @@ export async function buildDraftChecklist(
     'orientacoes',
     'acoes_imprensa',
   ]
-  const serviceMetricsReady = requiredMetrics.every(
+  const metricsPresent = requiredMetrics.every(
     (key) => typeof draft.service_metrics?.[key] === 'number' && Number.isFinite(draft.service_metrics[key])
   )
+  // Números herdados do mês anterior estão presentes mas não confirmados.
+  // Imprimi-los como sendo deste mês seria erro factual no entregável.
+  const serviceMetricsReady = metricsPresent && (draft.service_metrics_source ?? 'humano') === 'humano'
   return approvalChecklist({
     draft,
     items,
@@ -305,6 +320,8 @@ export async function buildDraftChecklist(
     unverifiedQualified,
     placeholders,
     serviceMetricsReady,
+    serviceMetricsSource: metricsPresent ? draft.service_metrics_source : 'ausente',
+    leadSource: draft.lead_source,
     qualityReady: draft.quality_status === 'passed' && Boolean(quality?.checks),
   })
 }

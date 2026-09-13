@@ -194,9 +194,11 @@ export const reportDraftCreateSchema = z.object({
   new_version: z.boolean().optional().default(false),
 })
 
+// Campos opcionais para permitir patches parciais — o Painel confirma apenas
+// os indicadores de serviço, sem reenviar as instruções do mês.
 export const reportDraftUpdateSchema = z.object({
-  monthly_instructions: z.string().max(10000),
-  service_metrics: z.record(z.string(), z.number().int().min(0)),
+  monthly_instructions: z.string().max(10000).optional(),
+  service_metrics: z.record(z.string(), z.number().int().min(0)).optional(),
   narrative_posture: z
     .enum(['consultivo_cauteloso', 'executivo_assertivo', 'somente_descritivo'])
     .optional(),

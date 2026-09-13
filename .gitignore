@@ -26,7 +26,11 @@ yarn-debug.log*
 yarn-error.log*
 
 # local env files
-.env*.local
+# `.env*.local` sozinho nao cobre um `.env` ou `.env.production` cru — e um
+# arquivo desses e exatamente o que carrega SUPABASE_SERVICE_ROLE_KEY.
+.env
+.env.*
+!.env.example
 
 # vercel
 .vercel
