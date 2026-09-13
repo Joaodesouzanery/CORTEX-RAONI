@@ -51,14 +51,31 @@ Produza o relatório EXATAMENTE nesta estrutura de seções, em markdown, com pr
 
 [Análise executiva densa de 4-6 parágrafos sobre o ambiente reputacional do mês, principais acontecimentos, evolução reputacional, riscos e oportunidades identificados, e principais entregas realizadas. Mencione as matérias mais relevantes com veículo e data entre parênteses.]
 
+### O NÚMERO DO MÊS
+[UMA estatística-âncora do período, em negrito e isolada, seguida de uma linha explicando por que ela sintetiza o mês, com citação. Exemplo de forma: **R$ 4,2 bilhões** — valor dos contratos de arrendamento portuário leiloados em agosto, o maior volume mensal do ano [E012]. Quando nenhum número dominar o período, abra com um CONTRASTE factual em vez de uma estatística (duas posições públicas opostas sobre o mesmo tema, ambas com citação). Não invente número: só use valores que apareçam nos artigos monitorados.]
+
 ### Top Insights do Mês
-[Liste entre 5 e 8 insights estratégicos numerados para a alta gestão]
+[Entre 7 e 8 insights numerados, cada um em DUAS partes: primeiro a tese em negrito numa frase só, depois um parágrafo curto de explicação com a evidência e a citação. Forma obrigatória:
+1. **Tese em uma frase.**
+   Explicação em 2-3 linhas com o fato que sustenta a tese, veículo e data [E00X].
+Nunca escreva um insight de uma linha só, nem uma tese sem explicação.]
 
 ---
 
 ## 2. TEMAS ESTRATÉGICOS DO MÊS
 
-[Identificar entre 5 e 10 temas-matriz. Para cada tema: subtítulo em negrito numerado (ex: **2.1. Nome do tema**), **Sinal do mês:** com a evidência factual concreta e **Leitura estratégica:** com 2-3 parágrafos explicando evolução, impacto, risco/oportunidade e ação recomendada para {cliente_nome}.]
+Abra a seção com uma tabela-síntese de exatamente três colunas, com no mínimo 5 e no máximo 10 linhas:
+
+| TEMA ESTRATÉGICO | RELEV. | SINAL DO MÊS |
+| --- | --- | --- |
+| Nome curto do tema | Alta | Fato datado e citado, ex.: "Consulta pública aberta em 12/08 com prazo até 30/09 [E007]" |
+
+Regras da tabela, sem exceção:
+- A coluna RELEV. aceita SOMENTE os valores "Alta" ou "Média". Nenhum outro rótulo.
+- A coluna SINAL DO MÊS é um FATO OBSERVADO, com data e citação [E00X] na própria célula. Nunca escreva rótulo de processo, de curadoria ou de estado interno (como "cobertura confirmada", "em revisão", "lacuna", "monitorando", "sem novidades") — isso não é sinal, é anotação de trabalho.
+- Cada linha da tabela tem de conter pelo menos uma citação [E00X].
+
+Depois da tabela, desenvolva cada tema: subtítulo em negrito numerado (ex: **2.1. Nome do tema**), **Sinal do mês:** com a evidência factual concreta e **Leitura estratégica:** com 2-3 parágrafos explicando evolução, impacto, risco/oportunidade e ação recomendada para {cliente_nome}.
 
 ---
 
@@ -83,11 +100,18 @@ Produza o relatório EXATAMENTE nesta estrutura de seções, em markdown, com pr
 
 ## 5. RISCOS REPUTACIONAIS PRIORITÁRIOS
 
-[Para cada risco identificado (mínimo 4):
-**Risco N - [Nome do risco]**
-Probabilidade: [baixa/média/média-alta/alta/muito alta]
-Impacto: [baixo/médio/alto/muito alto]
-Sinal do mês: [evidência concreta observada]]
+[No mínimo 4 riscos. Cada um no bloco fixo abaixo, nesta ordem exata de linhas:
+
+**Risco N — [Nome do risco]**
+Probabilidade: [Média | Média-alta | Alta]
+Impacto: [Médio | Alto | Muito alto]
+Sinal do mês — [evidência concreta observada no período, com data e citação [E00X]]
+[Parágrafo de leitura estratégica do risco.]
+
+Restrições:
+- As escadas são FECHADAS: Probabilidade só aceita Média, Média-alta ou Alta; Impacto só aceita Médio, Alto ou Muito alto. Um risco que não chegue a "Média" de probabilidade não entra nesta seção — ele é ruído e deve sair.
+- DOIS RISCOS NÃO PODEM TER O MESMO PAR (Probabilidade, Impacto). Os riscos são plotados numa matriz; pares repetidos ficam sobrepostos e ilegíveis. Se dois riscos empatarem, diferencie-os honestamente ou funda-os num só.
+- A linha do sinal usa travessão (—) depois de "Sinal do mês", não dois-pontos.]
 
 ---
 
@@ -101,23 +125,28 @@ Sinal do mês: [evidência concreta observada]]
 
 ## 7. RECOMENDAÇÕES EXECUTIVAS
 
-### Ações Imediatas
-[Bullets com recomendações de impacto imediato]
+Exatamente três blocos, com estes títulos e nesta ordem — nenhum a mais, nenhum a menos:
 
-### Ações de Curto Prazo
-[Bullets com recomendações para as próximas semanas]
+### AÇÕES IMEDIATAS (0-15 dias)
+[3 a 5 bullets. Cada bullet aponta o que fazer e por quê, ancorado num sinal do período com citação [E00X].]
 
-### Ações de Médio Prazo
-[Bullets com recomendações para o próximo trimestre]
+### AÇÕES DE CURTO PRAZO (15-60 dias)
+[3 a 5 bullets, mesma exigência de ancoragem.]
+
+### AÇÕES DE MÉDIO PRAZO (2-6 meses)
+[3 a 5 bullets, mesma exigência de ancoragem.]
 
 ---
 
 ## 8. CENÁRIOS PROSPECTIVOS
 
-[Para cada cenário (mínimo 3):
-**Cenário N - [Nome do cenário]**
-[Descrição do cenário e como pode se desenvolver]
-**Resposta recomendada:** [ação estratégica concisa]]
+[EXATAMENTE quatro cenários, rotulados CENÁRIO 01, CENÁRIO 02, CENÁRIO 03 e CENÁRIO 04 — com o número em dois dígitos. Nem três, nem cinco. Cada um no formato:
+
+**CENÁRIO 01 — [Nome do cenário]**
+[Descrição de como o cenário pode se desenvolver nos próximos meses, partindo de um sinal observado no período com citação [E00X].]
+**Resposta recomendada:** [ação estratégica concisa]
+
+Os quatro cenários devem cobrir desfechos distintos — não escreva quatro variações do mesmo enredo.]
 
 ---
 

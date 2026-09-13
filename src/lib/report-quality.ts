@@ -322,6 +322,131 @@ function check(
   return { key, label, status: count ? status : 'passed', count, details: details.slice(0, 20) }
 }
 
+/**
+ * Lint estrutural das cinco seções cuja FORMA foi ditada no prompt (§1, 2, 5, 7, 8).
+ *
+ * Sem isto, a forma é só um pedido: o modelo entrega prosa quando pedimos tabela,
+ * três cenários quando pedimos quatro, e ninguém percebe até o PDF. O parser de
+ * `report-structure.ts` lê exatamente este formato — o que o lint não travar aqui
+ * vira campo vazio no JSON entregue ao design.
+ *
+ * ATENÇÃO: confere POR LINHA, não por parágrafo. `markdownParagraphs` divide em
+ * linha em branco, então uma tabela inteira é UM parágrafo e um único [E###] em
+ * qualquer célula faria a checagem passar para todas as linhas.
+ */
+export function auditReportStructure(sections: ReportSection[]): ReportQualityCheckItem[] {
+  const byKey = new Map(sections.map((section) => [section.section_key, section.content || '']))
+  const lines = (key: number) =>
+    (byKey.get(key) || '')
+      .split('\n')
+      .map((line) => line.trim())
+      .filter(Boolean)
+  const problems: string[] = []
+
+  // Seção 1 — número do mês e insights em duas partes.
+  const s1 = lines(1)
+  if (s1.length) {
+    if (!s1.some((line) => /^#{2,4}\s*O NÚMERO DO MÊS/i.test(line))) {
+      problems.push('Seção 1: falta o bloco "### O NÚMERO DO MÊS"')
+    }
+    const insights = s1.filter((line) => /^\d+\.\s+\*\*/.test(line))
+    if (insights.length < 7 || insights.length > 8) {
+      problems.push(`Seção 1: ${insights.length} insights com tese em negrito (esperado 7 ou 8)`)
+    }
+  }
+
+  // Seção 2 — tabela de três colunas, cada linha datada e citada.
+  const s2 = lines(2)
+  if (s2.length) {
+    const rows = s2.filter((line) => line.startsWith('|') && !/^\|[\s:|-]+\|?$/.test(line))
+    const header = rows[0] || ''
+    if (!/RELEV\./i.test(header) || !/SINAL DO MÊS/i.test(header)) {
+      problems.push('Seção 2: falta a tabela com as colunas TEMA ESTRATÉGICO | RELEV. | SINAL DO MÊS')
+    }
+    const body = rows.slice(1)
+    if (body.length < 5) problems.push(`Seção 2: tabela com ${body.length} linhas (mínimo 5)`)
+    for (const row of body) {
+      const cells = row.split('|').map((cell) => cell.trim()).filter(Boolean)
+      if (cells.length < 3) {
+        problems.push(`Seção 2: linha com ${cells.length} colunas — ${row.slice(0, 90)}`)
+        continue
+      }
+      if (!/^(Alta|Média)$/i.test(cells[1])) {
+        problems.push(`Seção 2: RELEV. "${cells[1]}" fora da escada Alta/Média`)
+      }
+      if (!/\[E\d{3}\]/.test(cells[2])) {
+        problems.push(`Seção 2: SINAL DO MÊS sem citação — ${cells[2].slice(0, 90)}`)
+      }
+      if (!/\d{1,2}\/\d{1,2}|\d{1,2}\s+de\s+[a-zçãé]+/i.test(cells[2])) {
+        problems.push(`Seção 2: SINAL DO MÊS sem data — ${cells[2].slice(0, 90)}`)
+      }
+    }
+  }
+
+  // Seção 5 — escadas fechadas e nenhum par repetido.
+  const s5 = lines(5)
+  if (s5.length) {
+    const probs = s5.filter((line) => /^Probabilidade:/i.test(line))
+    const impacts = s5.filter((line) => /^Impacto:/i.test(line))
+    if (probs.length < 4) problems.push(`Seção 5: ${probs.length} riscos com Probabilidade (mínimo 4)`)
+    if (probs.length !== impacts.length) {
+      problems.push(`Seção 5: ${probs.length} linhas de Probabilidade para ${impacts.length} de Impacto`)
+    }
+    const value = (line: string) => line.split(':').slice(1).join(':').trim()
+    for (const line of probs) {
+      if (!/^(Média|Média-alta|Alta)$/i.test(value(line))) {
+        problems.push(`Seção 5: Probabilidade "${value(line)}" fora da escada Média/Média-alta/Alta`)
+      }
+    }
+    for (const line of impacts) {
+      if (!/^(Médio|Alto|Muito alto)$/i.test(value(line))) {
+        problems.push(`Seção 5: Impacto "${value(line)}" fora da escada Médio/Alto/Muito alto`)
+      }
+    }
+    // Pares repetidos ficam sobrepostos na matriz de risco do design.
+    const pairs = probs
+      .slice(0, impacts.length)
+      .map((line, index) => `${value(line).toLowerCase()}|${value(impacts[index]).toLowerCase()}`)
+    const repeated = pairs.filter((pair, index) => pairs.indexOf(pair) !== index)
+    for (const pair of Array.from(new Set(repeated))) {
+      problems.push(`Seção 5: dois riscos com o mesmo par probabilidade+impacto (${pair.replace('|', ' / ')})`)
+    }
+    if (!s5.some((line) => /^Sinal do mês\s*—/i.test(line))) {
+      problems.push('Seção 5: nenhum risco traz a linha "Sinal do mês —"')
+    }
+  }
+
+  // Seção 7 — os três horizontes, sem inventar um quarto.
+  const s7 = lines(7)
+  if (s7.length) {
+    const expected = [/AÇÕES IMEDIATAS/i, /AÇÕES DE CURTO PRAZO/i, /AÇÕES DE MÉDIO PRAZO/i]
+    const headings = s7.filter((line) => /^###\s/.test(line))
+    for (const [index, pattern] of expected.entries()) {
+      if (!pattern.test(headings[index] || '')) {
+        problems.push(`Seção 7: bloco ${index + 1} não é o esperado (${headings[index] || 'ausente'})`)
+      }
+    }
+    if (headings.length !== 3) problems.push(`Seção 7: ${headings.length} blocos de prazo (esperado exatamente 3)`)
+  }
+
+  // Seção 8 — exatamente CENÁRIO 01..04, cada um com resposta.
+  const s8 = lines(8)
+  if (s8.length) {
+    const labels = s8
+      .map((line) => line.match(/CENÁRIO\s+(\d{2})/i))
+      .filter(Boolean)
+      .map((match) => (match as RegExpMatchArray)[1])
+    const unique = Array.from(new Set(labels))
+    if (unique.join(',') !== '01,02,03,04') {
+      problems.push(`Seção 8: cenários encontrados [${unique.join(', ') || 'nenhum'}] (esperado 01, 02, 03, 04)`)
+    }
+    const answers = s8.filter((line) => /^\*\*Resposta recomendada:\*\*/i.test(line)).length
+    if (answers !== 4) problems.push(`Seção 8: ${answers} "Resposta recomendada:" (esperado 4)`)
+  }
+
+  return [check('report_structure', 'As seções seguem o formato do relatório-modelo', problems.length, problems)]
+}
+
 export function evaluateReportQuality(input: {
   items: ReportEvidenceItem[]
   topics: MonthlyReportTopic[]
@@ -443,6 +568,7 @@ export function evaluateReportQuality(input: {
       posture: input.narrativePosture || 'consultivo_cauteloso',
       clientName: input.clientName || 'cliente',
     }),
+    ...auditReportStructure(sections),
     ...lintEditorialDirectives(
       sections
         .filter((section) => section.content.trim())

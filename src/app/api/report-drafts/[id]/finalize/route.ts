@@ -1,11 +1,11 @@
 import { NextResponse } from 'next/server'
 import { createAdminClient as createClient } from '@/lib/supabase/server'
 import { buildQualifiedSection, reportEvidenceItems } from '@/lib/report-drafts'
+import { buildReportStructure, timelineFromEvidence } from '@/lib/report-structure'
 import {
   auditReportTraceability,
   buildMethodologyNote,
   buildMethodologySnapshot,
-  buildThematicMatrix,
   evidenceCitations,
 } from '@/lib/report-quality'
 import type { MonthlyReportTopic } from '@/types'
@@ -138,11 +138,10 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       { status: 409 }
     )
   }
-  const analyticalSections = sections.map((section) =>
-    section.section_key === 2
-      ? `${section.content.trim()}\n\n${buildThematicMatrix(topics, items)}`
-      : section.content.trim()
-  )
+  // A matriz temática saiu daqui: é auditoria de curadoria, e vive no dossiê
+  // interno (buildDossier). No relatório do cliente ela contradizia a própria
+  // seção 2, escrevendo rótulo de processo numa coluna "Sinal do mês".
+  const analyticalSections = sections.map((section) => section.content.trim())
   const mainContent = [
     buildMethodologyNote(methodology, draft.clients?.name || 'cliente', draft.applied_editorial_snapshot || null),
     ...analyticalSections,
@@ -196,6 +195,13 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       quality_snapshot: { ...latestQuality, traceability_checks: [...traceabilityChecks, ...directiveChecks] },
       methodology_snapshot: methodology,
       citation_snapshot: citations,
+      structure_snapshot: buildReportStructure({
+        sections,
+        citations,
+        methodology,
+        timeline: timelineFromEvidence(items),
+        serviceMetrics: draft.service_metrics || null,
+      }),
       narrative_posture: draft.narrative_posture || 'consultivo_cauteloso',
       applied_editorial_snapshot: draft.applied_editorial_snapshot || {},
     })

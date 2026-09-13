@@ -14,6 +14,7 @@ import {
   buildAgendaSection,
   buildMethodologyNote,
   buildMethodologySnapshot,
+  buildThematicMatrix,
   deterministicQualityFlags,
   evidenceCitations,
   inferGeographicScope,
@@ -439,20 +440,35 @@ function tableCell(value: unknown) {
     .trim()
 }
 
+const CHECKED_VERIFICATION = new Set(['fonte_original', 'documento_integral'])
+
 export function buildQualifiedSection(items: ReportEvidenceItem[], sectionNumber = 10) {
   const qualified = items.filter((item) => item.bucket === 'qualified').sort((a, b) => a.position - b.position)
   const citations = new Map(evidenceCitations(items).map((citation) => [citation.article_id, citation.code]))
+  // O marcador ↓ substitui a coluna "Fonte", que despejava o enum interno
+  // (`nao_verificada`) no entregável do cliente. Ele só aparece quando as DUAS
+  // condições valem: existe URL E a conferência chegou até a publicação original.
+  let verified = 0
   const rows = qualified.map((item) => {
     const article = item.article_snapshot
     const classification = item.classification_snapshot
     const date = article.published_at ? new Date(article.published_at).toLocaleDateString('pt-BR') : '—'
-    return `| [${citations.get(item.article_id)}] | ${tableCell(date)} | ${tableCell(article.publisher || article.source_name)} | ${tableCell(article.title)} | ${tableCell(classification.relevancia)} | ${tableCell(classification.tom)} | ${tableCell(classification.source_verification_status || 'nao_verificada')} |`
+    const checked =
+      Boolean(article.url) &&
+      CHECKED_VERIFICATION.has(String(classification.source_verification_status || ''))
+    if (checked) verified += 1
+    const title = `${tableCell(article.title)}${checked ? ' ↗' : ''}`
+    return `| ${tableCell(date)} | ${tableCell(article.publisher || article.source_name)} | ${title} | ${tableCell(classification.relevancia)} | ${tableCell(classification.tom)} | [${citations.get(item.article_id)}] |`
   })
+  // Contagem real, nunca arredondada: a nota só tem valor se o N bater com os ↗.
+  const footer = rows.length
+    ? `\n\n_Itens com ↗ tiveram a URL conferida na publicação original e são clicáveis (${verified} de ${rows.length}). As linhas restantes permanecem identificadas por veículo, título e data — sem URL fabricada._`
+    : ''
   return `## ${sectionNumber}. BASE QUALIFICADA DE EVIDÊNCIAS MONITORADAS NO MÊS\n\n${
     rows.length
-      ? ['| Evidência | Data | Veículo | Título | Relevância | Tom | Fonte |', '|---|---|---|---|---|---|---|', ...rows].join('\n')
+      ? ['| DATA | VEÍCULO | TÍTULO | RELEV. | TOM | EVID. |', '|---|---|---|---|---|---|', ...rows].join('\n')
       : '_Nenhuma evidência qualificada._'
-  }`
+  }${footer}`
 }
 
 export function buildAnnex(items: ReportEvidenceItem[]) {
@@ -488,6 +504,10 @@ export function buildDossier(
   return [
     buildMethodologyNote(methodology, clientName, editorial),
     topics.length ? buildAgendaSection(topics) : '',
+    // Sai do relatório do cliente e entra aqui: escreve rótulo de curadoria
+    // ("Cobertura confirmada", "Lacuna reconhecida") numa coluna chamada "Sinal
+    // do mês", e duas colunas de auditoria que nenhum dos relatórios-modelo tem.
+    topics.length ? buildThematicMatrix(topics, items) : '',
     buildQualifiedSection(items),
     '---',
     buildAnnex(items),

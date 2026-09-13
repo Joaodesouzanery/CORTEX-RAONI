@@ -10,8 +10,9 @@ import {
 import {
   buildMethodologyNote,
   buildMethodologySnapshot,
-  buildThematicMatrix,
+  evidenceCitations,
 } from '@/lib/report-quality'
+import { buildReportStructure, timelineFromEvidence } from '@/lib/report-structure'
 import type { MonthlyReportTopic } from '@/types'
 import { createZip } from '@/lib/zip'
 import { buildDraftChecklist } from '@/lib/report-automation'
@@ -49,11 +50,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     ).length,
   })) as MonthlyReportTopic[]
   const methodology = buildMethodologySnapshot(evidence)
-  const analyticalSections = (sections || []).map((section) =>
-    section.section_key === 2
-      ? `${section.content}\n\n${buildThematicMatrix(topics, evidence)}`
-      : section.content
-  )
+  const analyticalSections = (sections || []).map((section) => section.content)
   const safeName = `${String(draft.clients?.name || 'cliente').replace(/[^a-z0-9]+/gi, '-')}-${draft.period_month.slice(0, 7)}`
   if (format === 'claude-package' || format === 'claude-diagnostic') {
     const packageKind = format === 'claude-diagnostic' ? 'diagnostic' : 'final'
@@ -178,6 +175,22 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
       { name: '07_BRIEFING_DESIGN.md', content: design },
       { name: '08_MANIFESTO_EDITORIAL.json', content: editorialManifest(draft.applied_editorial_snapshot) },
       { name: '09_MANIFESTO_DO_PACOTE.json', content: JSON.stringify(manifest, null, 2) },
+      // O handoff de verdade para o Claude Design: destrava matriz de risco 2D,
+      // cards de estatística e linha do tempo sem reparsear prosa.
+      {
+        name: '10_ESTRUTURA_RELATORIO.json',
+        content: JSON.stringify(
+          buildReportStructure({
+            sections: sections || [],
+            citations: evidenceCitations(evidence),
+            methodology,
+            timeline: timelineFromEvidence(evidence),
+            serviceMetrics: draft.service_metrics || null,
+          }),
+          null,
+          2
+        ),
+      },
     ])
     const { data: currentSnapshot } = await supabase
       .from('monthly_report_drafts')

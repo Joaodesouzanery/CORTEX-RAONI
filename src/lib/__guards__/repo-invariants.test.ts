@@ -185,6 +185,18 @@ describe('invariantes de segurança do repositório', () => {
     expect(sql).toMatch(/RAISE EXCEPTION '034:/)
   })
 
+  it('não devolve a matriz de curadoria ao relatório do cliente', () => {
+    // buildThematicMatrix escreve rótulos de PROCESSO ("Cobertura confirmada",
+    // "Lacuna reconhecida") numa coluna chamada "Sinal do mês" — exatamente o
+    // que a seção 2 do prompt proíbe. É auditoria interna: vive no dossiê.
+    for (const rota of ['finalize', 'export']) {
+      const { text } = read(join(ROOT, 'src', 'app', 'api', 'report-drafts', '[id]', rota, 'route.ts'))
+      expect(text, `${rota} voltou a anexar a matriz temática ao entregável`).not.toContain('buildThematicMatrix')
+    }
+    const { text: dossie } = read(join(ROOT, 'src', 'lib', 'report-drafts.ts'))
+    expect(dossie, 'a matriz temática precisa continuar no dossiê interno').toContain('buildThematicMatrix(topics, items)')
+  })
+
   it('não confia em segredo ausente como autorização', () => {
     // internalAuthorized devolvia true quando CRON_SECRET não estava definido e
     // NODE_ENV !== 'production' — aberto em dev E em teste.
