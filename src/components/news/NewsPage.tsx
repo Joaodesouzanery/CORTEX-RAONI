@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, useRef } from 'react'
 import { CheckSquare, FileDown, FilePlus2, RefreshCw, Sparkles } from 'lucide-react'
 import { useViewMode } from '@/hooks/useViewMode'
 import { useArticleSelection } from '@/hooks/useArticleSelection'
@@ -25,6 +25,7 @@ import type {
 } from '@/types'
 import type { PanoramaRow } from '@/lib/panorama'
 import type { TagSuggestion } from '@/lib/ai/classify'
+import { createLatestGuard } from '@/lib/latest-request'
 
 const PAGE_SIZE = 100
 const TERMINAL_RUNS = new Set(['concluido', 'parcial', 'erro'])
@@ -56,6 +57,13 @@ export default function NewsPage() {
   const [suggesting, setSuggesting] = useState(false)
   const [busySelection, setBusySelection] = useState(false)
   const [qualificationSummary, setQualificationSummary] = useState<NewsQualificationSummary | null>(null)
+  // Trava: nenhuma busca de artigos sai antes de clientes/fontes e dos
+  // parâmetros de URL assentarem. Sem isso, a primeira requisição saía sem
+  // client_id e caía no ramo caro (count exato sobre a tabela inteira).
+  const [bootstrapped, setBootstrapped] = useState(false)
+  const [bootstrapError, setBootstrapError] = useState<string | null>(null)
+  const articlesGuard = useRef(createLatestGuard())
+  const inFlight = useRef<AbortController | null>(null)
 
   const sourceNames = useMemo(() => sources.filter((source) => source.active).map((source) => source.name), [sources])
   const activeSourceId = useMemo(
@@ -123,12 +131,22 @@ export default function NewsPage() {
   }
 
   async function loadArticles(reset = true) {
+    // Aborta a busca anterior e abre um token. Toda escrita de estado abaixo é
+    // precedida de `isCurrent`: sem isso, a requisição que falhou sobrescrevia
+    // a que deu certo, e a tela mostrava erro com os artigos já carregados.
+    if (reset) inFlight.current?.abort()
+    const controller = new AbortController()
+    if (reset) inFlight.current = controller
+    const token = articlesGuard.current.begin()
+    const current = () => articlesGuard.current.isCurrent(token)
+
     if (reset) setLoading(true)
     else setLoadingMore(true)
     try {
       const cursor = reset ? null : nextCursor
-      const res = await fetch(`/api/articles?${articleQuery(cursor)}`)
+      const res = await fetch(`/api/articles?${articleQuery(cursor)}`, { signal: controller.signal })
       const data = (await res.json().catch(() => null)) as PaginatedArticles | { error?: string } | null
+      if (!current()) return
       if (!res.ok || !data || !('items' in data)) {
         throw new Error((data && 'error' in data && data.error) || 'Falha ao carregar notícias.')
       }
@@ -142,6 +160,7 @@ export default function NewsPage() {
         setTagsById(tagMap)
         clearAll()
         await loadQualificationSummary()
+        if (!current()) return
       } else {
         setTagsById((previous) => {
           const next = new Map(previous)
@@ -150,20 +169,30 @@ export default function NewsPage() {
         })
       }
     } catch (error) {
+      // Requisição cancelada nunca vira erro na tela nem toast.
+      if (error instanceof Error && error.name === 'AbortError') return
+      if (!current()) return
       const message = error instanceof Error ? error.message : 'Falha ao carregar notícias.'
       setLoadError(message)
       toast({ title: 'Falha ao carregar notícias', description: message, variant: 'destructive' })
     } finally {
-      setLoading(false)
-      setLoadingMore(false)
+      if (current()) {
+        setLoading(false)
+        setLoadingMore(false)
+      }
     }
   }
 
   useEffect(() => {
-    Promise.all([
-      fetch('/api/clients?active=true').then((res) => res.json()),
-      fetch('/api/sources').then((res) => res.json()),
-    ])
+    // `.then(res => res.json())` sem conferir `res.ok` é o que tornava um 500
+    // indistinguível de uma lista vazia: um corpo `{error}` falha no
+    // Array.isArray abaixo e vira [] sem sinal nenhum.
+    const readJson = async (url: string) => {
+      const res = await fetch(url)
+      if (!res.ok) throw new Error(`${url} respondeu HTTP ${res.status}`)
+      return res.json()
+    }
+    Promise.all([readJson('/api/clients?active=true'), readJson('/api/sources')])
       .then(([clientRows, sourceRows]) => {
         const clientList = Array.isArray(clientRows) ? (clientRows as Client[]) : []
         setClients(clientList)
@@ -178,15 +207,22 @@ export default function NewsPage() {
           if (client && params.get('origin') === 'manual') setManualOnly(true)
         }
       })
-      .catch(() => {
+      .catch((error) => {
+        // Antes isto engolia tudo em silêncio: /api/clients quebrado ficava
+        // indistinguível de "nenhum cliente cadastrado".
         setClients([])
         setSources([])
+        setBootstrapError(
+          error instanceof Error ? error.message : 'Não foi possível carregar clientes e fontes.'
+        )
       })
+      .finally(() => setBootstrapped(true))
   }, [])
 
   useEffect(() => {
+    if (!bootstrapped) return
     loadArticles(true)
-  }, [activeClient?.id, activeSourceId, activeStatus, manualOnly, activePeriod, dateFrom, dateTo])
+  }, [bootstrapped, activeClient?.id, activeSourceId, activeStatus, manualOnly, activePeriod, dateFrom, dateTo])
 
   async function processRun(runId: string): Promise<FetchRun> {
     let latest: FetchRun | null = null
@@ -365,6 +401,10 @@ export default function NewsPage() {
         <div>
           <h1 className="text-5xl font-light tracking-tight">As últimas notícias</h1>
           <p className="mt-1 text-xs text-gray-400">
+            {/* Sem cliente a contagem do servidor é estimada (o count exato varria
+                a tabela inteira). O ≈ é obrigatório: número sem procedência
+                declarada é o que a regra de métrica honesta proíbe. */}
+            {activeClient ? '' : '≈ '}
             {total.toLocaleString('pt-BR')} publicações no filtro · carregadas {articles.length}
           </p>
         </div>
@@ -516,10 +556,12 @@ export default function NewsPage() {
 
       {loading ? (
         <div className="py-24 text-center text-gray-400">Carregando notícias…</div>
-      ) : loadError ? (
+      ) : loadError || bootstrapError ? (
         <div className="py-24 text-center">
-          <p className="text-lg text-red-600">Não foi possível carregar as notícias.</p>
-          <p className="mx-auto mt-2 max-w-xl break-words text-sm text-red-500">{loadError}</p>
+          <p className="text-lg text-red-600">
+            {bootstrapError ? 'Não foi possível carregar clientes e fontes.' : 'Não foi possível carregar as notícias.'}
+          </p>
+          <p className="mx-auto mt-2 max-w-xl break-words text-sm text-red-500">{bootstrapError || loadError}</p>
         </div>
       ) : !articles.length ? (
         <div className="py-24 text-center text-gray-400">Nenhuma publicação encontrada no filtro.</div>

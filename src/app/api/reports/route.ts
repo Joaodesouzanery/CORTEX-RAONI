@@ -3,6 +3,7 @@ import { createAdminClient as createClient } from '@/lib/supabase/server'
 import { generateReport } from '@/lib/ai/claude'
 import { reportCreateSchema, formatZodError } from '@/lib/validation'
 import type { Article } from '@/types'
+import { selectWithOptionalColumns } from '@/lib/pg-columns'
 
 export const dynamic = 'force-dynamic'
 // Hobby caps at 60s. The single-shot path below only runs for mock/local; the
@@ -10,27 +11,44 @@ export const dynamic = 'force-dynamic'
 // the assembled `content` here (no AI call, fast save).
 export const maxDuration = 60
 
+// O que a lista de Relatórios realmente lê. Nunca inclui `content`, que é
+// TEXT NOT NULL e pode ser enorme.
+const REQUIRED_COLUMNS = 'id, prompt, article_ids, created_at, client_id, clients(name, logo_url)'
+// Tudo que veio em migrations posteriores. Some uma a uma se o banco estiver
+// atrás; o fallback anterior tolerava só as três últimas, e qualquer coluna da
+// 026 faltando derrubava a rota — que a lista renderizava como "vazio".
+const OPTIONAL_COLUMNS = [
+  'metadata',
+  'draft_id',
+  'period_month',
+  'version',
+  'lead_article_id',
+  'brand_snapshot',
+  'agenda_snapshot',
+  'quality_snapshot',
+  'methodology_snapshot',
+  'citation_snapshot',
+  'narrative_posture',
+]
+
 export async function GET() {
   const supabase = createClient()
-  const result = await supabase
-    .from('reports')
-    .select('id, prompt, article_ids, created_at, metadata, client_id, draft_id, period_month, version, lead_article_id, brand_snapshot, agenda_snapshot, quality_snapshot, methodology_snapshot, citation_snapshot, narrative_posture, clients(name, logo_url)')
-    .order('created_at', { ascending: false })
-  if (
-    result.error?.message.includes('methodology_snapshot') ||
-    result.error?.message.includes('citation_snapshot') ||
-    result.error?.message.includes('narrative_posture')
-  ) {
-    const fallback = await supabase
-      .from('reports')
-      .select('id, prompt, article_ids, created_at, metadata, client_id, draft_id, period_month, version, lead_article_id, brand_snapshot, clients(name, logo_url)')
-      .order('created_at', { ascending: false })
-    if (fallback.error) return NextResponse.json({ error: fallback.error.message }, { status: 500 })
-    return NextResponse.json(fallback.data)
-  }
-  const { data, error } = result
+  const { data, error, dropped } = await selectWithOptionalColumns(
+    REQUIRED_COLUMNS,
+    OPTIONAL_COLUMNS,
+    // `select` é montado em runtime, então o supabase-js não infere a forma da
+    // linha e devolve GenericStringError[]. Cast no estilo já usado no repo.
+    async (select) =>
+      (await supabase.from('reports').select(select).order('created_at', { ascending: false })) as unknown as {
+        data: unknown
+        error: { message: string } | null
+      }
+  )
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
-  return NextResponse.json(data)
+  // Degradação declarada, não silenciosa: se colunas sumiram, quem consome
+  // sabe disso pelo header em vez de receber campos vazios sem explicação.
+  const headers = dropped.length ? { 'x-degraded-columns': dropped.join(',') } : undefined
+  return NextResponse.json(data, { headers })
 }
 
 export async function POST(req: Request) {

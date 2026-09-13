@@ -1,5 +1,5 @@
 // Section groups for the report's sectioned generation. Pure data (no server
-// deps) so both the server (claude.ts) and the client (ReportBuilder) can import
+// deps) so both the server (claude.ts) and the client can import
 // it — the client needs the count/labels to drive the progress UI.
 //
 // The nine analytical sections are produced one group at a time so each API

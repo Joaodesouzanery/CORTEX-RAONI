@@ -2,6 +2,10 @@ import { NextResponse } from 'next/server'
 import { createAdminClient as createClient } from '@/lib/supabase/server'
 
 export const dynamic = 'force-dynamic'
+// Sem isto a rota rodava no default da plataforma (~10s) e o ramo sem
+// client_id — count exato sobre a tabela inteira — estourava com 504 em HTML,
+// que o cliente lia como "Falha ao carregar notícias". 29 outras rotas já têm.
+export const maxDuration = 60
 
 type JoinedArticle = Record<string, unknown> & {
   article_provenance?: Array<{ sources?: unknown }>
@@ -176,14 +180,24 @@ export async function GET(req: Request) {
     const provenanceJoin = sourceId
       ? 'article_provenance!inner(source_id, sources(id, name, categoria, is_general))'
       : 'article_provenance(source_id, sources(id, name, categoria, is_general))'
+    // `count: 'estimated'` e não 'exact': sem client_id a contagem exata varre a
+    // tabela inteira e é a parte mais cara da requisição. O PostgREST devolve o
+    // número exato abaixo de um limiar e a estimativa do planejador acima dele,
+    // então o caso pequeno não muda. A contagem exata fica no ramo COM cliente,
+    // que é filtrado e é o número que o operador de fato lê no Panorama.
     let query = supabase
       .from('articles')
       .select(
         `id, source_id, title, url, image_url, excerpt, published_at, fetched_at, publisher, sources(name, categoria, is_general), ${provenanceJoin}`,
-        { count: 'exact' }
+        { count: 'estimated' }
       )
       .order('published_at', { ascending: false, nullsFirst: false })
       .range(offset, offset + limit - 1)
+    // Sem cliente e sem janela ("Todos" manda período nenhum), a consulta
+    // varreria o acervo inteiro. 30 dias é o mesmo padrão que a tela usa.
+    if (!cutoff && !publishedBefore) {
+      cutoff = new Date(Date.now() - 30 * 86400000).toISOString()
+    }
     if (cutoff) query = query.gte('published_at', cutoff)
     if (publishedBefore) query = query.lte('published_at', publishedBefore)
     if (search) query = query.ilike('title', `%${search}%`)
@@ -201,14 +215,19 @@ export async function GET(req: Request) {
       }
     })
     const total = count || 0
+    // Paginação derivada do tamanho da página, não do total: com contagem
+    // estimada, `offset + items.length < total` erraria. Custa no máximo uma
+    // página final vazia; em troca o cursor fica correto sempre.
+    const hasMore = items.length === limit
     return NextResponse.json({
       items,
       total,
-      next_cursor: offset + items.length < total ? String(offset + items.length) : null,
+      total_estimated: true,
+      next_cursor: hasMore ? String(offset + items.length) : null,
       coverage: {
         start: cutoff,
         end: publishedBefore || new Date().toISOString(),
-        complete: offset + items.length >= total,
+        complete: !hasMore,
       },
     })
   }
