@@ -2,6 +2,8 @@ import Parser from 'rss-parser'
 import { BROWSER_USER_AGENT, FETCH_TIMEOUTS } from './constants'
 import { safeExternalUrl } from '@/lib/url'
 import { readCappedText, safeFetch } from '@/lib/safe-fetch'
+import { isGoogleNews, resolveGoogleNewsUrl } from './extract'
+import { pickImageCandidate } from './article-image'
 
 const parser = new Parser({
   customFields: {
@@ -123,40 +125,52 @@ export function getMediaUrl(field: MediaValue | MediaValue[] | null | undefined)
 // Fetch the article page and extract its lead image. Follows redirects (so it
 // works for Google News redirect links, landing on the real publisher page) and
 // tries several metadata tags before falling back to the first in-content image.
-export async function fetchOgImage(articleUrl: string): Promise<string | null> {
+export async function fetchOgImage(
+  articleUrl: string
+): Promise<{ image: string | null; resolvedUrl: string | null }> {
   try {
-    const res = await safeFetch(articleUrl, {
+    // O link do Google News redireciona para SI MESMO — o salto real é por
+    // JavaScript. Buscá-lo direto devolvia a página do Google, cujo og:image é
+    // o MESMO logo para todo artigo. Resolver antes é o que faz a diferença
+    // entre a foto do veículo e o logo do Google gravado para sempre.
+    let target = articleUrl
+    let resolvedUrl: string | null = null
+    if (isGoogleNews(articleUrl)) {
+      const real = await resolveGoogleNewsUrl(articleUrl, 5000)
+      if (!real) return { image: null, resolvedUrl: null }
+      target = real
+      resolvedUrl = real
+    }
+
+    const res = await safeFetch(target, {
       headers: { 'User-Agent': BROWSER_USER_AGENT },
       timeoutMs: FETCH_TIMEOUTS.ogImage,
     })
-    if (!res.ok) return null
-    const finalUrl = res.url || articleUrl // after any redirects (Google News → outlet)
+    if (!res.ok) return { image: null, resolvedUrl }
+    const finalUrl = res.url || target
     const html = await readCappedText(res)
     const { load } = await import('cheerio')
     const $ = load(html)
 
-    const candidate =
-      $('meta[property="og:image"]').attr('content') ||
-      $('meta[property="og:image:url"]').attr('content') ||
-      $('meta[property="og:image:secure_url"]').attr('content') ||
-      $('meta[name="twitter:image"]').attr('content') ||
-      $('meta[name="twitter:image:src"]').attr('content') ||
-      $('link[rel="image_src"]').attr('href') ||
-      $('meta[itemprop="image"]').attr('content') ||
-      extractFirstImage($.html()) ||
-      null
-    if (!candidate) return null
-
-    let img = candidate.trim()
-    if (img.startsWith('//')) img = 'https:' + img
-    if (img.startsWith('http')) return img
-    try {
-      return new URL(img, finalUrl).href
-    } catch {
-      return null
-    }
+    // Ordem preservada, mas agora o PRIMEIRO NÃO-GENÉRICO vence. Em página
+    // gov.br o og:image é o brasão: antes ele ganhava e a foto do corpo nunca
+    // era alcançada.
+    const image = pickImageCandidate(
+      [
+        $('meta[property="og:image"]').attr('content'),
+        $('meta[property="og:image:url"]').attr('content'),
+        $('meta[property="og:image:secure_url"]').attr('content'),
+        $('meta[name="twitter:image"]').attr('content'),
+        $('meta[name="twitter:image:src"]').attr('content'),
+        $('link[rel="image_src"]').attr('href'),
+        $('meta[itemprop="image"]').attr('content'),
+        extractFirstImage($.html()),
+      ],
+      finalUrl
+    )
+    return { image, resolvedUrl }
   } catch {
-    return null
+    return { image: null, resolvedUrl: null }
   }
 }
 
@@ -201,15 +215,17 @@ export async function fetchRSS(feedUrl: string): Promise<FetchedArticle[]> {
   }).filter((a) => a.title?.trim() && a.url?.trim())
 
   // OG image fallback for articles without any image from RSS (up to 30 per feed).
-  // Skip Google News items: their links are redirects, so OG fetching is useless
-  // and just adds latency.
-  const isGoogleNews = feedUrl.includes('news.google.com')
-  if (!isGoogleNews) {
+  // Feeds do Google News ficam de fora AQUI de propósito: resolver o link real
+  // custa 1-2 requisições extras por item e /api/fetch-runs/[id]/process roda
+  // com maxDuration 45. A resolução acontece no backfill-images, que o workflow
+  // já chama 3x por ciclo logo depois da coleta.
+  const isGoogleNewsFeed = feedUrl.includes('news.google.com')
+  if (!isGoogleNewsFeed) {
     const missing = articles.filter((a) => !a.image_url)
     if (missing.length > 0) {
       await Promise.allSettled(
         missing.slice(0, 30).map(async (a) => {
-          a.image_url = await fetchOgImage(a.url)
+          a.image_url = (await fetchOgImage(a.url)).image
         })
       )
     }

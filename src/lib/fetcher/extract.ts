@@ -11,7 +11,7 @@ import { readCappedText, safeFetch } from '@/lib/safe-fetch'
 
 const GN_HOST = 'news.google.'
 
-function isGoogleNews(link: string): boolean {
+export function isGoogleNews(link: string): boolean {
   try {
     return new URL(link).hostname.includes(GN_HOST)
   } catch {
@@ -126,7 +126,7 @@ export async function resolveGoogleNewsUrl(link: string, timeoutMs = 5000): Prom
  * paragraph container, and join the paragraph text. Returns null if nothing
  * substantial is found.
  */
-async function extractMainText(html: string): Promise<string | null> {
+export async function extractMainText(html: string): Promise<string | null> {
   const { load } = await import('cheerio')
   const $ = load(html)
   $('script,style,noscript,nav,header,footer,aside,form,figure,figcaption,iframe,svg').remove()
@@ -166,13 +166,26 @@ async function extractMainText(html: string): Promise<string | null> {
  * text. Google News items that can't be resolved return null so the caller keeps
  * the title/excerpt instead of garbage. Bounded by `timeoutMs` per fetch.
  */
-export async function fetchArticleText(link: string, timeoutMs = 7000): Promise<string | null> {
+/**
+ * Busca o documento do veículo, resolvendo o link do Google News quando for o
+ * caso, e devolve o HTML BRUTO junto da URL final.
+ *
+ * Existe porque `fetchArticleText` baixava esse HTML e o descartava depois de
+ * extrair o texto — enquanto o backfill de imagens fazia a MESMA viagem de
+ * novo, do zero. Quem já tem o HTML na mão pode tirar a imagem de graça.
+ */
+export async function fetchArticleDocument(
+  link: string,
+  timeoutMs = 7000
+): Promise<{ html: string; finalUrl: string; resolvedUrl: string | null } | null> {
   if (!link) return null
   let target = link
+  let resolvedUrl: string | null = null
   if (isGoogleNews(link)) {
     const real = await resolveGoogleNewsUrl(link, Math.min(timeoutMs, 5000))
     if (!real) return null
     target = real
+    resolvedUrl = real
   }
   try {
     // `target` pode vir do batchexecute do Google News, ou seja, é decidido pela
@@ -185,8 +198,14 @@ export async function fetchArticleText(link: string, timeoutMs = 7000): Promise<
     // Guard against binary (images/PDF): only parse real HTML, never return
     // garbage extracted from non-text bytes.
     if (!/html/i.test(res.headers.get('content-type') || '')) return null
-    return await extractMainText(await readCappedText(res))
+    return { html: await readCappedText(res), finalUrl: res.url || target, resolvedUrl }
   } catch {
     return null
   }
+}
+
+export async function fetchArticleText(link: string, timeoutMs = 7000): Promise<string | null> {
+  const doc = await fetchArticleDocument(link, timeoutMs)
+  if (!doc) return null
+  return extractMainText(doc.html)
 }

@@ -2,6 +2,7 @@ import * as cheerio from 'cheerio'
 import type { FetchedArticle } from './rss'
 import { BROWSER_USER_AGENT, FETCH_TIMEOUTS } from './constants'
 import { readCappedText, safeFetch } from '@/lib/safe-fetch'
+import { pickImageCandidate } from './article-image'
 
 export async function scrapeOpenGraph(pageUrl: string): Promise<FetchedArticle | null> {
   try {
@@ -23,7 +24,9 @@ export async function scrapeOpenGraph(pageUrl: string): Promise<FetchedArticle |
     return {
       title: get('og:title') || $('title').text() || '',
       url: pageUrl,
-      image_url: get('og:image'),
+      // Fonte `scrape` aponta para páginas institucionais (gov.br, sindicatos),
+      // onde og:image é o brasão/logo — não a foto da matéria.
+      image_url: pickImageCandidate([get('og:image'), get('twitter:image')], res.url || pageUrl),
       excerpt: get('og:description'),
       content: null,
       published_at: get('article:published_time'),

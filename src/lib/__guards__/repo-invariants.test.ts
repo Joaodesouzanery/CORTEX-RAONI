@@ -119,6 +119,56 @@ describe('invariantes de segurança do repositório', () => {
     expect(offenders, 'passe { maxOutputLength } — o size do cabeçalho ZIP não é confiável').toEqual([])
   })
 
+  it('nao grava image_url sem passar por isGenericImage', () => {
+    // O backfill gravava o logo do Google News como foto de todo artigo vindo
+    // de la e, como filtra `.is('image_url', null)`, o artigo ficava excluido
+    // de nova tentativa PARA SEMPRE. A escolha tem de passar por
+    // pickImageCandidate/isGenericImage, ou trazer justificativa explicita.
+    const offenders: string[] = []
+    for (const { path, text } of sourceFiles.map(read)) {
+      if (path.endsWith('article-image.ts')) continue
+      const lines = text.split('\n')
+      lines.forEach((line, index) => {
+        const m = line.match(/image_url:\s*(.+?),?\s*$/)
+        if (!m) return
+        const valor = m[1].trim()
+        // `null` explicito e copia de um valor ja existente sao seguros; o que
+        // importa e a escrita de um valor BUSCADO agora.
+        // Copia de um valor ja existente (com ou sem fallback para null).
+        if (valor === 'null' || /^[\w.?[\]']+\.image_url(\s*\|\|\s*null)?$/.test(valor)) return
+        if (/^string \| null$/.test(valor)) return // declaracao de tipo
+        const janela = lines.slice(Math.max(0, index - 4), index + 1).join('\n')
+        if (
+          janela.includes('pickImageCandidate') ||
+          janela.includes('isGenericImage') ||
+          janela.includes('generic-image-ok')
+        ) {
+          return
+        }
+        if (text.includes('pickImageCandidate') || text.includes('isGenericImage')) return
+        offenders.push(`${path}:${index + 1}: ${valor.slice(0, 60)}`)
+      })
+    }
+    expect(
+      offenders,
+      'use pickImageCandidate de @/lib/fetcher/article-image, ou justifique com // generic-image-ok:'
+    ).toEqual([])
+  })
+
+  it('o caminho de imagem nunca busca um link news.google.com direto', () => {
+    // O link do Google News redireciona para si mesmo; buscá-lo direto devolve
+    // a pagina do Google, cujo og:image e o mesmo logo para todos os artigos.
+    // Quem chama fetchOgImage tem de resolver a URL real antes.
+    const offenders: string[] = []
+    for (const { path, text } of sourceFiles.map(read)) {
+      if (!text.includes('fetchOgImage')) continue
+      if (path.endsWith('rss.ts')) continue // a definicao resolve internamente
+      const resolve = text.includes('resolved_url') || text.includes('resolveGoogleNewsUrl')
+      if (!resolve) offenders.push(path)
+    }
+    expect(offenders, 'resolva a URL real antes de buscar imagem de link do Google News').toEqual([])
+  })
+
   it('a migration 034 nao tem guard de pre-condicao que a impeca de rodar', () => {
     // A 034 abortava com RAISE EXCEPTION quando o cliente ANTAQ nao existia,
     // exigindo um passo manual na UI antes do SQL. Ela agora cria o cliente
