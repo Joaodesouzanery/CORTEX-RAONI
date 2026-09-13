@@ -38,6 +38,7 @@ export interface AlertThresholds {
   negativeMin: number // ≥ this many neg/crítico items → alert
   negativeHigh: number // ≥ this many → severity "alta"
   topItems: number // items to attach per alert (for the digest)
+  altaMin?: number // minimum high-relevance items before the signal fires
 }
 
 export const DEFAULT_THRESHOLDS: AlertThresholds = {
@@ -46,9 +47,88 @@ export const DEFAULT_THRESHOLDS: AlertThresholds = {
   negativeMin: 3,
   negativeHigh: 6,
   topItems: 5,
+  altaMin: 1,
 }
 
+/**
+ * Limiares da faixa "Sinais" dentro de Notícias.
+ *
+ * O piso do e-mail para alta relevância é 1 porque o digest é um resumo diário
+ * — lá faz sentido listar tudo. Numa faixa permanente na tela, disparar com um
+ * único item significa estar sempre acesa, e painel sempre aceso é painel que
+ * ninguém lê. DEFAULT_THRESHOLDS fica intocado: o e-mail não muda.
+ */
+export const PANEL_THRESHOLDS: AlertThresholds = { ...DEFAULT_THRESHOLDS, altaMin: 3 }
+
 const isNegative = (a: AlertArticle) => a.tom === 'negativo' || a.tom === 'critico'
+
+/**
+ * Decide the alerts for ONE client's recent window.
+ * @param recent items in the alert window (e.g. last 24h), already client-relevant, each with tom/relevância.
+ * @param baselineDailyAvg average daily count of relevant items over the baseline window.
+ */
+export interface AlertCounts {
+  total: number
+  negativos: number
+  alta: number
+}
+
+/**
+ * Mesmas três regras, a partir de CONTAGENS em vez da lista de artigos.
+ *
+ * Existe para a faixa "Sinais" em Notícias, que tem os totais calculados no
+ * SERVIDOR sobre o filtro inteiro (via /api/articles/summary) — números
+ * melhores que os da página carregada. Devolve `items: []`; `renderDigestText`
+ * já tolera isso, então o botão "Copiar resumo" funciona sem código novo.
+ *
+ * `computeAlerts` delega para cá: um conjunto de regras, um conjunto de
+ * mensagens, um lugar para mudar.
+ */
+export function computeAlertsFromCounts(
+  counts: AlertCounts,
+  baselineDailyAvg: number,
+  th: AlertThresholds = DEFAULT_THRESHOLDS,
+  itemsByType?: { pico?: AlertArticle[]; negativos?: AlertArticle[]; alta?: AlertArticle[] }
+): Alert[] {
+  const alerts: Alert[] = []
+  const take = (list: AlertArticle[] | undefined) => (list || []).slice(0, th.topItems)
+
+  // 1) Volume spike vs. the client's own baseline.
+  const spikeFloor = Math.max(th.spikeMinItems, Math.ceil(baselineDailyAvg * th.spikeMultiplier))
+  if (counts.total >= spikeFloor) {
+    alerts.push({
+      type: 'pico_volume',
+      severity: counts.total >= spikeFloor * 1.5 ? 'alta' : 'media',
+      message: `Pico de cobertura: ${counts.total} itens no período (baseline ~${baselineDailyAvg.toFixed(1)}/dia).`,
+      count: counts.total,
+      items: take(itemsByType?.pico),
+    })
+  }
+
+  // 2) Negative/critical sentiment — the reputational-risk signal.
+  if (counts.negativos >= th.negativeMin) {
+    alerts.push({
+      type: 'sentimento_negativo',
+      severity: counts.negativos >= th.negativeHigh ? 'alta' : 'media',
+      message: `${counts.negativos} ${counts.negativos === 1 ? 'item' : 'itens'} de tom negativo/crítico no período.`,
+      count: counts.negativos,
+      items: take(itemsByType?.negativos),
+    })
+  }
+
+  // 3) High-relevance items — worth a look regardless of tone.
+  if (counts.alta >= (th.altaMin ?? 1)) {
+    alerts.push({
+      type: 'alta_relevancia',
+      severity: 'info',
+      message: `${counts.alta} ${counts.alta === 1 ? 'item' : 'itens'} de alta relevância no período.`,
+      count: counts.alta,
+      items: take(itemsByType?.alta),
+    })
+  }
+
+  return alerts
+}
 
 /**
  * Decide the alerts for ONE client's recent window.
@@ -60,45 +140,14 @@ export function computeAlerts(
   baselineDailyAvg: number,
   th: AlertThresholds = DEFAULT_THRESHOLDS
 ): Alert[] {
-  const alerts: Alert[] = []
-
-  // 1) Volume spike vs. the client's own baseline.
-  const spikeFloor = Math.max(th.spikeMinItems, Math.ceil(baselineDailyAvg * th.spikeMultiplier))
-  if (recent.length >= spikeFloor) {
-    alerts.push({
-      type: 'pico_volume',
-      severity: recent.length >= spikeFloor * 1.5 ? 'alta' : 'media',
-      message: `Pico de cobertura: ${recent.length} itens no período (baseline ~${baselineDailyAvg.toFixed(1)}/dia).`,
-      count: recent.length,
-      items: recent.slice(0, th.topItems),
-    })
-  }
-
-  // 2) Negative/critical sentiment — the reputational-risk signal.
-  const neg = recent.filter(isNegative)
-  if (neg.length >= th.negativeMin) {
-    alerts.push({
-      type: 'sentimento_negativo',
-      severity: neg.length >= th.negativeHigh ? 'alta' : 'media',
-      message: `${neg.length} ${neg.length === 1 ? 'item' : 'itens'} de tom negativo/crítico no período.`,
-      count: neg.length,
-      items: neg.slice(0, th.topItems),
-    })
-  }
-
-  // 3) High-relevance items — worth a look regardless of tone.
+  const negativos = recent.filter(isNegative)
   const alta = recent.filter((a) => a.relevancia === 'alta')
-  if (alta.length >= 1) {
-    alerts.push({
-      type: 'alta_relevancia',
-      severity: 'info',
-      message: `${alta.length} ${alta.length === 1 ? 'item' : 'itens'} de alta relevância no período.`,
-      count: alta.length,
-      items: alta.slice(0, th.topItems),
-    })
-  }
-
-  return alerts
+  return computeAlertsFromCounts(
+    { total: recent.length, negativos: negativos.length, alta: alta.length },
+    baselineDailyAvg,
+    th,
+    { pico: recent, negativos, alta }
+  )
 }
 
 export function hasAlerts(digests: ClientDigest[]): boolean {

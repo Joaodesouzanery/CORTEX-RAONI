@@ -10,6 +10,7 @@ import SourceFilterBar from './SourceFilterBar'
 import ArticleCardGrid from './ArticleCardGrid'
 import ArticleListView from './ArticleListView'
 import PanoramaPanel from './PanoramaPanel'
+import SignalsStrip from './SignalsStrip'
 import type { TagPatch } from './TagControls'
 import ClippingPdfButton from '@/components/report/ClippingPdfButton'
 import { Button } from '@/components/ui/button'
@@ -42,7 +43,12 @@ export default function NewsPage() {
   const [loadError, setLoadError] = useState<string | null>(null)
   const [fetching, setFetching] = useState(false)
   const [fetchRun, setFetchRun] = useState<FetchRun | null>(null)
-  const [activeSource, setActiveSource] = useState<string | null>(null)
+  // Guarda o ID, não o nome: o `find` por nome quebrava com fontes homônimas.
+  const [activeSourceId, setActiveSourceId] = useState<string | null>(null)
+  const [search, setSearch] = useState('')
+  const [debouncedSearch, setDebouncedSearch] = useState('')
+  const [directOnly, setDirectOnly] = useState(false)
+  const [clientLinks, setClientLinks] = useState<Map<string, { priority: number; is_thematic: boolean }> | null>(null)
   const [activePeriod, setActivePeriod] = useState<number | null>(30)
   const [dateFrom, setDateFrom] = useState('')
   const [dateTo, setDateTo] = useState('')
@@ -65,11 +71,6 @@ export default function NewsPage() {
   const articlesGuard = useRef(createLatestGuard())
   const inFlight = useRef<AbortController | null>(null)
 
-  const sourceNames = useMemo(() => sources.filter((source) => source.active).map((source) => source.name), [sources])
-  const activeSourceId = useMemo(
-    () => sources.find((source) => source.name === activeSource)?.id || null,
-    [sources, activeSource]
-  )
   const scores = useMemo(() => {
     if (!activeClient) return null
     return new Map(articles.map((article) => [article.id, article.tag?.match_score || 0]))
@@ -110,6 +111,9 @@ export default function NewsPage() {
     if (activePeriod) query.set('days', String(activePeriod))
     if (dateFrom) query.set('published_after', new Date(`${dateFrom}T00:00:00-03:00`).toISOString())
     if (dateTo) query.set('published_before', new Date(`${dateTo}T23:59:59-03:00`).toISOString())
+    if (debouncedSearch.trim().length >= 2) query.set('search', debouncedSearch.trim())
+    // `direct` só existe no ramo com cliente da rota.
+    if (directOnly && activeClient) query.set('direct', 'true')
     return query
   }
 
@@ -219,10 +223,55 @@ export default function NewsPage() {
       .finally(() => setBootstrapped(true))
   }, [])
 
+  // 350 ms: evita uma varredura por tecla digitada.
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedSearch(search), 350)
+    return () => clearTimeout(timer)
+  }, [search])
+
+  // Recarrega as fontes com o vínculo do cliente ativo, para o filtro poder
+  // agrupar "Fontes deste cliente" no topo.
+  useEffect(() => {
+    if (!bootstrapped) return
+    if (!activeClient) {
+      setClientLinks(null)
+      return
+    }
+    let cancelled = false
+    fetch(`/api/sources?client_id=${activeClient.id}`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((rows) => {
+        if (cancelled || !Array.isArray(rows)) return
+        const links = new Map<string, { priority: number; is_thematic: boolean }>()
+        for (const row of rows as Array<Source & { client_sources?: Array<{ priority: number; is_thematic: boolean }> }>) {
+          const link = row.client_sources?.[0]
+          if (link) links.set(row.id, { priority: link.priority, is_thematic: link.is_thematic })
+        }
+        setClientLinks(links)
+      })
+      .catch(() => {
+        if (!cancelled) setClientLinks(null)
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [bootstrapped, activeClient?.id])
+
   useEffect(() => {
     if (!bootstrapped) return
     loadArticles(true)
-  }, [bootstrapped, activeClient?.id, activeSourceId, activeStatus, manualOnly, activePeriod, dateFrom, dateTo])
+  }, [
+    bootstrapped,
+    activeClient?.id,
+    activeSourceId,
+    activeStatus,
+    manualOnly,
+    activePeriod,
+    dateFrom,
+    dateTo,
+    debouncedSearch,
+    directOnly,
+  ])
 
   async function processRun(runId: string): Promise<FetchRun> {
     let latest: FetchRun | null = null
@@ -498,6 +547,7 @@ export default function NewsPage() {
             const client = clients.find((item) => item.id === event.target.value) || null
             setActiveClient(client)
             if (!client) setManualOnly(false)
+                setDirectOnly(false)
           }}
           className="border border-gray-300 bg-white px-2 py-1 text-xs"
         >
@@ -538,10 +588,37 @@ export default function NewsPage() {
         )}
       </div>
 
-      <SourceFilterBar sources={sourceNames} active={activeSource} onChange={setActiveSource} />
+      <div className="mb-6 flex flex-wrap items-center gap-3">
+        <SourceFilterBar
+          sources={sources}
+          activeSourceId={activeSourceId}
+          onChange={setActiveSourceId}
+          clientLinks={clientLinks}
+        />
+        {/* A rota sempre soube buscar por título e filtrar menção direta;
+            nenhum dos dois estava exposto na tela até agora. */}
+        <input
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
+          placeholder="Buscar no título…"
+          className="w-56 border border-gray-300 px-3 py-1 text-xs outline-none focus:border-black"
+        />
+        {activeClient && (
+          <button
+            onClick={() => setDirectOnly((v) => !v)}
+            className={`border px-3 py-1 text-xs uppercase tracking-widest transition-colors ${
+              directOnly ? 'border-black bg-black text-white' : 'border-gray-300 text-gray-600 hover:border-black'
+            }`}
+          >
+            Só cita o cliente
+          </button>
+        )}
+      </div>
 
       {activeClient && (
         <div>
+          {/* Sinais acima do Panorama, na mesma tela que produziu os números. */}
+          <SignalsStrip client={activeClient} summary={qualificationSummary} />
           <p className="mb-2 text-xs text-gray-500">
             Panorama calculado no servidor sobre todo o filtro, independentemente das {articles.length} matérias carregadas.
           </p>

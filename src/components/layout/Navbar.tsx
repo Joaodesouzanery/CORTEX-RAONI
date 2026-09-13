@@ -8,15 +8,23 @@ export default function Navbar() {
   const pathname = usePathname()
   if (pathname === '/') return null
 
+  // Ordem: uso diário -> ocasional -> configuração.
+  //
+  // "Preparação" (/reports/prepare) entra no lugar de Relatórios e Fechamentos:
+  // é o workspace real — destino de TODOS os links profundos do app (Painel,
+  // card de cliente, Importações, Notícias) — e estava invisível no menu,
+  // enquanto /reports era uma folha cuja única ação é subir para a Preparação e
+  // /monthly-editions não tinha nenhum link de entrada além do próprio menu.
+  // Os dois seguem alcançáveis pelos botões dentro da Preparação.
+  //
+  // Alertas saiu: virou a faixa "Sinais" dentro de Notícias.
   const links = [
     { href: '/dashboard', label: 'Painel' },
     { href: '/news', label: 'Notícias' },
-    { href: '/alerts', label: 'Alertas' },
-    { href: '/sources', label: 'Fontes' },
+    { href: '/reports/prepare', label: 'Preparação' },
     { href: '/imports', label: 'Importações' },
     { href: '/clients', label: 'Clientes' },
-    { href: '/reports', label: 'Relatórios' },
-    { href: '/monthly-editions', label: 'Fechamentos' },
+    { href: '/sources', label: 'Fontes' },
   ]
 
   return (
@@ -32,7 +40,11 @@ export default function Navbar() {
               href={link.href}
               className={cn(
                 'text-sm uppercase tracking-wider transition-colors',
-                pathname.startsWith(link.href) ? 'text-black font-semibold' : 'text-gray-500 hover:text-black'
+                // Prefixo puro acenderia "Relatórios" em /reports/prepare. Com a
+                // barra o casamento é por segmento de rota, não por string.
+                pathname === link.href || pathname.startsWith(`${link.href}/`)
+                  ? 'text-black font-semibold'
+                  : 'text-gray-500 hover:text-black'
               )}
             >
               {link.label}

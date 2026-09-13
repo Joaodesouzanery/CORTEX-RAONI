@@ -3,6 +3,7 @@ import { createAdminClient as createClient } from '@/lib/supabase/server'
 import { fetchAll } from '@/lib/report-drafts'
 import { computePanorama, type PanoramaRow } from '@/lib/panorama'
 import type { NewsQualificationSummary, SourceCategoria } from '@/types'
+import { ilikePattern } from '@/lib/ilike'
 
 export const dynamic = 'force-dynamic'
 
@@ -38,6 +39,11 @@ export async function GET(req: Request) {
     params.get('published_after') ||
     (Number.isFinite(days) && days > 0 ? new Date(Date.now() - days * 86400000).toISOString() : null)
   const before = params.get('published_before')
+  // search e direct passam a ser honrados aqui também. Sem isto, no instante em
+  // que o operador usasse qualquer um dos dois na tela, o Panorama contaria uma
+  // população DIFERENTE da lista — número sem denominador coerente.
+  const search = ilikePattern(params.get('search'))
+  const directOnly = params.get('direct') === 'true'
   const articleJoin = sourceId
     ? 'articles!inner(published_at, sources(categoria), article_provenance!inner(source_id))'
     : 'articles!inner(published_at, sources(categoria))'
@@ -58,6 +64,8 @@ export async function GET(req: Request) {
         query = query.eq('monitoring_status', status)
       }
       if (manualOnly) query = query.eq('manual_intake', true)
+      if (directOnly) query = query.eq('cita_cliente', true)
+      if (search) query = query.ilike('articles.title', search)
       return query as unknown as PromiseLike<{
         data: SummaryRow[] | null
         error: { message: string } | null

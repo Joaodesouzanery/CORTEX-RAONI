@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { createAdminClient as createClient } from '@/lib/supabase/server'
 import { fetchAll } from '@/lib/report-drafts'
 import { csvCell } from '@/lib/csv'
+import { ilikePattern } from '@/lib/ilike'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
@@ -28,6 +29,9 @@ export async function GET(req: Request) {
   const daysParam = searchParams.get('days')
   const publishedAfter = searchParams.get('published_after')
   const publishedBefore = searchParams.get('published_before')
+  // O rótulo "Exportar CSV (N)" na tela usa o total do filtro; sem honrar
+  // `search` aqui, o arquivo teria um número de linhas diferente do rótulo.
+  const search = ilikePattern(searchParams.get('search'))
 
   let cutoff: string | null = publishedAfter
   if (!cutoff && daysParam) {
@@ -62,6 +66,7 @@ export async function GET(req: Request) {
     if (cutoff) query = query.gte('articles.published_at', cutoff)
     if (publishedBefore) query = query.lte('articles.published_at', publishedBefore)
     if (sourceId) query = query.eq('articles.article_provenance.source_id', sourceId)
+    if (search) query = query.ilike('articles.title', search)
     return query as unknown as PromiseLike<{ data: ClientArticleRow[] | null; error: { message: string } | null }>
   })
 

@@ -853,7 +853,13 @@ export default function ReportPreparationPage() {
             Base integral no servidor, triagem auditável, matéria principal manual e seções editáveis.
           </p>
         </div>
-        <Link href="/reports"><Button variant="outline">Relatórios gerados</Button></Link>
+        {/* Estes dois saíram do menu principal: a Preparação é a porta de
+            entrada deles agora. Não remover sem devolvê-los ao menu — sem isto
+            /monthly-editions fica inalcançável. */}
+        <div className="flex gap-2">
+          <Link href="/reports"><Button variant="outline">Relatórios gerados</Button></Link>
+          <Link href="/monthly-editions"><Button variant="outline">Fechamentos</Button></Link>
+        </div>
       </div>
 
       <div className="border border-gray-200 p-4 mb-6">

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createAdminClient as createClient } from '@/lib/supabase/server'
+import { ilikePattern } from '@/lib/ilike'
 
 export const dynamic = 'force-dynamic'
 // Sem isto a rota rodava no default da plataforma (~10s) e o ramo sem
@@ -25,6 +26,9 @@ export async function GET(req: Request) {
   const origin = searchParams.get('origin')
   const manualOnly = origin === 'manual'
   const search = searchParams.get('search')
+  // Escapa % e _ e exige 2+ caracteres: são curingas do LIKE, e um "%a%" sobre
+  // o acervo inteiro é varredura de tabela por um caractere.
+  const searchPattern = ilikePattern(search)
   const includeContent = searchParams.get('include_content') === 'true'
   const directOnly = searchParams.get('direct') === 'true'
   const requestedLimit = parseInt(searchParams.get('limit') || (paginated ? '100' : '500'))
@@ -80,7 +84,7 @@ export async function GET(req: Request) {
         if (directOnly) query = query.eq('cita_cliente', true)
         if (cutoff) query = query.gte('articles.published_at', cutoff)
         if (publishedBefore) query = query.lte('articles.published_at', publishedBefore)
-        if (search) query = query.ilike('articles.title', `%${search}%`)
+        if (searchPattern) query = query.ilike('articles.title', searchPattern)
         if (sourceId) query = query.eq('articles.article_provenance.source_id', sourceId)
         return query
       }
@@ -200,7 +204,7 @@ export async function GET(req: Request) {
     }
     if (cutoff) query = query.gte('published_at', cutoff)
     if (publishedBefore) query = query.lte('published_at', publishedBefore)
-    if (search) query = query.ilike('title', `%${search}%`)
+    if (searchPattern) query = query.ilike('title', searchPattern)
     if (sourceId) query = query.eq('article_provenance.source_id', sourceId)
     const { data, error, count } = await query
     if (error) return NextResponse.json({ error: error.message }, { status: 500 })
@@ -242,7 +246,7 @@ export async function GET(req: Request) {
     .order('published_at', { ascending: false, nullsFirst: false })
 
   if (sourceId) query = query.eq('source_id', sourceId)
-  if (search) query = query.ilike('title', `%${search}%`)
+  if (searchPattern) query = query.ilike('title', searchPattern)
 
   // Optional period window: bounds the payload to the selected window so the row
   // limit doesn't bury older-but-in-period news. Undated articles are kept (some

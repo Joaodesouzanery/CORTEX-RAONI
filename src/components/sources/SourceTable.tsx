@@ -5,34 +5,11 @@ import { Badge } from '@/components/ui/badge'
 import SourceForm from './SourceForm'
 import type { Source } from '@/types'
 import { Pencil, Trash2, Plus, Download } from 'lucide-react'
+import SourceHealthBadge from './SourceHealthBadge'
 
 interface Props {
   sources: Source[]
   onRefresh: () => void
-}
-
-// Feed health from the last fetch, so a dead feed doesn't degrade coverage in
-// silence: item count when it returned items, orange "vazio" when it returned
-// nothing, muted "sem coleta" before the first run.
-function HealthBadge({ source }: { source: Source }) {
-  if (source.last_fetched_at == null) {
-    return <span className="text-xs text-gray-400">sem coleta</span>
-  }
-  if (source.last_fetch_error) {
-    return (
-      <Badge variant="outline" className="max-w-40 truncate text-xs text-red-600 border-red-300" title={source.last_fetch_error}>
-        ✗ {source.last_fetch_error}
-      </Badge>
-    )
-  }
-  if (!source.last_fetch_count) {
-    return (
-      <Badge variant="outline" className="text-xs text-orange-600 border-orange-300">
-        ⚠ vazio
-      </Badge>
-    )
-  }
-  return <span className="text-xs text-emerald-700 tabular-nums">{source.last_fetch_count} itens</span>
 }
 
 export default function SourceTable({ sources, onRefresh }: Props) {
@@ -95,7 +72,7 @@ export default function SourceTable({ sources, onRefresh }: Props) {
                 <Badge variant={source.active ? 'default' : 'outline'} className="text-xs">
                   {source.active ? 'Ativa' : 'Inativa'}
                 </Badge>
-                <HealthBadge source={source} />
+                <SourceHealthBadge source={source} />
                 <button onClick={() => setEditing(source)} className="p-1 hover:text-black text-gray-400 transition-colors">
                   <Pencil className="w-4 h-4" />
                 </button>
