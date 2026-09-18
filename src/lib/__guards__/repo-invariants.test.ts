@@ -185,6 +185,25 @@ describe('invariantes de segurança do repositório', () => {
     expect(sql).toMatch(/RAISE EXCEPTION '034:/)
   })
 
+  it('mantém access_mode como trava real de reprodução', () => {
+    // A coluna existia desde a 023, era escrita por cinco migrations e nunca
+    // lida como condição — enquanto o clipping reproduzia a íntegra no PDF do
+    // cliente. Estes três pontos são a trava; se algum sair, ela volta a ser
+    // metadado decorativo sem ninguém perceber.
+    const { text: archive } = read(join(ROOT, 'src', 'lib', 'archive.ts'))
+    expect(archive, 'snapshotArticle precisa consultar canReproduceIntegra').toContain('canReproduceIntegra')
+    const { text: editions } = read(join(ROOT, 'src', 'lib', 'monthly-editions.ts'))
+    expect(editions, 'a query do clipping precisa trazer access_mode').toContain('access_mode)')
+
+    // O script do PDF roda fora do bundle e duplica a frase; as duas têm de
+    // continuar idênticas, senão o PDF passa a mentir sobre o motivo.
+    const { text: repro } = read(join(ROOT, 'src', 'lib', 'reproduction.ts'))
+    const { text: pdf } = read(join(ROOT, 'scripts', 'render-monthly-clipping.mjs'))
+    const frase = repro.match(/'(Texto integral não reproduzido:[^']+)'/)?.[1]
+    expect(frase, 'REPRODUCTION_BLOCKED_NOTICE sumiu de reproduction.ts').toBeTruthy()
+    expect(pdf, 'a frase do PDF divergiu da fonte').toContain(frase as string)
+  })
+
   it('reavalia o lint estrutural no finalize, não só no botão de portões', () => {
     // O portão armazenado é validado contra `base_version`, que muda com a BASE
     // e não com o TEXTO: rodar os portões antes de gerar aprova nove seções

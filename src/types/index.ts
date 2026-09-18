@@ -226,7 +226,7 @@ export interface Article {
   published_at: string | null
   fetched_at: string
   publisher?: string | null
-  sources?: { name: string; categoria?: SourceCategoria; is_general?: boolean }
+  sources?: { name: string; categoria?: SourceCategoria; is_general?: boolean; access_mode?: AccessMode }
   provenance_sources?: Array<{
     id: string
     name: string
@@ -956,6 +956,10 @@ export interface ArticleSnapshot {
   publisher: string | null
   source_name: string | null
   source_categoria: SourceCategoria
+  /** Modo de acesso mais restritivo entre as fontes do artigo. */
+  access_mode?: AccessMode
+  /** True quando a íntegra foi suprimida por `access_mode = 'referencia'`. */
+  reproduction_blocked?: boolean
   origin_pdf?: {
     document_id: string
     page_start: number

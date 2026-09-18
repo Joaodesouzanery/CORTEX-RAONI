@@ -17,6 +17,20 @@ type ArticleWithProvenance = Article & {
   article_provenance?: Array<{ source_id: string | null }>
 }
 
+/**
+ * Modos de acesso de TODAS as fontes por onde o artigo entrou.
+ * `article_provenance` pode apontar para fonte diferente de `articles.source_id`
+ * (o mesmo texto chega por dois feeds), e a permissão de reprodução tem de ser a
+ * da fonte mais restritiva, nunca a da mais frouxa.
+ */
+function accessModesOf(article: ArticleWithProvenance, sourceModes: Map<string, string>) {
+  const modes = (article.article_provenance || [])
+    .map((row) => (row.source_id ? sourceModes.get(row.source_id) : undefined))
+    .filter((mode): mode is string => Boolean(mode))
+  const own = article.sources?.access_mode
+  return own ? [...modes, own] : modes
+}
+
 async function loadMonthArticles(
   supabase: SupabaseClient,
   clientId: string,
@@ -28,7 +42,7 @@ async function loadMonthArticles(
   for (let offset = 0; ; offset += PAGE) {
     const { data, error } = await supabase
       .from('articles')
-      .select('*, sources(name, categoria, is_general), article_provenance(source_id)')
+      .select('*, sources(name, categoria, is_general, access_mode), article_provenance(source_id)')
       .gte('published_at', start)
       .lt('published_at', end)
       .order('published_at', { ascending: false })
@@ -51,7 +65,7 @@ async function loadMonthArticles(
   for (let offset = 0; offset < importedIds.length; offset += 300) {
     const { data, error } = await supabase
       .from('articles')
-      .select('*, sources(name, categoria, is_general), article_provenance(source_id)')
+      .select('*, sources(name, categoria, is_general, access_mode), article_provenance(source_id)')
       .in('id', importedIds.slice(offset, offset + 300))
     if (error) throw new Error(error.message)
     all.push(...(((data as unknown as ArticleWithProvenance[]) || [])))
@@ -199,6 +213,18 @@ export async function createEditionForClient(
     }
   }
 
+  // Modos de acesso de todas as fontes, para resolver a proveniência múltipla.
+  // A tabela é pequena (dezenas de linhas) e a alternativa seria um embed por
+  // artigo. Falha aqui é fatal: sem os modos, a trava de reprodução ficaria
+  // cega e o clipping voltaria a copiar íntegra sem checar.
+  const { data: sourceRows, error: sourceModesError } = await supabase
+    .from('sources')
+    .select('id, access_mode')
+  if (sourceModesError) throw new Error(sourceModesError.message)
+  const sourceModes = new Map(
+    (sourceRows || []).map((row: { id: string; access_mode: string | null }) => [row.id, row.access_mode || ''])
+  )
+
   const rows = candidates.map((article) => {
     const provenanceIds = new Set([
       article.source_id,
@@ -244,11 +270,18 @@ export async function createEditionForClient(
     .maybeSingle()
   const version = (latest?.version || 0) + 1
 
+  // Calculado UMA vez e reusado nas contagens e nos itens — antes o snapshot era
+  // remontado três vezes só para contar, e uma quarta para gravar.
+  const snapshots = rows.map(({ article }) => snapshotArticle(article, accessModesOf(article, sourceModes)))
+
   const counts = {
     total: rows.length,
-    integral: rows.filter((r) => snapshotArticle(r.article).content_status === 'integral').length,
-    parcial: rows.filter((r) => snapshotArticle(r.article).content_status === 'parcial').length,
-    metadados: rows.filter((r) => snapshotArticle(r.article).content_status === 'metadados').length,
+    integral: snapshots.filter((item) => item.content_status === 'integral').length,
+    parcial: snapshots.filter((item) => item.content_status === 'parcial').length,
+    metadados: snapshots.filter((item) => item.content_status === 'metadados').length,
+    // Contagem própria: sem ela, "metadados" confundiria matéria sem texto
+    // extraído com matéria que temos e não podemos reproduzir.
+    nao_reproduzivel: snapshots.filter((item) => item.reproduction_blocked).length,
     mencoes_diretas: rows.filter((r) => r.section === 'mencao_direta').length,
     cobertura_setorial: rows.filter((r) => r.section === 'cobertura_setorial').length,
     baixa_confianca: rows.filter((r) => r.section === 'baixa_confianca').length,
@@ -268,14 +301,14 @@ export async function createEditionForClient(
   if (editionError || !edition) throw new Error(editionError?.message || 'Falha ao criar edição.')
 
   if (rows.length) {
-    const snapshots = rows.map(({ article, tag, section }, index) => ({
+    const items = rows.map(({ article, tag, section }, index) => ({
       edition_id: edition.id,
       article_id: article.id,
       position: index + 1,
       section,
       cluster_key: clusterKey(article.title, article.published_at),
       article_snapshot: {
-        ...snapshotArticle(article),
+        ...snapshots[index],
         origin_pdf: pdfOrigins.get(article.id) || null,
       },
       classification_snapshot: {
@@ -287,10 +320,10 @@ export async function createEditionForClient(
         impact_summary: tag.impact_summary,
       },
     }))
-    for (let offset = 0; offset < snapshots.length; offset += 100) {
+    for (let offset = 0; offset < items.length; offset += 100) {
       const { error: itemsError } = await supabase
         .from('monthly_edition_items')
-        .insert(snapshots.slice(offset, offset + 100))
+        .insert(items.slice(offset, offset + 100))
       if (itemsError) {
         await supabase.from('monthly_editions').delete().eq('id', edition.id)
         throw new Error(itemsError.message)

@@ -184,8 +184,20 @@ function FrontDocument({ edition, items, starts }) {
   )
 }
 
+// Espelha REPRODUCTION_BLOCKED_NOTICE de src/lib/reproduction.ts. O script roda
+// como .mjs fora do bundle do app e não importa de src/, por isso a frase é
+// duplicada aqui — o invariante em repo-invariants.test.ts mantém as duas iguais.
+const REPRODUCTION_BLOCKED_NOTICE =
+  'Texto integral não reproduzido: a fonte está cadastrada como somente referência. Consulte a publicação original pelo link.'
+
 function articleParagraphs(item) {
   const article = item.article_snapshot
+  // Bloqueio de reprodução NÃO é "texto indisponível": um diz que não podemos
+  // publicar, o outro que não conseguimos extrair. Confundir os dois esconde uma
+  // decisão jurídica atrás de uma falha técnica.
+  if (article.reproduction_blocked) {
+    return [REPRODUCTION_BLOCKED_NOTICE]
+  }
   const raw = article.content || article.excerpt || '(texto integral indisponível; consulte a referência original)'
   return String(raw)
     .split(/\n{2,}/)

@@ -1,5 +1,6 @@
 import type { Article, ArticleSnapshot, ArticleTag, ContentStatus, EditionSection, SourceCategoria } from '@/types'
 import { normalizeText } from '@/lib/relevance'
+import { canReproduceIntegra, strictestAccessMode } from '@/lib/reproduction'
 
 export async function sha256Text(value: string): Promise<string> {
   const bytes = new TextEncoder().encode(value)
@@ -179,17 +180,33 @@ export function monthBounds(period: string): { month: string; start: string; end
   return { month: `${match[1]}-${match[2]}-01`, start, end }
 }
 
-export function snapshotArticle(article: Article): ArticleSnapshot {
+export function snapshotArticle(article: Article, accessModes: Array<string | null | undefined> = []): ArticleSnapshot {
   const content = cleanArticleText(article.content)
   const categoria: SourceCategoria = article.sources?.categoria || 'imprensa'
+  // A trava do access_mode mora aqui porque este é o ÚNICO ponto do repositório
+  // que copia `articles.content` para o snapshot do clipping — o PDF que chega
+  // ao cliente. Quando a fonte é somente referência, a íntegra não é copiada:
+  // não adianta gravar e filtrar na renderização, porque o snapshot é
+  // persistido em monthly_edition_items e vaza por qualquer leitura posterior.
+  const accessMode = strictestAccessMode(
+    accessModes.length ? accessModes : [article.sources?.access_mode]
+  )
+  const reproducible = canReproduceIntegra(accessMode)
   return {
     id: article.id,
     title: article.title,
     url: article.url || null,
     image_url: article.image_url || null,
     excerpt: article.excerpt || null,
-    content: content || null,
-    content_status: article.content_status || inferContentStatus(content, article.excerpt),
+    content: reproducible ? content || null : null,
+    // `metadados` é o estado honesto: não temos texto reproduzível. Mas ele
+    // sozinho confundiria "não conseguimos extrair" com "não podemos publicar",
+    // por isso o motivo viaja junto em `reproduction_blocked`.
+    content_status: reproducible
+      ? article.content_status || inferContentStatus(content, article.excerpt)
+      : 'metadados',
+    access_mode: accessMode,
+    reproduction_blocked: !reproducible && Boolean(content),
     author: article.author || null,
     published_at: article.published_at || null,
     publisher: article.publisher || null,
