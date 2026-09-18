@@ -6,6 +6,11 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import {
+  blockedReason,
+  type PreparationAction,
+  type PreparationState,
+} from '@/lib/report-preparation-steps'
+import {
   AlertTriangle,
   CheckCircle2,
   Download,
@@ -843,6 +848,19 @@ export default function ReportPreparationPage() {
   const finalPackageReady = Boolean(
     checklist && checklist.items.filter((item) => item.key !== 'package').every((item) => item.status !== 'blocked')
   )
+  // Toda ação bloqueada passa a DIZER o motivo. Botão apagado sem razão é
+  // indistinguível de botão quebrado, e a ordem do pipeline só existia como
+  // `disabled` espalhado por quatro pontos da tela.
+  const preparationState: PreparationState = {
+    total: evidence.length,
+    triaged: counts.triaged,
+    hasLead: Boolean(draft?.lead_article_id),
+    qualityStatus: draft?.quality_status || null,
+    approved: draft?.status === 'approved',
+    checklistReady: finalPackageReady,
+    busy: Boolean(busy),
+  }
+  const whyBlocked = (action: PreparationAction) => blockedReason(action, preparationState)
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-8">
@@ -990,6 +1008,12 @@ export default function ReportPreparationPage() {
               </div>
             </div>
           ) : null}
+          {(whyBlocked('generate') || whyBlocked('finalize')) && (
+            <div className="mb-4 border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
+              <span className="font-semibold">Próximo passo:</span>{' '}
+              {whyBlocked('verify') || whyBlocked('generate') || whyBlocked('finalize')}
+            </div>
+          )}
           <div className="flex gap-2 flex-wrap mb-6">
             <Button variant="outline" onClick={refreshBase} disabled={!!busy}>
               <RefreshCw className="w-4 h-4 mr-2" />Atualizar base
@@ -998,7 +1022,12 @@ export default function ReportPreparationPage() {
               <Sparkles className="w-4 h-4 mr-2" />
               {triageProgress ? `${triageProgress.done} triadas; ${triageProgress.remaining} restantes` : 'Triar todo o universo'}
             </Button>
-            <Button variant="outline" onClick={verifyAll} disabled={!!busy || counts.triaged < evidence.length}>
+            <Button
+              variant="outline"
+              onClick={verifyAll}
+              disabled={Boolean(whyBlocked('verify'))}
+              title={whyBlocked('verify') || undefined}
+            >
               <ShieldCheck className="w-4 h-4 mr-2" />
               {verificationProgress
                 ? `${verificationProgress.done} verificadas; ${verificationProgress.remaining} restantes`
@@ -1016,7 +1045,11 @@ export default function ReportPreparationPage() {
             <Button variant="outline" onClick={() => downloadClaudePackage('diagnostic')} disabled={!!busy}>
               <Download className="w-4 h-4 mr-2" />Pacote diagnóstico
             </Button>
-            <Button onClick={() => downloadClaudePackage('final')} disabled={!!busy || !finalPackageReady}>
+            <Button
+              onClick={() => downloadClaudePackage('final')}
+              disabled={Boolean(whyBlocked('package'))}
+              title={whyBlocked('package') || undefined}
+            >
               <Download className="w-4 h-4 mr-2" />Pacote final para o Claude
             </Button>
           </div>
@@ -1425,7 +1458,11 @@ export default function ReportPreparationPage() {
 
           <div className="flex justify-between items-center mb-3">
             <h2 className="text-xl font-semibold">Seções 1–9</h2>
-            <Button onClick={generateMissing} disabled={!!busy || !draft.lead_article_id || draft.quality_status !== 'passed'}>
+            <Button
+              onClick={generateMissing}
+              disabled={Boolean(whyBlocked('generate'))}
+              title={whyBlocked('generate') || undefined}
+            >
               <Sparkles className="w-4 h-4 mr-2" />Gerar seções vazias
             </Button>
           </div>
@@ -1445,7 +1482,12 @@ export default function ReportPreparationPage() {
                     placeholder="Gere com IA ou escreva manualmente."
                   />
                   <div className="flex gap-2 mt-2">
-                    <Button size="sm" onClick={() => generateSection(section)} disabled={!!busy || !draft.lead_article_id || draft.quality_status !== 'passed'}>
+                    <Button
+                      size="sm"
+                      onClick={() => generateSection(section)}
+                      disabled={Boolean(whyBlocked('generate'))}
+                      title={whyBlocked('generate') || undefined}
+                    >
                       <Sparkles className="w-3 h-3 mr-1" />{sectionTexts[section] ? 'Regenerar' : 'Gerar'}
                     </Button>
                     <Button size="sm" variant="outline" onClick={() => saveSection(section)} disabled={!!busy || !sectionTexts[section]?.trim()}>
@@ -1469,10 +1511,19 @@ export default function ReportPreparationPage() {
               <Button variant="outline" onClick={() => downloadEvidenceCsv('qualified')} disabled={!!busy}>
                 <Download className="w-4 h-4 mr-2" />Exportar qualificadas ({counts.qualified})
               </Button>
-              <Button variant="outline" onClick={() => downloadClaudePackage('final')} disabled={!!busy || !finalPackageReady}>
+              <Button
+                variant="outline"
+                onClick={() => downloadClaudePackage('final')}
+                disabled={Boolean(whyBlocked('package'))}
+                title={whyBlocked('package') || undefined}
+              >
                 <Download className="w-4 h-4 mr-2" />Pacote final Claude
               </Button>
-              <Button onClick={() => finalize()} disabled={!!busy || draft.status === 'approved' || draft.quality_status !== 'passed'}>
+              <Button
+                onClick={() => finalize()}
+                disabled={Boolean(whyBlocked('finalize'))}
+                title={whyBlocked('finalize') || undefined}
+              >
                 <CheckCircle2 className="w-4 h-4 mr-2" />{draft.status === 'approved' ? 'Versão aprovada' : 'Finalizar versão'}
               </Button>
             </div>

@@ -3,6 +3,7 @@ import { createAdminClient as createClient } from '@/lib/supabase/server'
 import { buildQualifiedSection, reportEvidenceItems } from '@/lib/report-drafts'
 import { buildReportStructure, timelineFromEvidence } from '@/lib/report-structure'
 import {
+  auditReportStructure,
   auditReportTraceability,
   buildMethodologyNote,
   buildMethodologySnapshot,
@@ -125,13 +126,21 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     sections.map((section) => section.content).join('\n\n'),
     draft.applied_editorial_snapshot || null
   )
-  const traceabilityBlocked = [...traceabilityChecks, ...directiveChecks].filter(
+  // O lint estrutural TEM de ser reavaliado aqui, sobre as seções reais.
+  // O portão armazenado (`quality_status`) é validado só contra `base_version`,
+  // que muda quando a BASE muda — não quando o texto é gerado ou editado. Quem
+  // clica "Executar portões" antes de gerar passa com as nove seções vazias
+  // (o lint pula seção vazia de propósito, para não travar geração parcial) e
+  // esse "passed" continuaria valendo depois. Sem esta linha, a forma ditada no
+  // prompt nunca é cobrada no único ponto em que o relatório vira entregável.
+  const structureChecks = auditReportStructure(sections)
+  const traceabilityBlocked = [...traceabilityChecks, ...directiveChecks, ...structureChecks].filter(
     (check) => check.status === 'blocked'
   )
   if (traceabilityBlocked.length) {
     return NextResponse.json(
       {
-        error: 'O texto ainda possui pendências de rastreabilidade ou postura narrativa.',
+        error: 'O texto ainda possui pendências de rastreabilidade, postura narrativa ou formato.',
         code: 'TRACEABILITY_CHECK_FAILED',
         checks: traceabilityBlocked,
       },

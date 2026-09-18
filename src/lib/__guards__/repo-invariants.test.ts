@@ -185,6 +185,16 @@ describe('invariantes de segurança do repositório', () => {
     expect(sql).toMatch(/RAISE EXCEPTION '034:/)
   })
 
+  it('reavalia o lint estrutural no finalize, não só no botão de portões', () => {
+    // O portão armazenado é validado contra `base_version`, que muda com a BASE
+    // e não com o TEXTO: rodar os portões antes de gerar aprova nove seções
+    // vazias, e esse "passed" sobreviveria à geração inteira.
+    const { text } = read(join(ROOT, 'src', 'app', 'api', 'report-drafts', '[id]', 'finalize', 'route.ts'))
+    expect(text, 'o finalize precisa chamar auditReportStructure sobre as seções reais').toContain(
+      'auditReportStructure(sections)'
+    )
+  })
+
   it('não devolve a matriz de curadoria ao relatório do cliente', () => {
     // buildThematicMatrix escreve rótulos de PROCESSO ("Cobertura confirmada",
     // "Lacuna reconhecida") numa coluna chamada "Sinal do mês" — exatamente o
