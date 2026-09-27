@@ -3,6 +3,18 @@ import type { FetchedArticle } from './rss'
 import { BROWSER_USER_AGENT, FETCH_TIMEOUTS } from './constants'
 import { readCappedText, safeFetch } from '@/lib/safe-fetch'
 import { pickImageCandidate } from './article-image'
+import { rankArticleLinks } from './article-links'
+
+/**
+ * Páginas baixadas por fonte `scrape` em cada execução.
+ *
+ * Continua 12 porque o orçamento é compartilhado: `processFetchSource` dá 25 s
+ * para a fonte inteira (src/lib/fetch-run.ts) e cada página tem timeout de 10 s
+ * (FETCH_TIMEOUTS.scrapePage). O ganho de cobertura desta rodada veio de gastar
+ * melhor as 12 — ordenando por probabilidade de ser matéria — e não de subir o
+ * teto, que esbarraria no tempo antes de render item.
+ */
+const SCRAPE_PAGE_LIMIT = 12
 
 export async function scrapeOpenGraph(pageUrl: string): Promise<FetchedArticle | null> {
   try {
@@ -69,8 +81,14 @@ export async function scrapeSite(siteUrl: string): Promise<FetchedArticle[]> {
       }
     })
 
+    // Ordena ANTES de cortar. Em ordem do DOM, os 12 primeiros links de um site
+    // de notícias são o menu — a fonte gastava as 12 requisições em "Home",
+    // "Sobre" e "Categorias" e entregava duas ou três matérias, porque
+    // `isNavigationPage` só descarta DEPOIS de baixar.
     const candidates = await Promise.all(
-      articleLinks.slice(0, 12).map((link) => scrapeOpenGraph(link))
+      rankArticleLinks(articleLinks, siteUrl)
+        .slice(0, SCRAPE_PAGE_LIMIT)
+        .map((link) => scrapeOpenGraph(link))
     )
     return candidates.filter(
       (article): article is FetchedArticle => Boolean(article?.title)
