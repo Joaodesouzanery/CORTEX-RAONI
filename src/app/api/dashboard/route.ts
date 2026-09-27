@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { SOURCE_FRESHNESS_MS } from '@/lib/collection-health'
 import { createAdminClient as createClient } from '@/lib/supabase/server'
 import type { ApprovalChecklist, Client, DashboardClientSummary, Source } from '@/types'
 
@@ -226,7 +227,10 @@ export async function GET(req: Request) {
     )
 
     const sources = (sourceRows as Source[]) || []
-    const staleThreshold = now.getTime() - 8 * 60 * 60 * 1000
+    // Meta acordada: toda fonte visitada a cada 24 h. O valor literal anterior
+    // era 8 h contra um cron de 6 h — 2 h de margem, na qual um único ciclo
+    // perdido pintava todas as fontes de vermelho e escondia a causa real.
+    const staleThreshold = now.getTime() - SOURCE_FRESHNESS_MS
     const never = sources.filter((source) => !source.last_fetched_at)
     const stale = sources.filter(
       (source) =>

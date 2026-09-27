@@ -3,6 +3,18 @@ name: Fetch news
 # Vercel Hobby crons run at most once/day, so we schedule from GitHub Actions
 # (free, arbitrary frequency) and call the same public, rate-limited flow used
 # by the operator in the browser.
+#
+# HISTÓRICO (26/09/2026): a coleta ficou cinco dias parada e ninguém soube.
+# O laço abaixo usava `test "${code}" = "200"` sob `bash -e`, então UM único
+# HTTP diferente de 200 abortava o ciclo inteiro — e como os steps seguintes
+# não tinham `if: always()`, o backfill de imagens e o enrich morriam junto.
+# A função /process tem maxDuration=45; um lote lento devolve 504 e, no desenho
+# antigo, isso custava o dia inteiro de coleta.
+#
+# O run é retomável POR CONSTRUÇÃO: as fontes de um lote interrompido voltam a
+# 'pendente' após 90s (src/app/api/fetch-runs/[id]/process/route.ts). Repetir o
+# mesmo lote é idempotente — por isso agora falha de lote é tentada de novo, e
+# só três falhas SEGUIDAS desistem.
 on:
   schedule:
     - cron: '0 */6 * * *' # every 6 hours (UTC)
@@ -14,9 +26,19 @@ on:
         default: true
         type: boolean
 
+# Dois disparos simultâneos brigariam pelo índice fetch_runs_single_active_idx
+# (um único run ativo no banco inteiro). Enfileira em vez de cancelar: cancelar
+# deixaria um run 'executando' órfão, que bloqueia todos os próximos.
+concurrency:
+  group: fetch-news
+  cancel-in-progress: false
+
 jobs:
   fetch:
     runs-on: ubuntu-latest
+    # O default do GitHub é 360 min. 74 fontes em lotes de 4 levam ~20 lotes;
+    # 30 min cobre isso com folga larga e evita runner preso por horas.
+    timeout-minutes: 30
     steps:
       - name: Trigger news fetch
         shell: bash
@@ -30,37 +52,64 @@ jobs:
             -X POST \
             -H "Content-Type: application/json" \
             -d '{"trigger_type":"schedule"}' \
-            "${APP_URL%/}/api/fetch-runs")
+            "${APP_URL%/}/api/fetch-runs" || echo '000')
           echo "HTTP ${code}"
-          cat /tmp/run.json
-          test "${code}" = "200" -o "${code}" = "201"
+          cat /tmp/run.json || true
+          echo
+          if [ "${code}" != "200" ] && [ "${code}" != "201" ]; then
+            echo "Falha ao criar a execução (HTTP ${code}). Sem run, não há coleta." >&2
+            exit 1
+          fi
           run_id=$(node -e "const x=require('/tmp/run.json'); process.stdout.write(x.run?.id||'')")
           test -n "${run_id}"
+          echo "run_id=${run_id}"
 
+          # Falhas SEGUIDAS, não acumuladas: um 504 isolado no meio de vinte
+          # lotes é normal (a função tem 45s); o que indica problema real é a
+          # sequência. Backoff 15s/30s antes de desistir.
+          fail_streak=0
           for n in $(seq 1 100); do
             code=$(curl -sS -o /tmp/process.json -w '%{http_code}' \
-              --max-time 120 -X POST "${APP_URL%/}/api/fetch-runs/${run_id}/process")
+              --max-time 120 -X POST "${APP_URL%/}/api/fetch-runs/${run_id}/process" || echo '000')
+
+            if [ "${code}" != "200" ] && [ "${code}" != "201" ]; then
+              fail_streak=$((fail_streak + 1))
+              echo "lote ${n}: HTTP ${code} — falha ${fail_streak}/3" >&2
+              cat /tmp/process.json 2>/dev/null || true
+              echo
+              if [ "${fail_streak}" -ge 3 ]; then
+                echo "Três lotes seguidos falharam (último HTTP ${code}). O run ${run_id} fica retomável: o próximo ciclo continua de onde parou." >&2
+                exit 1
+              fi
+              sleep $((fail_streak * 15))
+              continue
+            fi
+
+            fail_streak=0
             cat /tmp/process.json
-            test "${code}" = "200"
+            echo
             status=$(node -e "const x=require('/tmp/process.json'); process.stdout.write(x.run?.status||'')")
             case "${status}" in
-              concluido|parcial) exit 0 ;;
-              erro) exit 1 ;;
+              concluido|parcial) echo "Execução encerrada como '${status}' no lote ${n}."; exit 0 ;;
+              erro) echo "Execução encerrada como 'erro' no lote ${n}." >&2; exit 1 ;;
             esac
           done
-          echo "Fetch run did not finish after 100 batches." >&2
+          echo "Fetch run did not finish after 100 batches. Fontes podem estar sendo reenfileiradas em loop — confira fetch_run_sources com attempt_count alto." >&2
           exit 1
         env:
           APP_URL: ${{ secrets.APP_URL }}
 
       - name: Backfill article images
         # Best-effort: fills missing images (incl. Google News) in batches.
+        # `always()`: coleta parcial ainda merece imagem. Sem isto, uma falha no
+        # step anterior levava junto o backfill de matérias JÁ coletadas.
+        if: always()
         continue-on-error: true
         run: |
           [ -z "${APP_URL}" ] && exit 0
           for n in 1 2 3; do
             code=$(curl -sS -o /tmp/img.json -w '%{http_code}' --max-time 120 \
-              "${APP_URL%/}/api/articles/backfill-images")
+              "${APP_URL%/}/api/articles/backfill-images" || echo '000')
             echo "backfill ${n}: HTTP ${code}"; cat /tmp/img.json || true; echo
           done
         env:
@@ -69,19 +118,22 @@ jobs:
       - name: Enrich partial article text
         # Best-effort and public pages only. Paid/unavailable content remains
         # explicitly marked as partial in the monthly PDF.
+        if: always()
         continue-on-error: true
         run: |
           [ -z "${APP_URL}" ] && exit 0
           for n in 1 2; do
             code=$(curl -sS -o /tmp/enrich.json -w '%{http_code}' --max-time 120 \
-              "${APP_URL%/}/api/articles/enrich")
+              "${APP_URL%/}/api/articles/enrich" || echo '000')
             echo "enrich ${n}: HTTP ${code}"; cat /tmp/enrich.json || true; echo
           done
         env:
           APP_URL: ${{ secrets.APP_URL }}
 
       - name: Reclassify archive
-        if: ${{ github.event_name == 'workflow_dispatch' && inputs.reclassify_archive }}
+        # Opera sobre o acervo já existente, então roda mesmo se a coleta falhou
+        # — quem pediu reclassificação no disparo manual quer isso de qualquer forma.
+        if: ${{ always() && github.event_name == 'workflow_dispatch' && inputs.reclassify_archive }}
         env:
           APP_URL: ${{ secrets.APP_URL }}
         run: |

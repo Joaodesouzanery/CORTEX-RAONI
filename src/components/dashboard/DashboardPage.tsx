@@ -5,6 +5,7 @@ import { AlertTriangle, Download, FileText, Play, RefreshCw } from 'lucide-react
 import { Button } from '@/components/ui/button'
 import ClientAutomationCard from '@/components/dashboard/ClientAutomationCard'
 import ExceptionQueueDrawer from '@/components/dashboard/ExceptionQueueDrawer'
+import { describeCollectionHealth } from '@/lib/collection-health'
 import type { DashboardSummary } from '@/types'
 
 const PERIODS = [7, 15, 30] as const
@@ -14,33 +15,31 @@ const MAX_TICKS = 120
 
 function HealthBanner({ summary }: { summary: DashboardSummary }) {
   const { health } = summary
-  const degraded =
-    !health.coverage_complete ||
-    health.stale_sources > 0 ||
-    health.failed_sources > 0 ||
-    (health.empty_sources || 0) > 0
+  // O veredito decide a MANCHETE: quando o ciclo parou, dizer "74 fontes
+  // atrasadas" é reportar consequência e mandar auditar 74 fontes por um
+  // problema só. `coverage_complete` saiu do gatilho: ele é `true` sempre que
+  // existir qualquer matéria anterior ao corte da janela, ou seja, não mede
+  // completude de coleta nenhuma — deixava o banner amarelo por nada.
+  const verdict = describeCollectionHealth(health)
+  const degraded = verdict.level === 'atencao'
   const label = health.last_success_at
     ? new Date(health.last_success_at).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })
     : 'nenhuma coleta concluída'
-  const coverageStart = health.coverage_start
-    ? new Date(health.coverage_start).toLocaleDateString('pt-BR', {
-        timeZone: 'America/Sao_Paulo',
-      })
-    : 'sem matérias datadas'
   return (
     <div className={`mb-6 border px-4 py-3 text-sm ${degraded ? 'border-amber-300 bg-amber-50' : 'border-emerald-200 bg-emerald-50'}`}>
       <div className="flex items-center gap-2 font-medium">
         {degraded ? <AlertTriangle className="h-4 w-4 text-amber-700" /> : <span className="h-2 w-2 rounded-full bg-emerald-600" />}
-        Cobertura: {degraded ? 'atenção necessária' : 'fontes atualizadas'}
+        {verdict.headline}
       </div>
-      <p className="mt-1 text-xs text-gray-600">
-        Última coleta: {label}. {health.healthy_sources}/{health.active_sources} fontes saudáveis
-        {health.stale_sources ? `, ${health.stale_sources} atrasadas` : ''}
+      <p className="mt-1 text-xs text-gray-600">{verdict.detail}</p>
+      {/* A composição continua disponível, mas como detalhe — não como manchete. */}
+      <p className="mt-1 text-xs text-gray-500">
+        Última coleta: {label}. {health.healthy_sources}/{health.active_sources} dentro da janela
+        {health.stale_sources ? `, ${health.stale_sources} fora` : ''}
         {health.failed_sources ? `, ${health.failed_sources} com falha` : ''}
         {health.empty_sources ? `, ${health.empty_sources} sem itens` : ''}
-        {health.never_fetched_sources ? `, ${health.never_fetched_sources} ainda não executadas` : ''}.
-        {' '}Cobertura do período desde {coverageStart}
-        {health.latest_run ? `; última execução ${health.latest_run.status}` : ''}.
+        {health.never_fetched_sources ? `, ${health.never_fetched_sources} ainda não executadas` : ''}
+        {health.latest_run ? ` · última execução ${health.latest_run.status}` : ''}.
       </p>
     </div>
   )

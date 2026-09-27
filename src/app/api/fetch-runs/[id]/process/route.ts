@@ -10,7 +10,10 @@ export async function POST(_: Request, { params }: { params: Promise<{ id: strin
   const { id } = await params
   const supabase = createClient()
   const staleBefore = new Date(Date.now() - 90_000).toISOString()
-  await supabase
+  // Estas duas escritas são o que torna o run retomável — é delas que depende o
+  // workflow poder repetir um lote que deu 504. Falha silenciosa aqui deixaria
+  // fontes presas em 'executando' para sempre, e o run nunca fecharia.
+  const { error: requeueError } = await supabase
     .from('fetch_run_sources')
     .update({
       status: 'pendente',
@@ -21,7 +24,8 @@ export async function POST(_: Request, { params }: { params: Promise<{ id: strin
     .eq('status', 'executando')
     .lt('started_at', staleBefore)
     .lt('attempt_count', 2)
-  await supabase
+  if (requeueError) return NextResponse.json({ error: requeueError.message }, { status: 500 })
+  const { error: exhaustedError } = await supabase
     .from('fetch_run_sources')
     .update({
       status: 'erro',
@@ -32,6 +36,7 @@ export async function POST(_: Request, { params }: { params: Promise<{ id: strin
     .eq('status', 'executando')
     .lt('started_at', staleBefore)
     .gte('attempt_count', 2)
+  if (exhaustedError) return NextResponse.json({ error: exhaustedError.message }, { status: 500 })
 
   const { data: claimed, error: claimError } = await supabase.rpc('claim_fetch_run_sources', {
     p_run_id: id,
@@ -46,11 +51,15 @@ export async function POST(_: Request, { params }: { params: Promise<{ id: strin
     return NextResponse.json({ run, results: [] })
   }
 
-  await supabase
+  // `started_at` aqui é o que data o run para a expiração de run travado
+  // (isRunStuck em src/lib/fetch-run-recovery.ts). Se não gravar, o run fica
+  // datado só por created_at — ainda expira, mas mais cedo do que deveria.
+  const { error: startError } = await supabase
     .from('fetch_runs')
     .update({ status: 'executando', started_at: new Date().toISOString() })
     .eq('id', id)
     .eq('status', 'pendente')
+  if (startError) return NextResponse.json({ error: startError.message }, { status: 500 })
 
   const { data: sourceRows, error: sourcesError } = await supabase.from('sources').select('*').in('id', ids)
   if (sourcesError) return NextResponse.json({ error: sourcesError.message }, { status: 500 })
@@ -65,14 +74,19 @@ export async function POST(_: Request, { params }: { params: Promise<{ id: strin
     )
   )
   const run = await refreshFetchRun(supabase, id)
-  const { data: sourceResults } = await supabase
+  // Só as fontes COM ERRO. Antes isto trazia todas as ~74 linhas do run, com
+  // embed de `sources`, em CADA um dos ~19 lotes — payload e tempo de função
+  // multiplicados por 19 dentro de um teto de 45 s, que é a causa mais provável
+  // dos 504 que matavam o ciclo. O único consumidor (NewsPage.tsx:512) filtra
+  // exatamente por `row.error`, então nada se perde na tela.
+  const { data: failedSources, error: failedError } = await supabase
     .from('fetch_run_sources')
     .select('*, sources(name, type)')
     .eq('run_id', id)
-    .order('status', { ascending: true })
-    .order('started_at', { ascending: true })
+    .not('error', 'is', null)
+  if (failedError) return NextResponse.json({ error: failedError.message }, { status: 500 })
   return NextResponse.json({
-    run: { ...run, source_results: sourceResults || [] },
+    run: { ...run, source_results: failedSources || [] },
     results,
   })
 }

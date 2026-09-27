@@ -1,9 +1,54 @@
 import { NextResponse } from 'next/server'
 import { createAdminClient as createClient } from '@/lib/supabase/server'
+import { refreshFetchRun } from '@/lib/fetch-run'
+import { isRunStuck } from '@/lib/fetch-run-recovery'
+import type { FetchRun } from '@/types'
 
 export const dynamic = 'force-dynamic'
 
 const COOLDOWN_MS = 10 * 60 * 1000
+
+/**
+ * Encerra um run ativo que passou do prazo, liberando o índice único.
+ *
+ * Duas etapas, nesta ordem, porque o caso comum é benigno:
+ * 1. Reconciliar. Quase sempre todas as `fetch_run_sources` JÁ terminaram e só
+ *    faltou alguém chamar `refreshFetchRun` — o run vira terminal sozinho e
+ *    nada precisa ser forçado.
+ * 2. Só se continuar ativo depois disso é que está travado de verdade, e aí o
+ *    run é marcado `erro`. As linhas de `fetch_run_sources` que sobraram ficam
+ *    como estão: pertencem a um run terminal, ninguém mais as reivindica
+ *    (`claim_fetch_run_sources` filtra por `run_id`), e o run seguinte
+ *    reenfileira todas as fontes do zero.
+ *
+ * Devolve `true` quando o caminho está livre para criar um run novo.
+ */
+async function releaseStuckRun(
+  supabase: ReturnType<typeof createClient>,
+  run: FetchRun
+): Promise<boolean> {
+  let reconciled: FetchRun | null = null
+  try {
+    reconciled = (await refreshFetchRun(supabase, run.id)) as FetchRun
+  } catch {
+    // Reconciliação falhou (run sem fontes, por exemplo). Segue para o
+    // encerramento forçado — não deixar o índice preso é o que importa.
+  }
+  if (reconciled && !isRunStuck(reconciled)) return false
+
+  const { error } = await supabase
+    .from('fetch_runs')
+    .update({
+      status: 'erro',
+      finished_at: new Date().toISOString(),
+    })
+    .eq('id', run.id)
+    .in('status', ['pendente', 'executando'])
+  // Escrita não confirmada é escrita que não aconteceu: se o UPDATE falhou, o
+  // índice continua preso e criar um run novo daria 23505. Melhor reusar.
+  if (error) return false
+  return true
+}
 
 export async function GET() {
   const supabase = createClient()
@@ -39,7 +84,14 @@ export async function POST(req: Request) {
       { status: migrationMissing ? 503 : 500 }
     )
   }
-  if (active) return NextResponse.json({ run: active, reused: true })
+  if (active) {
+    // Sem esta saída, um run morto no meio trava a coleta indefinidamente — foi
+    // uma das hipóteses para os cinco dias sem coleta de setembro/2026.
+    const released = isRunStuck(active as FetchRun)
+      ? await releaseStuckRun(supabase, active as FetchRun)
+      : false
+    if (!released) return NextResponse.json({ run: active, reused: true })
+  }
 
   const { data: latest } = await supabase
     .from('fetch_runs')
