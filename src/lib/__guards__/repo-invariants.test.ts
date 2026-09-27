@@ -185,6 +185,39 @@ describe('invariantes de segurança do repositório', () => {
     expect(sql).toMatch(/RAISE EXCEPTION '034:/)
   })
 
+  it('park() confirma as escritas que faz', () => {
+    // park() gravava status='waiting_review' num Promise.all SEM checar error,
+    // e a CHECK da 030 rejeitava esse valor: o job ficava preso em 'running' e
+    // reparqueava a cada 10 min, em silêncio. A 038 corrigiu a CHECK; isto
+    // impede que a checagem de erro suma de novo.
+    const { text } = read(join(ROOT, 'src', 'lib', 'report-automation-worker.ts'))
+    const park = text.slice(text.indexOf('const park = async'), text.indexOf('const run = await finishRunIfNeeded'))
+    expect(park, 'park() precisa capturar o resultado das escritas').toMatch(/const \[jobResult, draftResult\]/)
+    expect(park, 'park() precisa falhar alto quando o UPDATE do job é rejeitado').toMatch(/jobResult\.error/)
+    expect(park, 'park() precisa falhar alto quando o UPDATE do rascunho é rejeitado').toMatch(/draftResult\.error/)
+
+    // E a migration tem de aceitar o status que o código realmente grava.
+    const sql = readFileSync(
+      join(ROOT, 'supabase', 'migrations', '038_prio_topics_and_job_status.sql'),
+      'utf8'
+    ).replace(/^\s*--.*$/gm, '')
+    expect(sql, 'a CHECK precisa aceitar waiting_review').toMatch(/waiting_review/)
+  })
+
+  it('a triagem não volta a matar o job por falta de agenda', () => {
+    // O 409 por ausência de tópicos era contado como falha de estágio pelo
+    // worker; em três tentativas o job ia para 'error', estado que "Continuar"
+    // não ressuscitava. Nada na triagem lê monthly_report_topics além da
+    // contagem — a agenda melhora a curadoria, não é pré-requisito lógico.
+    const { text } = read(
+      join(ROOT, 'src', 'app', 'api', 'report-drafts', '[id]', 'triage', 'route.ts')
+    )
+    expect(text, 'a triagem deve avisar, não abortar').toContain("'sem_agenda'")
+    expect(text, 'o 409 por falta de agenda não pode voltar').not.toMatch(
+      /Defina ao menos um tópico da agenda mensal antes da triagem/
+    )
+  })
+
   it('mantém access_mode como trava real de reprodução', () => {
     // A coluna existia desde a 023, era escrita por cinco migrations e nunca
     // lida como condição — enquanto o clipping reproduzia a íntegra no PDF do

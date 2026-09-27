@@ -78,6 +78,9 @@ export default function ReportPreparationPage() {
   const [busy, setBusy] = useState('')
   const [error, setError] = useState('')
   const [triageProgress, setTriageProgress] = useState<{ done: number; remaining: number } | null>(null)
+  // Aviso não-bloqueante da triagem (hoje só "sem_agenda"). Separado de `error`
+  // de propósito: agenda faltando degrada a curadoria, não impede o trabalho.
+  const [triageWarning, setTriageWarning] = useState('')
   const [verificationProgress, setVerificationProgress] = useState<{ done: number; remaining: number } | null>(null)
   const [evidenceFilter, setEvidenceFilter] = useState<'exceptions' | 'all' | 'pending' | 'qualified' | 'annex'>('exceptions')
   const [reviewQueueCount, setReviewQueueCount] = useState(0)
@@ -328,12 +331,12 @@ export default function ReportPreparationPage() {
 
   async function triageAll() {
     if (!draft) return
-    if (!draft.topics?.length) {
-      setError('Defina ao menos um tópico da agenda mensal antes de iniciar a triagem.')
-      return
-    }
+    // A trava dura por falta de agenda saiu daqui e do servidor: nada na
+    // triagem lê os tópicos, e o 409 que ela gerava matava o job da automação
+    // em três tentativas, num estado que "Continuar" não ressuscitava.
     setBusy('triage')
     setError('')
+    setTriageWarning('')
     setTriageProgress({ done: 0, remaining: draft.evidence_items?.length || 0 })
     let done = 0
     try {
@@ -343,6 +346,11 @@ export default function ReportPreparationPage() {
         if (!res.ok) throw new Error(data?.error || 'Falha na triagem.')
         done += data.processed || 0
         setTriageProgress({ done, remaining: data.remaining || 0 })
+        if (Array.isArray(data.warnings) && data.warnings.includes('sem_agenda')) {
+          setTriageWarning(
+            'Triado sem agenda mensal: nenhum tópico está definido para este mês. A triagem funciona, mas a cobertura por tema não é conferida — defina os tópicos em "Agenda mensal obrigatória" para fechar essa lacuna.'
+          )
+        }
         if (data.complete) break
       }
       await loadDraft(draft.id)
@@ -1008,6 +1016,11 @@ export default function ReportPreparationPage() {
               </div>
             </div>
           ) : null}
+          {triageWarning && (
+            <div className="mb-4 border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
+              <span className="font-semibold">Aviso da triagem:</span> {triageWarning}
+            </div>
+          )}
           {(whyBlocked('generate') || whyBlocked('finalize')) && (
             <div className="mb-4 border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900">
               <span className="font-semibold">Próximo passo:</span>{' '}

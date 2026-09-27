@@ -43,16 +43,20 @@ export async function POST(_: Request, { params }: { params: Promise<{ id: strin
   if (draft.status === 'approved') {
     return NextResponse.json({ error: 'A versão aprovada é imutável.' }, { status: 409 })
   }
-  const { count: topicCount } = await supabase
+  // A agenda MELHORA a curadoria, mas não entra na decisão de triagem: nada
+  // abaixo lê `monthly_report_topics` — só se contava para barrar. Esse 409
+  // custou caro: o worker o tratava como falha de estágio e, em três tentativas,
+  // o job ia para 'error', estado que o botão "Continuar" não ressuscitava. Um
+  // cliente sem template semeado (PRIO) travava para sempre, em silêncio.
+  // Agora avisa e segue — o aviso viaja na resposta e aparece na Preparação.
+  const { count: topicCount, error: topicCountError } = await supabase
     .from('monthly_report_topics')
     .select('id', { count: 'exact', head: true })
     .eq('draft_id', id)
-  if (!topicCount) {
-    return NextResponse.json(
-      { error: 'Defina ao menos um tópico da agenda mensal antes da triagem.' },
-      { status: 409 }
-    )
+  if (topicCountError) {
+    return NextResponse.json({ error: topicCountError.message }, { status: 500 })
   }
+  const warnings = topicCount ? [] : ['sem_agenda']
   const useAi = Boolean(process.env.ANTHROPIC_API_KEY)
 
   const [evidence, humanTags, triaged, { data: memoryRows }] = await Promise.all([
@@ -95,7 +99,7 @@ export async function POST(_: Request, { params }: { params: Promise<{ id: strin
   const batch = candidates.filter((item) => !triagedIds.has(item.article_id)).slice(0, 20)
   if (!batch.length) {
     await refreshDraftEvidence(supabase, draft)
-    return NextResponse.json({ processed: 0, remaining: 0, complete: true })
+    return NextResponse.json({ processed: 0, remaining: 0, complete: true, warnings })
   }
 
   await supabase.from('monthly_report_drafts').update({ status: 'triaging' }).eq('id', id)
@@ -186,6 +190,7 @@ export async function POST(_: Request, { params }: { params: Promise<{ id: strin
       remaining,
       complete: remaining === 0,
       source: result.source,
+      warnings,
     })
   } catch (triageError) {
     const message = triageError instanceof Error ? triageError.message : 'Falha na triagem.'

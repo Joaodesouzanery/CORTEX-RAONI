@@ -212,9 +212,16 @@ async function resumeParkedJobs(supabase: SupabaseClient, scope: { runId?: strin
       available_at: new Date().toISOString(),
       locked_at: null,
       error: null,
+      failure_count: 0,
       updated_at: new Date().toISOString(),
     })
-    .in('status', ['waiting_review', 'waiting_configuration'])
+    // 'error' entra aqui porque o resume é SEMPRE humano (o Painel só manda
+    // resume no primeiro tick, a partir de um clique). Sem isto, um job que
+    // esgotou as três tentativas ficava morto para sempre: "Continuar" chamava
+    // o claim, o claim ignora 'error', e o botão não fazia nada — em silêncio.
+    // `failure_count` volta a zero: quem clicou está dizendo que a causa foi
+    // tratada, e manter a contagem faria o job morrer na primeira recaída.
+    .in('status', ['waiting_review', 'waiting_configuration', 'error'])
   if (scope.clientId) query = query.eq('client_id', scope.clientId)
   if (scope.runId) query = query.eq('run_id', scope.runId)
   const { data, error } = await query.select('draft_id')
@@ -246,7 +253,14 @@ export async function processNextAutomationJob(supabase: SupabaseClient, options
   const headers = { 'Content-Type': 'application/json' }
 
   const park = async (draftId: string, status: 'waiting_configuration' | 'waiting_review', reason: string | null, message: string) => {
-    await Promise.all([
+    // As duas escritas eram feitas dentro de um Promise.all SEM checar `error`.
+    // A CHECK de report_automation_jobs não aceitava 'waiting_review' (migration
+    // 030; corrigida na 038), então o UPDATE do job era rejeitado em silêncio:
+    // o job continuava 'running' com o locked_at do claim, era reivindicado de
+    // novo 10 min depois e parqueava outra vez, para sempre — enquanto o
+    // rascunho exibia waiting_review. Escrita não confirmada é escrita que não
+    // aconteceu.
+    const [jobResult, draftResult] = await Promise.all([
       supabase
         .from('report_automation_jobs')
         .update({ status, error: message, locked_at: null, updated_at: new Date().toISOString() })
@@ -256,6 +270,12 @@ export async function processNextAutomationJob(supabase: SupabaseClient, options
         .update({ automation_status: status, automation_blocking_reason: reason, automation_updated_at: new Date().toISOString() })
         .eq('id', draftId),
     ])
+    if (jobResult.error) {
+      throw new Error(`Falha ao parquear o job em "${status}": ${jobResult.error.message}`)
+    }
+    if (draftResult.error) {
+      throw new Error(`Falha ao registrar "${status}" no rascunho: ${draftResult.error.message}`)
+    }
     const run = await finishRunIfNeeded(supabase, job.run_id)
     return { job_id: job.id, draft_id: draftId, stage: job.stage, status, blocking_reason: reason, run }
   }

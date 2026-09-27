@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { AlertTriangle, Download, FileText, Play, RefreshCw } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { describeQualification } from '@/lib/dashboard-status'
 import type { DashboardClientSummary } from '@/types'
 
 /**
@@ -44,6 +45,7 @@ type Props = {
 
 export default function ClientAutomationCard({ row, busy, onPrepare, onContinue, onOpenExceptions, onChanged }: Props) {
   const { client, total, triaged_count, qualified_count, annex_count, pending_count, variation_percent, readiness } = row
+  const qualificationNote = describeQualification({ total, triaged_count, qualified_count })
   const [confirming, setConfirming] = useState<'metrics' | 'lead' | null>(null)
   const [metrics, setMetrics] = useState<Record<string, string>>({})
   const [saving, setSaving] = useState(false)
@@ -205,6 +207,14 @@ export default function ClientAutomationCard({ row, busy, onPrepare, onContinue,
       <div>
         <span className="text-4xl font-light tabular-nums">{qualified_count}</span>
         <span className="ml-1 text-xs text-gray-500">evidências qualificadas</span>
+        {/* Zero tem três causas distintas e cada uma pede ação diferente. Sem
+            esta linha, "0" parecia ausência de matéria quando muitas vezes era
+            uma etapa do fluxo que ninguém rodou. */}
+        {qualificationNote.text && (
+          <p className={`mt-1 text-[11px] ${qualificationNote.actionable ? 'text-amber-700' : 'text-gray-500'}`}>
+            {qualificationNote.text}
+          </p>
+        )}
         <p className="mt-1 text-[11px] text-gray-400">
           {total} candidatas · {triaged_count} triadas · {pending_count} pendentes · {annex_count} no anexo
           {variation_percent != null && ` · ${variation_percent >= 0 ? '+' : ''}${variation_percent}%`}
