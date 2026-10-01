@@ -27,6 +27,7 @@ import type {
 import type { PanoramaRow } from '@/lib/panorama'
 import type { TagSuggestion } from '@/lib/ai/classify'
 import { createLatestGuard } from '@/lib/latest-request'
+import { saoPauloPeriodOf } from '@/lib/sao-paulo-period'
 
 const PAGE_SIZE = 100
 const TERMINAL_RUNS = new Set(['concluido', 'parcial', 'erro'])
@@ -404,7 +405,7 @@ export default function NewsPage() {
     setBusySelection(true)
     try {
       const dated = selectedArticles.find((article) => article.published_at)?.published_at
-      const selectedPeriod = dated?.slice(0, 7) || new Date().toISOString().slice(0, 7)
+      const selectedPeriod = saoPauloPeriodOf(dated || new Date())
       const create = async (newVersion: boolean) =>
         fetch('/api/report-drafts', {
           method: 'POST',

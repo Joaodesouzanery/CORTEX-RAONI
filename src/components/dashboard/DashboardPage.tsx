@@ -118,6 +118,8 @@ export default function DashboardPage() {
       if (data?.status === 'error') throw new Error(data?.error || 'A automação parou com erro.')
       setProgress(`${data?.stage || 'processando'} → ${data?.next_stage || '…'}`)
     }
+    // Sem isto o teto terminava o laço como se fosse conclusão normal.
+    throw new Error(`Limite de ${MAX_TICKS} passos atingido antes de concluir. Clique em Continuar para seguir.`)
   }, [])
 
   const runAutomation = useCallback(
