@@ -1,8 +1,9 @@
 name: Monthly clippings
 
 on:
-  schedule:
-    - cron: '0 11 1 * *' # primeiro dia, 08:00 em Brasília
+  # DESLIGADO (2026-10-04): todo cron deste repo falhava — secret APP_URL/CRON_SECRET ausente no GitHub (Settings > Secrets and variables > Actions). Ver chat/CRON-STATUS.md para o diagnostico e como reativar. workflow_dispatch continua disponivel p/ rodar na mao.
+  # schedule:  # DESLIGADO em 2026-10-04 — ver nota acima
+    # - cron: '0 11 1 * *' # primeiro dia, 08:00 em Brasília
   workflow_dispatch:
     inputs:
       edition_ids:

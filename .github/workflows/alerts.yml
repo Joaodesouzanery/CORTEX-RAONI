@@ -4,8 +4,9 @@ name: Alerts digest
 # → e-mail digest. Runs ONCE a day so the 24h window doesn't overlap (no dupes).
 # Same pattern as fetch-news.yml: GitHub Actions cron calling a protected endpoint.
 on:
-  schedule:
-    - cron: '0 11 * * *' # 11:00 UTC (~08:00 BRT) daily
+  # DESLIGADO (2026-10-04): todo cron deste repo falhava — secret APP_URL/CRON_SECRET ausente no GitHub (Settings > Secrets and variables > Actions). Ver chat/CRON-STATUS.md para o diagnostico e como reativar. workflow_dispatch continua disponivel p/ rodar na mao.
+  # schedule:  # DESLIGADO em 2026-10-04 — ver nota acima
+    # - cron: '0 11 * * *' # 11:00 UTC (~08:00 BRT) daily
   workflow_dispatch: {} # allow manual runs from the Actions tab
 
 jobs:

@@ -16,8 +16,9 @@ name: Fetch news
 # mesmo lote é idempotente — por isso agora falha de lote é tentada de novo, e
 # só três falhas SEGUIDAS desistem.
 on:
-  schedule:
-    - cron: '0 */6 * * *' # every 6 hours (UTC)
+  # DESLIGADO (2026-10-04): todo cron deste repo falhava — secret APP_URL/CRON_SECRET ausente no GitHub (Settings > Secrets and variables > Actions). Ver chat/CRON-STATUS.md para o diagnostico e como reativar. workflow_dispatch continua disponivel p/ rodar na mao.
+  # schedule:  # DESLIGADO em 2026-10-04 — ver nota acima
+    # - cron: '0 */6 * * *' # every 6 hours (UTC)
   workflow_dispatch:
     inputs:
       reclassify_archive:
@@ -25,6 +26,11 @@ on:
         required: false
         default: true
         type: boolean
+      reclassify_period:
+        description: 'Limitar a reclassificação a um mês (YYYY-MM). Vazio = acervo inteiro'
+        required: false
+        default: ''
+        type: string
 
 # Dois disparos simultâneos brigariam pelo índice fetch_runs_single_active_idx
 # (um único run ativo no banco inteiro). Enfileira em vez de cancelar: cancelar
@@ -89,6 +95,11 @@ jobs:
             cat /tmp/process.json
             echo
             status=$(node -e "const x=require('/tmp/process.json'); process.stdout.write(x.run?.status||'')")
+            # Avisos da coleta (qualificação por regra ou destaque obrigatório não
+            # ingerido, ex.: migration 039 não aplicada): a coleta segue, mas o
+            # Painel pode ficar sem qualificadas. Anotação visível no resumo do
+            # run em vez de sumir no meio do JSON.
+            node -e "const fs=require('fs'); const x=require('/tmp/process.json'); const seen=fs.existsSync('/tmp/warned.txt')?fs.readFileSync('/tmp/warned.txt','utf8').split('\n'):[]; for (const w of (x.warnings||[])) { const line=String(w).replace(/[\r\n]+/g,' '); if (seen.includes(line)) continue; fs.appendFileSync('/tmp/warned.txt', line+'\n'); console.log('::warning title=Aviso da coleta::'+line) }"
             case "${status}" in
               concluido|parcial) echo "Execução encerrada como '${status}' no lote ${n}."; exit 0 ;;
               erro) echo "Execução encerrada como 'erro' no lote ${n}." >&2; exit 1 ;;
@@ -122,7 +133,8 @@ jobs:
         continue-on-error: true
         run: |
           [ -z "${APP_URL}" ] && exit 0
-          for n in 1 2; do
+          # 3 chamadas x 20 matérias: as qualificadas passam na frente (link do veículo no CSV).
+          for n in 1 2 3; do
             code=$(curl -sS -o /tmp/enrich.json -w '%{http_code}' --max-time 120 \
               "${APP_URL%/}/api/articles/enrich" || echo '000')
             echo "enrich ${n}: HTTP ${code}"; cat /tmp/enrich.json || true; echo
@@ -136,10 +148,11 @@ jobs:
         if: ${{ always() && github.event_name == 'workflow_dispatch' && inputs.reclassify_archive }}
         env:
           APP_URL: ${{ secrets.APP_URL }}
+          RECLASSIFY_PERIOD: ${{ inputs.reclassify_period }}
         run: |
           cursor=""
           for n in $(seq 1 500); do
-            body=$(node -e "process.stdout.write(JSON.stringify({cursor:process.argv[1]||null}))" "${cursor}")
+            body=$(node -e "process.stdout.write(JSON.stringify({cursor:process.argv[1]||null,period:process.env.RECLASSIFY_PERIOD||undefined}))" "${cursor}")
             code=$(curl -sS -o /tmp/classify.json -w '%{http_code}' --max-time 120 \
               -X POST -H "Content-Type: application/json" -d "${body}" \
               "${APP_URL%/}/api/articles/classify")
