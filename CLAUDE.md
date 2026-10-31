@@ -121,7 +121,7 @@ Valem por padrão, em todo trabalho, sem depender de skill disparar.
   forjar um código de evidência que entra no PDF do cliente. Ao mexer em
   `src/lib/ai/*`, delimite o conteúdo e valide o que volta contra o conjunto
   de códigos realmente enviado.
-- Reprodução de íntegra respeita `sources.access_mode`.
+- Reprodução de íntegra respeita `sources.access_mode`. **Decisão pendente de reflexo no código:** o usuário quer clipping baseado em notícias próprias; não reproduza íntegra de terceiro em produto novo sem combinar.
 - **Nunca ligue o User-Agent de Googlebot** (`CRAWLER_USER_AGENT` existe e é
   deliberadamente não usado).
 
@@ -155,7 +155,11 @@ Valem por padrão, em todo trabalho, sem depender de skill disparar.
 - `articles.url` NULLABLE com `UNIQUE` (023): matéria de impresso/rádio não tem
   dedupe no banco.
 
+## Playbook
+
+Decisões de produto, modelos de entregável e riscos: `docs/playbook/README.md`. Vale também para outros chats e projetos. Produto: Cortex. SAUZ, CRT e Grupo Nery são marcas de entregável.
+
 ## Skills e agents deste repositório
 
-Ver `.claude/`. As quatro skills e os dois agents nasceram de bugs reais
+Ver `.claude/`. As quatro primeiras skills e os dois primeiros agents nasceram de bugs reais
 **deste** repo — os exemplos são `file:line` daqui, não de outro projeto.
