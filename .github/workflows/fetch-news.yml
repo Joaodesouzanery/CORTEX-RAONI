@@ -16,9 +16,10 @@ name: Fetch news
 # mesmo lote é idempotente — por isso agora falha de lote é tentada de novo, e
 # só três falhas SEGUIDAS desistem.
 on:
-  # DESLIGADO (2026-10-04): todo cron deste repo falhava — secret APP_URL/CRON_SECRET ausente no GitHub (Settings > Secrets and variables > Actions). Ver chat/CRON-STATUS.md para o diagnostico e como reativar. workflow_dispatch continua disponivel p/ rodar na mao.
-  # schedule:  # DESLIGADO em 2026-10-04 — ver nota acima
-    # - cron: '0 */6 * * *' # every 6 hours (UTC)
+  # Religado em 31/10/2026, 3x/dia. Exige os secrets APP_URL e CRON_SECRET (ver chat/CRON-STATUS.md).
+  schedule:
+    # 07h, 12h e 18h em Brasília. Só coleta e regras: esses passos não chamam a Anthropic.
+    - cron: '0 10,15,21 * * *'
   workflow_dispatch:
     inputs:
       reclassify_archive:

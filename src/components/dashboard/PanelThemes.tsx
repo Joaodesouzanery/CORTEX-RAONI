@@ -100,7 +100,7 @@ export function PanelThemes({ clients, refreshKey }: { clients: Array<{ id: stri
                   {href
                     ? <a className="underline" href={href} target="_blank" rel="noopener noreferrer">{article.title}</a>
                     : article.title}
-                  <span className="text-xs text-gray-500"> · {article.publisher ?? 'veículo não informado'} · {article.published_at?.slice(0, 10) ?? 'sem data'}{article.cites_client ? ' · cita o cliente' : ''}</span>
+                  <span className="text-xs text-gray-500"> · {article.publisher ?? 'veículo não informado'} · {article.published_at?.slice(0, 10) ?? 'sem data'}{article.highlighted ? ' · destaque' : ''}{article.cites_client ? ' · cita o cliente' : ''}</span>
                 </li>
                 )
               })}

@@ -16,6 +16,8 @@ export type PanelThemeArticle = {
   publisher: string | null
   published_at: string | null
   cites_client: boolean
+  /** Destaque confirmado por uma pessoa na curadoria. */
+  highlighted: boolean
 }
 
 export type PanelTheme = { title: string; articles: PanelThemeArticle[] }
@@ -33,6 +35,7 @@ type ThemeRow = {
   article_id: string
   cita_cliente?: boolean | null
   monitoring_status?: string | null
+  report_role_source?: string | null
   articles: {
     title: string
     url?: string | null
@@ -73,10 +76,12 @@ export function buildPanelThemes(
           publisher: row.articles.publisher ?? null,
           published_at: row.articles.published_at ?? null,
           cites_client: Boolean(row.cita_cliente),
+          highlighted: row.report_role_source === 'humano',
         }
       })
       .sort(
         (a, b) =>
+          Number(b.highlighted) - Number(a.highlighted) ||
           Number(b.cites_client) - Number(a.cites_client) ||
           String(b.published_at).localeCompare(String(a.published_at))
       )

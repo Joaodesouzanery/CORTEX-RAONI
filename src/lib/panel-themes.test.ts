@@ -31,6 +31,14 @@ describe('buildPanelThemes', () => {
     expect(out.themes[0].articles.map((a) => a.id)).toEqual(['2', '1'])
   })
 
+  it('destaque humano vem antes de citação automática', () => {
+    const out = buildPanelThemes('2026-09', templates, [
+      row('1', 'Redata cita', { cita_cliente: true }),
+      row('2', 'Redata curado', { report_role_source: 'humano' }),
+    ])
+    expect(out.themes[0].articles.map((a) => a.id)).toEqual(['2', '1'])
+  })
+
   it('não entrega href perigoso', () => {
     const out = buildPanelThemes('2026-09', templates, [
       { ...row('1', 'Redata'), articles: { title: 'Redata', url: 'javascript:alert(1)' } },

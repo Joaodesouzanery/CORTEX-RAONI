@@ -1,3 +1,5 @@
+> **Atualização 31/10/2026:** `fetch-news.yml` religado, 3x/dia (07h, 12h, 18h BRT), a pedido do usuário. Depende dos secrets `APP_URL` e `CRON_SECRET`. Os demais crons seguem desligados.
+
 # Status dos crons — 2026-10-04
 
 ## O que foi pedido
