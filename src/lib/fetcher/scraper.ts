@@ -50,50 +50,48 @@ export async function scrapeOpenGraph(pageUrl: string): Promise<FetchedArticle |
 }
 
 export async function scrapeSite(siteUrl: string): Promise<FetchedArticle[]> {
-  try {
-    const res = await safeFetch(siteUrl, {
-      headers: { 'User-Agent': BROWSER_USER_AGENT },
-      timeoutMs: FETCH_TIMEOUTS.scrapeSite,
-    })
-    if (!res.ok) return []
-    const html = await readCappedText(res)
-    const $ = cheerio.load(html)
+  const res = await safeFetch(siteUrl, {
+    headers: { 'User-Agent': BROWSER_USER_AGENT },
+    timeoutMs: FETCH_TIMEOUTS.scrapeSite,
+  })
+  // Fonte fora do ar é falha honesta: devolver [] gravava sucesso com 0 itens
+  // e atualizava last_success_at, escondendo a queda.
+  if (!res.ok) throw new Error(`Falha ao ler a fonte: HTTP ${res.status}`)
+  const html = await readCappedText(res)
+  const $ = cheerio.load(html)
 
-    const articleLinks: string[] = []
-    $('a[href]').each((_, el) => {
-      const href = $(el).attr('href') || ''
-      let full: string
-      try {
-        full = href.startsWith('http') ? new URL(href).href : new URL(href, siteUrl).href
-      } catch {
-        return
-      }
-      // Comparar por HOST, não por prefixo de string: com prefixo,
-      // siteUrl "http://exemplo.com" casava "http://exemplo.com.interno/".
-      let sameHost = false
-      try {
-        sameHost = new URL(full).host === new URL(siteUrl).host
-      } catch {
-        sameHost = false
-      }
-      if (sameHost && full !== siteUrl && !articleLinks.includes(full)) {
-        articleLinks.push(full)
-      }
-    })
+  const articleLinks: string[] = []
+  $('a[href]').each((_, el) => {
+    const href = $(el).attr('href') || ''
+    let full: string
+    try {
+      full = href.startsWith('http') ? new URL(href).href : new URL(href, siteUrl).href
+    } catch {
+      return
+    }
+    // Comparar por HOST, não por prefixo de string: com prefixo,
+    // siteUrl "http://exemplo.com" casava "http://exemplo.com.interno/".
+    let sameHost = false
+    try {
+      sameHost = new URL(full).host === new URL(siteUrl).host
+    } catch {
+      sameHost = false
+    }
+    if (sameHost && full !== siteUrl && !articleLinks.includes(full)) {
+      articleLinks.push(full)
+    }
+  })
 
-    // Ordena ANTES de cortar. Em ordem do DOM, os 12 primeiros links de um site
-    // de notícias são o menu — a fonte gastava as 12 requisições em "Home",
-    // "Sobre" e "Categorias" e entregava duas ou três matérias, porque
-    // `isNavigationPage` só descarta DEPOIS de baixar.
-    const candidates = await Promise.all(
-      rankArticleLinks(articleLinks, siteUrl)
-        .slice(0, SCRAPE_PAGE_LIMIT)
-        .map((link) => scrapeOpenGraph(link))
-    )
-    return candidates.filter(
-      (article): article is FetchedArticle => Boolean(article?.title)
-    )
-  } catch {
-    return []
-  }
+  // Ordena ANTES de cortar. Em ordem do DOM, os 12 primeiros links de um site
+  // de notícias são o menu — a fonte gastava as 12 requisições em "Home",
+  // "Sobre" e "Categorias" e entregava duas ou três matérias, porque
+  // `isNavigationPage` só descarta DEPOIS de baixar.
+  const candidates = await Promise.all(
+    rankArticleLinks(articleLinks, siteUrl)
+      .slice(0, SCRAPE_PAGE_LIMIT)
+      .map((link) => scrapeOpenGraph(link))
+  )
+  return candidates.filter(
+    (article): article is FetchedArticle => Boolean(article?.title)
+  )
 }

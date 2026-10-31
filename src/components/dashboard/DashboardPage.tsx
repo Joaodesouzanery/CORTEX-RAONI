@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import ClientAutomationCard from '@/components/dashboard/ClientAutomationCard'
 import ExceptionQueueDrawer from '@/components/dashboard/ExceptionQueueDrawer'
 import { describeCollectionHealth } from '@/lib/collection-health'
+import { PanelThemes } from '@/components/dashboard/PanelThemes'
 import type { DashboardSummary } from '@/types'
 
 const PERIODS = [7, 15, 30] as const
@@ -55,9 +56,11 @@ export default function DashboardPage() {
   const [actionError, setActionError] = useState('')
   const [drawer, setDrawer] = useState<{ draftId: string; clientId: string; clientName: string } | null>(null)
   const cancelled = useRef(false)
+  const [themesTick, setThemesTick] = useState(1)
 
   const load = useCallback(async () => {
     setLoading(true)
+    setThemesTick((tick) => tick + 1)
     try {
       const res = await fetch(`/api/dashboard?days=${periodDays}`)
       const data = await res.json().catch(() => null)
@@ -243,6 +246,8 @@ export default function DashboardPage() {
           </Link>
         </div>
       </div>
+
+      <PanelThemes clients={(summary?.clients ?? []).map((row) => row.client)} refreshKey={themesTick} />
 
       <div className="mb-6 flex flex-wrap items-center gap-2">
         <span className="mr-1 text-xs uppercase tracking-widest text-gray-500">Período:</span>
