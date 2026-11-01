@@ -11,6 +11,7 @@ Produto: **Cortex**. SAUZ, CRT e Grupo Nery são marcas de entregável; a marca 
 | [modelo-agenda-regulatoria](modelo-agenda-regulatoria.md) | Agenda por agência |
 | [modelo-conteudo-proprio](modelo-conteudo-proprio.md) | Matérias longas de autoria própria |
 | [fontes](fontes.md) | Como cadastrar e avaliar fontes |
+| [custos](custos.md) | Estimativa da API Anthropic |
 | [riscos-e-conformidade](riscos-e-conformidade.md) | Direito autoral, LGPD, conteúdo, segurança |
 
 Relatórios reais de clientes são confidenciais e **não entram neste repositório**.

@@ -8,3 +8,6 @@ Fluxo: tema → dossiê → pauta com ângulo próprio → redação por seçõe
 - Sem paráfrase de uma matéria só e sem trechos longos copiados; citação curta, com aspas e crédito.
 - Fontes listadas com link; aviso de uso de IA; data de atualização; histórico de correções; canal de direito de resposta.
 - Publicação só com aprovação humana.
+
+## Imparcialidade
+Separar fato de análise. Apresentar os lados relevantes, com fontes de cada um. Sem adjetivo valorativo. Não favorecer cliente; quando a matéria tratar de cliente, declarar a relação.

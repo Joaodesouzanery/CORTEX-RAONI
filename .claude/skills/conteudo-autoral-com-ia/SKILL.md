@@ -12,3 +12,4 @@ Modelo em `docs/playbook/modelo-conteudo-proprio.md`.
 - Separe fato de análise.
 - Sem aprovação humana registrada, não publica.
 - Sem IA disponível, parqueia visível.
+- Imparcialidade: apresente os lados relevantes, sem adjetivo valorativo; não favoreça cliente e declare a relação quando a matéria tratar dele.
