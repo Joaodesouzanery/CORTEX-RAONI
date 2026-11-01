@@ -30,9 +30,15 @@ describe('assertPublicUrl', () => {
     await rejects('http://[fe80::1]/')
   })
 
+  it('aceita IP público em 192.0.x, como o do WordPress VIP', async () => {
+    await accepts('http://192.0.66.154/')
+    await accepts('http://192.0.78.241/')
+  })
+
   it('bloqueia faixas reservadas e de teste', async () => {
     await rejects('http://198.18.0.1/') // benchmark
     await rejects('http://192.0.2.1/') // TEST-NET-1
+    await rejects('http://192.0.0.1/') // IETF protocol assignments
     await rejects('http://198.51.100.1/') // TEST-NET-2
     await rejects('http://203.0.113.1/') // TEST-NET-3
     await rejects('http://224.0.0.1/') // multicast

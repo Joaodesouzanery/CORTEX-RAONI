@@ -49,7 +49,18 @@ export async function scrapeOpenGraph(pageUrl: string): Promise<FetchedArticle |
   }
 }
 
+export function isPlanaltoDocument(url: string) {
+  const { hostname, pathname } = new URL(url)
+  return hostname.endsWith('planalto.gov.br') && /\.html?$/i.test(pathname)
+}
+
 export async function scrapeSite(siteUrl: string): Promise<FetchedArticle[]> {
+  // Ato no Planalto é o próprio documento: seguir links nunca capturava o decreto.
+  if (isPlanaltoDocument(siteUrl)) {
+    const document = await scrapeOpenGraph(siteUrl)
+    if (!document?.title) throw new Error('Falha ao ler o documento oficial.')
+    return [document]
+  }
   const res = await safeFetch(siteUrl, {
     headers: { 'User-Agent': BROWSER_USER_AGENT },
     timeoutMs: FETCH_TIMEOUTS.scrapeSite,

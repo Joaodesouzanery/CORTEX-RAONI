@@ -28,7 +28,7 @@ function privateIPv4(parts: number[]): boolean {
   if (parts.length !== 4 || parts.some((part) => !Number.isInteger(part) || part < 0 || part > 255)) {
     return true // quad malformado: nega por precaução
   }
-  const [a, b] = parts
+  const [a, b, c] = parts
   return (
     a === 0 || // "este" host
     a === 10 || // RFC1918
@@ -36,7 +36,9 @@ function privateIPv4(parts: number[]): boolean {
     (a === 100 && b >= 64 && b <= 127) || // CGNAT — usado por Fly.io, Tailscale, k8s
     (a === 169 && b === 254) || // link-local e metadados de nuvem
     (a === 172 && b >= 16 && b <= 31) || // RFC1918
-    (a === 192 && b === 0) || // IETF protocol assignments / TEST-NET-1
+    // Só estas duas /24 são reservadas. O /16 inteiro derrubava sites públicos em
+    // 192.0.64.0/18 (WordPress VIP): InfoMoney e Diário do Transporte.
+    (a === 192 && b === 0 && (c === 0 || c === 2)) || // IETF protocol assignments / TEST-NET-1
     (a === 192 && b === 168) || // RFC1918
     (a === 198 && (b === 18 || b === 19)) || // benchmark
     (a === 198 && b === 51) || // TEST-NET-2

@@ -1,6 +1,8 @@
 # Objetivo final
 Ao buscar notícias, cada cliente recebe automaticamente as matérias que sua curadoria escolheria à mão. O sistema entrega temas, destaques e links; o relatório sai pronto, faltando só o design no Claude Design.
 
+**Decisão de 01/11/2026:** relatórios usam matérias de terceiros com link. Clipping traz a íntegra das matérias de autoria própria. A unidade é uma matéria por assunto, a partir de várias fontes, não a reescrita de cada notícia.
+
 Serviços distintos: portal interno de notícias, clipping, relatórios e boletins. Relatórios e boletins são pagos e contratados por contato.
 
 ## Temas-alvo
