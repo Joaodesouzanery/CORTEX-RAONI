@@ -22,6 +22,8 @@ export default function Navbar() {
     { href: '/dashboard', label: 'Painel' },
     { href: '/news', label: 'Notícias' },
     { href: '/reports/prepare', label: 'Preparação' },
+    { href: '/bulletins', label: 'Boletim' },
+    { href: '/agenda', label: 'Agenda' },
     { href: '/imports', label: 'Importações' },
     { href: '/clients', label: 'Clientes' },
     { href: '/sources', label: 'Fontes' },
