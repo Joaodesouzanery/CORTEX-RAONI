@@ -20,12 +20,12 @@ Pronto:
 - Telas `/bulletins` e `/agenda`.
 - Playbook, skills e agents em `.claude/`.
 
-Migrations: até 043 aplicadas pelo dono; **044 pendente**.
+Migrations: até 043 aplicadas pelo dono; 044 entregue; **045 pendente** (conferir com o dono).
 
-Agenda: só ANTAQ por decisão do dono, carregada do boletim mensal em PDF. Atualização ainda manual, por nova migration a cada boletim. O painel Aquarela responde 403 a acesso automatizado; não contornar.
+Agenda: só ANTAQ por decisão do dono. Conector automático em `src/lib/agenda/antaq.ts`: acha o boletim mais recente na página oficial, lê o PDF e grava; roda no `fetch-news.yml`; sem boletim novo é no-op. Painel Aquarela não é usado: bloqueia acesso automatizado.
 
 ## Pendências
-1. Teste SIMINERAL: receber as 291 matérias de outubro; ajustar regras (excesso de mineração fora do Pará); redigir relatório e 2-3 matérias neste chat, com aprovação humana.
+1. Teste SIMINERAL: 291 matérias recebidas (173 confirmadas, 89 mencionam Pará, 224 links Google News, 6 citam o cliente); ajustar regras (excesso de mineração fora do Pará) e reclassificar; redigir relatório e 2-3 matérias neste chat, com aprovação humana.
 2. Resolver links `news.google.com` para a URL real antes de usar como evidência (53 de 100 na amostra).
 3. Conferir com a consultoria os links dos relatórios DAQ e ONS de setembro (muitos 404).
 4. Conferir se InfoMoney e Diário do Transporte voltaram e se a coleta das 12h e 18h roda.
@@ -34,6 +34,13 @@ Agenda: só ANTAQ por decisão do dono, carregada do boletim mensal em PDF. Atua
 7. Login e acesso por serviço e cliente, antes de vender e antes da chave da Anthropic.
 8. Interface inspirada no modelo enviado: ainda não aplicada.
 9. Trocar `claude-sonnet-4-6` por `claude-sonnet-5-5` ao conectar a Anthropic.
+
+## Falta conectar (repetir ao dono em toda resposta)
+- Colar a migration 045 e fazer merge/deploy.
+- Conferir em Actions se `fetch-news` roda 3x/dia e o passo da agenda.
+- Chaves `PEXELS_API_KEY` e `UNSPLASH_ACCESS_KEY`.
+- Login, antes da `ANTHROPIC_API_KEY`.
+- `RESEND_API_KEY` se quiser alertas e envio por e-mail.
 
 ## Variáveis
 Nunca coloque valores neste arquivo.

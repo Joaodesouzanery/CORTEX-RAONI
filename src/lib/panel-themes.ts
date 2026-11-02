@@ -39,6 +39,7 @@ type ThemeRow = {
   articles: {
     title: string
     url?: string | null
+    resolved_url?: string | null
     excerpt?: string | null
     content?: string | null
     publisher?: string | null
@@ -72,7 +73,7 @@ export function buildPanelThemes(
         return {
           id: row.article_id,
           title: row.articles.title,
-          url: safeExternalUrl(row.articles.url),
+          url: safeExternalUrl(row.articles.resolved_url || row.articles.url),
           publisher: row.articles.publisher ?? null,
           published_at: row.articles.published_at ?? null,
           cites_client: Boolean(row.cita_cliente),

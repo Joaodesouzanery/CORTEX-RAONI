@@ -143,6 +143,18 @@ jobs:
         env:
           APP_URL: ${{ secrets.APP_URL }}
 
+      - name: Sync ANTAQ regulatory agenda
+        # Sem novo boletim é no-op. Falha aqui não pode esconder a coleta, e a coleta não impede a agenda.
+        if: ${{ always() }}
+        env:
+          APP_URL: ${{ secrets.APP_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          code=$(curl -sS -o /tmp/agenda.json -w '%{http_code}' --max-time 120 -X POST \
+            -H "Authorization: Bearer ${CRON_SECRET}" "${APP_URL%/}/api/internal/agenda/sync-antaq" || echo '000')
+          cat /tmp/agenda.json
+          test "${code}" = "200"
+
       - name: Reclassify archive
         # Opera sobre o acervo já existente, então roda mesmo se a coleta falhou
         # — quem pediu reclassificação no disparo manual quer isso de qualquer forma.

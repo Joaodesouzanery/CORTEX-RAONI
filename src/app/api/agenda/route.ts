@@ -11,7 +11,7 @@ export async function GET() {
     const items = await fetchAll<Record<string, unknown>>((from, to) =>
       supabase
         .from('regulatory_agenda_items')
-        .select('id, agency, title, item_type, phase, deadline, official_url, client_names, checked_at')
+        .select('id, agency, title, item_type, phase, deadline, official_url, client_names, checked_at, source_label')
         .order('deadline', { ascending: true, nullsFirst: false })
         .range(from, to)
     )
