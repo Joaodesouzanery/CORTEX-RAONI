@@ -92,11 +92,16 @@ export function PanelThemes({ clients, refreshKey }: { clients: Array<{ id: stri
             <summary className="cursor-pointer text-sm font-medium">
               {theme.title} · {theme.articles.length === 0 ? 'lacuna: nenhuma matéria' : `${theme.articles.length} matérias`}
             </summary>
-            <ul className="mt-2 grid gap-1 text-sm">
+            <ul className="mt-3 grid gap-3 text-sm sm:grid-cols-2 lg:grid-cols-3">
               {theme.articles.slice(0, VISIBLE_ARTICLES).map((article) => {
                 const href = safeExternalUrl(article.url)
                 return (
-                <li key={article.id}>
+                <li key={article.id} className="overflow-hidden rounded-lg border p-3">
+                  {article.image && (
+                    // Imagem da própria matéria, de domínio variável: next/image exigiria liberar todo host.
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={article.image} alt="" loading="lazy" className="-mx-3 -mt-3 mb-2 h-32 w-[calc(100%+1.5rem)] max-w-none object-cover" />
+                  )}
                   {href
                     ? <a className="underline" href={href} target="_blank" rel="noopener noreferrer">{article.title}</a>
                     : article.title}

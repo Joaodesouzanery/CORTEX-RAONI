@@ -155,6 +155,22 @@ jobs:
           cat /tmp/agenda.json
           test "${code}" = "200"
 
+      - name: Resolve Google News links
+        if: ${{ always() }}
+        env:
+          APP_URL: ${{ secrets.APP_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          # 40 lotes de 30: dá conta do acúmulo aos poucos sem estourar o job.
+          for n in $(seq 1 40); do
+            code=$(curl -sS -o /tmp/links.json -w '%{http_code}' --max-time 120 -X POST \
+              -H "Authorization: Bearer ${CRON_SECRET}" "${APP_URL%/}/api/internal/articles/resolve-links" || echo '000')
+            cat /tmp/links.json; echo
+            test "${code}" = "200"
+            done=$(node -e "process.stdout.write(String(!!require('/tmp/links.json').done))")
+            [ "${done}" = "true" ] && exit 0
+          done
+
       - name: Reclassify archive
         # Opera sobre o acervo já existente, então roda mesmo se a coleta falhou
         # — quem pediu reclassificação no disparo manual quer isso de qualquer forma.

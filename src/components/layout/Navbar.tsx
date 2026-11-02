@@ -30,23 +30,23 @@ export default function Navbar() {
   ]
 
   return (
-    <nav className="border-b border-gray-200 bg-white sticky top-0 z-50">
-      <div className="max-w-screen-2xl mx-auto px-6 py-4 flex items-center justify-between">
+    <nav className="sticky top-0 z-50 border-b border-slate-200 bg-white">
+      <div className="mx-auto flex max-w-screen-xl flex-wrap items-center gap-x-8 gap-y-2 px-6 py-3">
         <Link href="/news" aria-label="CORTEX — notícias" className="transition-opacity hover:opacity-70">
           <CortexLogo size="compact" />
         </Link>
-        <div className="flex items-center gap-8">
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-1">
           {links.map((link) => (
             <Link
               key={link.href}
               href={link.href}
               className={cn(
-                'text-sm uppercase tracking-wider transition-colors',
+                'border-b-2 py-1 text-sm transition-colors',
                 // Prefixo puro acenderia "Relatórios" em /reports/prepare. Com a
                 // barra o casamento é por segmento de rota, não por string.
                 pathname === link.href || pathname.startsWith(`${link.href}/`)
-                  ? 'text-black font-semibold'
-                  : 'text-gray-500 hover:text-black'
+                  ? 'border-sky-600 font-medium text-slate-900'
+                  : 'border-transparent text-slate-600 hover:text-slate-900'
               )}
             >
               {link.label}

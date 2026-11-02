@@ -14,6 +14,7 @@ export type PanelThemeArticle = {
   title: string
   url: string | null
   publisher: string | null
+  image: string | null
   published_at: string | null
   cites_client: boolean
   /** Destaque confirmado por uma pessoa na curadoria. */
@@ -43,6 +44,7 @@ type ThemeRow = {
     excerpt?: string | null
     content?: string | null
     publisher?: string | null
+    image_url?: string | null
     published_at?: string | null
   }
 }
@@ -75,6 +77,7 @@ export function buildPanelThemes(
           title: row.articles.title,
           url: safeExternalUrl(row.articles.resolved_url || row.articles.url),
           publisher: row.articles.publisher ?? null,
+          image: safeExternalUrl(row.articles.image_url),
           published_at: row.articles.published_at ?? null,
           cites_client: Boolean(row.cita_cliente),
           highlighted: row.report_role_source === 'humano',

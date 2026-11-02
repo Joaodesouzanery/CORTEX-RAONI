@@ -79,6 +79,18 @@ export default function AgendaPage() {
             {lanes.length > 0 && <p className="mt-1 text-xs text-gray-500">Início da faixa: hoje. Vermelho: até {URGENT_DAYS} dias.</p>}
           </section>
           <section>
+            <h2 className="mb-2 text-xl font-light">Fases da agenda</h2>
+            {/* A maioria dos temas não tem prazo oficial: a fase é o que mostra o andamento. */}
+            <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+              {Object.entries(visible.reduce<Record<string, number>>((all, item) => ({ ...all, [item.phase ?? item.item_type]: (all[item.phase ?? item.item_type] ?? 0) + 1 }), {}))
+                .sort(([a], [b]) => parseInt(a) - parseInt(b))
+                .map(([phase, count]) => (
+                  <div key={phase} className="rounded-lg border p-3 text-sm"><strong className="text-xl">{count}</strong><div className="text-xs text-gray-500">{phase}</div></div>
+                ))}
+            </div>
+            <p className="mt-1 text-xs text-gray-500">{visible.length} temas no filtro atual.</p>
+          </section>
+          <section>
             <h2 className="mb-2 text-xl font-light">Itens ({visible.length})</h2>
             {visible.length === 0 && <p className="text-sm text-gray-500">Ainda não há itens conectados para este filtro.</p>}
             <div className="overflow-x-auto">

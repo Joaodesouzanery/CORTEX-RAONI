@@ -58,22 +58,36 @@ export default function BulletinPage() {
       {!data && !error && <p className="text-sm text-gray-500">Montando boletim…</p>}
       {data && (
         <article className="grid gap-6">
-          <header className="rounded p-8 text-white" style={{ background: sector.color }}>
+          <header className="relative overflow-hidden rounded-lg p-8 text-white" style={{ background: sector.color }}>
+            <svg aria-hidden="true" viewBox="0 0 1000 300" preserveAspectRatio="none" className="absolute inset-0 h-full w-full opacity-70">
+              {Array.from({ length: 8 }, (_, line) => (
+                <path key={line} d={`M350 ${300 - line * 14} C 560 ${180 - line * 16}, 640 ${380 - line * 14}, 1000 ${70 + line * 14}`} fill="none" stroke={sector.accent} strokeWidth="1.5" />
+              ))}
+            </svg>
+            <div className="relative">
             <p className="text-xs uppercase tracking-widest">Boletim semanal · {sector.label}</p>
             <h2 className="mt-2 text-3xl font-semibold">{client?.name}</h2>
             <p className="mt-2 text-sm">{date(data.start)} a {date(data.end)}: {data.total_tagged} matérias marcadas, {data.highlights.length} em destaque, {data.unthemed} sem tema.</p>
+            </div>
           </header>
           <section>
             <h3 className="mb-2 text-xl font-light">Destaques</h3>
             {data.highlights.length === 0 && <p className="text-sm text-gray-500">Nenhuma matéria citou o cliente nesta semana.</p>}
-            <ul className="grid gap-3">
+            <ul className="grid gap-4 sm:grid-cols-2">
               {data.highlights.slice(0, 10).map((article) => {
                 const href = safeExternalUrl(article.url)
                 return (
-                  <li key={article.id} className="border-t pt-3 text-sm">
+                  <li key={article.id} className="overflow-hidden rounded-lg border text-sm">
+                    {article.image && (
+                      // Imagem da própria matéria, de domínio variável: next/image exigiria liberar todo host.
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={article.image} alt="" loading="lazy" className="h-36 w-full object-cover" />
+                    )}
+                    <div className="p-3">
                     {href ? <a className="font-medium underline" href={href} target="_blank" rel="noopener noreferrer">{article.title}</a> : <span className="font-medium">{article.title}</span>}
                     <div className="text-xs text-gray-500">{article.publisher ?? 'veículo não informado'} · {date(article.published_at)}</div>
                     <p className="mt-1 text-xs text-gray-500">Por que importa: pendente de análise.</p>
+                    </div>
                   </li>
                 )
               })}

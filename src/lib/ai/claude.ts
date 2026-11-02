@@ -30,6 +30,8 @@ RASTREABILIDADE OBRIGATÓRIA:
 - Use exclusivamente os códigos fornecidos nos ARTIGOS MONITORADOS. Nunca invente um código.
 - Separe interpretação de fato com o marcador **Leitura estratégica:**.
 - Não diga que todas as fontes foram verificadas. A disponibilidade do texto e a conferência da publicação original são estados distintos.
+- Nunca invente dado, número, citação, nome, cargo ou link. Use apenas porta-vozes confirmados pelas fontes. Link não confirmado fica como —.
+- Na seção 9, descreva a contratada apenas com os verbos auxilia, apoia, assessora ou subsidia. Nunca coordena, lidera, dirige, chefia, controla ou gerencia.
 
 POSTURA NARRATIVA:
 {postura_narrativa}
