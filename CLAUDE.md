@@ -40,7 +40,7 @@ Verificação de uma mudança = `typecheck` + `lint` + `test` + o script de QA d
 ## Banco de dados
 
 - Migrations versionadas e **idempotentes** em `supabase/migrations/`
-  (001..035). **Nunca edite uma migration já aplicada** — crie a próxima.
+  (001..044; ver docs/HANDOFF.md para quais estão aplicadas). **Nunca edite uma migration já aplicada** — crie a próxima.
 - Padrão da casa: `CREATE TABLE IF NOT EXISTS`, `ADD COLUMN IF NOT EXISTS`,
   e constraint dentro de `DO $$ ... IF NOT EXISTS (SELECT 1 FROM pg_constraint
   WHERE conname = ...) $$`.
@@ -154,6 +154,10 @@ Valem por padrão, em todo trabalho, sem depender de skill disparar.
 - `sources.access_mode` é escrito e nunca lido como trava.
 - `articles.url` NULLABLE com `UNIQUE` (023): matéria de impresso/rádio não tem
   dedupe no banco.
+
+## Continuidade
+
+Ao começar, leia `docs/HANDOFF.md`: estado atual, pendências e configuração. Atualize-o ao fim de cada etapa e envie tudo ao GitHub.
 
 ## Playbook
 

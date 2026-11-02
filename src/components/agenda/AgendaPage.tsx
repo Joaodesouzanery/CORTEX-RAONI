@@ -44,7 +44,7 @@ export default function AgendaPage() {
         </div>
         <select aria-label="Setor" className="rounded border px-2 py-1 text-sm" value={sectorKey} onChange={(event) => setSectorKey(event.target.value)}>
           <option value="">Todos os setores</option>
-          {SECTORS.map((item) => <option key={item.key} value={item.key}>{item.label}</option>)}
+          {SECTORS.filter((item) => (item.agencies as readonly string[]).some((agency) => items?.some((row) => row.agency === agency))).map((item) => <option key={item.key} value={item.key}>{item.label}</option>)}
         </select>
       </div>
       {error && <p className="text-sm text-red-600">{error}</p>}
@@ -105,10 +105,9 @@ export default function AgendaPage() {
           <section>
             <h2 className="mb-2 text-xl font-light">Cobertura por agência</h2>
             <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-6">
-              {AGENCIES.map((agency) => {
-                const count = items.filter((item) => item.agency === agency).length
-                return <div key={agency} className="rounded border p-2 text-sm"><strong>{agency}</strong><div className="text-xs text-gray-500">{count ? `${count} itens` : 'a conectar'}</div></div>
-              })}
+              {AGENCIES.filter((agency) => items.some((item) => item.agency === agency)).map((agency) => (
+                <div key={agency} className="rounded border p-2 text-sm"><strong>{agency}</strong><div className="text-xs text-gray-500">{items.filter((item) => item.agency === agency).length} itens</div></div>
+              ))}
             </div>
           </section>
         </div>
