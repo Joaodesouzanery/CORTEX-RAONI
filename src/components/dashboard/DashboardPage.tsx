@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import ClientAutomationCard from '@/components/dashboard/ClientAutomationCard'
 import ExceptionQueueDrawer from '@/components/dashboard/ExceptionQueueDrawer'
 import { describeCollectionHealth } from '@/lib/collection-health'
+import { PanelSidebar } from '@/components/dashboard/PanelSidebar'
 import { PanelThemes } from '@/components/dashboard/PanelThemes'
 import type { DashboardSummary } from '@/types'
 
@@ -64,7 +65,7 @@ export default function DashboardPage() {
     try {
       const res = await fetch(`/api/dashboard?days=${periodDays}`)
       const data = await res.json().catch(() => null)
-      if (!res.ok) throw new Error(data?.error || 'Falha ao carregar o Painel.')
+      if (!res.ok) throw new Error(data?.error || `Falha ao carregar o Painel (HTTP ${res.status}).`)
       setSummary(data as DashboardSummary)
       setLoadError(null)
     } catch (error) {
@@ -219,11 +220,11 @@ export default function DashboardPage() {
   useEffect(() => () => { cancelled.current = true }, [])
 
   return (
-    <div className="mx-auto max-w-screen-2xl px-6 py-8">
+    <div className="mx-auto max-w-screen-xl px-6 py-10">
       <div className="mb-8 flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className="text-5xl font-light tracking-tight">Painel</h1>
-          <p className="mt-1 text-xs text-gray-400">Cobertura monitorada por cliente, sem truncamento</p>
+          <h1 className="text-5xl font-light tracking-tight text-slate-900">Painel</h1>
+          <p className="mt-2 max-w-2xl text-sm text-slate-600">As notícias do mês agrupadas por tema, a agenda regulatória e o andamento de cada cliente.</p>
         </div>
         <div className="flex flex-wrap gap-2">
           <Button variant="outline" onClick={load} disabled={loading || Boolean(running)}>
@@ -247,7 +248,11 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      <PanelThemes clients={(summary?.clients ?? []).map((row) => row.client)} refreshKey={themesTick} />
+      <div className="mb-12 grid gap-10 lg:grid-cols-[minmax(0,1fr)_300px]">
+        <PanelThemes refreshKey={themesTick} />
+        <PanelSidebar />
+      </div>
+      <h2 className="mb-4 text-3xl font-light text-slate-900">Cobertura e preparação por cliente</h2>
 
       <div className="mb-6 flex flex-wrap items-center gap-2">
         <span className="mr-1 text-xs uppercase tracking-widest text-gray-500">Período:</span>

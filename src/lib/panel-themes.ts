@@ -19,6 +19,8 @@ export type PanelThemeArticle = {
   cites_client: boolean
   /** Destaque confirmado por uma pessoa na curadoria. */
   highlighted: boolean
+  /** Sem texto integral: a relevância saiu só de título e resumo. */
+  weak: boolean
 }
 
 export type PanelTheme = { title: string; articles: PanelThemeArticle[] }
@@ -46,6 +48,7 @@ type ThemeRow = {
     publisher?: string | null
     image_url?: string | null
     published_at?: string | null
+    content_status?: string | null
   }
 }
 
@@ -81,6 +84,7 @@ export function buildPanelThemes(
           published_at: row.articles.published_at ?? null,
           cites_client: Boolean(row.cita_cliente),
           highlighted: row.report_role_source === 'humano',
+          weak: row.articles.content_status !== 'integral',
         }
       })
       .sort(

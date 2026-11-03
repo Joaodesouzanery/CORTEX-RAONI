@@ -21,7 +21,7 @@ export async function loadBulletin(supabase: SupabaseClient, clientId: string, n
     fetchAll<Parameters<typeof buildPanelThemes>[2][number]>((from, to) =>
       supabase
         .from('article_client_tags')
-        .select('article_id, cita_cliente, monitoring_status, report_role_source, articles!inner(title, url, resolved_url, excerpt, content, publisher, image_url, published_at)')
+        .select('article_id, cita_cliente, monitoring_status, report_role_source, articles!inner(title, url, resolved_url, excerpt, content, publisher, image_url, published_at, content_status)')
         .eq('client_id', clientId)
         .gte('articles.published_at', start)
         .lt('articles.published_at', end)

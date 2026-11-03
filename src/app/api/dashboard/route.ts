@@ -4,41 +4,8 @@ import { createAdminClient as createClient } from '@/lib/supabase/server'
 import type { ApprovalChecklist, Client, DashboardClientSummary, Source } from '@/types'
 
 export const dynamic = 'force-dynamic'
+export const maxDuration = 60
 
-async function monitoredCount(
-  supabase: ReturnType<typeof createClient>,
-  clientId: string,
-  start: string,
-  end?: string,
-  filter?: 'direct' | 'review' | 'triaged' | 'qualified' | 'annex' | 'pending'
-): Promise<number> {
-  let query = supabase
-    .from('article_client_tags')
-    .select('article_id, articles!inner(published_at)', { count: 'exact', head: true })
-    .eq('client_id', clientId)
-    .neq('monitoring_status', 'excluido')
-    .gte('articles.published_at', start)
-  if (end) query = query.lt('articles.published_at', end)
-  if (filter === 'direct') query = query.eq('cita_cliente', true)
-  if (filter === 'review') query = query.eq('monitoring_status', 'revisao')
-  if (filter === 'triaged') {
-    query = query.or('triaged_at.not.is.null,report_role_source.eq.humano')
-  }
-  if (filter === 'qualified') {
-    query = query
-      .eq('report_role', 'evidencia')
-      .or(
-        'report_role_source.eq.humano,editorial_review_state.eq.revisado,and(verification_status.eq.verificada,qa_checked_at.not.is.null,editorial_confidence.gte.0.85)'
-      )
-  }
-  if (filter === 'annex') query = query.in('report_role', ['contexto', 'ruido'])
-  if (filter === 'pending') {
-    query = query.or('report_role.is.null,editorial_review_state.eq.pendente')
-  }
-  const { count, error } = await query
-  if (error) throw new Error(error.message)
-  return count || 0
-}
 
 export async function GET(req: Request) {
   const supabase = createClient()
@@ -64,17 +31,22 @@ export async function GET(req: Request) {
   if (sourcesError) return NextResponse.json({ error: sourcesError.message }, { status: 500 })
 
   try {
+    // Uma consulta para todos os clientes (migration 047); antes eram 8 por cliente.
+    const { data: countRows, error: countsError } = await supabase.rpc('dashboard_client_counts', {
+      p_start: cutoff,
+      p_previous_start: previousStart,
+    })
+    if (countsError) throw new Error(countsError.message)
+    const countsByClient = new Map(
+      ((countRows as Array<Record<string, string | number>>) || []).map((row) => [String(row.client_id), row])
+    )
+    const countOf = (clientId: string, key: string) => Number(countsByClient.get(clientId)?.[key] ?? 0)
     const clients: DashboardClientSummary[] = await Promise.all(
       ((clientRows as Client[]) || []).map(async (client) => {
-        const [total, direct, review, previous, triaged, qualified, annex, pending, draftResult] = await Promise.all([
-          monitoredCount(supabase, client.id, cutoff),
-          monitoredCount(supabase, client.id, cutoff, undefined, 'direct'),
-          monitoredCount(supabase, client.id, cutoff, undefined, 'review'),
-          monitoredCount(supabase, client.id, previousStart, cutoff),
-          monitoredCount(supabase, client.id, cutoff, undefined, 'triaged'),
-          monitoredCount(supabase, client.id, cutoff, undefined, 'qualified'),
-          monitoredCount(supabase, client.id, cutoff, undefined, 'annex'),
-          monitoredCount(supabase, client.id, cutoff, undefined, 'pending'),
+        const [total, direct, review, previous, triaged, qualified, annex, pending] = [
+          'total', 'direct', 'review', 'previous', 'triaged', 'qualified', 'annex', 'pending',
+        ].map((key) => countOf(client.id, key))
+        const [draftResult] = await Promise.all([
           supabase
             .from('monthly_report_drafts')
             .select('id, quality_status, status, automation_status, automation_blocking_reason, lead_article_id, lead_source, service_metrics, service_metrics_source, auto_sections, base_version, quality_summary')

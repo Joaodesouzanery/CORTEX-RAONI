@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter, Space_Grotesk } from 'next/font/google'
 import './globals.css'
 import Navbar from '@/components/layout/Navbar'
+import SiteFooter from '@/components/layout/SiteFooter'
 import { Toaster } from '@/components/ui/toaster'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -17,7 +18,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="pt-BR">
       <body className={`${inter.className} ${spaceGrotesk.variable}`}>
         <Navbar />
-        <main className="min-h-screen bg-white">{children}</main>
+        <main className="min-h-screen bg-white">{children}
+        <SiteFooter /></main>
         <Toaster />
       </body>
     </html>
