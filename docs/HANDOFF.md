@@ -20,11 +20,14 @@ Pronto:
 - Telas `/bulletins` e `/agenda`.
 - Playbook, skills e agents em `.claude/`.
 
-Migrations: até 043 aplicadas pelo dono; 044 entregue; 046 aplicada; 047 entregue; **048 pendente** (marcas PRIO=Vortex e ONS=CRT, temas pedidos).
+Migrations: até 043 aplicadas pelo dono; 044 entregue; 046 aplicada; 047 entregue; **048 aplicada; **049 pendente** (cobertura setorial ONS/CCEE, Zero Hora, JN, desliga manchetes gerais).
 
 Agenda: só ANTAQ por decisão do dono. Conector automático em `src/lib/agenda/antaq.ts`: acha o boletim mais recente na página oficial, lê o PDF e grava; roda no `fetch-news.yml`; sem boletim novo é no-op. Painel Aquarela não é usado: bloqueia acesso automatizado.
 
 ## Pendências
+- Cobertura ONS: 510 manchetes, 84 coletadas, 39 marcadas (03/11). Reexecutar `docs/evidencias/2026-10/gabarito-ons/gabarito-ons.sql` após 2 dias com a paginação WordPress e a 049.
+- Design: tokens, fonte e cards aplicados em Notícias e Painel; faltam Preparação, Clientes, Fontes, Importações.
+- Saúde: `/api/internal/health` grava alertas; Painel exibe. Falta e-mail de saúde (Resend).
 - Resumo diário (aba em Boletim) no formato que a ONS recebe: falta tom e frase-resumo, que dependem de IA ou editor.
 - Marca da DAQ e dos demais clientes: confirmar com o dono.
 - Gabarito da ONS: 510 manchetes de 19 a 30/10 em clippings de fornecedor (PDFs confidenciais, não versionados). Brasil Energia (16) não tem feed nem itens no Google News.
@@ -40,7 +43,8 @@ Agenda: só ANTAQ por decisão do dono. Conector automático em `src/lib/agenda/
 9. Trocar `claude-sonnet-4-6` por `claude-sonnet-5-5` ao conectar a Anthropic.
 
 ## Falta conectar (repetir ao dono em toda resposta)
-- Colar as migrations 047 e 048.
+- Colar a migration 049.
+- Tornar o repositório privado antes de subir os PDFs de clipping (hoje é público).
 - Rodar `gabarito-ons.sql` (local, fora do Git) para medir a cobertura das manchetes dos clippings diários da ONS.
 - Rodar `fetch-news` manual com `reclassify_archive` e período 2026-10.
 - Conferir em Actions se `fetch-news` roda 3x/dia e o passo da agenda.

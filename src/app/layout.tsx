@@ -1,11 +1,13 @@
 import type { Metadata } from 'next'
-import { Inter, Space_Grotesk } from 'next/font/google'
+import { IBM_Plex_Mono, Manrope, Space_Grotesk } from 'next/font/google'
 import './globals.css'
 import Navbar from '@/components/layout/Navbar'
 import SiteFooter from '@/components/layout/SiteFooter'
 import { Toaster } from '@/components/ui/toaster'
 
-const inter = Inter({ subsets: ['latin'] })
+// Manrope: geométrica e legível em títulos grandes, no espírito do modelo de referência.
+const manrope = Manrope({ subsets: ['latin'], variable: '--font-sans' })
+const plexMono = IBM_Plex_Mono({ subsets: ['latin'], weight: ['400', '500'], variable: '--font-mono' })
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], variable: '--font-space-grotesk' })
 
 export const metadata: Metadata = {
@@ -16,10 +18,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR">
-      <body className={`${inter.className} ${spaceGrotesk.variable}`}>
+      <body className={`${manrope.variable} ${plexMono.variable} ${spaceGrotesk.variable} font-sans`}>
         <Navbar />
-        <main className="min-h-screen bg-white">{children}
-        <SiteFooter /></main>
+        <main className="min-h-screen bg-white">{children}</main>
+        <SiteFooter />
         <Toaster />
       </body>
     </html>

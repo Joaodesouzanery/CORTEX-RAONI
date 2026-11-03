@@ -174,11 +174,44 @@ export async function fetchOgImage(
   }
 }
 
-export async function fetchRSS(feedUrl: string): Promise<FetchedArticle[]> {
-  const xml = await fetchFeedString(feedUrl)
-  const feed = await parser.parseString(xml)
+/** WordPress devolve 10 itens por página; MegaWhat publica ~10/dia e perdia o resto. */
+const WP_PAGE_SIZE = 10
+/** 5 páginas = 50 itens, dentro dos 25s por fonte e abaixo do corte de 100 do fetch-run. */
+const WP_MAX_PAGES = 5
 
-  const articles: FetchedArticle[] = feed.items.map((item) => {
+function pagedFeedUrl(feedUrl: string, page: number) {
+  const url = new URL(feedUrl)
+  url.searchParams.set('paged', String(page))
+  return url.toString()
+}
+
+/** Páginas extras só em feed WordPress cheio; para quando a página repete ou encurta. */
+async function fetchFeedPages(feedUrl: string) {
+  const first = await parser.parseString(await fetchFeedString(feedUrl))
+  const items = [...first.items]
+  const isWordPress = /wordpress/i.test(first.generator || '') || /\/feed\/?$/.test(new URL(feedUrl).pathname)
+  if (feedUrl.includes('news.google.com') || !isWordPress || first.items.length < WP_PAGE_SIZE) return items
+  const seen = new Set(items.map((item) => item.link))
+  for (let page = 2; page <= WP_MAX_PAGES; page++) {
+    let next
+    try {
+      next = await parser.parseString(await fetchFeedString(pagedFeedUrl(feedUrl, page)))
+    } catch {
+      break // página extra fora do ar não derruba a fonte: a primeira já veio
+    }
+    const fresh = next.items.filter((item) => item.link && !seen.has(item.link))
+    if (!fresh.length) break
+    fresh.forEach((item) => seen.add(item.link as string))
+    items.push(...fresh)
+    if (next.items.length < WP_PAGE_SIZE) break
+  }
+  return items
+}
+
+export async function fetchRSS(feedUrl: string): Promise<FetchedArticle[]> {
+  const feedItems = await fetchFeedPages(feedUrl)
+
+  const articles: FetchedArticle[] = feedItems.map((item) => {
     const extended = item as typeof item & ExtendedFeedItem
     const mediaContent = extended['media:content']
     const mediaThumbnail = extended['media:thumbnail']

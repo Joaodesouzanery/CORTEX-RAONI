@@ -210,6 +210,10 @@ export default function NewsPage() {
           const client = clientList.find((item) => item.id === clientId) || null
           setActiveClient(client)
           if (client && params.get('origin') === 'manual') setManualOnly(true)
+        } else if (params.get('client') !== 'todos') {
+          // Sem cliente a tela mostrava o acervo inteiro, com tudo que a coleta
+          // traz. Abre no primeiro cliente; "?client=todos" volta ao acervo.
+          setActiveClient(clientList.find((item) => item.active !== false) || null)
         }
       })
       .catch((error) => {
@@ -449,7 +453,7 @@ export default function NewsPage() {
     <div className="mx-auto max-w-screen-2xl px-6 py-8">
       <div className="mb-8 flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className="text-5xl font-light tracking-tight">As últimas notícias</h1>
+          <h1 className="text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl">Notícias</h1>
           <p className="mt-1 text-xs text-gray-400">
             {/* Sem cliente a contagem do servidor é estimada (o count exato varria
                 a tabela inteira). O ≈ é obrigatório: número sem procedência

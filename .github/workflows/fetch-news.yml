@@ -171,6 +171,18 @@ jobs:
             [ "${done}" = "true" ] && exit 0
           done
 
+      - name: Health check
+        # Último passo: o que as etapas acima deixaram é o que o usuário vai ver.
+        if: ${{ always() }}
+        env:
+          APP_URL: ${{ secrets.APP_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          code=$(curl -sS -o /tmp/health.json -w '%{http_code}' --max-time 120 -X POST \
+            -H "Authorization: Bearer ${CRON_SECRET}" "${APP_URL%/}/api/internal/health" || echo '000')
+          cat /tmp/health.json; echo
+          test "${code}" = "200"
+
       - name: Reclassify archive
         # Opera sobre o acervo já existente, então roda mesmo se a coleta falhou
         # — quem pediu reclassificação no disparo manual quer isso de qualquer forma.

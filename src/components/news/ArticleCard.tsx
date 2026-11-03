@@ -15,9 +15,9 @@ interface Props {
 
 export default function ArticleCard({ article, selected, onSelect, score }: Props) {
   return (
-    <div className={cn('group flex flex-col', selected && 'ring-2 ring-black')}>
+    <div className={cn('group card-hover flex flex-col overflow-hidden rounded-lg border border-slate-200 bg-white', selected && 'ring-2 ring-sky-600')}>
       {/* Source + Date header */}
-      <div className="flex items-center justify-between mb-2">
+      <div className="flex items-center justify-between px-4 pt-3 pb-2">
         <span className="text-xs uppercase tracking-widest text-gray-500 flex items-center gap-2">
           {article.tag?.manual_intake && (
             <span
@@ -55,9 +55,9 @@ export default function ArticleCard({ article, selected, onSelect, score }: Prop
       </div>
 
       {/* Image */}
-      <div className="relative w-full aspect-video bg-gray-100 overflow-hidden mb-3">
+      <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-100">
         {article.image_url ? (
-          <Image src={article.image_url} alt={article.title} fill className="object-cover" unoptimized />
+          <Image src={article.image_url} alt="" fill className="object-cover transition-transform duration-300 group-hover:scale-[1.03]" unoptimized />
         ) : (
           <div className="w-full h-full bg-gray-100 flex items-center justify-center">
             <span className="text-xs uppercase tracking-widest text-gray-400 px-3 text-center line-clamp-2">
@@ -68,10 +68,10 @@ export default function ArticleCard({ article, selected, onSelect, score }: Prop
       </div>
 
       {/* Title */}
-      <h3 className="font-bold text-base leading-snug line-clamp-2 mb-2">{article.title}</h3>
+      <h3 className="mx-4 mt-3 mb-2 text-lg font-semibold leading-snug text-slate-900 line-clamp-3">{article.title}</h3>
 
       {/* Excerpt */}
-      {article.excerpt && <p className="text-sm text-gray-600 line-clamp-3 mb-3 flex-1">{article.excerpt}</p>}
+      {article.excerpt && <p className="mx-4 mb-3 flex-1 text-sm text-slate-600 line-clamp-3">{article.excerpt}</p>}
 
       {/* Read link — o href passa pelo validador: linhas gravadas antes da
           correção na ingestão podem conter javascript:, e o React não sanitiza. */}
@@ -80,9 +80,9 @@ export default function ArticleCard({ article, selected, onSelect, score }: Prop
           href={safeExternalUrl(article.url)!}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-sm text-black hover:underline mt-auto"
+          className="focus-ring mx-4 mb-4 mt-auto inline-block text-sm font-medium text-sky-700 hover:underline"
         >
-          ↳ Saiba Mais
+          Ler matéria
         </a>
       ) : (
         <span className="text-xs text-gray-400 mt-auto">Sem link externo</span>
