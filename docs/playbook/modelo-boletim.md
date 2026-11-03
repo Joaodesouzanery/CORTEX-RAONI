@@ -12,3 +12,6 @@ Duas variantes do mesmo esqueleto. É serviço separado do relatório.
 **Aos associados (referência: Boletim SindInfor de setembro/2026):** principais matérias do mês, "na imprensa" em destaque e blocos por tema. Sem conteúdo reservado do relatório da diretoria.
 
 Quando faltar link direto, dizer isso e indicar cobertura relacionada; nunca inventar link.
+
+## Resumo diário (formato que a ONS recebe)
+Por fato: veículos que publicaram, o que disseram, citação literal quando houver e tom (positiva, técnica, negativa). Primeiro as menções ao cliente; depois "No setor". Toda frase vem de matéria do dia.

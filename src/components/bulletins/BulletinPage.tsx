@@ -1,5 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
+import { DailyDigestPanel } from '@/components/bulletins/DailyDigestPanel'
 import { sectorForClient } from '@/lib/sectors'
 import { safeExternalUrl } from '@/lib/url'
 import type { PanelThemesResult } from '@/lib/panel-themes'
@@ -14,6 +15,7 @@ export default function BulletinPage() {
   const [clientId, setClientId] = useState('')
   const [data, setData] = useState<Bulletin | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [mode, setMode] = useState<'semanal' | 'diario'>('semanal')
 
   useEffect(() => {
     fetch('/api/clients')
@@ -54,9 +56,17 @@ export default function BulletinPage() {
           {clients.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}
         </select>
       </div>
-      {error && <p className="text-sm text-red-600">{error}</p>}
-      {!data && !error && <p className="text-sm text-gray-500">Montando boletim…</p>}
-      {data && (
+      <div className="mb-6 flex gap-4 border-b">
+        {(['semanal', 'diario'] as const).map((item) => (
+          <button key={item} onClick={() => setMode(item)} className={`border-b-2 pb-2 text-sm ${mode === item ? 'border-sky-600 text-slate-900' : 'border-transparent text-slate-500'}`}>
+            {item === 'semanal' ? 'Boletim semanal' : 'Resumo diário'}
+          </button>
+        ))}
+      </div>
+      {mode === 'diario' && client && <DailyDigestPanel clientId={client.id} clientName={client.name} />}
+      {mode === 'semanal' && error && <p className="text-sm text-red-600">{error}</p>}
+      {mode === 'semanal' && !data && !error && <p className="text-sm text-gray-500">Montando boletim…</p>}
+      {mode === 'semanal' && data && (
         <article className="grid gap-6">
           <header className="relative overflow-hidden rounded-lg p-8 text-white" style={{ background: sector.color }}>
             <svg aria-hidden="true" viewBox="0 0 1000 300" preserveAspectRatio="none" className="absolute inset-0 h-full w-full opacity-70">

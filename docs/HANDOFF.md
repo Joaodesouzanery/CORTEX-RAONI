@@ -20,11 +20,14 @@ Pronto:
 - Telas `/bulletins` e `/agenda`.
 - Playbook, skills e agents em `.claude/`.
 
-Migrations: até 043 aplicadas pelo dono; 044 entregue; 046 aplicada; **047 pendente** (contagens do Painel em uma consulta).
+Migrations: até 043 aplicadas pelo dono; 044 entregue; 046 aplicada; 047 entregue; **048 pendente** (marcas PRIO=Vortex e ONS=CRT, temas pedidos).
 
 Agenda: só ANTAQ por decisão do dono. Conector automático em `src/lib/agenda/antaq.ts`: acha o boletim mais recente na página oficial, lê o PDF e grava; roda no `fetch-news.yml`; sem boletim novo é no-op. Painel Aquarela não é usado: bloqueia acesso automatizado.
 
 ## Pendências
+- Resumo diário (aba em Boletim) no formato que a ONS recebe: falta tom e frase-resumo, que dependem de IA ou editor.
+- Marca da DAQ e dos demais clientes: confirmar com o dono.
+- Gabarito da ONS: 510 manchetes de 19 a 30/10 em clippings de fornecedor (PDFs confidenciais, não versionados). Brasil Energia (16) não tem feed nem itens no Google News.
 0. Evidência fraca (sem texto integral) já marcada no Painel e no pacote; falta levar a marca ao relatório e ao PDF.
 1. Teste SIMINERAL: 291 matérias recebidas (173 confirmadas, 89 mencionam Pará, 224 links Google News, 6 citam o cliente); ajustar regras (excesso de mineração fora do Pará) e reclassificar; redigir relatório e 2-3 matérias neste chat, com aprovação humana.
 2. Resolver links `news.google.com` para a URL real antes de usar como evidência (53 de 100 na amostra).
@@ -37,7 +40,8 @@ Agenda: só ANTAQ por decisão do dono. Conector automático em `src/lib/agenda/
 9. Trocar `claude-sonnet-4-6` por `claude-sonnet-5-5` ao conectar a Anthropic.
 
 ## Falta conectar (repetir ao dono em toda resposta)
-- Colar a migration 047 (sem ela o Painel não carrega as contagens).
+- Colar as migrations 047 e 048.
+- Rodar `gabarito-ons.sql` (local, fora do Git) para medir a cobertura das manchetes dos clippings diários da ONS.
 - Rodar `fetch-news` manual com `reclassify_archive` e período 2026-10.
 - Conferir em Actions se `fetch-news` roda 3x/dia e o passo da agenda.
 - Chaves `PEXELS_API_KEY` e `UNSPLASH_ACCESS_KEY`.
