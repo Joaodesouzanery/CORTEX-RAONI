@@ -31,6 +31,9 @@ export async function GET(req: Request) {
   const searchPattern = ilikePattern(search)
   const includeContent = searchParams.get('include_content') === 'true'
   const directOnly = searchParams.get('direct') === 'true'
+  // Sem cliente: só matéria marcada para algum cliente. Tira do acervo geral o que
+  // nenhuma regra quer (futebol, celebridades) sem desligar os veículos.
+  const relevantOnly = searchParams.get('relevant') === 'true'
   const requestedLimit = parseInt(searchParams.get('limit') || (paginated ? '100' : '500'))
   const limit = paginated ? Math.min(200, Math.max(1, requestedLimit || 100)) : requestedLimit
   const offsetParam = searchParams.get('offset')
@@ -192,7 +195,9 @@ export async function GET(req: Request) {
     let query = supabase
       .from('articles')
       .select(
-        `id, source_id, title, url, image_url, excerpt, published_at, fetched_at, publisher, sources(name, categoria, is_general), ${provenanceJoin}`,
+        (relevantOnly
+          ? `id, source_id, title, url, image_url, excerpt, published_at, fetched_at, publisher, sources(name, categoria, is_general), ${provenanceJoin}, article_client_tags!inner(article_id, monitoring_status)`
+          : `id, source_id, title, url, image_url, excerpt, published_at, fetched_at, publisher, sources(name, categoria, is_general), ${provenanceJoin}`) as 'id, source_id, title, url, image_url, excerpt, published_at, fetched_at, publisher, sources(name, categoria, is_general), article_provenance(source_id, sources(id, name, categoria, is_general))',
         { count: 'estimated' }
       )
       .order('published_at', { ascending: false, nullsFirst: false })
@@ -203,6 +208,7 @@ export async function GET(req: Request) {
       cutoff = new Date(Date.now() - 30 * 86400000).toISOString()
     }
     if (cutoff) query = query.gte('published_at', cutoff)
+    if (relevantOnly) query = query.neq('article_client_tags.monitoring_status', 'excluido')
     if (publishedBefore) query = query.lte('published_at', publishedBefore)
     if (searchPattern) query = query.ilike('title', searchPattern)
     if (sourceId) query = query.eq('article_provenance.source_id', sourceId)

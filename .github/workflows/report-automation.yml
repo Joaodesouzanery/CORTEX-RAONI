@@ -1,12 +1,13 @@
 name: Preparação mensal contínua
 
 on:
-  # DESLIGADO (2026-10-04): todo cron deste repo falhava — secret APP_URL/CRON_SECRET ausente no GitHub (Settings > Secrets and variables > Actions). Ver chat/CRON-STATUS.md para o diagnostico e como reativar. workflow_dispatch continua disponivel p/ rodar na mao.
-  # schedule:  # DESLIGADO em 2026-10-04 — ver nota acima
+  # Religado em 04/11/2026: a preparação mensal passa a ser automática (a tela
+  # "Preparação" sai do menu). Sem ANTHROPIC_API_KEY o pipeline parqueia visível.
+  schedule:
     # 00h15 de Brasília no primeiro dia: garante as preparações do mês.
-    # - cron: '15 3 1 * *'
+    - cron: '15 3 1 * *'
     # 04h15 de Brasília: atualiza mês corrente e anterior ainda aberto.
-    # - cron: '15 7 * * *'
+    - cron: '15 7 * * *'
   workflow_dispatch:
     inputs:
       period:

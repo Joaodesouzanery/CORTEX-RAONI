@@ -334,6 +334,7 @@ export interface DashboardSummary {
     latest_run: FetchRun | null
   }
   operational_alerts?: OperationalAlert[]
+  counts_warning?: string | null
 }
 
 export interface PaginatedArticles {

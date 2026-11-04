@@ -36,7 +36,12 @@ export async function GET(req: Request) {
       p_start: cutoff,
       p_previous_start: previousStart,
     })
-    if (countsError) throw new Error(countsError.message)
+    // PGRST202 = função ausente (migration 047 não aplicada ou cache do PostgREST
+    // antigo). O Painel segue sem as contagens e diz por quê, em vez de cair inteiro.
+    if (countsError && countsError.code !== 'PGRST202') throw new Error(countsError.message)
+    const countsWarning = countsError
+      ? 'Contagens indisponíveis: aplique a migration 047 e recarregue o cache do Supabase.'
+      : null
     const countsByClient = new Map(
       ((countRows as Array<Record<string, string | number>>) || []).map((row) => [String(row.client_id), row])
     )
@@ -263,6 +268,7 @@ export async function GET(req: Request) {
         latest_run: latestRun || null,
       },
       operational_alerts: operationalAlerts || [],
+      counts_warning: countsWarning,
     })
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Falha ao montar o painel.'

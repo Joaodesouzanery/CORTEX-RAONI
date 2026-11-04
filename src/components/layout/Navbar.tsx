@@ -19,14 +19,10 @@ export default function Navbar() {
   //
   // Alertas saiu: virou a faixa "Sinais" dentro de Notícias.
   const links = [
-    { href: '/dashboard', label: 'Painel' },
     { href: '/news', label: 'Notícias' },
-    { href: '/reports/prepare', label: 'Preparação' },
-    { href: '/bulletins', label: 'Boletim' },
+    { href: '/reports/prepare', label: 'Relatórios' },
+    { href: '/bulletins', label: 'Boletins' },
     { href: '/agenda', label: 'Agenda' },
-    { href: '/imports', label: 'Importações' },
-    { href: '/clients', label: 'Clientes' },
-    { href: '/sources', label: 'Fontes' },
   ]
 
   return (
@@ -36,9 +32,10 @@ export default function Navbar() {
           <CortexLogo size="compact" />
         </Link>
         <div className="flex flex-wrap items-center gap-5 text-sm text-slate-600">
-          <Link href="/news" className="hover:text-slate-900">Pesquisar</Link>
+          <Link href="/dashboard" className="hover:text-slate-900">Painel</Link>
+          <Link href="/sources" className="hover:text-slate-900">Fontes e clientes</Link>
+          <Link href="/imports" className="hover:text-slate-900">Importações</Link>
           <a href="mailto:neryadministrativo@gmail.com" className="hover:text-slate-900">Suporte</a>
-          <Link href="/sources" className="hover:text-slate-900">Saúde da coleta</Link>
         </div>
       </div>
       <div className="mx-auto flex max-w-screen-xl flex-wrap items-center gap-x-7 gap-y-1 px-6 pb-2 pt-2">

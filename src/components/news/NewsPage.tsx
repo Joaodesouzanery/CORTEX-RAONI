@@ -8,6 +8,7 @@ import ViewToggle from './ViewToggle'
 import SelectAllBar from './SelectAllBar'
 import SourceFilterBar from './SourceFilterBar'
 import ArticleCardGrid from './ArticleCardGrid'
+import NewsHero from './NewsHero'
 import ArticleListView from './ArticleListView'
 import PanoramaPanel from './PanoramaPanel'
 import SignalsStrip from './SignalsStrip'
@@ -49,6 +50,8 @@ export default function NewsPage() {
   const [search, setSearch] = useState('')
   const [debouncedSearch, setDebouncedSearch] = useState('')
   const [directOnly, setDirectOnly] = useState(false)
+  // Padrão: todas as fontes, mas só o que alguma regra de cliente quis.
+  const [relevantOnly, setRelevantOnly] = useState(true)
   const [clientLinks, setClientLinks] = useState<Map<string, { priority: number; is_thematic: boolean }> | null>(null)
   const [activePeriod, setActivePeriod] = useState<number | null>(30)
   const [dateFrom, setDateFrom] = useState('')
@@ -115,6 +118,7 @@ export default function NewsPage() {
     if (debouncedSearch.trim().length >= 2) query.set('search', debouncedSearch.trim())
     // `direct` só existe no ramo com cliente da rota.
     if (directOnly && activeClient) query.set('direct', 'true')
+    if (relevantOnly && !activeClient) query.set('relevant', 'true')
     return query
   }
 
@@ -210,10 +214,6 @@ export default function NewsPage() {
           const client = clientList.find((item) => item.id === clientId) || null
           setActiveClient(client)
           if (client && params.get('origin') === 'manual') setManualOnly(true)
-        } else if (params.get('client') !== 'todos') {
-          // Sem cliente a tela mostrava o acervo inteiro, com tudo que a coleta
-          // traz. Abre no primeiro cliente; "?client=todos" volta ao acervo.
-          setActiveClient(clientList.find((item) => item.active !== false) || null)
         }
       })
       .catch((error) => {
@@ -276,6 +276,7 @@ export default function NewsPage() {
     dateTo,
     debouncedSearch,
     directOnly,
+    relevantOnly,
   ])
 
   async function processRun(runId: string): Promise<FetchRun> {
@@ -450,10 +451,12 @@ export default function NewsPage() {
   }
 
   return (
-    <div className="mx-auto max-w-screen-2xl px-6 py-8">
+    <>
+    <NewsHero onPickClient={(id) => setActiveClient(clients.find((client) => client.id === id) || null)} />
+    <div className="mx-auto max-w-screen-xl px-6 py-10">
       <div className="mb-8 flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className="text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl">Notícias</h1>
+          <h2 className="text-4xl font-light tracking-tight text-slate-900 sm:text-5xl">Últimas notícias</h2>
           <p className="mt-1 text-xs text-gray-400">
             {/* Sem cliente a contagem do servidor é estimada (o count exato varria
                 a tabela inteira). O ≈ é obrigatório: número sem procedência
@@ -618,6 +621,17 @@ export default function NewsPage() {
             Só cita o cliente
           </button>
         )}
+        {!activeClient && (
+          <button
+            onClick={() => setRelevantOnly((v) => !v)}
+            className={`rounded border px-3 py-1 text-xs transition-colors ${
+              relevantOnly ? 'border-sky-700 bg-sky-700 text-white' : 'border-gray-300 text-gray-600 hover:border-black'
+            }`}
+            title="Desligado mostra tudo o que as fontes trouxeram, inclusive o que nenhum cliente quer"
+          >
+            {relevantOnly ? 'Só o relevante para clientes' : 'Mostrando todas as matérias'}
+          </button>
+        )}
       </div>
 
       {activeClient && (
@@ -685,5 +699,6 @@ export default function NewsPage() {
         </div>
       )}
     </div>
+    </>
   )
 }
