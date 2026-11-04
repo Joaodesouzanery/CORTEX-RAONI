@@ -1,3 +1,4 @@
+import { withAiBudget } from '@/lib/ai/budget'
 import type {
   ArticleSnapshot,
   EditorialReviewState,
@@ -66,7 +67,7 @@ export async function triageEvidence(
     date: article.published_at,
     text: (article.content || article.excerpt || '').slice(0, 3500),
   }))
-  const message = await anthropic.messages.create({
+  const message = await withAiBudget('triage', (params) => anthropic.messages.create(params), {
     model: 'claude-sonnet-4-6',
     max_tokens: 5000,
     system: `Você faz triagem editorial conservadora de inteligência reputacional para ${client.name}, no setor ${client.sector || 'informado pelo cliente'}.

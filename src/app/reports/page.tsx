@@ -51,7 +51,7 @@ export default function ReportsPage() {
   return (
     <div className="max-w-4xl mx-auto px-6 py-8">
       <div className="flex justify-between items-center gap-4 mb-8">
-        <h1 className="text-3xl font-bold">Relatórios Gerados</h1>
+        <h1 className="text-5xl font-light tracking-tight">Relatórios gerados</h1>
         <Link href="/reports/prepare">
           <Button>Preparação mensal</Button>
         </Link>

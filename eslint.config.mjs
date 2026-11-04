@@ -34,5 +34,7 @@ export default defineConfig([
       'react-hooks/exhaustive-deps': 'off',
     },
   },
-  globalIgnores(['.next/**', 'node_modules/**']),
+  // docs/ guarda o template entregue pela consultoria (support.js etc.): é
+  // acervo de referência, não código do app.
+  globalIgnores(['.next/**', 'node_modules/**', 'docs/**']),
 ])

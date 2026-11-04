@@ -266,7 +266,7 @@ export default function ImportsPage() {
     <div className="max-w-6xl mx-auto px-6 py-8">
       <div className="flex items-start justify-between gap-4 mb-6">
         <div>
-          <h1 className="text-4xl font-light tracking-tight">Importações em lote</h1>
+          <h1 className="text-5xl font-light tracking-tight">Importações em lote</h1>
           <p className="text-sm text-gray-500 mt-1">
             Escolha todos os clientes e a competência uma vez. Arquivos, links e mensagens entram no mesmo acervo.
           </p>

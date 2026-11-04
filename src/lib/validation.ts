@@ -192,6 +192,8 @@ export const reportDraftCreateSchema = z.object({
     .optional()
     .default('consultivo_cauteloso'),
   new_version: z.boolean().optional().default(false),
+  // Último dia incluído (YYYY-MM-DD, horário de Brasília). Vazio = mês inteiro.
+  cutoff_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Use a data YYYY-MM-DD').nullable().optional(),
 })
 
 // Campos opcionais para permitir patches parciais — o Painel confirma apenas

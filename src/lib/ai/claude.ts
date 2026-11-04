@@ -1,3 +1,4 @@
+import { withAiBudget } from '@/lib/ai/budget'
 import type { Article, ReportPosture } from '@/types'
 import { REPORT_SECTION_GROUPS, type ReportSectionGroup } from '@/lib/report-sections'
 
@@ -473,7 +474,7 @@ export async function generateReport(
     return generateMockReport(articles, metadata, client)
   }
 
-  const message = await anthropic.messages.create({
+  const message = await withAiBudget('report', (params) => anthropic.messages.create(params), {
     model: REPORT_MODEL,
     max_tokens: 16000,
     system: buildSystemPrompt(metadata, client),
@@ -519,7 +520,7 @@ export async function generateReportSection(
 INSTRUÇÃO DE GERAÇÃO PARCIAL:
 Produza AGORA, em markdown, SOMENTE ${group.instruction}, seguindo exatamente a estrutura, profundidade e formatação definidas no system prompt. ${headerNote} Não produza nenhuma outra seção.${priorNote}`
 
-  const message = await anthropic.messages.create({
+  const message = await withAiBudget('report', (params) => anthropic.messages.create(params), {
     model: SECTION_MODEL,
     max_tokens: 4000,
     system: buildSystemPrompt(metadata, client),

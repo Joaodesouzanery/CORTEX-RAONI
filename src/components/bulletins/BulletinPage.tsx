@@ -6,7 +6,7 @@ import { safeExternalUrl } from '@/lib/url'
 import type { PanelThemesResult } from '@/lib/panel-themes'
 import type { Client } from '@/types'
 
-type Bulletin = PanelThemesResult & { start: string; end: string; highlights: PanelThemesResult['themes'][number]['articles'] }
+type Bulletin = PanelThemesResult & { start: string; end: string; highlights: Array<PanelThemesResult['themes'][number]['articles'][number] & { complement?: boolean }> }
 
 const date = (value: string | null) => (value ? new Date(value).toLocaleDateString('pt-BR') : 'sem data')
 
@@ -84,7 +84,7 @@ export default function BulletinPage() {
             <h3 className="mb-2 text-xl font-light">Destaques</h3>
             {data.highlights.length === 0 && <p className="text-sm text-gray-500">Nenhuma matéria citou o cliente nesta semana.</p>}
             <ul className="grid gap-4 sm:grid-cols-2">
-              {data.highlights.slice(0, 10).map((article) => {
+              {data.highlights.slice(0, 20).map((article) => {
                 const href = safeExternalUrl(article.url)
                 return (
                   <li key={article.id} className="overflow-hidden rounded-lg border text-sm">
@@ -96,13 +96,18 @@ export default function BulletinPage() {
                     <div className="p-3">
                     {href ? <a className="font-medium underline" href={href} target="_blank" rel="noopener noreferrer">{article.title}</a> : <span className="font-medium">{article.title}</span>}
                     <div className="text-xs text-gray-500">{article.publisher ?? 'veículo não informado'} · {date(article.published_at)}</div>
+                    {article.complement && (
+                      <span className="mt-1 inline-block rounded border border-amber-300 bg-amber-50 px-1.5 text-[10px] uppercase tracking-wide text-amber-800" title="Matéria do setor que não cita o cliente; entra para completar o mínimo de 20">
+                        Complemento do setor
+                      </span>
+                    )}
                     <p className="mt-1 text-xs text-gray-500">Por que importa: pendente de análise.</p>
                     </div>
                   </li>
                 )
               })}
             </ul>
-            {data.highlights.length > 10 && <p className="mt-2 text-xs text-gray-500">Mostrando 10 de {data.highlights.length}.</p>}
+            {data.highlights.length > 20 && <p className="mt-2 text-xs text-gray-500">Mostrando 20 de {data.highlights.length}.</p>}
           </section>
           <section>
             <h3 className="mb-2 text-xl font-light">Radar por tema</h3>

@@ -473,6 +473,8 @@ export interface MonthlyReportDraft {
   id: string
   client_id: string
   period_month: string
+  // Corte exclusivo (migration 051). NULL/ausente = mês inteiro.
+  period_cutoff?: string | null
   version: number
   status: ReportDraftStatus
   lead_article_id: string | null

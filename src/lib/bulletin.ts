@@ -4,6 +4,10 @@ import { fetchAll } from '@/lib/report-drafts'
 
 /** Janela do boletim semanal. */
 const BULLETIN_DAYS = 7
+// Pedido do cliente (out/2026): o boletim do SINDINFOR tem 20 matérias e o
+// relatório normal vinha com 9. Abaixo disso completa com matéria do setor,
+// marcada como complemento (não cita o cliente nem foi destacada).
+export const MIN_BULLETIN_ITEMS = 20
 
 export async function loadBulletin(supabase: SupabaseClient, clientId: string, now = new Date()) {
   const end = now.toISOString()
@@ -37,5 +41,16 @@ export async function loadBulletin(supabase: SupabaseClient, clientId: string, n
   const highlights = [...seen.values()]
     .filter((article) => article.highlighted || article.cites_client)
     .sort((a, b) => Number(b.highlighted) - Number(a.highlighted) || String(b.published_at).localeCompare(String(a.published_at)))
-  return { start, end, ...themes, highlights }
+  const highlightIds = new Set(highlights.map((article) => article.id))
+  const complements = [...seen.values()]
+    .filter((article) => !highlightIds.has(article.id))
+    .sort((a, b) => String(b.published_at).localeCompare(String(a.published_at)))
+    .slice(0, Math.max(0, MIN_BULLETIN_ITEMS - highlights.length))
+    .map((article) => ({ ...article, complement: true as const }))
+  return {
+    start,
+    end,
+    ...themes,
+    highlights: [...highlights.map((article) => ({ ...article, complement: false as const })), ...complements],
+  }
 }

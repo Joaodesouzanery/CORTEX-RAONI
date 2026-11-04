@@ -1,3 +1,4 @@
+import { withAiBudget } from '@/lib/ai/budget'
 import type {
   ArticleSnapshot,
   GeographicScope,
@@ -96,7 +97,7 @@ export async function verifyEvidenceBatch(
     inclusion_terms: topic.inclusion_terms,
     exclusion_terms: topic.exclusion_terms,
   }))
-  const message = await anthropic.messages.create({
+  const message = await withAiBudget('verify', (params) => anthropic.messages.create(params), {
     model: 'claude-sonnet-4-6',
     max_tokens: 5000,
     system: `Você é a segunda verificação independente de um relatório de inteligência reputacional para ${client.name}.

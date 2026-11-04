@@ -1,3 +1,4 @@
+import { withAiBudget } from '@/lib/ai/budget'
 import type { Article, Tom, Relevancia } from '@/types'
 import {
   parseKeywords,
@@ -210,7 +211,7 @@ async function classifyWithAI(articles: Article[], client: ClassifyClient): Prom
 Responda SOMENTE com um array JSON, um objeto por item, no formato exato:
 [{"i":0,"tom":"neutro","relevancia":"media","cita_cliente":false,"tema":"...","confidence":0.85,"impact_summary":"..."}]`
 
-    const message = await anthropic.messages.create({
+    const message = await withAiBudget('classify', (params) => anthropic.messages.create(params), {
       model: CLASSIFY_MODEL,
       max_tokens: 2048,
       system,

@@ -1,5 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { generateReportSection } from '@/lib/ai/claude'
+import { AiBudgetExceededError } from '@/lib/ai/budget'
 import { buildAnnex, ensureLeadInSection, evidenceArticles, reportEvidenceItems } from '@/lib/report-drafts'
 import { evidenceCitations } from '@/lib/report-quality'
 import { directivesPrompt, lintEditorialDirectives } from '@/lib/editorial-directives'
@@ -191,7 +192,12 @@ export async function generateDraftSection(
       },
       client,
       prior
-    )
+    ).catch((err: unknown) => {
+      // Teto de gasto é falta de configuração, não falha: 503 parqueia o job
+      // em waiting_configuration com o motivo na tela.
+      if (err instanceof AiBudgetExceededError) throw new SectionGenerationError(err.message, 503)
+      throw err
+    })
     if (section === 1 || section === 4) {
       const leadCode = citationByArticle.get(lead.article_id)
       markdown = ensureLeadInSection(markdown, section, lead, leadCode)

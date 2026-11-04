@@ -131,9 +131,14 @@ export async function reportEvidenceItems(
 export async function monthlyTaggedArticles(
   supabase: SupabaseClient,
   clientId: string,
-  period: string
+  period: string,
+  cutoff?: string | null
 ): Promise<TaggedArticleRow[]> {
-  const { start, end, date } = monthBounds(period)
+  const bounds = monthBounds(period)
+  const { start, date } = bounds
+  // Data de corte: relatório gerado no meio do mês (ex.: até o dia 20) só usa o
+  // que saiu até ali. Nunca estende além do fim do mês.
+  const end = cutoff && cutoff < bounds.end && cutoff > start ? cutoff : bounds.end
   const dated = await fetchAll<TaggedArticleRow>((from, to) =>
     supabase
       .from('article_client_tags')
@@ -239,9 +244,9 @@ export function evidencePayload(rows: TaggedArticleRow[]) {
 
 export async function refreshDraftEvidence(
   supabase: SupabaseClient,
-  draft: { id: string; client_id: string; period_month: string; base_version?: number }
+  draft: { id: string; client_id: string; period_month: string; base_version?: number; period_cutoff?: string | null }
 ) {
-  const rows = await monthlyTaggedArticles(supabase, draft.client_id, draft.period_month.slice(0, 7))
+  const rows = await monthlyTaggedArticles(supabase, draft.client_id, draft.period_month.slice(0, 7), draft.period_cutoff)
   const items = evidencePayload(rows)
   const now = new Date().toISOString()
   const currentItems = items.map((item, index) => ({

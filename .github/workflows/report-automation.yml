@@ -1,13 +1,8 @@
 name: Preparação mensal contínua
 
 on:
-  # Religado em 04/11/2026: a preparação mensal passa a ser automática (a tela
-  # "Preparação" sai do menu). Sem ANTHROPIC_API_KEY o pipeline parqueia visível.
-  schedule:
-    # 00h15 de Brasília no primeiro dia: garante as preparações do mês.
-    - cron: '15 3 1 * *'
-    # 04h15 de Brasília: atualiza mês corrente e anterior ainda aberto.
-    - cron: '15 7 * * *'
+  # Sem agendamento desde 04/11/2026: o relatório é gerado sob demanda, a
+  # qualquer dia do mês (tela Relatórios → Gerar relatório, com data de corte).
   workflow_dispatch:
     inputs:
       period:

@@ -20,7 +20,17 @@ Pronto:
 - Telas `/bulletins` e `/agenda`.
 - Playbook, skills e agents em `.claude/`.
 
-Migrations: até 043 aplicadas pelo dono; 044 entregue; 046 aplicada; 047 entregue; **048 aplicada; 049 entregue; **050 pendente** (recria a função do Painel e recarrega o cache, religa manchetes gerais, exclusões de esporte/entretenimento, marcas PRIO=VX e DAQ/CCEE/SIMINERAL/SINDINFOR=SAUZ).
+Migrations: até 043 aplicadas pelo dono; 044 entregue; 046 aplicada; 047 entregue; 048 e 050 aplicadas; 049 entregue; **051 pendente**: busca por cliente nos grandes veículos (O Globo, Valor, Estadão, CNN, Eixos, Folha, G1, Poder360, InfoMoney, Metrópoles), `client_report_profiles`, `ai_usage_ledger` (teto da IA) e `monthly_report_drafts.period_cutoff`.
+
+Fase 15 (04/11):
+- Acervo dos relatórios entregues em `docs/referencia-relatorios/modelo/` (não reorganizar; caminhos relativos).
+- `scripts/calibrate-against-reports.mjs`: links do gabarito × acervo. Outubro tem bem menos links que setembro (PRIO 8×16, SindInfor 8×22, CCEE 10×16).
+- Filtro por mês em Notícias; coluna lateral da agenda em Últimas notícias.
+- Relatório sob demanda: sem cron em `report-automation.yml`; tela Relatórios aceita "Até o dia" (corte).
+- Boletim: mínimo de 20 matérias (`MIN_BULLETIN_ITEMS`), completando com "Complemento do setor".
+- Teto da IA (`src/lib/ai/budget.ts`): sem `ANTHROPIC_MONTHLY_BUDGET_USD` e `ANTHROPIC_DAILY_CALL_LIMIT` a IA não roda; teto atingido parqueia em waiting_configuration.
+- Design: botões pretos e contornados, carrossel por tema e faixas alternadas no Painel, títulos leves.
+- **Próximo passo**: resumo diário com tom, porta-voz, link exato, tema/agenda e "por que importa", depois de ligar a chave; gerador no template `.dc.html`; escolha manual de matérias no gerador.
 
 Agenda: só ANTAQ por decisão do dono. Conector automático em `src/lib/agenda/antaq.ts`: acha o boletim mais recente na página oficial, lê o PDF e grava; roda no `fetch-news.yml`; sem boletim novo é no-op. Painel Aquarela não é usado: bloqueia acesso automatizado.
 
@@ -46,7 +56,9 @@ Agenda: só ANTAQ por decisão do dono. Conector automático em `src/lib/agenda/
 9. Trocar `claude-sonnet-4-6` por `claude-sonnet-5-5` ao conectar a Anthropic.
 
 ## Falta conectar (repetir ao dono em toda resposta)
-- Colar a migration 050.
+- Colar a migration 051.
+- Enviar ao GitHub o commit do acervo (o envio automático foi bloqueado) e deixar o repositório privado.
+- `ANTHROPIC_MONTHLY_BUDGET_USD` e `ANTHROPIC_DAILY_CALL_LIMIT` (Vercel), além do limite no console da Anthropic, antes da chave.
 - Tornar o repositório privado antes de subir os PDFs de clipping (hoje é público).
 - Rodar `gabarito-ons.sql` (local, fora do Git) para medir a cobertura das manchetes dos clippings diários da ONS.
 - Rodar `fetch-news` manual com `reclassify_archive` e período 2026-10.
@@ -59,7 +71,7 @@ Agenda: só ANTAQ por decisão do dono. Conector automático em `src/lib/agenda/
 Nunca coloque valores neste arquivo.
 
 **Vercel:** `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `CRON_SECRET`.
-Opcionais: `RESEND_API_KEY`, `ALERTS_EMAIL_FROM`, `ALERTS_EMAIL_TO` (alertas). Depois: `ANTHROPIC_API_KEY`; `PEXELS_API_KEY`, `UNSPLASH_ACCESS_KEY` (nomes reservados, ainda sem uso no código).
+Opcionais: `RESEND_API_KEY`, `ALERTS_EMAIL_FROM`, `ALERTS_EMAIL_TO` (alertas). Depois: `ANTHROPIC_API_KEY` com `ANTHROPIC_MONTHLY_BUDGET_USD` e `ANTHROPIC_DAILY_CALL_LIMIT` (obrigatórias para a IA rodar); `PEXELS_API_KEY`, `UNSPLASH_ACCESS_KEY` (nomes reservados, ainda sem uso no código).
 
 **GitHub Actions:** `APP_URL`, `CRON_SECRET` (mesmo valor da Vercel).
 

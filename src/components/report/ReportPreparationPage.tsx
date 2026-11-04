@@ -64,6 +64,8 @@ export default function ReportPreparationPage() {
   const [clients, setClients] = useState<Client[]>([])
   const [clientId, setClientId] = useState('')
   const [period, setPeriod] = useState(currentPeriod())
+  // Vazio = mês inteiro. Permite gerar o relatório a qualquer dia (ex.: até o dia 20).
+  const [cutoffDate, setCutoffDate] = useState('')
   const [instructions, setInstructions] = useState('')
   const [narrativePosture, setNarrativePosture] =
     useState<ReportPosture>('consultivo_cauteloso')
@@ -170,6 +172,11 @@ export default function ReportPreparationPage() {
     setDraft(data)
     setClientId(data.client_id)
     setPeriod(String(data.period_month).slice(0, 7))
+    setCutoffDate(
+      data.period_cutoff
+        ? new Date(new Date(data.period_cutoff).getTime() - 86_400_000).toLocaleDateString('sv-SE', { timeZone: 'America/Sao_Paulo' })
+        : ''
+    )
     setInstructions(data.monthly_instructions || '')
     setNarrativePosture(data.narrative_posture || 'consultivo_cauteloso')
     setMetrics((current) => ({ ...current, ...(data.service_metrics || {}) }))
@@ -301,6 +308,7 @@ export default function ReportPreparationPage() {
           service_metrics: metrics,
           narrative_posture: narrativePosture,
           new_version: newVersion,
+          cutoff_date: cutoffDate && cutoffDate.startsWith(period) ? cutoffDate : null,
         }),
       })
       const data = await res.json().catch(() => null)
@@ -874,7 +882,7 @@ export default function ReportPreparationPage() {
     <div className="max-w-7xl mx-auto px-6 py-8">
       <div className="flex justify-between items-start gap-4 mb-6">
         <div>
-          <h1 className="text-4xl font-light tracking-tight">Preparação mensal</h1>
+          <h1 className="text-5xl font-light tracking-tight">Gerar relatório</h1>
           <p className="text-sm text-gray-500 mt-1">
             Base integral no servidor, triagem auditável, matéria principal manual e seções editáveis.
           </p>
@@ -889,7 +897,7 @@ export default function ReportPreparationPage() {
       </div>
 
       <div className="border border-gray-200 p-4 mb-6">
-        <div className="grid md:grid-cols-3 gap-4">
+        <div className="grid md:grid-cols-4 gap-4">
           <div>
             <Label>Cliente</Label>
             <select
@@ -904,6 +912,18 @@ export default function ReportPreparationPage() {
           <div>
             <Label>Competência</Label>
             <Input type="month" value={period} onChange={(event) => setPeriod(event.target.value)} className="mt-1" />
+          </div>
+          <div>
+            <Label>Até o dia (opcional)</Label>
+            <Input
+              type="date"
+              value={cutoffDate}
+              min={`${period}-01`}
+              max={`${period}-31`}
+              onChange={(event) => setCutoffDate(event.target.value)}
+              className="mt-1"
+              title="Gera o relatório só com o que saiu até esta data. Vazio = mês inteiro."
+            />
           </div>
           <div className="flex items-end gap-2">
             <Button onClick={() => prepare(false)} disabled={!!busy || !clientId}>Preparar / abrir</Button>

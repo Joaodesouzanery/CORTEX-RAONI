@@ -9,6 +9,7 @@ import SelectAllBar from './SelectAllBar'
 import SourceFilterBar from './SourceFilterBar'
 import ArticleCardGrid from './ArticleCardGrid'
 import NewsHero from './NewsHero'
+import AgendaSidebar from './AgendaSidebar'
 import ArticleListView from './ArticleListView'
 import PanoramaPanel from './PanoramaPanel'
 import SignalsStrip from './SignalsStrip'
@@ -31,6 +32,19 @@ import { createLatestGuard } from '@/lib/latest-request'
 import { saoPauloPeriodOf } from '@/lib/sao-paulo-period'
 
 const PAGE_SIZE = 100
+
+// Últimos 12 meses: cobre o ciclo anual de relatórios sem lista infinita.
+const MONTH_OPTIONS = 12
+
+function monthOptions(): Array<{ value: string; label: string }> {
+  const now = new Date()
+  return Array.from({ length: MONTH_OPTIONS }, (_, index) => {
+    const date = new Date(now.getFullYear(), now.getMonth() - index, 1)
+    const value = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`
+    const label = date.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })
+    return { value, label }
+  })
+}
 const TERMINAL_RUNS = new Set(['concluido', 'parcial', 'erro'])
 
 export default function NewsPage() {
@@ -611,6 +625,34 @@ export default function NewsPage() {
           placeholder="Buscar no título…"
           className="w-56 border border-gray-300 px-3 py-1 text-xs outline-none focus:border-black"
         />
+        {/* Mês fechado do cliente: reaproveita o intervalo de datas da rota em
+            vez de um parâmetro novo, então o Panorama e a lista batem. */}
+        <select
+          aria-label="Mês"
+          value={dateFrom && dateTo && dateFrom.endsWith('-01') && dateFrom.slice(0, 7) === dateTo.slice(0, 7) ? dateFrom.slice(0, 7) : ''}
+          onChange={(event) => {
+            const month = event.target.value
+            if (!month) {
+              setDateFrom('')
+              setDateTo('')
+              setActivePeriod(30)
+              return
+            }
+            const [year, mon] = month.split('-').map(Number)
+            const lastDay = new Date(Date.UTC(year, mon, 0)).getUTCDate()
+            setActivePeriod(null)
+            setDateFrom(`${month}-01`)
+            setDateTo(`${month}-${String(lastDay).padStart(2, '0')}`)
+          }}
+          className="rounded border border-gray-300 px-2 py-1 text-xs outline-none focus:border-black"
+        >
+          <option value="">Mês: todos</option>
+          {monthOptions().map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
         {activeClient && (
           <button
             onClick={() => setDirectOnly((v) => !v)}
@@ -662,7 +704,14 @@ export default function NewsPage() {
       ) : !articles.length ? (
         <div className="py-24 text-center text-gray-400">Nenhuma publicação encontrada no filtro.</div>
       ) : mode === 'card' ? (
-        <ArticleCardGrid articles={articles} selected={selected} onSelect={toggleSelect} scores={scores} />
+        <div className="grid gap-8 lg:grid-cols-[1fr_18rem]">
+          <ArticleCardGrid articles={articles} selected={selected} onSelect={toggleSelect} scores={scores} />
+          <div className="hidden lg:block">
+            <div className="sticky top-24">
+              <AgendaSidebar />
+            </div>
+          </div>
+        </div>
       ) : (
         <ArticleListView
           articles={articles}

@@ -47,8 +47,19 @@ export async function POST(req: Request) {
     service_metrics,
     narrative_posture,
     new_version,
+    cutoff_date,
   } = parsed.data
   const periodDate = monthBounds(period).date
+  // Corte exclusivo: o dia seguinte à data escolhida, 00h de Brasília. Só vai
+  // ao banco quando informado, para a criação sem corte não depender da 051.
+  const cutoffPatch =
+    cutoff_date === undefined
+      ? {}
+      : {
+          period_cutoff: cutoff_date
+            ? new Date(new Date(`${cutoff_date}T00:00:00-03:00`).getTime() + 86_400_000).toISOString()
+            : null,
+        }
   const { data: client, error: clientError } = await supabase.from('clients').select('*').eq('id', client_id).single()
   if (clientError || !client) {
     return NextResponse.json({ error: clientError?.message || 'Cliente não encontrado.' }, { status: 404 })
@@ -74,6 +85,7 @@ export async function POST(req: Request) {
         monthly_instructions,
         service_metrics,
         narrative_posture,
+        ...cutoffPatch,
         updated_at: new Date().toISOString(),
       })
       .eq('id', latest.id)
@@ -110,6 +122,17 @@ export async function POST(req: Request) {
       }
     }
     await seedDraftTopics(supabase, latest.id, client_id, period)
+    // Nova data de corte muda a base: remonta já, para a tela não mostrar a
+    // base antiga com a data nova.
+    if (cutoff_date !== undefined) {
+      try {
+        const refreshed = await refreshDraftEvidence(supabase, updated)
+        return NextResponse.json({ ...refreshed, created: false })
+      } catch (refreshError) {
+        const message = refreshError instanceof Error ? refreshError.message : 'Falha ao remontar a base.'
+        return NextResponse.json({ error: message, draft: updated }, { status: 500 })
+      }
+    }
     return NextResponse.json({
       draft: appliedEditorialSnapshot
         ? { ...updated, applied_editorial_snapshot: appliedEditorialSnapshot, editorial_snapshot_version: appliedEditorialSnapshot.profile_version }
@@ -150,6 +173,7 @@ export async function POST(req: Request) {
       editorial_snapshot_version: appliedEditorialSnapshot.profile_version,
       automation_status: 'pending',
       status: 'preparing',
+      ...cutoffPatch,
     })
     .select()
     .single()

@@ -1,8 +1,9 @@
+import { withAiBudget } from '@/lib/ai/budget'
 export async function extractPdfWithAi(data: Uint8Array): Promise<string | null> {
   if (!process.env.ANTHROPIC_API_KEY) return null
   const { default: Anthropic } = await import('@anthropic-ai/sdk')
   const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
-  const response = await client.messages.create({
+  const response = await withAiBudget('ocr', (params) => client.messages.create(params), {
     model: 'claude-sonnet-4-6',
     max_tokens: 16_000,
     system:

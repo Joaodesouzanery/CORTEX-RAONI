@@ -3,11 +3,13 @@ import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import type { PanelThemesResult } from '@/lib/panel-themes'
 import { safeExternalUrl } from '@/lib/url'
+import { Carousel, CarouselItem } from '@/components/ui/carousel'
 
 type Article = PanelThemesResult['themes'][number]['articles'][number]
 
 /** Cards por tema na grade; o pacote leva todas. */
-const VISIBLE_ARTICLES = 6
+// O carrossel comporta mais que a grade antiga sem ocupar altura.
+const VISIBLE_ARTICLES = 12
 
 function monthLabel(period: string) {
   return `${period.slice(5)}/${period.slice(0, 4)}`
@@ -130,17 +132,21 @@ export function PanelThemes({ refreshKey }: { refreshKey: number }) {
         </div>
       )}
       {data && data.themes.length === 0 && <p className="text-sm text-slate-500">Este cliente ainda não tem temas cadastrados.</p>}
-      <div className="grid gap-8">
-        {data?.themes.map((theme) => (
-          <div key={theme.title}>
+      <div className="-mx-4 md:-mx-8">
+        {data?.themes.map((theme, index) => (
+          <div key={theme.title} className={`px-4 py-8 md:px-8 ${index % 2 === 0 ? 'bg-neutral-100' : 'bg-white'}`}>
             <div className="mb-3 flex items-baseline justify-between gap-3 border-b border-slate-200 pb-2">
-              <h3 className="text-lg text-slate-900">{theme.title}</h3>
+              <h3 className="text-2xl font-light text-slate-900">{theme.title}</h3>
               <span className="text-sm text-slate-500">{theme.articles.length === 0 ? 'Lacuna: nenhuma matéria' : `${theme.articles.length} matérias`}</span>
             </div>
             {theme.articles.length > 0 && (
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {theme.articles.slice(0, VISIBLE_ARTICLES).map((article) => <Card key={article.id} article={article} />)}
-              </div>
+              <Carousel label={`Matérias do tema ${theme.title}`}>
+                {theme.articles.slice(0, VISIBLE_ARTICLES).map((article) => (
+                  <CarouselItem key={article.id}>
+                    <Card article={article} />
+                  </CarouselItem>
+                ))}
+              </Carousel>
             )}
             {theme.articles.length > VISIBLE_ARTICLES && <p className="mt-2 text-xs text-slate-500">Mostrando {VISIBLE_ARTICLES} de {theme.articles.length}; o pacote leva todas.</p>}
           </div>
