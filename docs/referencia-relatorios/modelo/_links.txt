@@ -1,0 +1,549 @@
+
+#### P1
+CRTIVE LAB SAUZ CRT
+Base de Evidências
+Setembro 2026
+Relatórios de Inteligência Reputacional — Rodada Completa
+Total de Links
+120
+evidências catalogadas
+Clientes
+6
+SINDINFOR · CCEE · PRIO · SIMINERAL · DAQ · ONS
+Período
+Set/26
+01 a 30 de setembro de 2026
+SINDINFOR CCEE PRIO SIMINERAL DAQ ONS
+SINDINFOR
+CRTIVE LAB 20 evidências
+LINKS: 
+#### P2
+# DATA VEÍCULO TÍTULO TOM PORTA-VOZ / ORIGEM
+1 01/09/20
+26 Convergência Digital Redata é sancionado: regime especial para data centers entra em vigor Positivo Presidência da República (nota)
+2 01/09/20
+26 TI Inside
+Com Redata sancionado, Brasil dá passo decisivo para atrair data
+centers Positivo MCOM (nota oficial)
+3 01/09/20
+26 ComputerWorld Sanção do Redata: o que muda para o setor de data centers Positivo/
+Neutro Sem porta-voz nomeado
+4 15/09/20
+26 Agência Brasil Decreto do Redata define critérios: PUE 1,4 e 80% de energia renovável Neutro MCOM (decreto)
+5 15/09/20
+26 Convergência Digital
+Regulamentação do Redata: setor avalia exigências e vê pontos de
+melhoria Neutro/Crítico Associações setoriais (sem nome
+confirmado)
+6 03/09/20
+26 Folha de S.Paulo
+Redata inclui data centers a gás: ambientalistas questionam subsídio a
+combustível fóssil
+Negativo/
+Crítico Coalizão pelo Clima (nota)
+7 05/09/20
+26 Valor Econômico
+Gás no Redata: setor defende energia firme; ambientalistas pedem
+revisão
+Negativo/
+Neutro Abradi e ambientalistas
+8 12/09/20
+26
+Jornal Estado de
+Minas
+Projeto de data center de R$ 4,2 bi é anunciado para Paracatu;
+expectativa de 800 empregos Positivo Gov. MG (nota oficial)
+9 12/09/20
+26 Hoje em Dia Paracatu recebe maior investimento em data center da história de MG Positivo Prefeitura de Paracatu (nota)
+10 14/09/20
+26
+TI Inside Paracatu e o novo mapa dos data centers no Brasil: por que o interior de
+MG?
+Positivo/ Analista setorial (sem nome
+LINKS: https://www.intercept.com.br/2026/09/10/data-center-cidade-mineira-falta-agua https://www.intercept.com.br/2026/09/10/data-center-cidade-mineira-falta-agua https://paracatu.net/39061/atlas-planeja-complexo-de-data-centers-em-paracatu/ https://paracatunews.com.br/noticia/61437/governo-de-minas-atrai-projeto-de-parque-de-data-centers-que-vai-gerar-1-1-mil-empregos-diretos https://paracatunews.com.br/noticia/61437/governo-de-minas-atrai-projeto-de-parque-de-data-centers-que-vai-gerar-1-1-mil-empregos-diretos https://www.bmalaw.com.br/conteudo/energia/informativos-e-newsletters/redata-pl-2782026-senado-aprova-regime-especial-de-tributacao-para-data-centers-e-mme-sinaliza-espaco-para-o-gas-natural https://www.bmalaw.com.br/conteudo/energia/informativos-e-newsletters/redata-pl-2782026-senado-aprova-regime-especial-de-tributacao-para-data-centers-e-mme-sinaliza-espaco-para-o-gas-natural https://aciara.com.br/redata-lobby-renovavel-tenta-barrar-gas-em-data-centers/ https://aciara.com.br/redata-lobby-renovavel-tenta-barrar-gas-em-data-centers/ https://eixos.com.br/newsletters/dialogos-da-transicao/redata-expoe-racha-no-governo-sobre-o-que-e-baixa-emissao/ https://eixos.com.br/newsletters/dialogos-da-transicao/redata-expoe-racha-no-governo-sobre-o-que-e-baixa-emissao/ https://www.bmalaw.com.br/conteudo/energia/informativos-e-newsletters/redata-pl-2782026-senado-aprova-regime-especial-de-tributacao-para-data-centers-e-mme-sinaliza-espaco-para-o-gas-natural https://www.nexojornal.com.br/expresso/2026/09/17/data-center-ia-o-que-e-brasil-redata-pl-278-2026 https://noticias.datapolicy.co/infraestrutura/redata-e-sancionado-e-cria-regime-tributario-para-incentivar-data-centers-no-brasil/ https://noticias.datapolicy.co/infraestrutura/redata-e-sancionado-e-cria-regime-tributario-para-incentivar-data-centers-no-brasil/ https://tiinside.com.br/15/09/2026/sancionado-regime-especial-para-incentivar-instalacao-de-datacenters-no-pais/
+#### P3
+# DATA VEÍCULO TÍTULO TOM PORTA-VOZ / ORIGEM
+Neutro confirmado)
+11 08/09/20
+26 Valor Econômico
+Energia elétrica vira gargalo para expansão de data centers e IA no
+Brasil
+Negativo/
+Crítico MME e empresas do setor
+12 10/09/20
+26 Folha de S.Paulo IA consome energia: Brasil precisa de plano para infraestrutura digital Negativo/
+Crítico
+Especialista (sem nome
+confirmado)
+13 18/09/20
+26
+Converge
+Comunicações ICMS sobre energia para data centers: MG paga mais que SP, RJ e CE Negativo/
+Crítico Levantamento próprio do veículo
+14 20/09/20
+26 TI Inside
+Licenciamento ambiental para data centers em MG: por que demora
+tanto?
+Negativo/
+Crítico SEMAD/MG (declaração)
+15 22/09/20
+26 Agência Brasil Câmara aprova PL da IA em primeiro turno; texto segue para o Senado Neutro Câmara dos Deputados (nota)
+16 23/09/20
+26 Convergência Digital PL da IA: o que mudaria para data centers e provedores de nuvem Neutro Especialista jurídico (sem nome
+confirmado)
+17 17/09/20
+26 Teletime
+Anatel publica edital para expansão de backbone com rotas pelo interior
+de MG Positivo Anatel (edital)
+18 25/09/20
+26 Agência Brasil
+Governo quer nuvem soberana: dependência de provedores estrangeiros
+preocupa
+Negativo/
+Crítico Nota do governo federal
+19 27/09/20
+26
+ComputerWorld Dois ataques cibernéticos em setembro reacendem debate sobre Negativo/ CTIR Gov (boletim)
+LINKS: https://minutodaseguranca.blog.br/incidentes-seguranca-cibernetica-brasil-2026/ https://www.forte.jor.br/2026/08/24/governo-estrutura-nuvem-brasileira-para-reduzir-dependencia-de-gigantes-estrangeiras/ https://www.forte.jor.br/2026/08/24/governo-estrutura-nuvem-brasileira-para-reduzir-dependencia-de-gigantes-estrangeiras/ https://convergenciadigital.com.br/governo/governo-quer-uma-nuvem-100-brasileira-e-soberana/ https://convergenciadigital.com.br/governo/governo-quer-uma-nuvem-100-brasileira-e-soberana/ https://convergenciadigital.com.br/mercado/rio-sao-paulo-e-minas-nao-tem-legislacao-ambiental-para-expansao-de-data-centers/ https://www.camara.leg.br/proposicoesWeb/fichadetramitacao?idProposicao=2487262 https://www.brasildefato.com.br/2026/07/09/sem-regulacao-avanco-de-data-centers-de-ia-em-mg-acende-alerta-para-impactos-ambientais/ https://www.brasildefato.com.br/2026/07/09/sem-regulacao-avanco-de-data-centers-de-ia-em-mg-acende-alerta-para-impactos-ambientais/ https://convergenciadigital.com.br/mercado/rio-sao-paulo-e-minas-nao-tem-legislacao-ambiental-para-expansao-de-data-centers/ https://www.brasilemfolhas.com.br/2026/09/governo-discute-quem-pagara-custo-de-energia-de-data-centers/ https://www.diariodepernambuco.com.br/tecnologia/2026/09/11725196-energia-vira-gargalo-para-expansao-de-data-centers-na-america-latina-aponta-estudo.html https://www.diariodepernambuco.com.br/tecnologia/2026/09/11725196-energia-vira-gargalo-para-expansao-de-data-centers-na-america-latina-aponta-estudo.html
+#### P4
+# DATA VEÍCULO TÍTULO TOM PORTA-VOZ / ORIGEM
+segurança da infraestrutura digital Crítico
+20 30/09/20
+26 TI Inside
+Data centers certificados: ISO 27001 e SOC 2 viram diferencial no
+mercado brasileiro
+Positivo/
+Neutro Sem porta-voz nomeado
+CCEE
+SAUZ 20 evidências
+# DATA VEÍCULO TÍTULO TOM PORTA-VOZ / ORIGEM
+1 22/09/202
+6 Canalenergia
+ANEEL aprova Módulo 16 e define regras para abertura do mercado livre
+na baixa tensão Positivo ANEEL (nota oficial)
+2 22/09/202
+6 Epbr Mercado livre avança para baixa tensão: o que muda para o consumidor Positivo/
+Neutro Sem porta-voz nomeado
+3 22/09/202
+6 Agência iNFRA
+Módulo 16 aprovado: CCEE será responsável pela liquidação do novo
+mercado Positivo Sem porta-voz nomeado
+4 15/09/202
+6 Canalenergia
+Fundo de Liquidez da CCEE é acionado para cobrir posição de
+comercializadora
+Negativo/
+Crítico CCEE (nota técnica)
+LINKS: https://megawhat.uol.com.br/mercado-energetico/ccee-avanca-em-proposta-de-fundo-para-cobrir-perdas-em-casos-de-inadimplencia-no-mercado/ https://megawhat.uol.com.br/mercado-energetico/ccee-avanca-em-proposta-de-fundo-para-cobrir-perdas-em-casos-de-inadimplencia-no-mercado/ https://neofeed.com.br/economia/por-que-a-variacao-no-preco-da-energia-tem-quebrado-o-mercado-livre/ https://neofeed.com.br/economia/por-que-a-variacao-no-preco-da-energia-tem-quebrado-o-mercado-livre/ https://movimentoeconomico.com.br/economia/energia/2026/08/30/mercado-livre-tera-novas-regras-antes-de-chegar-a-todos-os-consumidores/ https://www.gov.br/aneel/pt-br/assuntos/noticias/2026-defeso-eleitoral/consulta-publica-propoe-aprimoramento-das-regras-de-comercializacao-2027 https://www.gov.br/aneel/pt-br/assuntos/noticias/2026-defeso-eleitoral/consulta-publica-propoe-aprimoramento-das-regras-de-comercializacao-2027 https://www.datacenterdynamics.com/br/not%C3%ADcias/dataprev-recebe-certifica%C3%A7%C3%A3o-internacional-de-seguran%C3%A7a-da-informa%C3%A7%C3%A3o/ https://www.datacenterdynamics.com/br/not%C3%ADcias/dataprev-recebe-certifica%C3%A7%C3%A3o-internacional-de-seguran%C3%A7a-da-informa%C3%A7%C3%A3o/ https://minutodaseguranca.blog.br/incidentes-seguranca-cibernetica-brasil-2026/
+#### P5
+# DATA VEÍCULO TÍTULO TOM PORTA-VOZ / ORIGEM
+5 16/09/202
+6 Agência iNFRA
+Liquidez no mercado livre: o que é o Fundo de Garantia da CCEE e como
+funciona Neutro Sem porta-voz nomeado
+6 18/09/202
+6 Valor Econômico
+Comercializadoras sob pressão: inadimplência é o próximo risco do
+mercado livre?
+Negativo/
+Crítico
+Associação de agentes (sem nome
+confirmado)
+7 05/09/202
+6 Epbr
+Despacho de térmicas a gás aumenta em setembro com reservatórios
+abaixo da média Neutro ONS (nota operacional)
+8 10/09/202
+6 Canalenergia
+MME sinaliza atenção ao nível dos reservatórios e despacho adicional de
+térmicas Neutro MME (nota)
+9 12/09/202
+6 Portal Solar
+Curtailment no Nordeste: eólicas e solares sofrem cortes em período de
+baixo carregamento Negativo ONS / dados operacionais
+10 19/09/202
+6 Agência iNFRA Curtailment de eólica no Nordeste cresce 23% em setembro vs. agosto Negativo ONS / dados operacionais
+11 08/09/202
+6 Epbr PLD sobe em setembro com seca e despacho térmico intenso Negativo CCEE (dado público)
+12 14/09/202
+6 Canalenergia
+Modelos computacionais da CCEE: por que o PLD parece uma caixa-preta
+para o mercado?
+Negativo/
+Crítico
+Analista de mercado (sem nome
+confirmado)
+13 24/09/202
+6 Valor Econômico
+NEWAVE e DECOMP: entenda por que a transparência dos modelos virou
+tema prioritário
+Negativo/
+Crítico
+Especialista setorial (sem nome
+confirmado)
+14 03/09/202
+6
+Canalenergia Regras de Comercialização 2027: CCEE abre consulta sobre propostas de
+ajuste
+Neutro CCEE (nota oficial)
+LINKS: https://www.canalenergia.com.br/noticias/53355200/regras-de-comercializacao-de-2027-vao-a-consulta-publica https://www.canalenergia.com.br/noticias/53355200/regras-de-comercializacao-de-2027-vao-a-consulta-publica https://www.broadcast.com.br/ultimas-noticias/ccee-pld-tem-maxima-de-r-52591-por-mwh-no-sudeste-centro-oeste-e-norte-nesta-segunda-feira/ https://www.broadcast.com.br/ultimas-noticias/ccee-pld-tem-maxima-de-r-52591-por-mwh-no-sudeste-centro-oeste-e-norte-nesta-segunda-feira/ https://www.ccee.org.br/dados-e-analises/dados-pld https://www.ccee.org.br/dados-e-analises/dados-pld https://www.gerawatts.com.br/pld-da-semana-de-05-09-2026-fecha-praticamente-estavel-e-uniforme-em-todos-os-submercados/ https://valor.globo.com/publicacoes/especiais/transicao-energetica/noticia/2026/08/27/ons-projeta-cortes-declinantes-na-geracao-de-energia-solar-e-eolica.ghtml https://newblogs.correiobraziliense.com.br/ecobraziliense/curtailment-cresce-e-amplia-desperdicio-de-energia-renovavel/ https://newblogs.correiobraziliense.com.br/ecobraziliense/curtailment-cresce-e-amplia-desperdicio-de-energia-renovavel/ https://www.cnnbrasil.com.br/infra/quebra-de-comercializadoras-de-energia-acumula-rombo-que-passa-r-10-bi/ https://www.cnnbrasil.com.br/infra/quebra-de-comercializadoras-de-energia-acumula-rombo-que-passa-r-10-bi/ https://valor.globo.com/brasil/noticia/2026/08/04/al-se-e-mg-favorecem-mercado-livre-de-gas.ghtml https://valor.globo.com/brasil/noticia/2026/08/04/al-se-e-mg-favorecem-mercado-livre-de-gas.ghtml https://www1.folha.uol.com.br/mercado/2026/07/comercializadoras-de-energia-entram-em-crise-com-rombo-de-mais-de-r-6-bi.shtml https://www1.folha.uol.com.br/mercado/2026/07/comercializadoras-de-energia-entram-em-crise-com-rombo-de-mais-de-r-6-bi.shtml https://www.ccee.org.br/-/co-repasse-do-pagamento-de-dividas-no-ambito-da-ccee-em-30-09-2026 https://www.ccee.org.br/-/co-repasse-do-pagamento-de-dividas-no-ambito-da-ccee-em-30-09-2026
+#### P6
+# DATA VEÍCULO TÍTULO TOM PORTA-VOZ / ORIGEM
+15 25/09/202
+6 Agência iNFRA
+Consulta pública sobre Regras 2027 recebe 47 contribuições de agentes
+de mercado Neutro CCEE (dado público)
+16 09/09/202
+6 Epbr
+Reserva de capacidade: debate avança sobre papel das térmicas no novo
+modelo de mercado Neutro MME e ANEEL (declarações públicas)
+17 17/09/202
+6 Canalenergia
+Abertura do mercado de gás: como a nova estrutura afeta os custos de
+geração térmica Neutro MME/SNPTC (nota)
+18 26/09/202
+6 Agência iNFRA
+CCEE publica dados de setembro: volume liquidado no ACL cresce 8% vs.
+setembro 2025 Positivo CCEE (dado público)
+19 29/09/202
+6
+Portal do
+Governo
+CNPE reafirma diretrizes para ampliação do mercado livre e segurança
+energética Neutro CNPE (resolução)
+20 30/09/202
+6 Canalenergia
+Balanço de setembro: mercado livre fecha o mês com novo recorde de
+agentes cadastrados Positivo CCEE (dado público)
+PRIO
+CRT 20 evidências
+LINKS: https://www.canalenergia.com.br/noticias/53355200/regras-de-comercializacao-de-2027-vao-a-consulta-publica https://www.canalenergia.com.br/noticias/53355200/regras-de-comercializacao-de-2027-vao-a-consulta-publica https://www.gov.br/aneel/pt-br/assuntos/noticias/2026-defeso-eleitoral/consulta-publica-propoe-aprimoramento-das-regras-de-comercializacao-2027 https://www.gov.br/aneel/pt-br/assuntos/noticias/2026-defeso-eleitoral/consulta-publica-propoe-aprimoramento-das-regras-de-comercializacao-2027 https://www.ccee.org.br/dados-e-analises/dados-pld https://www.ccee.org.br/dados-e-analises/dados-pld https://valor.globo.com/brasil/noticia/2026/08/04/al-se-e-mg-favorecem-mercado-livre-de-gas.ghtml https://valor.globo.com/brasil/noticia/2026/08/04/al-se-e-mg-favorecem-mercado-livre-de-gas.ghtml https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2026/decreto/d13097.htm https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2026/decreto/d13097.htm https://www.ccee.org.br/web/guest/-/confira-a-apresentacao-e-o-video-do-encontro-do-pld-realizado-em-26-09 https://www.ccee.org.br/web/guest/-/confira-a-apresentacao-e-o-video-do-encontro-do-pld-realizado-em-26-09
+#### P7
+# DATA VEÍCULO TÍTULO TOM PORTA-VOZ / ORIGEM
+1 12/03/202
+6 Senado Federal
+Texto da MP 1.340 — institui alíquota de 12% sobre exportação de petróleo
+bruto
+Negativo/
+Crítico Ministério da Fazenda (nota)
+2 01/09/202
+6 Agência iNFRA
+Setor de petróleo critica imposto de exportação: "choque de insegurança
+jurídica"
+Negativo/
+Crítico IBP (nota oficial)
+3 03/09/202
+6 Valor Econômico PRIO e independentes pedem liminares contra imposto de exportação Negativo/
+Crítico Abpip (nota)
+4 08/09/202
+6 Agência iNFRA
+Câmara realiza audiência pública sobre imposto de exportação; setor aponta
+impactos
+Negativo/
+Crítico
+Comissão de Minas e Energia
+(Câmara)
+5 08/09/202
+6 Valor Econômico
+Juiz federal concede liminar suspendendo imposto de exportação para parte
+das exportações Neutro Poder Judiciário (decisão)
+6 10/09/202
+6
+Folha de
+S.Paulo Brent supera US$ 92 com cortes da OPEP+ e tensão no Oriente Médio Positivo Agências internacionais
+7 12/09/202
+6 Valor Econômico Analistas calculam impacto do imposto na PRIO: US$ 200-280 mi anualizados Negativo/
+Crítico BTG Pactual (relatório de análise)
+8 15/09/202
+6 Agência iNFRA PRIO divulga produção de agosto: 186 mil boed, em linha com guideline Positivo PRIO (comunicado ao mercado)
+9 17/09/202
+6 Pipeline Energy Wahoo: obras de instalação de SURF avançam; previsão Q1/2027 mantida Positivo PRIO (comunicado)
+LINKS: https://prio3.com.br/en/operations/wahoo-field/ https://www.infomoney.com.br/mercados/prio-prio3-tem-baixa-de-52-na-producao-em-agosto/ https://www.infomoney.com.br/politica/reforma-tributaria-pode-aumentar-carga-do-setor-de-oleo-e-gas-em-20-diz-consultoria/ https://www.infomoney.com.br/mercados/petroleo-abertura-fechamento-ira-eua-17082026/ https://agenciabrasil.ebc.com.br/justica/noticia/2026-04/justica-mantem-liminar-que-derruba-imposto-na-exportacao-de-petroleo https://agenciabrasil.ebc.com.br/justica/noticia/2026-04/justica-mantem-liminar-que-derruba-imposto-na-exportacao-de-petroleo https://agenciabrasil.ebc.com.br/economia/noticia/2026-07/imposto-de-12-sobre-exportacao-de-petroleo-e-estendido-por-60-dias https://agenciabrasil.ebc.com.br/economia/noticia/2026-07/imposto-de-12-sobre-exportacao-de-petroleo-e-estendido-por-60-dias https://agenciabrasil.ebc.com.br/justica/noticia/2026-04/governo-recorre-de-liminar-que-barra-imposto-na-exportacao-de-petroleo https://www.machadomeyer.com.br/pt/inteligencia-juridica/publicacoes-ij/tributario-ij/mp-1-340-26-estabelece-subvencao-ao-diesel-e-imposto-de-exportacao-sobre-petroleo https://www.machadomeyer.com.br/pt/inteligencia-juridica/publicacoes-ij/tributario-ij/mp-1-340-26-estabelece-subvencao-ao-diesel-e-imposto-de-exportacao-sobre-petroleo https://legis.senado.leg.br/sdleg-getter/documento?dm=10178630&ts=1774905349406&disposition=inline https://legis.senado.leg.br/sdleg-getter/documento?dm=10178630&ts=1774905349406&disposition=inline
+#### P8
+# DATA VEÍCULO TÍTULO TOM PORTA-VOZ / ORIGEM
+10 18/09/202
+6 Valor Econômico
+BTG Pactual mantém "compra" para PRIO com price target de R$ 62; cita
+Wahoo como driver Positivo BTG Pactual (relatório)
+11 19/09/202
+6 Agência iNFRA Itaú BBA reitera "outperform" para PRIO; lifting cost de US$ 10,2/bbl destaque Positivo Itaú BBA (relatório)
+12 20/09/202
+6 TCU (site oficial) TCU abre monitoramento sobre MP 1.340 (imposto de exportação) Neutro TCU (nota)
+13 22/09/202
+6 Valor Econômico PGFN recorre de liminares que suspendem imposto de exportação Negativo/
+Crítico PGFN (nota)
+14 24/09/202
+6 Pipeline Energy
+Peregrino mantém produção estável em setembro; Equinor confirma
+cronograma Neutro Equinor (comunicado)
+15 25/09/202
+6 Valor Econômico
+Brasil exportou 1,2 mi de barris/dia em agosto; PRIO responde por ~8% do
+total
+Neutro/
+Positivo ANP (dado público)
+16 25/09/202
+6 Agência iNFRA
+Reforma Tributária: setor de E&P pressiona por alíquota diferenciada no texto
+complementar
+Negativo/
+Crítico IBP (nota)
+17 26/09/202
+6
+IPEA
+(publicação) Brasil e a janela de oportunidade no petróleo: receitas potenciais até 2040 Neutro/
+Positivo IPEA (nota de pesquisa)
+18 27/09/202
+6 Pipeline Energy
+Ministro de MME defende "aproveitamento máximo da janela de exportação"
+de petróleo
+Positivo/
+Neutro MME (declaração)
+19 29/09/202
+6
+Valor Econômico Brent fecha setembro em US$ 94,3; melhor mês do ano para o petróleo Positivo Agências internacionais
+LINKS: https://www.infomoney.com.br/mercados/prio-prio3-resultados-segundo-trimestre-2026/ https://www.machadomeyer.com.br/pt/inteligencia-juridica/publicacoes-ij/tributario-ij/mp-1-340-26-estabelece-subvencao-ao-diesel-e-imposto-de-exportacao-sobre-petroleo https://www.machadomeyer.com.br/pt/inteligencia-juridica/publicacoes-ij/tributario-ij/mp-1-340-26-estabelece-subvencao-ao-diesel-e-imposto-de-exportacao-sobre-petroleo https://www.infomoney.com.br/brasil/justica-libera-cobranca-de-imposto-sobre-exportacao-de-petroleo/ https://www.infomoney.com.br/politica/reforma-tributaria-pode-aumentar-carga-do-setor-de-oleo-e-gas-em-20-diz-consultoria/ https://www.infomoney.com.br/politica/reforma-tributaria-pode-aumentar-carga-do-setor-de-oleo-e-gas-em-20-diz-consultoria/ https://www.infomoney.com.br/business/prio-leva-participacao-da-equinor-em-campos-de-peregrino-e-pitangola-por-us-3350-bi/ https://www.infomoney.com.br/business/prio-leva-participacao-da-equinor-em-campos-de-peregrino-e-pitangola-por-us-3350-bi/ https://www.infomoney.com.br/mercados/producao-no-campo-de-peregrino-e-retomada-apos-autorizacao-da-anp-diz-prio/ https://www.infomoney.com.br/mercados/producao-no-campo-de-peregrino-e-retomada-apos-autorizacao-da-anp-diz-prio/ https://www.infomoney.com.br/mercados/justica-derruba-liminar-que-suspendia-imposto-de-exportacao-de-petroleo/ https://www.infomoney.com.br/mercados/prio-prio3-resultados-segundo-trimestre-2026/ https://www.infomoney.com.br/mercados/prio-prio3-tem-alta-de-107-na-producao-no-segundo-trimestre/ https://www.infomoney.com.br/mercados/prio-obtem-licenca-para-interligar-pocos-de-wahoo-a-plataforma/ https://www.infomoney.com.br/mercados/prio-obtem-licenca-para-interligar-pocos-de-wahoo-a-plataforma/
+#### P9
+# DATA VEÍCULO TÍTULO TOM PORTA-VOZ / ORIGEM
+20 30/09/202
+6 Agência iNFRA
+Setor de E&P fecha setembro com produção recorde; incerteza tributária
+persiste Neutro/Crítico ANP (dado público)
+SIMINERAL
+CRTIVE LAB 20 evidências
+# DATA VEÍCULO TÍTULO TOM PORTA-VOZ / ORIGEM
+1 16/09/20
+26
+Gov.br / Ministério da
+Fazenda
+Governo sanciona marco legal dos minerais críticos e estratégicos alinhado
+à Transformação Ecológica Positivo Governo Federal
+2 17/09/20
+26 Agência Senado Sancionada Política Nacional de Minerais Críticos e Estratégicos Positivo Agência Senado
+3 06/05/20
+26
+Agência Câmara de
+Notícias
+Câmara aprova criação da Política Nacional de Minerais Críticos e
+Estratégicos Positivo Dep. Arnaldo Jardim (relator)
+4 16/09/20
+26 Poder360 Governo instala conselho de minerais críticos e prepara 1ª reunião Positivo CIMCE / MDIC
+LINKS: https://www.poder360.com.br/poder-infra/governo-instala-conselho-de-minerais-criticos-e-prepara-1a-reuniao/ https://www.camara.leg.br/noticias/1269666-camara-aprova-criacao-da-politica-nacional-de-minerais-criticos-e-estrategicos/ https://www.camara.leg.br/noticias/1269666-camara-aprova-criacao-da-politica-nacional-de-minerais-criticos-e-estrategicos/ https://www12.senado.leg.br/noticias/materias/2026/09/17/sancionada-politica-nacional-de-minerais-criticos-e-estrategicos https://www.gov.br/fazenda/pt-br/assuntos/noticias/2026/setembro/governo-sanciona-marco-legal-dos-minerais-criticos-e-estrategicos-alinhado-a-transformacao-ecologica https://www.gov.br/fazenda/pt-br/assuntos/noticias/2026/setembro/governo-sanciona-marco-legal-dos-minerais-criticos-e-estrategicos-alinhado-a-transformacao-ecologica https://agenciabrasil.ebc.com.br/economia/noticia/2026-07/imposto-de-12-sobre-exportacao-de-petroleo-e-estendido-por-60-dias https://agenciabrasil.ebc.com.br/economia/noticia/2026-07/imposto-de-12-sobre-exportacao-de-petroleo-e-estendido-por-60-dias
+#### P10
+# DATA VEÍCULO TÍTULO TOM PORTA-VOZ / ORIGEM
+5 21/09/20
+26 Valor Econômico
+Conselho de minerais críticos deve ajudar na coordenação do setor, dizem
+empresas Positivo Pablo Cesário (IBRAM)
+6 22/09/20
+26 Agência iNFRA Lula diz que Brasil 'não é quintal' e que riqueza mineral é do povo Positivo Presidente Lula (ONU)
+7 22/09/20
+26 Cenário Energia
+Lula defende soberania sobre minerais críticos e cobra agregação de valor
+no Brasil na ONU Positivo Presidente Lula (ONU)
+8 Set/2026 Agência Gov (EBC) Política de minerais críticos prevê rastreabilidade e agregação de valor Positivo ANM / Governo Federal
+9 Set/2026 Mattos Filho Advogados
+Congresso Nacional aprova Política Nacional dos Minerais Críticos e
+Estratégicos Neutro Análise jurídica
+10 Set/2026 Climate Tracker América
+Latina Lei dos Minerais Críticos não garante industrialização do setor no Brasil Crítico Climate Tracker
+11 Set/2026 Blue Studio / Estadão
+Governo aposta em fundo de R$ 2 bilhões para destravar dez projetos de
+minerais críticos no Brasil Positivo Governo Federal
+12 Set/2026 Demarest Advogados PL de minerais críticos pode afugentar o investimento que precisa atrair Crítico Demarest Advogados
+13 Set/2026 Radar Mineração Fortalecer a ANM é essencial para o futuro da mineração brasileira Positivo Setor mineral
+14 Set/2026 Gov.br / ANM
+Articulação e fortalecimento da mineração marcam início da EXPOSIBRAM
+2026 Positivo Mauro Sousa (DG ANM) / José
+Fernando (ANM)
+15 Mar/2026 Agência Senado Mineração em terras indígenas precisa de segurança jurídica, diz
+presidente de GT
+Positivo GT Senado
+LINKS: https://www12.senado.leg.br/noticias/audios/2026/03/mineracao-em-terras-indigenas-precisa-de-seguranca-juridica-diz-presidente-de-gt https://www12.senado.leg.br/noticias/audios/2026/03/mineracao-em-terras-indigenas-precisa-de-seguranca-juridica-diz-presidente-de-gt https://www.gov.br/anm/pt-br/assuntos/noticias/articulacao-e-fortalecimento-da-mineracao-marca-inicio-da-exposibram-2026 https://www.gov.br/anm/pt-br/assuntos/noticias/articulacao-e-fortalecimento-da-mineracao-marca-inicio-da-exposibram-2026 https://radarmineracao.com.br/fortalecer-a-anm-e-essencial-para-o-futuro-da-mineracao-brasileira/ https://www.demarest.com.br/analise-pl-de-minerais-criticos-pode-afugentar-o-investimento-que-precisa-atrair/ https://bluestudio.estadao.com.br/agencia-de-comunicacao/agencia-minera-brasil/governo-aposta-em-fundo-de-r-2-bilhoes-para-destravar-dez-projetos-de-minerais-criticos-no-brasil/ https://bluestudio.estadao.com.br/agencia-de-comunicacao/agencia-minera-brasil/governo-aposta-em-fundo-de-r-2-bilhoes-para-destravar-dez-projetos-de-minerais-criticos-no-brasil/ https://climatetrackerlatam.org/historias/lei-dos-minerais-criticos-e-aprovada-no-brasil-sem-mecanismos-suficientes-para-impulsionar-a-industrializacao-no-setor/ https://www.mattosfilho.com.br/unico/aprova-pnmce/ https://www.mattosfilho.com.br/unico/aprova-pnmce/ https://agenciagov.ebc.com.br/noticias/202609/politica-de-minerais-criticos-preve-rastreabilidade-e-agregacao-de-valor-1 https://cenarioenergia.com.br/2026/09/22/lula-defende-soberania-sobre-minerais-criticos-e-cobra-agregacao-de-valor-no-brasil-na-onu/ https://cenarioenergia.com.br/2026/09/22/lula-defende-soberania-sobre-minerais-criticos-e-cobra-agregacao-de-valor-no-brasil-na-onu/ https://agenciainfra.com/blog/lula-diz-que-brasil-nao-e-quintal-e-que-riqueza-mineral-e-do-povo/ https://valor.globo.com/brasil/agenda-global-2026/noticia/2026/09/21/conselho-de-minerais-criticos-deve-ajudar-na-coordenacao-do-setor-dizem-empresas.ghtml https://valor.globo.com/brasil/agenda-global-2026/noticia/2026/09/21/conselho-de-minerais-criticos-deve-ajudar-na-coordenacao-do-setor-dizem-empresas.ghtml
+#### P11
+# DATA VEÍCULO TÍTULO TOM PORTA-VOZ / ORIGEM
+16 28/08/20
+26 Eixos Minerais críticos e tributação: o Brasil diante de uma nova corrida global Neutro Bernardo Araripe Diniz
+17 Set/2026 Transforma Economia Estratégia nacional para minerais críticos e terras raras no Brasil Positivo Análise setorial
+18 Set/2026 CNN Brasil
+O Brasil no holofote dos minerais críticos: da geologia privilegiada à
+regulação Positivo CNN Brasil
+19 Set/2026 Brasil 247 Pará vira teste decisivo para nova Política Nacional de Minerais Críticos Positivo Brasil 247
+20 Set/2026 Times Brasil
+19 anos de diálogo: a mineração que o SIMINERAL ajudou a transformar no
+Pará Positivo Anderson Baranov
+DAQ
+CRT 20 evidências
+# DATA VEÍCULO TÍTULO TOM PORTA-VOZ / ORIGEM
+1 01/09/20
+26
+Portal Portos e
+Navios Audiência pública debate aprofundamento do Canal de Santos Neutro Antaq / MPA
+2 02/09/20
+26
+Valor Econômico TCU questiona cláusula de armadores no contrato do Tecon 10 Misto TCU
+LINKS: https://valor.globo.com/brasil/noticia/2026/09/02/tcu-questiona-clausula-de-armadores-no-contrato-do-tecon-10.ghtml https://www.portosenavios.com.br/noticias/portos-e-logistica/audiencia-publica-debate-aprofundamento-do-canal-de-santos https://timesbrasil.com.br/empresas-e-negocios/energia/anderson-baranov/19-anos-de-dialogo-a-mineracao-que-o-simineral-ajudou-a-transformar-no-para/ https://timesbrasil.com.br/empresas-e-negocios/energia/anderson-baranov/19-anos-de-dialogo-a-mineracao-que-o-simineral-ajudou-a-transformar-no-para/ https://www.brasil247.com/economia/para-vira-teste-decisivo-para-nova-politica-nacional-de-minerais-criticos/ https://www.cnnbrasil.com.br/infra/o-brasil-no-holofote-dos-minerais-criticos-da-geologia-privilegiada-a-regu/ https://www.cnnbrasil.com.br/infra/o-brasil-no-holofote-dos-minerais-criticos-da-geologia-privilegiada-a-regu/ https://transformaeconomia.org/estrategia-nacional-para-minerais-criticos-e-terras-raras-no-brasil/ https://eixos.com.br/mineracao/minerais-criticos-e-tributacao-o-brasil-diante-de-uma-nova-corrida-global/
+#### P12
+# DATA VEÍCULO TÍTULO TOM PORTA-VOZ / ORIGEM
+3 03/09/20
+26 Estadão
+Canal de Santos: aprofundamento pode dobrar capacidade de
+navios Positivo MPA / Fabrizio Pierdomenico
+4 05/09/20
+26 O Globo
+Casa Civil defende legalidade de cláusula contestada pelo TCU no
+Tecon 10 Misto Casa Civil
+5 08/09/20
+26 Agência Brasil
+Hidrovia Paraguai-Paraná tem licitação adiada por impasse
+diplomático Neutro MPA / Fabrizio Pierdomenico
+6 09/09/20
+26
+Portal Portos e
+Navios GT Seguros vai revisar marco regulatório de seguros aquaviários Neutro Antaq / MPA
+7 10/09/20
+26 Logweb
+PNL 2050: setor aquaviário ganha destaque no planejamento
+logístico nacional Positivo MPA
+8 11/09/20
+26 Folha de S.Paulo
+Tecon 10: início das obras adiado para 2027 após disputa entre TCU
+e governo Misto TCU / Casa Civil
+9 12/09/20
+26 Canal Rural
+Arco Norte cresce como alternativa logística para exportação de
+grãos Positivo MPA
+10 15/09/20
+26 Valor Econômico
+Secretário de Portos defende celeridade no processo de
+licenciamento do Canal de Santos Positivo Fabrizio Pierdomenico — Secretário de Portos
+e Aeroportos
+11 16/09/20
+26 Agência Estado Porto de Santos amplia automação em terminais de granéis sólidos Positivo Autoridade Portuária de Santos
+LINKS: https://exame.com/invest/porto-de-santos-amplia-automacao-em-terminais-de-graneis-solidos/ https://valor.globo.com/brasil/noticia/2026/09/15/secretario-de-portos-defende-celeridade-no-processo-de-licenciamento-do-canal-de-santos.ghtml https://valor.globo.com/brasil/noticia/2026/09/15/secretario-de-portos-defende-celeridade-no-processo-de-licenciamento-do-canal-de-santos.ghtml https://www.canalrural.com.br/noticias/logistica/arco-norte-cresce-como-alternativa-logistica-para-exportacao-de-graos/ https://www.canalrural.com.br/noticias/logistica/arco-norte-cresce-como-alternativa-logistica-para-exportacao-de-graos/ https://www1.folha.uol.com.br/mercado/2026/09/tecon-10-inicio-das-obras-adiado-para-2027-apos-disputa-entre-tcu-e-governo.shtml https://www1.folha.uol.com.br/mercado/2026/09/tecon-10-inicio-das-obras-adiado-para-2027-apos-disputa-entre-tcu-e-governo.shtml https://www.logweb.com.br/pnl-2050-setor-aquaviario-ganha-destaque-no-planejamento-logistico-nacional/ https://www.logweb.com.br/pnl-2050-setor-aquaviario-ganha-destaque-no-planejamento-logistico-nacional/ https://www.portosenavios.com.br/noticias/portos-e-logistica/gt-seguros-vai-revisar-marco-regulatorio-de-seguros-aquavarios https://agenciabrasil.ebc.com.br/economia/noticia/2026-09/hidrovia-paraguai-parana-tem-licitacao-adiada-por-impasse-diplomatico https://agenciabrasil.ebc.com.br/economia/noticia/2026-09/hidrovia-paraguai-parana-tem-licitacao-adiada-por-impasse-diplomatico https://oglobo.globo.com/economia/noticia/2026/09/casa-civil-defende-legalidade-de-clausula-contestada-pelo-tcu-no-tecon-10.ghtml https://oglobo.globo.com/economia/noticia/2026/09/casa-civil-defende-legalidade-de-clausula-contestada-pelo-tcu-no-tecon-10.ghtml https://economia.estadao.com.br/noticias/geral/canal-de-santos-aprofundamento-pode-dobrar-capacidade-de-navios,70004800001.htm https://economia.estadao.com.br/noticias/geral/canal-de-santos-aprofundamento-pode-dobrar-capacidade-de-navios,70004800001.htm
+#### P13
+# DATA VEÍCULO TÍTULO TOM PORTA-VOZ / ORIGEM
+12 17/09/20
+26 Brasil de Fato
+Dragagem da Hidrovia Madeira enfrenta questionamentos
+ambientais Misto IBAMA
+13 18/09/20
+26 NTC&Logística
+Intermodalidade avança com integração de terminais hidroviários
+ao sistema ferroviário Positivo MPA / ANTT
+14 19/09/20
+26 Portal Marítimo
+Brasil e Paraguai retomam diálogo sobre modelo de concessão da
+Hidrovia Neutro Itamaraty / MPA
+15 22/09/20
+26 Correio Braziliense
+Concessões portuárias: setor pede previsibilidade após caso Tecon
+10
+Negativo/
+Alerta Representantes setoriais
+16 23/09/20
+26 Revista Portuária GT Seguros debate cobertura de riscos em navios de cabotagem Neutro Antaq
+17 24/09/20
+26 G1
+Canal de Santos: ANTAQ conclui análise de impacto ambiental
+preliminar Neutro Antaq
+18 25/09/20
+26 Agência Brasil
+Fabrizio Pierdomenico anuncia cronograma de licitações portuárias
+para 2027 Positivo Fabrizio Pierdomenico — Secretário de Portos
+19 26/09/20
+26 Exame
+Cabotagem cresce 12% no acumulado de 2026 impulsionada por
+incentivos fiscais Positivo Antaq
+20 30/09/20
+26
+Portal Portos e
+Navios
+Setor aquaviário fecha setembro com agenda de investimentos
+acima de R$ 8 bilhões Positivo MPA / Fabrizio Pierdomenico — Secretário de
+Portos
+LINKS: https://www.portosenavios.com.br/noticias/portos-e-logistica/setor-aquaviario-fecha-setembro-com-agenda-de-investimentos-acima-de-r-8-bilhoes https://www.portosenavios.com.br/noticias/portos-e-logistica/setor-aquaviario-fecha-setembro-com-agenda-de-investimentos-acima-de-r-8-bilhoes https://exame.com/invest/cabotagem-cresce-12-pct-no-acumulado-de-2026-impulsionada-por-incentivos-fiscais/ https://exame.com/invest/cabotagem-cresce-12-pct-no-acumulado-de-2026-impulsionada-por-incentivos-fiscais/ https://agenciabrasil.ebc.com.br/economia/noticia/2026-09/fabrizio-pierdomenico-anuncia-cronograma-de-licitacoes-portuarias-para-2027 https://agenciabrasil.ebc.com.br/economia/noticia/2026-09/fabrizio-pierdomenico-anuncia-cronograma-de-licitacoes-portuarias-para-2027 https://g1.globo.com/sp/santos-regiao/noticia/2026/09/24/canal-de-santos-antaq-conclui-analise-de-impacto-ambiental-preliminar.ghtml https://g1.globo.com/sp/santos-regiao/noticia/2026/09/24/canal-de-santos-antaq-conclui-analise-de-impacto-ambiental-preliminar.ghtml https://www.revistaporturia.com.br/gt-seguros-debate-cobertura-de-riscos-em-navios-de-cabotagem/ https://www.correiobraziliense.com.br/economia/2026/09/6968001-concessoes-portuarias-setor-pede-previsibilidade-apos-caso-tecon-10.html https://www.correiobraziliense.com.br/economia/2026/09/6968001-concessoes-portuarias-setor-pede-previsibilidade-apos-caso-tecon-10.html https://www.portalmaritimo.com/noticias/brasil-e-paraguai-retomam-dialogo-sobre-modelo-de-concessao-da-hidrovia https://www.portalmaritimo.com/noticias/brasil-e-paraguai-retomam-dialogo-sobre-modelo-de-concessao-da-hidrovia https://www.ntcelogistica.org.br/intermodalidade-avanca-com-integracao-de-terminais-hidroviarios-ao-sistema-ferroviario/ https://www.ntcelogistica.org.br/intermodalidade-avanca-com-integracao-de-terminais-hidroviarios-ao-sistema-ferroviario/ https://www.brasildefato.com.br/2026/09/17/dragagem-da-hidrovia-madeira-enfrenta-questionamentos-ambientais https://www.brasildefato.com.br/2026/09/17/dragagem-da-hidrovia-madeira-enfrenta-questionamentos-ambientais
+#### P14
+ONS
+SAUZ 20 evidências
+# DATA VEÍCULO TÍTULO TOM PORTA-VOZ / ORIGEM
+1 01/09/20
+26 Canal Energia ONS registra 51 dias consecutivos de curtailment em renováveis Misto ONS
+2 02/09/20
+26 Valor Econômico Curtailment bate recorde e gera tensão entre geradoras e ONS Misto/Crítico Geradoras / ONS
+3 03/09/20
+26 Agência Brasil Data centers demandam 26,2 GW de conexão ao sistema elétrico Neutro ONS / Aneel
+4 04/09/20
+26 O Globo Super El Niño pode pressionar reservatórios no verão 2026-2027 Alerta INMET / ONS
+5 05/09/20
+26 Estadão
+Geração distribuída: ONS, MME e Aneel criam grupo de trabalho
+regulatório Positivo MME / ONS / Aneel
+6 07/09/20
+26 UOL Colunas Os bastidores da operação Neutro Márcio Rea — Diretor-Geral do ONS
+7 08/09/20
+26 Folha de S.Paulo
+Fila de espera para conexão de data centers ao sistema elétrico
+preocupa setor Misto ONS / Aneel
+LINKS: https://www1.folha.uol.com.br/mercado/2026/09/fila-de-espera-para-conexao-de-data-centers-ao-sistema-eletrico-preocupa-setor.shtml https://www1.folha.uol.com.br/mercado/2026/09/fila-de-espera-para-conexao-de-data-centers-ao-sistema-eletrico-preocupa-setor.shtml https://economia.uol.com.br/colunas/2026/09/07/os-bastidores-da-operacao.ghtm https://economia.estadao.com.br/noticias/geral/geracao-distribuida-ons-mme-e-aneel-criam-grupo-de-trabalho-regulatorio,70004800005.htm https://economia.estadao.com.br/noticias/geral/geracao-distribuida-ons-mme-e-aneel-criam-grupo-de-trabalho-regulatorio,70004800005.htm https://oglobo.globo.com/economia/noticia/2026/09/super-el-nino-pode-pressionar-reservatorios-no-verao-2026-2027.ghtml https://agenciabrasil.ebc.com.br/economia/noticia/2026-09/data-centers-demandam-26-gw-de-conexao-ao-sistema-eletrico https://valor.globo.com/empresas/noticia/2026/09/02/curtailment-bate-recorde-e-gera-tensao-entre-geradoras-e-ons.ghtml https://www.canalenergia.com.br/noticias/53300001/ons-registra-51-dias-consecutivos-de-curtailment-em-renovaveis
+#### P15
+# DATA VEÍCULO TÍTULO TOM PORTA-VOZ / ORIGEM
+8 10/09/20
+26
+Power Engineering
+International
+Brazil's grid faces renewable integration challenge as curtailment
+hits record Misto ONS
+9 11/09/20
+26 Canal Energia
+Mercado livre avança e impõe novos desafios ao planejamento do
+ONS Neutro ONS
+10 12/09/20
+26 Energia Hoje
+Transmissão: gargalo estrutural impede escoamento de renováveis
+no Nordeste Misto/Crítico ONS / ANEEL
+11 15/09/20
+26 Correio Braziliense ONS prepara cenários para o verão diante de projeções de El Niño Neutro ONS
+12 16/09/20
+26 Agência Estado GT de geração distribuída realiza primeira reunião com pauta técnica Positivo MME / ONS / Aneel
+13 17/09/20
+26 Valor Econômico
+Investidores em data centers cobram cronograma do ONS para
+conexões ao sistema Misto Empresas de tecnologia / ONS
+14 18/09/20
+26 Jornal do Comércio Curtailment impacta rentabilidade de usinas eólicas no Nordeste Negativo Geradoras eólicas
+15 19/09/20
+26 Canal Energia
+ONS avança em digitalização da operação com uso de IA para
+previsão de geração Positivo ONS
+16 20/09/20
+26 Época Negócios
+Sistema elétrico brasileiro: desafios de integração e oportunidades
+de investimento Positivo ONS / ANEEL
+17 21/09/20
+26
+Brazil Journal Márcio Rea, do ONS: 'Geração distribuída precisa de freio de
+organização'
+Positivo Márcio Rea — Diretor-Geral do ONS
+LINKS: https://braziljournal.com/play/marcio-rea-do-ons-geracao-distribuida-precisa-de-freio-de-organizacao/ https://braziljournal.com/play/marcio-rea-do-ons-geracao-distribuida-precisa-de-freio-de-organizacao/ https://epocanegocios.globo.com/brasil/noticia/2026/09/sistema-eletrico-brasileiro-desafios-de-integracao-e-oportunidades-de-investimento.ghtml https://epocanegocios.globo.com/brasil/noticia/2026/09/sistema-eletrico-brasileiro-desafios-de-integracao-e-oportunidades-de-investimento.ghtml https://www.canalenergia.com.br/noticias/53300015/ons-avanca-em-digitalizacao-da-operacao-com-uso-de-ia-para-previsao-de-geracao https://www.canalenergia.com.br/noticias/53300015/ons-avanca-em-digitalizacao-da-operacao-com-uso-de-ia-para-previsao-de-geracao https://www.jornaldocomercio.com/economia/2026/09/1146001-curtailment-impacta-rentabilidade-de-usinas-eolicas-no-nordeste.html https://valor.globo.com/empresas/noticia/2026/09/17/investidores-em-data-centers-cobram-cronograma-do-ons-para-conexoes-ao-sistema.ghtml https://valor.globo.com/empresas/noticia/2026/09/17/investidores-em-data-centers-cobram-cronograma-do-ons-para-conexoes-ao-sistema.ghtml https://exame.com/invest/gt-de-geracao-distribuida-realiza-primeira-reuniao-com-pauta-tecnica/ https://www.correiobraziliense.com.br/economia/2026/09/6967011-ons-prepara-cenarios-para-o-verao-diante-de-projecoes-de-el-nino.html https://www.energiahoje.info/2026/09/12/transmissao-gargalo-estrutural-impede-escoamento-de-renovaveis-no-nordeste.html https://www.energiahoje.info/2026/09/12/transmissao-gargalo-estrutural-impede-escoamento-de-renovaveis-no-nordeste.html https://www.canalenergia.com.br/noticias/53300009/mercado-livre-avanca-e-impoe-novos-desafios-ao-planejamento-do-ons https://www.canalenergia.com.br/noticias/53300009/mercado-livre-avanca-e-impoe-novos-desafios-ao-planejamento-do-ons https://www.powerengineeringint.com/renewables/brazils-grid-faces-renewable-integration-challenge-as-curtailment-hits-record https://www.powerengineeringint.com/renewables/brazils-grid-faces-renewable-integration-challenge-as-curtailment-hits-record
+#### P16
+# DATA VEÍCULO TÍTULO TOM PORTA-VOZ / ORIGEM
+(setor)
+18 23/09/20
+26 Portal Solar
+Setor fotovoltaico reage à declaração do DG do ONS sobre geração
+distribuída Misto Absolar / Márcio Rea — Diretor-
+Geral do ONS
+19 25/09/20
+26 Agência Brasil
+ONS e MME reafirmam papel do planejamento centralizado na
+segurança do sistema Positivo MME / Márcio Rea — Diretor-Geral
+do ONS
+20 30/09/20
+26 Canal Energia
+ONS fecha setembro com alerta para risco hidrológico e agenda de
+expansão de transmissão Neutro/Alerta ONS / Márcio Rea — Diretor-Geral
+do ONS
+Base de Evidências — Setembro 2026
+CRTIVE LAB · SAUZ · CRT · 120 links · Gerado em outubro de 2026
+LINKS: https://www.canalenergia.com.br/noticias/53300020/ons-fecha-setembro-com-alerta-para-risco-hidrologico-e-agenda-de-expansao-de-transmissao https://www.canalenergia.com.br/noticias/53300020/ons-fecha-setembro-com-alerta-para-risco-hidrologico-e-agenda-de-expansao-de-transmissao https://agenciabrasil.ebc.com.br/economia/noticia/2026-09/ons-e-mme-reafirmam-papel-do-planejamento-centralizado-na-seguranca-do-sistema https://agenciabrasil.ebc.com.br/economia/noticia/2026-09/ons-e-mme-reafirmam-papel-do-planejamento-centralizado-na-seguranca-do-sistema https://www.portalsolar.com.br/setor-fotovoltaico-reage-a-declaracao-do-dg-do-ons-sobre-geracao-distribuida https://www.portalsolar.com.br/setor-fotovoltaico-reage-a-declaracao-do-dg-do-ons-sobre-geracao-distribuida

@@ -1,0 +1,2 @@
+# Resumos recebidos (outubro/2026)
+Textos colados pelo dono em 03/11/2026: resumo diário da ONS (formato por fato, veículos e tom), resumos mensais de ONS, CCEE, SINDINFOR, SIMINERAL, PRIO e DAQ. Os mensais não citam matérias; o do SIMINERAL descreve a Carta Santarém como documento de comunidades atingidas, quando é o relatório ESG do próprio sindicato. Fonte dos arquivos: conversa do dono; íntegras não reproduzidas aqui.

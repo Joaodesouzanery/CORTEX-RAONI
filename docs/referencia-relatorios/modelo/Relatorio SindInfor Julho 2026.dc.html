@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+  doc-page:not(:defined){visibility:hidden}
+  *{box-sizing:border-box}
+  .rp p{orphans:3;widows:3}
+  .pgnum::after{content:counter(page)}
+</style>
+</helmet>
+<x-import component-from-global-scope="doc-page" from="./doc-page.js" size="a4" margin="17mm" hint-size="100%,100%">
+<div slot="footer" style="display:flex;justify-content:space-between;align-items:baseline;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.05em;color:#8b90a2;border-top:1px solid #e7e7f0;padding-top:2mm">
+  <span>SAUZ · SindInfor · Julho 2026 — Confidencial</span>
+  <span class="pgnum" style="color:#4f46e5;font-weight:500"></span>
+</div>
+
+<div class="rp" style="font-family:'IBM Plex Sans',-apple-system,'Segoe UI',sans-serif;font-size:12.8px;line-height:1.55;color:#172032;-webkit-font-smoothing:antialiased">
+
+<!-- ============ CAPA ============ -->
+<div data-screen-label="Capa" style="position:relative;overflow:hidden;background:#080d1c;margin:-17mm -17mm 0;box-sizing:border-box;display:flex;flex-direction:column;break-after:page">
+  <div style="position:relative;height:208mm;overflow:hidden">
+    <img src="cover_sind_jul.jpg" alt="Rede digital global com nós de dados conectados — economia digital e regulação de plataformas" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 52%">
+    <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(8,13,28,.76) 0%,rgba(12,18,40,.34) 24%,rgba(58,38,140,.24) 50%,rgba(10,14,30,.56) 74%,rgba(6,9,20,.94) 100%)"></div>
+
+    <div style="position:absolute;top:15mm;left:19mm;right:19mm;z-index:3;display:flex;justify-content:space-between;align-items:flex-start;gap:9mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.02em;color:#e8ebf7;text-shadow:0 1px 12px rgba(6,9,20,.85);max-width:112mm;line-height:1.5">SindInfor — Sindicato da Indústria de Software e da Tecnologia da Informação do Estado de Minas Gerais</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#9aa2c4;white-space:nowrap">Inteligência Setorial</div>
+    </div>
+
+    <div style="position:absolute;top:20mm;right:10mm;height:178mm;z-index:3;writing-mode:vertical-rl;font-family:'IBM Plex Sans',sans-serif;font-weight:700;font-size:13.5px;letter-spacing:.11em;color:#fff;text-transform:uppercase;opacity:.95;white-space:nowrap">Regulação · Tributação · Talento · Minas Digital</div>
+
+    <div style="position:absolute;left:0;right:0;top:31%;z-index:3;display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 19mm">
+      <img src="sauz-logo.png" alt="SAUZ" style="height:72px;display:block;filter:drop-shadow(0 3px 20px rgba(6,9,20,.7))">
+      <div style="width:50px;height:2px;background:#8b8cf0;margin:13px 0 9px"></div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:#e6e9f7;text-shadow:0 1px 12px rgba(6,9,20,.9)">Comunicação e Estratégia · Inteligência Reputacional</div>
+    </div>
+
+    <div style="position:absolute;left:19mm;right:24mm;bottom:16mm;z-index:3">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:#a5a6f5;margin-bottom:6mm">Relatório Mensal · Julho de 2026</div>
+      <h1 style="font-size:33px;font-weight:600;line-height:1.13;letter-spacing:-.015em;margin:0;color:#fff;max-width:148mm;text-shadow:0 2px 24px rgba(6,9,20,.6)">Relatório Mensal de Comunicação Estratégica e Inteligência Setorial</h1>
+    </div>
+  </div>
+
+  <div style="background:#080d1c;padding:8mm 19mm 7mm;display:flex;justify-content:space-between;align-items:flex-end;gap:10mm">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#6a7196">Suporte estratégico prestado por SAUZ</div>
+    <div style="text-align:right;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#9aa2c4;line-height:1.7">
+      <div>Setor de Tecnologia · Julho de 2026</div>
+      <div style="color:#5f6688">Confidencial — uso interno da diretoria</div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);height:6mm">
+    <div style="background:#4f46e5"></div><div style="background:#6366f1"></div><div style="background:#7c3aed"></div><div style="background:#0891b2"></div><div style="background:#1e293b"></div>
+  </div>
+</div>
+
+<!-- ============ NOTA DE MÉTODO + SUMÁRIO ============ -->
+<div data-screen-label="Visão geral e método" style="break-after:page;padding-top:2mm">
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:#8b90a2;margin-bottom:3mm">Visão geral e método</div>
+  <div style="border-top:1.6px solid #172032"></div>
+  <div style="background:#f2f2fb;border-left:3px solid #4f46e5;padding:5mm 6mm;margin-top:4.5mm;max-width:162mm">
+    <p style="margin:0 0 2.4mm;text-align:justify;font-size:12.5px;color:#2a2f42"><strong>Ler antes.</strong> O monitoramento do período reuniu itens sobre o setor de tecnologia, compondo uma visão geral do ambiente setorial com inserções sobre o ecossistema mineiro de software.</p>
+    <p style="margin:0 0 2.4mm;text-align:justify;font-size:12.5px;color:#2a2f42">Este documento é, portanto, uma <strong>leitura de inteligência setorial a serviço da entidade</strong> — lê o ambiente do setor e o que ele significa para as empresas mineiras de software e para a agenda do SindInfor.</p>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#2a2f42">O tema central do mês (a entrada em vigor dos Decretos nº 12.975 e nº 12.976) foi apurado e verificado em fontes primárias e especializadas, indicadas ao longo do texto. Nada foi atribuído ao SindInfor ou a terceiros sem base factual.</p>
+  </div>
+
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:#8b90a2;margin:9mm 0 3mm">Sumário</div>
+  <div style="border-top:1.6px solid #172032"></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;column-gap:14mm">
+    <div>
+      <a href="#s1" style="display:flex;gap:11px;align-items:baseline;padding:2.7mm 0;border-bottom:1px solid #e7e7f0;text-decoration:none;color:#172032"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#4f46e5;min-width:20px">01</span><span style="font-weight:500">Sumário Executivo</span></a>
+      <a href="#s2" style="display:flex;gap:11px;align-items:baseline;padding:2.7mm 0;border-bottom:1px solid #e7e7f0;text-decoration:none;color:#172032"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#4f46e5;min-width:20px">02</span><span style="font-weight:500">Temas Estratégicos do Mês</span></a>
+      <a href="#s3" style="display:flex;gap:11px;align-items:baseline;padding:2.7mm 0;border-bottom:1px solid #e7e7f0;text-decoration:none;color:#172032"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#4f46e5;min-width:20px">03</span><span style="font-weight:500">Leitura Reputacional do Ambiente</span></a>
+      <a href="#s4" style="display:flex;gap:11px;align-items:baseline;padding:2.7mm 0;border-bottom:1px solid #e7e7f0;text-decoration:none;color:#172032"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#4f46e5;min-width:20px">04</span><span style="font-weight:500">Análise Temática Aprofundada</span></a>
+      <a href="#s5" style="display:flex;gap:11px;align-items:baseline;padding:2.7mm 0;border-bottom:1px solid #e7e7f0;text-decoration:none;color:#172032"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#4f46e5;min-width:20px">05</span><span style="font-weight:500">Riscos Reputacionais Prioritários</span></a>
+    </div>
+    <div>
+      <a href="#s6" style="display:flex;gap:11px;align-items:baseline;padding:2.7mm 0;border-bottom:1px solid #e7e7f0;text-decoration:none;color:#172032"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#4f46e5;min-width:20px">06</span><span style="font-weight:500">Oportunidades de Posicionamento</span></a>
+      <a href="#s7" style="display:flex;gap:11px;align-items:baseline;padding:2.7mm 0;border-bottom:1px solid #e7e7f0;text-decoration:none;color:#172032"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#4f46e5;min-width:20px">07</span><span style="font-weight:500">Recomendações Executivas</span></a>
+      <a href="#s8" style="display:flex;gap:11px;align-items:baseline;padding:2.7mm 0;border-bottom:1px solid #e7e7f0;text-decoration:none;color:#172032"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#4f46e5;min-width:20px">08</span><span style="font-weight:500">Cenários Prospectivos</span></a>
+      <a href="#s9" style="display:flex;gap:11px;align-items:baseline;padding:2.7mm 0;border-bottom:1px solid #e7e7f0;text-decoration:none;color:#172032"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#4f46e5;min-width:20px">09</span><span style="font-weight:500">Demonstração dos Serviços — SAUZ</span></a>
+      <a href="#s10" style="display:flex;gap:11px;align-items:baseline;padding:2.7mm 0;border-bottom:1px solid #e7e7f0;text-decoration:none;color:#172032"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#4f46e5;min-width:20px">10</span><span style="font-weight:500">Base Qualificada de Evidências</span></a>
+    </div>
+  </div>
+
+  <!-- DESTAQUE DO MÊS -->
+  <div style="margin-top:8mm;border-top:1.6px solid #172032;padding-top:4.5mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#4f46e5;margin-bottom:3.5mm">Matéria principal do mês</div>
+    <div style="background:#f2f2fb;border-left:3px solid #4f46e5;padding:6mm 7mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#6a6fa0;margin-bottom:2.5mm">Vigência em 20 de julho de 2026 · publicados em 21 de maio</div>
+      <div style="font-size:22px;font-weight:600;line-height:1.22;letter-spacing:-.01em;margin-bottom:3.5mm;max-width:152mm">Decretos nº 12.975 e nº 12.976: o novo regime das plataformas digitais</div>
+      <p style="margin:0 0 3mm;font-size:13px;color:#2a2f42;text-align:justify;max-width:158mm">A regulação das plataformas deixou de ser debate e virou <strong>obrigação operacional</strong>. O alcance vai além das big techs: atinge provedores de aplicação em sentido amplo, incluindo empresas de software e operações SaaS — universo que descreve boa parte dos associados do SindInfor.</p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4mm">
+        <div style="background:#fff;padding:3.5mm 4mm;border-top:2px solid #4f46e5"><div style="font-weight:600;font-size:12.5px;margin-bottom:1.4mm">Remoção</div><div style="font-size:11px;color:#4a5068;line-height:1.4">Conteúdos ilícitos após notificação extrajudicial</div></div>
+        <div style="background:#fff;padding:3.5mm 4mm;border-top:2px solid #6366f1"><div style="font-weight:600;font-size:12.5px;margin-bottom:1.4mm">Transparência</div><div style="font-size:11px;color:#4a5068;line-height:1.4">Devido processo e direito de contestação</div></div>
+        <div style="background:#fff;padding:3.5mm 4mm;border-top:2px solid #7c3aed"><div style="font-weight:600;font-size:12.5px;margin-bottom:1.4mm">Prevenção</div><div style="font-size:11px;color:#4a5068;line-height:1.4">Medidas contra fraudes, golpes e anúncios enganosos</div></div>
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:6mm;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#8b90a2;letter-spacing:.02em">SAUZ · SindInfor · Julho de 2026 — Confidencial</div>
+</div>
+
+<!-- ============ SEÇÃO 01 ============ -->
+<div id="s1" data-screen-label="01 Sumário Executivo" style="margin-top:1mm">
+  <div style="border-top:1.6px solid #172032;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#4f46e5;font-weight:600">01</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b90a2">Síntese</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Sumário Executivo</h2>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 2.4mm;text-align:justify">Julho de 2026 entrou para o calendário do setor de tecnologia como o mês em que a regulação das plataformas digitais deixou de ser debate e virou obrigação operacional. Em 20 de julho, entraram em vigor os Decretos nº 12.975 e nº 12.976, publicados em 21 de maio, que atualizam a regulamentação do Marco Civil da Internet e inauguram um novo regime de responsabilidade para provedores de aplicações de internet no Brasil. O prazo de adaptação foi de apenas 60 dias — vacatio curta diante do volume de adequações exigidas —, e o alcance da norma vai muito além das big techs: atinge provedores de aplicação em sentido amplo, incluindo empresas de software e operações SaaS, universo que descreve boa parte dos associados do SindInfor.</p>
+    <p style="margin:0 0 2.4mm;text-align:justify">O conteúdo da mudança é estrutural. O Decreto nº 12.975 altera o Decreto nº 8.771/2016 e transpõe para o plano regulamentar a tese fixada pelo Supremo Tribunal Federal nos Temas 987 e 533, que declarou a inconstitucionalidade parcial e progressiva do artigo 19 do Marco Civil — dispositivo que, desde 2014, condicionava a responsabilização civil das plataformas ao descumprimento de ordem judicial. Em seu lugar, surgem três deveres operacionais: <strong>remoção</strong> de conteúdos ilícitos após notificação extrajudicial, <strong>transparência e devido processo</strong> na moderação — com requisitos de validade da notificação e direito de contestação pelo autor da publicação — e <strong>prevenção</strong>, com medidas tecnicamente adequadas contra a circulação massiva de fraudes, golpes e anúncios enganosos. O Decreto nº 12.976, norma irmã voltada à proteção da mulher no ambiente digital, impõe prazos ainda mais rigorosos, como a remoção de conteúdo íntimo não consentido em até duas horas após a notificação.</p>
+    <p style="margin:0 0 2.4mm;text-align:justify">A reação do ecossistema de tecnologia foi de resistência qualificada. Associações de empresas e startups criticaram o curto período de transição e alertaram para o risco de sobrecarga jurídica e de impactos operacionais severos, sobretudo sobre companhias que não dispõem de estruturas robustas de compliance — um argumento que atinge em cheio o perfil predominante do setor brasileiro de software, formado majoritariamente por micro e pequenas empresas. Há, ainda, um ponto sensível de fundo: os decretos criam deveres e estrutura sancionatória em matéria que o próprio STF havia remetido ao Congresso Nacional, o que abre flanco a questionamentos sobre os limites do poder regulamentar.</p>
+    <p style="margin:0 0 2.4mm;text-align:justify">Foi por esse flanco que o tema escalou. A disputa chegou ao Supremo Tribunal Federal, tornando-se alvo de ações que questionam a constitucionalidade das normas e os limites da responsabilização imposta a big techs e desenvolvedores de plataformas. O resultado é um ambiente de insegurança jurídica em camadas superpostas — o artigo 19 do Marco Civil, a tese de repercussão geral do STF (cuja redação final foi proclamada em 17 de junho de 2026, com ajustes relevantes) e os decretos — que convivem e demandam interpretação conjunta.</p>
+    <p style="margin:0 0 2.4mm;text-align:justify">No pano de fundo, a agenda estrutural do setor seguiu ativa. A reforma tributária manteve seu marco mais sensível: a Receita não atendeu ao pleito do mercado e manteve 3 de agosto como data para as notas fiscais com IBS e CBS (Convergência Digital, 31/07/2026) — dado que confirma o diagnóstico do mês anterior de que a tributação é a pauta de maior materialidade para os associados. A corrida por data centers seguiu esbarrando no gargalo de transmissão de energia (Valor Econômico, 31/07/2026), com Minas Gerais mapeando regiões aptas a recebê-los (Agência Infra, 06/07/2026). A escassez de talentos qualificados voltou como desafio concreto das empresas de software (Paraíba Business, 25/07/2026), e o governo prorrogou a parceria com a Softex para fomento ao setor (O Tempo, 31/07/2026).</p>
+    <p style="margin:0;text-align:justify">Para o SindInfor, a leitura de conjunto é de urgência e de oportunidade na mesma medida. Urgência porque as novas obrigações já são exigíveis e boa parte dos associados provavelmente não fez o diagnóstico de aderência. Oportunidade porque poucas pautas oferecem a uma entidade de classe um papel tão nítido: traduzir a norma, orientar a adequação e representar tecnicamente o setor mineiro num debate que se decide agora, entre o Executivo, o Congresso e o Supremo.</p>
+  </div>
+
+  <div style="margin-top:6mm;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#4f46e5;padding-bottom:2.5mm;border-bottom:1px solid #e4e4ef;margin-bottom:4mm">Top Insights do Mês</div>
+    <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3mm">
+      <li style="display:grid;grid-template-columns:21px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#4f46e5;font-weight:600">01</span><span style="text-align:justify">Os <strong>Decretos 12.975 e 12.976 entraram em vigor em 20 de julho</strong> e criam obrigações operacionais imediatas de moderação, transparência e prevenção a fraudes — com alcance sobre provedores de aplicação e SaaS, não apenas big techs.</span></li>
+      <li style="display:grid;grid-template-columns:21px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#4f46e5;font-weight:600">02</span><span style="text-align:justify">O <strong>prazo de 60 dias</strong> de adaptação é o ponto de maior atrito com o setor: o volume de adequações é alto e desproporcional à capacidade de compliance das micro e pequenas empresas de software.</span></li>
+      <li style="display:grid;grid-template-columns:21px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#4f46e5;font-weight:600">03</span><span style="text-align:justify">A <strong>judicialização no STF</strong> instala insegurança jurídica em camadas (art. 19 + tese de repercussão geral + decretos), e a definição das regras do jogo ainda está em curso.</span></li>
+      <li style="display:grid;grid-template-columns:21px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#4f46e5;font-weight:600">04</span><span style="text-align:justify">A <strong>reforma tributária</strong> manteve 3 de agosto para as notas fiscais com IBS e CBS, confirmando a tributação como a pauta de maior materialidade para os associados.</span></li>
+      <li style="display:grid;grid-template-columns:21px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#4f46e5;font-weight:600">05</span><span style="text-align:justify"><strong>Data centers e energia</strong> seguem como fronteira de desenvolvimento — Minas mapeia regiões aptas, mas o gargalo de transmissão é o fator limitante nacional.</span></li>
+      <li style="display:grid;grid-template-columns:21px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#4f46e5;font-weight:600">06</span><span style="text-align:justify">A <strong>escassez de talentos</strong> e o novo perfil profissional exigido pela IA mantêm o capital humano como gargalo estrutural do setor.</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 02 ============ -->
+<div id="s2" data-screen-label="02 Temas Estratégicos" style="margin-top:8mm">
+  <div style="border-top:1.6px solid #172032;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#4f46e5;font-weight:600">02</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b90a2">Mapeamento</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Temas Estratégicos do Mês</h2>
+
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:0 0 2.8mm;color:#172032;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#4f46e5;font-weight:500">2.1</span><span>Panorama do monitoramento</span></h3>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 4mm;text-align:justify">O monitoramento do período reuniu 125 itens, compondo uma visão geral do ambiente setorial com inserções sobre o ecossistema mineiro. A distribuição temática da base é reveladora: a inteligência artificial domina a pauta (presente em cerca de metade dos títulos), seguida por data centers e infraestrutura de energia, mercado de software e, em menor volume, tributação e qualificação profissional. O tema regulatório central do mês — a entrada em vigor dos decretos de plataformas — foi apurado em fontes primárias, o que sugere um ajuste de escopo do monitoramento para os próximos ciclos.</p>
+  </div>
+
+  <div style="border-top:1.6px solid #172032;margin-bottom:5mm;padding-top:4mm;break-inside:avoid;max-width:160mm;display:grid;grid-template-columns:repeat(4,1fr);gap:6mm">
+    <div><div style="font-size:26px;font-weight:600;letter-spacing:-.02em;line-height:1">125</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#5b6069;margin-top:3px">itens monitorados</div></div>
+    <div style="padding-left:6mm;border-left:1px solid #e4e4ef"><div style="font-size:26px;font-weight:600;letter-spacing:-.02em;line-height:1;color:#4f46e5">20/07</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#5b6069;margin-top:3px">vigência dos decretos</div></div>
+    <div style="padding-left:6mm;border-left:1px solid #e4e4ef"><div style="font-size:26px;font-weight:600;letter-spacing:-.02em;line-height:1;color:#7c3aed">60</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#5b6069;margin-top:3px">dias de vacatio legis</div></div>
+    <div style="padding-left:6mm;border-left:1px solid #e4e4ef"><div style="font-size:26px;font-weight:600;letter-spacing:-.02em;line-height:1;color:#0891b2">03/08</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#5b6069;margin-top:3px">marco IBS/CBS na nota fiscal</div></div>
+  </div>
+
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:0 0 2.8mm;color:#172032;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#4f46e5;font-weight:500">2.2</span><span>Síntese dos temas</span></h3>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 4mm;text-align:justify">A leitura do período identificou seis temas-matriz. O quadro sintetiza cada um, sua relevância para os associados do SindInfor e o principal sinal do mês.</p>
+  </div>
+
+  <table style="width:100%;border-collapse:collapse;break-inside:auto">
+    <thead><tr>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#8b90a2;font-weight:500;padding:0 9px 2.4mm 0;border-bottom:1.5px solid #172032;width:36%">Tema estratégico</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#8b90a2;font-weight:500;padding:0 9px 2.4mm 0;border-bottom:1.5px solid #172032;width:14%">Relev.</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#8b90a2;font-weight:500;padding:0 0 2.4mm 0;border-bottom:1.5px solid #172032;width:50%">Sinal do mês</th>
+    </tr></thead>
+    <tbody style="font-size:11.5px;line-height:1.35">
+      <tr><td style="padding:2.4mm 9px 2.4mm 0;border-bottom:1px solid #ececf2;vertical-align:top;font-weight:500">Regulação de plataformas (Decretos 12.975/12.976)</td><td style="padding:2.4mm 9px;border-bottom:1px solid #ececf2;vertical-align:top">Alta</td><td style="padding:2.4mm 0;border-bottom:1px solid #ececf2;vertical-align:top;color:#41474d">Vigência em 20/07; prazo de 60 dias; judicialização no STF</td></tr>
+      <tr><td style="padding:2.4mm 9px 2.4mm 0;border-bottom:1px solid #ececf2;vertical-align:top;font-weight:500">Reforma tributária e IBS/CBS</td><td style="padding:2.4mm 9px;border-bottom:1px solid #ececf2;vertical-align:top">Alta</td><td style="padding:2.4mm 0;border-bottom:1px solid #ececf2;vertical-align:top;color:#41474d">Receita mantém 3 de agosto para notas com IBS e CBS</td></tr>
+      <tr><td style="padding:2.4mm 9px 2.4mm 0;border-bottom:1px solid #ececf2;vertical-align:top;font-weight:500">IA e transformação do modelo de software</td><td style="padding:2.4mm 9px;border-bottom:1px solid #ececf2;vertical-align:top">Alta</td><td style="padding:2.4mm 0;border-bottom:1px solid #ececf2;vertical-align:top;color:#41474d">IA redefine produtos, RH e o mercado de white label</td></tr>
+      <tr><td style="padding:2.4mm 9px 2.4mm 0;border-bottom:1px solid #ececf2;vertical-align:top;font-weight:500">Data centers, energia e Minas Gerais</td><td style="padding:2.4mm 9px;border-bottom:1px solid #ececf2;vertical-align:top">Alta</td><td style="padding:2.4mm 0;border-bottom:1px solid #ececf2;vertical-align:top;color:#41474d">Minas mapeia regiões aptas; gargalo de transmissão nacional</td></tr>
+      <tr><td style="padding:2.4mm 9px 2.4mm 0;border-bottom:1px solid #ececf2;vertical-align:top;font-weight:500">Capital humano e escassez de talentos</td><td style="padding:2.4mm 9px;border-bottom:1px solid #ececf2;vertical-align:top">Alta</td><td style="padding:2.4mm 0;border-bottom:1px solid #ececf2;vertical-align:top;color:#41474d">Escassez desafia empresas de software; novos perfis em IA</td></tr>
+      <tr><td style="padding:2.4mm 9px 2.4mm 0;vertical-align:top;font-weight:500">Fomento e política setorial</td><td style="padding:2.4mm 9px;vertical-align:top">Média</td><td style="padding:2.4mm 0;vertical-align:top;color:#41474d">Governo prorroga parceria com a Softex</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ============ SEÇÃO 03 ============ -->
+<div id="s3" data-screen-label="03 Leitura Reputacional" style="margin-top:8mm">
+  <div style="border-top:1.6px solid #172032;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#4f46e5;font-weight:600">03</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b90a2">Diagnóstico</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Leitura Reputacional do Ambiente Externo</h2>
+
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:0 0 2.6mm;color:#172032;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#4f46e5;font-weight:500">3.1</span><span>Narrativa predominante sobre o setor</span></h3>
+  <div style="max-width:160mm"><p style="margin:0 0 4.5mm;text-align:justify">A narrativa predominante do mês foi a de um setor <strong>sob nova disciplina regulatória</strong>. Depois de anos em que a regulação das plataformas era discussão parlamentar e judicial, julho materializou obrigações exigíveis, com fiscalização atribuída à ANPD. A imagem pública do setor de tecnologia oscila entre a de motor da economia digital e a de ambiente que precisa ser regulado — e a segunda ganhou força no período.</p></div>
+
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:0 0 2.6mm;color:#172032;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#4f46e5;font-weight:500">3.2</span><span>Risco reputacional dominante</span></h3>
+  <div style="max-width:160mm"><p style="margin:0 0 4.5mm;text-align:justify">O maior risco para os associados é de <strong>exposição jurídica e operacional por inadequação</strong>. Empresas que não realizaram o diagnóstico de aderência podem ser surpreendidas por notificações, sanções e litígios, num regime que já é exigível. Some-se o risco de que o setor seja percebido publicamente como resistente à proteção de direitos — leitura injusta para quem apenas pede prazo e proporcionalidade, mas provável se a crítica ao prazo não vier acompanhada de compromisso com os objetivos da norma.</p></div>
+
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:0 0 2.6mm;color:#172032;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#4f46e5;font-weight:500">3.3</span><span>Oportunidade reputacional dominante</span></h3>
+  <div style="max-width:160mm"><p style="margin:0;text-align:justify">A principal oportunidade é ocupar o papel de <strong>tradutor e representante técnico do setor mineiro</strong>. Poucas pautas dão a uma entidade de classe função tão concreta: explicar a norma, orientar a adequação dos associados e levar às instâncias competentes o argumento da proporcionalidade — defendendo prazos e obrigações compatíveis com o porte das empresas, sem se opor aos fins da regulação.</p></div>
+</div>
+
+<!-- ============ SEÇÃO 04 ============ -->
+<div id="s4" data-screen-label="04 Análise Temática" style="margin-top:8mm">
+  <div style="border-top:1.6px solid #172032;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#4f46e5;font-weight:600">04</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b90a2">Análise</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Análise Temática Aprofundada</h2>
+
+  <!-- 4.1 — TEMA PRINCIPAL -->
+  <div style="background:#4f46e5;color:#fff;padding:3mm 5mm;margin-bottom:3.5mm;display:flex;align-items:baseline;gap:11px;break-after:avoid;max-width:160mm">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#cfcdfa;font-weight:500">4.1</span>
+    <span style="font-weight:600;font-size:15px;line-height:1.25">A entrada em vigor dos Decretos 12.975 e 12.976: o novo regime das plataformas</span>
+  </div>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 2.4mm;text-align:justify">O fato mais relevante do mês para a indústria de software foi a entrada em vigor, em 20 de julho de 2026, dos Decretos nº 12.975 e nº 12.976, publicados em 21 de maio. O primeiro altera o Decreto nº 8.771/2016 — regulamento do Marco Civil da Internet — e inaugura um novo framework regulatório para provedores de aplicações de internet no Brasil, transpondo para o plano infralegal a tese fixada pelo STF no julgamento dos Temas 987 e 533, que declarou a inconstitucionalidade parcial e progressiva do artigo 19 do Marco Civil (Migalhas, 22/06/2026; Poder360, 20/07/2026).</p>
+    <p style="margin:0 0 2.4mm;text-align:justify">O conteúdo das obrigações é operacional e direto. O regime instituiu o <strong>dever de remoção</strong>, pelo qual conteúdos ilícitos devem ser indisponibilizados após notificação extrajudicial, observadas as hipóteses do rol taxativo; o <strong>dever de transparência e devido processo</strong>, exigindo que a notificação contenha, sob pena de nulidade, os elementos identificadores da conduta, do conteúdo e do notificante, com garantia de contestação interna pelo autor da publicação; e o <strong>dever de prevenção</strong>, que obriga as empresas a adotar medidas tecnicamente adequadas para impedir a circulação massiva de fraudes, golpes, anúncios enganosos e crimes graves. O Decreto nº 12.976, assinado no mesmo dia durante a cerimônia dos 100 dias do Pacto Nacional Brasil Contra o Feminicídio, estabelece diretrizes de proteção às mulheres no ambiente digital e impõe prazos particularmente exigentes, como a remoção de conteúdo íntimo não consentido em até duas horas após a notificação da vítima ou de seu representante.</p>
+    <p style="margin:0;text-align:justify">Duas dimensões tornam o tema crítico para os associados do SindInfor. A primeira é o <strong>alcance subjetivo</strong>: o novo regramento não se dirige apenas às grandes redes sociais, mas a provedores de aplicações de internet em sentido amplo — o que, na leitura de especialistas, alcança operações de SaaS e empresas de software que hospedem ou intermediem conteúdo de terceiros. A segunda é o <strong>desenho institucional</strong>: o decreto atribui à ANPD competências de fiscalização e estruturação administrativa, consolidando a autoridade como reguladora sistêmica do ambiente digital, e prevê camadas normativas adicionais, com guias e regulamentos específicos a serem editados.</p>
+  </div>
+  <div style="background:#f2f2fb;border-left:3px solid #4f46e5;padding:4mm 5mm;margin:3.5mm 0 0;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#4f46e5;margin-bottom:2mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#2a2f42">Este é o tema de maior urgência prática do semestre para os associados. Recomenda-se que o SindInfor produza, com celeridade, uma orientação técnica de adequação — diagnóstico de aderência, canal de notificações, fluxo de moderação com devido processo, política de prevenção a fraudes e representação legal —, priorizando os pontos de maior exposição. Traduzir a norma em linguagem operacional é o serviço de maior valor imediato que a entidade pode prestar.</p>
+  </div>
+
+  <!-- 4.2 -->
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:6mm 0 2.6mm;color:#172032;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#4f46e5;font-weight:500">4.2</span><span>Resistência do setor: o prazo, a proporcionalidade e o risco de sobrecarga</span></h3>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 2.4mm;text-align:justify">A reação do ecossistema de tecnologia concentrou-se menos nos fins da regulação e mais nos meios. Associações de empresas de tecnologia e de startups criticaram o curto período de transição — 60 dias de vacatio para um volume expressivo de adequações — e alertaram para o risco de sobrecarga jurídica e de impactos operacionais severos sobre o ecossistema de inovação nacional. O argumento tem lastro estrutural: o setor brasileiro de software é formado, em sua esmagadora maioria, por micro e pequenas empresas, que não dispõem de departamentos jurídicos e de compliance capazes de absorver, em dois meses, a montagem de canais de notificação, fluxos de moderação com devido processo, políticas de prevenção a fraudes e estruturas de resposta a demandas administrativas.</p>
+    <p style="margin:0;text-align:justify">Há também uma crítica de natureza jurídica que reforça a resistência: os decretos criam deveres e estrutura sancionatória em matéria que o próprio Supremo havia remetido ao Congresso Nacional, o que suscita o debate sobre os limites do poder regulamentar. Em paralelo, o tema avançou no Legislativo, com iniciativas voltadas à sustação dos decretos — sinal de que a disputa se desenrola simultaneamente nos três Poderes.</p>
+  </div>
+  <div style="background:#f2f2fb;border-left:3px solid #4f46e5;padding:4mm 5mm;margin:3.5mm 0 0;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#4f46e5;margin-bottom:2mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#2a2f42">A posição mais defensável e reputacionalmente segura para o SindInfor é a da <strong>proporcionalidade</strong>: apoiar os objetivos da norma — combate a fraudes, golpes e conteúdos criminosos, proteção das mulheres — e pleitear prazos e obrigações escalonados conforme o porte e o risco da empresa. Criticar o prazo sem endossar os fins expõe o setor à narrativa de resistência a direitos; defender proporcionalidade com compromisso explícito com os objetivos protege a legitimidade da entidade.</p>
+  </div>
+
+  <!-- 4.3 -->
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:6mm 0 2.6mm;color:#172032;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#4f46e5;font-weight:500">4.3</span><span>A judicialização no STF e a insegurança jurídica em camadas</span></h3>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 2.4mm;text-align:justify">O tema escalou para o Supremo Tribunal Federal, tornando-se alvo de ações que questionam a constitucionalidade dos decretos e os limites da responsabilização imposta a big techs e desenvolvedores de plataformas. O pano de fundo é um processo de reconstrução das bases da responsabilidade civil dos provedores no Brasil: em 17 de junho de 2026, o STF proclamou a redação final da tese decorrente dos embargos de declaração, promovendo ajustes relevantes — entre eles a distinção entre regimes de remoção e a previsão de excludente por análise diligente — e decretando trânsito em julgado imediato (Leonardi Advogados, 06/2026).</p>
+    <p style="margin:0;text-align:justify">O resultado é um ambiente de insegurança jurídica em camadas superpostas, apontado por analistas do setor: o artigo 19 do Marco Civil, a tese de repercussão geral do STF e os decretos de 2026 convivem e precisam ser interpretados em conjunto (ConJur, 08/06/2026). Para as empresas, isso significa operar sob normas cujo desenho final ainda está em disputa, com o risco adicional de que decisões judiciais alterem obrigações já implementadas.</p>
+  </div>
+  <div style="background:#f2f2fb;border-left:3px solid #4f46e5;padding:4mm 5mm;margin:3.5mm 0 0;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#4f46e5;margin-bottom:2mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#2a2f42">O SindInfor deve acompanhar de perto a evolução judicial e manter os associados informados sobre o estágio da disputa, orientando que a judicialização <strong>não suspende</strong> a exigibilidade das obrigações — a adequação deve seguir em paralelo. Comunicar essa distinção evita que empresas adiem a conformidade na expectativa de uma reversão que pode não vir.</p>
+  </div>
+
+  <!-- 4.4 -->
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:6mm 0 2.6mm;color:#172032;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#4f46e5;font-weight:500">4.4</span><span>Reforma tributária: o marco de agosto e a materialidade para os associados</span></h3>
+  <div style="max-width:160mm">
+    <p style="margin:0;text-align:justify">A pauta de maior materialidade econômica para os associados manteve sua trajetória. A Receita Federal não atendeu ao pleito do mercado e manteve 3 de agosto como data para a emissão de notas fiscais com destaque de IBS e CBS (Convergência Digital, 31/07/2026), confirmando que 2026 é ano de virada operacional da reforma. Para empresas de serviços intensivos em conhecimento — caso do software —, o desafio permanece o mesmo diagnosticado no ciclo anterior: alíquota cheia no novo IVA e baixa geração de créditos, dada a estrutura de custos concentrada em mão de obra e fornecedores do Simples Nacional.</p>
+  </div>
+  <div style="background:#f2f2fb;border-left:3px solid #4f46e5;padding:4mm 5mm;margin:3.5mm 0 0;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#4f46e5;margin-bottom:2mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#2a2f42">A proximidade do marco de agosto exige comunicação prática e imediata aos associados sobre a obrigação de destaque nos documentos fiscais, somada à continuidade da frente de representação técnica sobre o enquadramento do setor de software no novo sistema. Tributação e regulação de plataformas formam, juntas, a agenda de conformidade mais pesada que o setor enfrenta em anos.</p>
+  </div>
+
+  <!-- 4.5 -->
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:6mm 0 2.6mm;color:#172032;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#4f46e5;font-weight:500">4.5</span><span>IA, data centers e o posicionamento de Minas Gerais</span></h3>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 2.4mm;text-align:justify">A inteligência artificial dominou o volume da cobertura e seguiu redefinindo o setor por dois caminhos: como produto — acelerando mercados como o de software white label (Valor Econômico, 15/07/2026) e assumindo tarefas antes humanas em áreas como RH (Exame, 30/07/2026) — e como infraestrutura, com a corrida por data centers. Aqui, o gargalo é físico: a aceleração dos data centers enfrenta limitação de transmissão de energia (Valor Econômico, 31/07/2026), tema que se tornou o principal fator condicionante da economia digital brasileira.</p>
+    <p style="margin:0;text-align:justify">Minas Gerais seguiu se posicionando nessa disputa, com o mapeamento de regiões aptas a receber data centers (Agência Infra, 06/07/2026), na continuidade do movimento identificado no ciclo anterior. É a fronteira em que o estado pode converter vocação energética em adensamento da cadeia digital local.</p>
+  </div>
+  <div style="background:#f2f2fb;border-left:3px solid #4f46e5;padding:4mm 5mm;margin:3.5mm 0 0;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#4f46e5;margin-bottom:2mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#2a2f42">O SindInfor deve manter a agenda “Minas Digital” ativa, pleiteando que a atração de infraestrutura digital venha acompanhada do adensamento do ecossistema local — fornecedores, talento e serviços —, e não apenas da instalação física dos data centers.</p>
+  </div>
+
+  <!-- 4.6 -->
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:6mm 0 2.6mm;color:#172032;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#4f46e5;font-weight:500">4.6</span><span>Capital humano: escassez e o novo perfil profissional</span></h3>
+  <div style="max-width:160mm">
+    <p style="margin:0;text-align:justify">O segundo tema-âncora do SindInfor manteve-se crítico. A escassez de talentos tecnológicos foi reportada como desafio concreto das empresas de software (Paraíba Business, 25/07/2026), enquanto o setor público se move para disputar os mesmos profissionais, com reajuste de salários em TI e criação de perfis especializados em infraestrutura de inteligência artificial (Convergência Digital, 24/07/2026). Em paralelo, avançam iniciativas de formação, como programas de qualificação de pesquisadores em IA. No campo do fomento, o governo prorrogou a parceria com a Softex para o fomento ao setor de software (O Tempo, 31/07/2026) — sinal positivo de continuidade de política setorial.</p>
+  </div>
+  <div style="background:#f2f2fb;border-left:3px solid #4f46e5;padding:4mm 5mm;margin:3.5mm 0 0;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#4f46e5;margin-bottom:2mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#2a2f42">Cabe ao SindInfor articular a agenda de formação e retenção de talento em Minas, conectando associados, academia e programas de fomento, e produzindo inteligência sobre remuneração e perfis emergentes — um benefício direto e diferenciado para a base associada.</p>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 05 ============ -->
+<div id="s5" data-screen-label="05 Riscos" style="margin-top:8mm">
+  <div style="border-top:1.6px solid #172032;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#4f46e5;font-weight:600">05</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b90a2">Riscos</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Riscos Reputacionais Prioritários</h2>
+
+  <div style="break-inside:avoid;margin-bottom:5mm">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#8b90a2;margin-bottom:4mm">Matriz de risco · probabilidade × impacto</div>
+    <div style="display:flex;gap:8px;max-width:148mm">
+      <div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#8b90a2;display:flex;align-items:center;justify-content:center;padding-bottom:16px">Impacto</div>
+      <div style="flex:1">
+        <div style="display:grid;grid-template-columns:20mm 1fr 1fr 1fr;grid-auto-rows:50px;gap:4px">
+          <div style="display:flex;align-items:center;justify-content:flex-end;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#5b6069;padding-right:5px">Muito alto</div>
+          <div style="background:#f4f5f3"></div>
+          <div style="background:#f7ddcf"></div>
+          <div style="background:#f2cfc9;display:flex;align-items:center;justify-content:center;gap:5px"><span style="width:27px;height:27px;border-radius:50%;background:#8f2723;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">1</span><span style="width:27px;height:27px;border-radius:50%;background:#8f2723;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">4</span></div>
+
+          <div style="display:flex;align-items:center;justify-content:flex-end;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#5b6069;padding-right:5px">Alto</div>
+          <div style="background:#f7f8f6"></div>
+          <div style="background:#fbeede;display:flex;align-items:center;justify-content:center"><span style="width:27px;height:27px;border-radius:50%;background:#a5322d;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">2</span></div>
+          <div style="background:#f6dcd7;display:flex;align-items:center;justify-content:center;gap:5px"><span style="width:27px;height:27px;border-radius:50%;background:#a5322d;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">3</span><span style="width:27px;height:27px;border-radius:50%;background:#a5322d;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">5</span></div>
+
+          <div style="display:flex;align-items:center;justify-content:flex-end;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#5b6069;padding-right:5px">Médio</div>
+          <div style="background:#f7f8f6"></div>
+          <div style="background:#f4f5f3"></div>
+          <div style="background:#fbeede"></div>
+        </div>
+        <div style="display:grid;grid-template-columns:20mm 1fr 1fr 1fr;gap:4px;margin-top:5px">
+          <div></div>
+          <div style="text-align:center;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#5b6069">Média</div>
+          <div style="text-align:center;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#5b6069">Média-alta</div>
+          <div style="text-align:center;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#5b6069">Alta</div>
+        </div>
+        <div style="text-align:center;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#8b90a2;margin-top:6px;padding-left:20mm">Probabilidade</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:4.5mm">
+    <div style="display:grid;grid-template-columns:29px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="width:27px;height:27px;border-radius:50%;background:#8f2723;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">1</div>
+      <div>
+        <div style="font-weight:600;font-size:14px;margin-bottom:2mm;line-height:1.3">Exposição jurídica dos associados por inadequação aos decretos</div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:10px;margin-bottom:2mm"><span><span style="color:#8b90a2">Probabilidade</span> <span style="color:#172032;font-weight:500">Alta</span></span><span><span style="color:#8b90a2">Impacto</span> <span style="color:#b23b36;font-weight:500;white-space:nowrap">Muito alto</span></span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b6069;margin-bottom:2mm">Sinal do mês — vigência desde 20/07 com vacatio de 60 dias.</div>
+        <p style="margin:0;text-align:justify">Empresas sem diagnóstico de aderência ficam expostas a notificações, sanções e litígios sob um regime já exigível e fiscalizado pela ANPD.</p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:29px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="width:27px;height:27px;border-radius:50%;background:#a5322d;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">2</div>
+      <div>
+        <div style="font-weight:600;font-size:14px;margin-bottom:2mm;line-height:1.3">Percepção de resistência do setor à proteção de direitos</div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:10px;margin-bottom:2mm"><span><span style="color:#8b90a2">Probabilidade</span> <span style="color:#172032;font-weight:500">Média-alta</span></span><span><span style="color:#8b90a2">Impacto</span> <span style="color:#b23b36;font-weight:500">Alto</span></span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b6069;margin-bottom:2mm">Sinal do mês — crítica pública ao prazo e às obrigações.</div>
+        <p style="margin:0;text-align:justify">Criticar a regulação sem endossar seus objetivos pode enquadrar o setor como refratário ao combate a fraudes e à violência digital.</p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:29px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="width:27px;height:27px;border-radius:50%;background:#a5322d;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">3</div>
+      <div>
+        <div style="font-weight:600;font-size:14px;margin-bottom:2mm;line-height:1.3">Insegurança jurídica prolongada pela judicialização</div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:10px;margin-bottom:2mm"><span><span style="color:#8b90a2">Probabilidade</span> <span style="color:#172032;font-weight:500">Alta</span></span><span><span style="color:#8b90a2">Impacto</span> <span style="color:#b23b36;font-weight:500">Alto</span></span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b6069;margin-bottom:2mm">Sinal do mês — ações no STF e iniciativas de sustação no Congresso.</div>
+        <p style="margin:0;text-align:justify">A sobreposição de normas e a disputa nos três Poderes dificultam o planejamento e podem levar a investimentos de conformidade que mudem de escopo.</p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:29px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="width:27px;height:27px;border-radius:50%;background:#8f2723;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">4</div>
+      <div>
+        <div style="font-weight:600;font-size:14px;margin-bottom:2mm;line-height:1.3">Elevação de carga tributária sobre serviços de software</div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:10px;margin-bottom:2mm"><span><span style="color:#8b90a2">Probabilidade</span> <span style="color:#172032;font-weight:500">Alta</span></span><span><span style="color:#8b90a2">Impacto</span> <span style="color:#b23b36;font-weight:500;white-space:nowrap">Muito alto</span></span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b6069;margin-bottom:2mm">Sinal do mês — manutenção de 3 de agosto para IBS e CBS.</div>
+        <p style="margin:0;text-align:justify">Alíquota cheia com baixa geração de créditos pressiona margens, sobretudo das pequenas e médias.</p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:29px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="width:27px;height:27px;border-radius:50%;background:#a5322d;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">5</div>
+      <div>
+        <div style="font-weight:600;font-size:14px;margin-bottom:2mm;line-height:1.3">Escassez de talento como limite ao crescimento</div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:10px;margin-bottom:2mm"><span><span style="color:#8b90a2">Probabilidade</span> <span style="color:#172032;font-weight:500">Alta</span></span><span><span style="color:#8b90a2">Impacto</span> <span style="color:#b23b36;font-weight:500">Alto</span></span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b6069;margin-bottom:2mm">Sinal do mês — escassez reportada e disputa com o setor público.</div>
+        <p style="margin:0;text-align:justify">A dificuldade de atrair e reter profissionais qualificados restringe a capacidade de execução das empresas mineiras.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 06 ============ -->
+<div id="s6" data-screen-label="06 Oportunidades" style="margin-top:8mm">
+  <div style="border-top:1.6px solid #172032;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#4f46e5;font-weight:600">06</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b90a2">Oportunidades</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Oportunidades de Posicionamento Institucional</h2>
+  <div style="display:flex;flex-direction:column;gap:4.5mm">
+    <div style="display:grid;grid-template-columns:29px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="width:27px;height:27px;border-radius:50%;background:#4f46e5;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">1</div>
+      <div><div style="font-weight:600;font-size:14px;margin-bottom:1.6mm">Tradutor da norma para o setor mineiro</div><p style="margin:0;text-align:justify">Produzir orientação técnica de adequação aos decretos, transformando complexidade regulatória em roteiro operacional para os associados.</p></div>
+    </div>
+    <div style="display:grid;grid-template-columns:29px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="width:27px;height:27px;border-radius:50%;background:#4f46e5;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">2</div>
+      <div><div style="font-weight:600;font-size:14px;margin-bottom:1.6mm">Voz da proporcionalidade regulatória</div><p style="margin:0;text-align:justify">Defender prazos e obrigações escalonados por porte e risco, endossando os objetivos da norma — posição legítima, defensável e reputacionalmente segura.</p></div>
+    </div>
+    <div style="display:grid;grid-template-columns:29px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="width:27px;height:27px;border-radius:50%;background:#6366f1;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">3</div>
+      <div><div style="font-weight:600;font-size:14px;margin-bottom:1.6mm">Frente técnica na reforma tributária</div><p style="margin:0;text-align:justify">Sustentar a representação sobre o enquadramento do software no novo sistema, somada à orientação prática sobre o marco de agosto.</p></div>
+    </div>
+    <div style="display:grid;grid-template-columns:29px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="width:27px;height:27px;border-radius:50%;background:#0891b2;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">4</div>
+      <div><div style="font-weight:600;font-size:14px;margin-bottom:1.6mm">Agenda “Minas Digital”</div><p style="margin:0;text-align:justify">Conectar a atração de data centers ao adensamento do ecossistema local de software, talento e fornecedores.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 07 ============ -->
+<div id="s7" data-screen-label="07 Recomendações" style="margin-top:8mm">
+  <div style="border-top:1.6px solid #172032;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#4f46e5;font-weight:600">07</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b90a2">Ação</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Recomendações Executivas</h2>
+
+  <div style="max-width:160mm;break-inside:avoid">
+    <div style="padding-bottom:2.4mm;border-bottom:1px solid #e4e4ef;margin-bottom:3.2mm"><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#4f46e5;font-weight:500">Ações Imediatas</span></div>
+    <ul style="list-style:none;margin:0 0 6mm;padding:0;display:flex;flex-direction:column;gap:2.6mm">
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#4f46e5;font-weight:600">→</span><span style="text-align:justify">Emitir comunicação de alerta aos associados sobre a vigência dos decretos desde 20 de julho, com checklist de adequação prioritária (representação legal, canal de notificações, fluxo de moderação, prevenção a fraudes).</span></li>
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#4f46e5;font-weight:600">→</span><span style="text-align:justify">Esclarecer que a judicialização não suspende a exigibilidade das obrigações, evitando que empresas adiem a conformidade.</span></li>
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#4f46e5;font-weight:600">→</span><span style="text-align:justify">Comunicar o marco de 3 de agosto para o destaque de IBS e CBS nas notas fiscais.</span></li>
+    </ul>
+  </div>
+
+  <div style="max-width:160mm;break-inside:avoid">
+    <div style="padding-bottom:2.4mm;border-bottom:1px solid #e4e4ef;margin-bottom:3.2mm"><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#4f46e5;font-weight:500">Ações de Curto Prazo</span></div>
+    <ul style="list-style:none;margin:0 0 6mm;padding:0;display:flex;flex-direction:column;gap:2.6mm">
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#4f46e5;font-weight:600">→</span><span style="text-align:justify">Constituir posição institucional pela proporcionalidade regulatória (escalonamento por porte e risco), com endosso explícito aos objetivos da norma.</span></li>
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#4f46e5;font-weight:600">→</span><span style="text-align:justify">Promover capacitação prática (webinar, guia, plantão de dúvidas) sobre adequação aos decretos e à reforma tributária.</span></li>
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#4f46e5;font-weight:600">→</span><span style="text-align:justify">Ampliar a articulação com academia e programas de fomento para a agenda de talento.</span></li>
+    </ul>
+  </div>
+
+  <div style="max-width:160mm;break-inside:avoid">
+    <div style="padding-bottom:2.4mm;border-bottom:1px solid #e4e4ef;margin-bottom:3.2mm"><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#4f46e5;font-weight:500">Ações de Médio Prazo</span></div>
+    <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2.6mm">
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#4f46e5;font-weight:600">→</span><span style="text-align:justify">Consolidar a posição do SindInfor como fonte de referência técnica do setor de software mineiro junto ao poder público e à imprensa.</span></li>
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#4f46e5;font-weight:600">→</span><span style="text-align:justify">Manter acompanhamento contínuo da evolução normativa e judicial (STF, Congresso, ANPD), com alertas aos associados.</span></li>
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#4f46e5;font-weight:600">→</span><span style="text-align:justify">Sustentar a agenda “Minas Digital”, conectando infraestrutura digital ao adensamento da cadeia local.</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 08 ============ -->
+<div id="s8" data-screen-label="08 Cenários" style="margin-top:8mm">
+  <div style="border-top:1.6px solid #172032;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#4f46e5;font-weight:600">08</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b90a2">Cenários</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Cenários Prospectivos</h2>
+  <div style="display:flex;flex-direction:column;gap:0">
+    <div style="border-top:1px solid #e4e4ef;padding:4mm 0;break-inside:avoid;max-width:160mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#8b90a2;margin-bottom:2mm">Cenário 01</div>
+      <div style="font-weight:600;font-size:14.5px;margin-bottom:2mm">Consolidação do novo regime com ajustes</div>
+      <p style="margin:0 0 2.4mm;text-align:justify">Os decretos se mantêm, a ANPD edita guias e o setor se adapta com escalonamento parcial de exigências.</p>
+      <div style="font-size:12.5px;color:#2a2f42"><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:#4f46e5;font-weight:600">Resposta recomendada &nbsp;</span>O SindInfor consolida-se como tradutor técnico e interlocutor da proporcionalidade, orientando a adequação dos associados.</div>
+    </div>
+    <div style="border-top:1px solid #e4e4ef;padding:4mm 0;break-inside:avoid;max-width:160mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#8b90a2;margin-bottom:2mm">Cenário 02</div>
+      <div style="font-weight:600;font-size:14.5px;margin-bottom:2mm">Reversão ou suspensão judicial/legislativa</div>
+      <p style="margin:0 0 2.4mm;text-align:justify">O STF ou o Congresso derrubam ou suspendem dispositivos, prolongando a indefinição.</p>
+      <div style="font-size:12.5px;color:#2a2f42"><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:#4f46e5;font-weight:600">Resposta recomendada &nbsp;</span>Comunicação de cautela, orientando os associados a manter a conformidade e evitar decisões baseadas em expectativa de reversão.</div>
+    </div>
+    <div style="border-top:1px solid #e4e4ef;border-bottom:1px solid #e4e4ef;padding:4mm 0;break-inside:avoid;max-width:160mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#8b90a2;margin-bottom:2mm">Cenário 03</div>
+      <div style="font-weight:600;font-size:14.5px;margin-bottom:2mm">Endurecimento fiscalizatório</div>
+      <p style="margin:0 0 2.4mm;text-align:justify">A ANPD inicia atuação sancionatória e casos de autuação ganham repercussão.</p>
+      <div style="font-size:12.5px;color:#2a2f42"><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:#4f46e5;font-weight:600">Resposta recomendada &nbsp;</span>Apoio jurídico-informativo aos associados e reforço público do compromisso do setor com os objetivos da norma.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 09 ============ -->
+<div id="s9" data-screen-label="09 SAUZ" style="margin-top:8mm">
+  <div style="border-top:1.6px solid #172032;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#4f46e5;font-weight:600">09</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b90a2">SAUZ</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Demonstração dos Serviços — SAUZ</h2>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 2.4mm;text-align:justify">No período analisado, a SAUZ atuou como instância de apoio técnico e aconselhamento estratégico à diretoria do SindInfor, subsidiando a entidade com inteligência setorial, leitura de cenário e recomendações de posicionamento. A atuação teve caráter consultivo e de suporte: contribuiu para a interpretação do tema de maior impacto do mês — a entrada em vigor dos decretos de regulamentação das plataformas digitais —, bem como das pautas de tributação, capital humano e economia digital, preservando na própria diretoria do SindInfor a coordenação e a condução das ações institucionais.</p>
+    <p style="margin:0 0 2.4mm;text-align:justify">O esforço do período concentrou-se em identificar, apurar e traduzir um marco regulatório que impacta diretamente os associados, e em transformá-lo em prioridades acionáveis para a entidade. A SAUZ ofereceu leituras de risco, análises de oportunidade e recomendações de mensagem, sempre em posição de assessoria à liderança do SindInfor.</p>
+    <p style="margin:0 0 4.5mm;text-align:justify">Ao longo do mês, a SAUZ manteve o monitoramento do ambiente de mídia e de política setorial, a qualificação das evidências relevantes e a produção de análises de apoio, prestando suporte à comunicação e ao posicionamento do SindInfor conforme as prioridades definidas pela própria diretoria.</p>
+  </div>
+
+</div>
+
+<!-- ============ SEÇÃO 10 ============ -->
+<div id="s10" data-screen-label="10 Base de Evidências" style="break-before:page;padding-top:2mm">
+  <div style="border-top:1.6px solid #172032;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#4f46e5;font-weight:600">10</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b90a2">Evidências</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 3.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Base Qualificada de Evidências Monitoradas no Mês</h2>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 3.5mm;text-align:justify">A tabela reúne as evidências que sustentam a análise: os itens do monitoramento efetivamente relevantes para o SindInfor e as fontes apuradas sobre o marco regulatório do mês (assinaladas como verificadas). O monitoramento reuniu 125 itens; o restante do volume foi tratado como contexto.</p>
+  </div>
+
+  <div style="display:flex;gap:15px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#5b6069;margin-bottom:3mm">
+    <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:11px;height:11px;background:#e8f3ea;border:1px solid #cfe3d5;display:inline-block"></span>Positivo</span>
+    <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:11px;height:11px;background:#ffffff;border:1px solid #d8d8d4;display:inline-block"></span>Neutro</span>
+    <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:11px;height:11px;background:#fae9e8;border:1px solid #eccbc9;display:inline-block"></span>Negativo</span>
+    <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:11px;height:11px;background:#fbeede;border:1px solid #ecd6b8;display:inline-block"></span>Crítico</span>
+  </div>
+
+  <table style="width:100%;border-collapse:collapse;break-inside:auto">
+    <thead><tr>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:#8b90a2;font-weight:500;padding:0 5px 2.2mm 7px;border-bottom:1.5px solid #172032;width:7%">Data</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:#8b90a2;font-weight:500;padding:0 5px 2.2mm 5px;border-bottom:1.5px solid #172032;width:21%">Veículo</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:#8b90a2;font-weight:500;padding:0 5px 2.2mm 5px;border-bottom:1.5px solid #172032;width:48%">Título / Conteúdo</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:#8b90a2;font-weight:500;padding:0 5px 2.2mm 5px;border-bottom:1.5px solid #172032;width:11%">Relev.</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:#8b90a2;font-weight:500;padding:0 7px 2.2mm 5px;border-bottom:1.5px solid #172032;width:13%">Tom</th>
+    </tr></thead>
+    <tbody style="font-size:10.5px;line-height:1.32">
+      <tr style="background:#fae9e8"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f3eceb;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">20/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Poder360 <span style="color:#4f46e5;font-weight:500">(verificado)</span></td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Plataformas digitais têm novas regras a partir desta 2ª feira</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr style="background:#fae9e8"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f3eceb;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">22/06</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Migalhas <span style="color:#4f46e5;font-weight:500">(verificado)</span></td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Plataformas digitais têm até 20 de julho de 2026 para se adequar</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr style="background:#fae9e8"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f3eceb;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">08/06</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">ConJur <span style="color:#4f46e5;font-weight:500">(verificado)</span></td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Plataformas digitais, entre o STF e o decreto: quem define as regras do jogo</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #ececf2;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">06/2026</td><td style="padding:2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Leonardi Advogados <span style="color:#4f46e5;font-weight:500">(verificado)</span></td><td style="padding:2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">STF finaliza tese sobre responsabilidade de plataformas (17/06/2026)</td><td style="padding:2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #ececf2;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">05/2026</td><td style="padding:2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">CGI.br <span style="color:#4f46e5;font-weight:500">(verificado)</span></td><td style="padding:2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Nota pública sobre os Decretos nº 12.975/2026 e nº 12.976/2026</td><td style="padding:2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #ececf2;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">05/2026</td><td style="padding:2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Ag. Patrícia Galvão <span style="color:#4f46e5;font-weight:500">(verificado)</span></td><td style="padding:2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">O que muda com os novos decretos sobre plataformas digitais</td><td style="padding:2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Média</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr style="background:#fae9e8"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f3eceb;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">31/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Convergência Digital</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Reforma tributária: Receita mantém 3 de agosto para notas com IBS e CBS</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr style="background:#fae9e8"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f3eceb;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">31/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Valor Econômico</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Aceleração de data centers enfrenta gargalo de transmissão de energia</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f0efe9;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">31/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">O Tempo</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Governo prorroga parceria com a Softex para fomento ao setor de software</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #ececf2;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">30/07</td><td style="padding:2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Exame</td><td style="padding:2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Agentes de IA da Senior assumem tarefas e mudam a rotina do RH</td><td style="padding:2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Média</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr style="background:#fae9e8"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f3eceb;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">25/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Paraíba Business</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Escassez de talentos tecnológicos desafia empresas de software</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #ececf2;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">24/07</td><td style="padding:2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Convergência Digital</td><td style="padding:2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Governo reajusta salários em TI e cria perfil de especialista em IA</td><td style="padding:2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #ececf2;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">24/07</td><td style="padding:2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Convergência Digital</td><td style="padding:2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Terceirizadas de TI do Governo impedidas de usar IA por decisão própria</td><td style="padding:2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Média</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #ececf2;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">24/07</td><td style="padding:2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Convergência Digital</td><td style="padding:2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Busca pelo domínio .ia.br avança no Brasil</td><td style="padding:2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Baixa</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #ececf2;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">23/07</td><td style="padding:2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Época Negócios</td><td style="padding:2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">O futuro das empresas de software em tempos de IA</td><td style="padding:2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f0efe9;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">21/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Convergência Digital</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Programa de formação de até 180 pesquisadores em IA abre inscrições</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Média</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #ececf2;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">21/07</td><td style="padding:2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Convergência Digital</td><td style="padding:2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">IBTD anuncia especialistas para economia digital, IA, IoT e plataformas</td><td style="padding:2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Média</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #ececf2;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">20/07</td><td style="padding:2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Convergência Digital</td><td style="padding:2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Convergência tecnológica: a próxima fronteira da economia digital</td><td style="padding:2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Média</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #ececf2;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">20/07</td><td style="padding:2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Convergência Digital</td><td style="padding:2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">TCU cria site 100% feito com Inteligência Artificial</td><td style="padding:2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Baixa</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #ececf2;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">17/07</td><td style="padding:2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Estadão</td><td style="padding:2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Golpes digitais, cripto e a maturidade que a economia digital exige</td><td style="padding:2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #ececf2;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">15/07</td><td style="padding:2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Valor Econômico</td><td style="padding:2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Inteligência artificial está acelerando o mercado de software White Label</td><td style="padding:2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Média</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #ececf2;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">07/07</td><td style="padding:2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Cenário Energia</td><td style="padding:2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Brasil pode atrair R$ 3,7 trilhões com data centers, mas energia é decisiva</td><td style="padding:2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f0efe9;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">06/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Agência Infra</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Minas mapeia regiões aptas para receber data centers</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #ececf2;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">27/07</td><td style="padding:2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Convergência Digital</td><td style="padding:2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">SECOP 2026: entidades públicas discutem Estado Inteligente, IA e governança</td><td style="padding:2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Média</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr><td style="padding:2mm 5px 2mm 7px;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">27/07</td><td style="padding:2mm 5px;vertical-align:top">Cenário Energia</td><td style="padding:2mm 5px;vertical-align:top">Avanço da IA exige sinergia entre data centers e concessionárias</td><td style="padding:2mm 5px;vertical-align:top">Média</td><td style="padding:2mm 7px 2mm 5px;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+    </tbody>
+  </table>
+
+  <div style="max-width:160mm;margin-top:4mm">
+    <p style="margin:0;font-size:11.5px;color:#5b6069;text-align:justify"><span style="font-style:italic">Nota metodológica:</span> os itens assinalados como “verificado” foram apurados em fontes primárias e especializadas fora da base monitorada, dada a ausência do tema regulatório central no clipping do período. Os demais refletem o que consta das matérias monitoradas, sem extrapolação. Recomenda-se ajustar o escopo do monitoramento para captar a agenda regulatória (Marco Civil, ANPD, STF, reforma tributária) nos próximos ciclos.</p>
+  </div>
+</div>
+
+<!-- ENCERRAMENTO -->
+<div data-screen-label="Encerramento" style="margin-top:9mm;border-top:1.6px solid #172032;padding-top:5mm;break-inside:avoid">
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b90a2;margin-bottom:3.5mm">Encerramento</div>
+  <p style="margin:0 0 5mm;font-size:13.5px;color:#2a2f42">Belo Horizonte/MG, agosto de 2026.</p>
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#5b6069;margin-bottom:5px">Suporte estratégico prestado por</div>
+  <div style="display:inline-flex;background:#080d1c;border-radius:8px;padding:10px 17px"><img src="sauz-logo.png" alt="SAUZ" style="height:32px;display:block"></div>
+</div>
+
+<!--CONTENT_END-->
+</div>
+</x-import>
+</x-dc>
+</body>
+</html>

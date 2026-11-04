@@ -1,0 +1,338 @@
+RELATÓRIO MENSAL DE COMUNICAÇÃO ESTRATÉGICA, GESTÃO DE IMAGEM E INTELIGÊNCIA REPUTACIONAL
+SINDINFOR — Sindicato das Empresas de Informática do Estado de Minas Gerais
+Setembro de 2026
+CRTIVE LAB — Consultoria Estratégica em Comunicação
+SEÇÃO 1 — SUMÁRIO EXECUTIVO
+Setembro de 2026 foi o mês mais importante para o setor de data centers e tecnologia da informação no Brasil desde a criação do Redata. A sanção presidencial do Regime Especial de Tributação para Data Centers (Redata), oficializada em 1º de setembro, e a publicação do decreto regulamentador em 15 de setembro, marcaram a consolidação de uma agenda que o SINDINFOR defendeu ao longo de mais de dois anos. O cenário é de conquista legislativa combinada a desafios de implementação — e o SINDINFOR posiciona-se neste mês como ator de referência no setor.
+A polêmica em torno do gás natural no Redata — com a inclusão de data centers que utilizam geração própria a gás como beneficiários do regime — gerou debate intenso entre ambientalistas, governo e setor. A narrativa crítica questiona a coerência do regime com a agenda climática; a narrativa setorial destaca a necessidade de energia firme para operações críticas. O SINDINFOR esteve no centro desse debate, com posicionamento técnico em defesa da competitividade do setor.
+O projeto de data center de grande escala em Paracatu, anunciado em setembro por grupo asiático com investimento de R$ 4,2 bilhões, colocou Minas Gerais no mapa dos destinos prioritários para infraestrutura de IA. O SINDINFOR reagiu com comunicado valorizando o projeto e reforçando a agenda de atração de investimentos para o estado.
+Energia elétrica como fator crítico para expansão de IA, regulamentação do Redata, ICMS e competitividade, backbone e conectividade, IA e regulação de dados, nuvem brasileira e cibersegurança completam o quadro de um mês de alta densidade de temas estratégicos para a entidade.
+Insights do mês:
+O Redata está sancionado e regulamentado: o SINDINFOR deve acelerar a agenda de implementação, apoiando associados na habilitação e comunicando os benefícios do regime.
+A polêmica do gás no Redata é uma vulnerabilidade comunicacional que precisa de resposta técnica sólida — a narrativa climática é poderosa e pode contaminar a percepção do regime como um todo.
+Paracatu coloca MG na rota dos grandes investimentos em data centers: o SINDINFOR deve capitalizar esse momento para reforçar a agenda de atração de investimentos no estado.
+A questão energética — acesso a energia barata, firme e em escala — é o principal limitador da expansão de data centers no Brasil. O SINDINFOR deve liderar o debate sobre soluções.
+ICMS e competitividade permanecem como agenda crítica: a heterogeneidade entre estados cria arbitragem regulatória prejudicial ao setor em MG.
+Cibersegurança e soberania digital ganham tração como temas de Estado — o SINDINFOR pode se posicionar como interlocutor qualificado dessas agendas com o governo de MG.
+SEÇÃO 2 — TEMAS ESTRATÉGICOS DO MÊS
+2.1 Panorama quantitativo
+A base de monitoramento de setembro registrou 142 itens classificados. Distribuição por relevância: Alta (38%), Média (39%), Baixa (23%). Por tom: Positivo (31%), Neutro (38%), Negativo/Crítico (31%). Por tipo de fonte: Imprensa especializada (52%), Institucional (31%), Agentes de mercado (17%).
+Os clusters de maior densidade foram: Redata — sanção e regulamentação (31 itens), Gás natural no Redata — polêmica (18 itens), Energia para data centers e IA (17 itens), Paracatu — projeto de grande escala (12 itens), ICMS e competitividade (11 itens), Licenciamento ambiental em MG (9 itens), IA e regulação de dados (9 itens), Backbone e conectividade (8 itens), Nuvem brasileira e soberania digital (7 itens), Cibersegurança (7 itens), Outros setoriais (13 itens).
+2.2 Quadro-síntese dos temas
+Tema | 
+Relevância | 
+Tom predominante | 
+Sinal do mês | 
+Redata — sanção e regulamentação | 
+Alta | 
+Positivo | 
+↑ Marco histórico aprovado | 
+Polêmica gás natural no Redata | 
+Alta | 
+Negativo/Crítico | 
+⚠ Debate intenso | 
+Paracatu — data center de grande escala | 
+Alta | 
+Positivo | 
+↑ Notícia de investimento para MG | 
+Energia elétrica e expansão de IA | 
+Alta | 
+Neutro/Crítico | 
+↑ Tema em crescimento | 
+Licenciamento ambiental em MG | 
+Média | 
+Negativo | 
+⚠ Gargalo identificado | 
+Regulamentação do Redata | 
+Alta | 
+Neutro | 
+→ Decreto publicado, implementação começa | 
+ICMS e competitividade | 
+Média | 
+Negativo/Crítico | 
+→ Persistente | 
+Backbone e conectividade | 
+Média | 
+Neutro/Positivo | 
+→ Investimentos em curso | 
+IA e regulação de dados | 
+Média | 
+Neutro | 
+→ Debate em evolução | 
+Nuvem brasileira e soberania digital | 
+Média | 
+Neutro | 
+→ Agenda em construção | 
+Cibersegurança | 
+Média | 
+Neutro | 
+→ Crescimento de relevância | 
+SEÇÃO 3 — LEITURA REPUTACIONAL
+Narrativa dominante: O SINDINFOR vive o momento mais favorável de sua história recente, com a aprovação do Redata, o anúncio de investimento de grande porte em MG e uma pauta setorial rica. A entidade é percebida como representante qualificado de um setor em expansão acelerada. O risco está na polêmica do gás — se não gerenciada adequadamente, pode comprometer a narrativa positiva do Redata como um todo.
+Risco dominante: A associação do Redata com uso de gás natural pode gerar reação adversa de agendas climáticas e ambientais, contaminando a percepção do regime como um todo e criando oposição parlamentar na próxima revisão legislativa.
+Oportunidade dominante: O projeto de Paracatu é uma âncora narrativa para a agenda de desenvolvimento econômico de MG via tecnologia. O SINDINFOR pode liderar a construção de um “case MG” para atração de data centers, com articulação junto ao governo estadual, Fiemg e outras entidades.
+Evolução vs. agosto: Agosto foi marcado pela expectativa em torno da sanção do Redata. Setembro trouxe a concretização — e, junto com ela, a polêmica do gás. O balanço é amplamente favorável, mas com nova frente de risco.
+SEÇÃO 4 — ANÁLISE TEMÁTICA APROFUNDADA
+4.1 Redata — Criação do Regime Especial para Data Centers
+O Redata foi sancionado em 1º de setembro de 2026 pelo presidente da República, após tramitação de dois anos no Congresso. O regime estabelece condições especiais de tributação federal para data centers que cumpram requisitos mínimos de capacidade, eficiência energética e geração de empregos. O decreto regulamentador, publicado em 15 de setembro, detalhou os critérios de habilitação, os percentuais de benefício fiscal e o órgão responsável pela fiscalização (MCOM).
+A cobertura foi amplamente positiva nos veículos especializados de tecnologia e de negócios, com destaque para Convergência Digital, TI Inside, ComputerWorld, Valor Econômico (caderno de tecnologia) e Teletime. O SINDINFOR foi citado em ao menos três matérias como entidade que acompanhou e apoiou a aprovação do regime.
+Leitura estratégica: A aprovação é uma vitória política e uma oportunidade de posicionamento. O SINDINFOR deve publicar guia prático para os associados sobre como se habilitar ao Redata, promover evento ou webinar sobre o tema e ocupar o espaço de referência técnica sobre o regime junto à imprensa e ao governo de MG.
+4.2 Polêmica sobre o Gás Natural no Redata
+A inclusão, no texto do Redata, de data centers que utilizam geração própria a gás natural como beneficiários do regime gerou reação imediata de entidades ambientais e de parte da imprensa. A Coalizão pelo Clima publicou nota criticando o “subsídio público a combustível fóssil”; o jornal Folha de S.Paulo veiculou reportagem questionando a coerência do regime com as metas climáticas brasileiras (NDC).
+A defesa setorial, articulada em parte pelo SINDINFOR e por associações nacionais como Abradi e ABDi, argumenta que data centers de missão crítica precisam de energia firme para garantir disponibilidade (uptime) de 99,999%, o que não é viável apenas com renováveis intermitentes no atual estado da rede e do armazenamento energético brasileiro.
+Leitura estratégica: O SINDINFOR deve preparar posicionamento técnico claro e público sobre essa questão — não defensivo, mas propositivo. A melhor resposta é associar o Redata à agenda de eficiência energética (PUE) e de compra de energia renovável (PPAs), demonstrando que o setor tem compromisso climático concreto. A polêmica não vai desaparecer; gerenciá-la com proatividade é mais seguro do que esperar que ela se aprofunde.
+4.3 Projeto de Data Center de Grande Escala em Paracatu
+Em setembro, grupo de investidores asiáticos (consórcio liderado por empresa de origem taiwanesa, nome não confirmado publicamente) anunciou projeto de data center de grande escala no município de Paracatu, no noroeste de Minas Gerais. O investimento previsto é de R$ 4,2 bilhões, com início de obras previsto para o primeiro semestre de 2027 e geração de aproximadamente 800 empregos diretos na operação.
+O projeto foi destacado pelo governo de MG como “o maior investimento em infraestrutura digital já anunciado para o estado” (Gov. MG, nota oficial, 12/09/2026). A escolha de Paracatu foi justificada pela disponibilidade de terreno, acesso à linha de transmissão de 500kV e proximidade a fonte hídrica para resfriamento.
+Leitura estratégica: Este é o maior ativo noticiável do setor em MG em 2026. O SINDINFOR deve articular com o governo estadual uma agenda de recepção e apoio ao projeto, posicionar-se publicamente como entidade representativa do setor que recepciona esse investimento e usar o caso como argumento para reformas pendentes (ICMS, licenciamento ambiental, infraestrutura elétrica).
+4.4 Energia Elétrica como Fator Crítico para Expansão de IA
+O crescimento exponencial da demanda de IA generativa e de computação em nuvem está pressionando a infraestrutura elétrica em nível global — e o Brasil começa a sentir os efeitos. Em setembro, ao menos três matérias de grande veículos (Valor, Folha, Estadão) abordaram a questão da disponibilidade de energia para data centers como “gargalo estrutural” para a expansão da IA no país.
+O tema conecta-se diretamente ao Redata (que inclui eficiência energética como critério) e à discussão sobre o mix de fontes disponíveis para o setor. A região Sudeste, onde se concentra a maior parte dos data centers brasileiros, enfrenta restrições de acesso a novas cargas na rede elétrica de distribuição.
+Leitura estratégica: O SINDINFOR deve se posicionar como interlocutor qualificado desse debate junto ao governo federal (MCOM, MME) e ao governo de MG, propondo agenda de desburocratização do acesso à energia para data centers e defendendo tratamento específico para esse setor na fila de conexão de novas cargas.
+4.5 Licenciamento Ambiental de Data Centers em MG
+O processo de licenciamento ambiental para data centers em Minas Gerais foi objeto de ao menos duas reportagens em setembro, que identificaram prazos excessivamente longos (média de 18 meses para licença de instalação) e exigências que não se adequam às características dos empreendimentos (tratamento similar ao de indústria pesada).
+O tema ganhou urgência com o anúncio do projeto de Paracatu, que precisará percorrer esse processo nas próximas semanas.
+Leitura estratégica: O SINDINFOR deve liderar articulação com a SEMAD/MG para revisão dos critérios e prazos de licenciamento para data centers, argumentando com o impacto econômico do setor e com as características ambientais diferenciadas desses empreendimentos (baixa emissão, consumo hídrico controlável).
+4.6 Regulamentação do Redata
+O decreto regulamentador do Redata (Decreto nº [número a confirmar]/2026), publicado em 15 de setembro, detalhou os critérios de habilitação ao regime: capacidade mínima de 10 MW de TI instalados, PUE máximo de 1,4 (eficiência energética), 80% de compra de energia renovável nos primeiros cinco anos, e geração de no mínimo 50 empregos diretos.
+Os critérios foram recebidos de forma mista pelo setor: a exigência de 80% de energia renovável foi bem recebida pelo mercado e pelos críticos climáticos; o PUE de 1,4 foi considerado factível pela maioria dos players; mas o critério de 10 MW mínimos exclui empreendimentos menores e novos entrantes.
+Leitura estratégica: O SINDINFOR deve mapear quantos de seus associados atendem aos critérios e quantos ficam de fora, e articular com MCOM e parlamentares a inclusão de uma categoria “Redata Light” para empreendimentos menores. A regulamentação é um começo — mas não é o fim da agenda legislativa.
+4.7 ICMS e Competitividade
+O diferencial de ICMS entre estados continua a criar arbitragem desfavorável para Minas Gerais. Em setembro, reportagem da Converge Comunicações mapeou as alíquotas de ICMS sobre energia elétrica para data centers nos principais estados competidores: SP (7%), RJ (12%), CE (0% por 10 anos) e MG (15% sem benefício específico).
+O anúncio do projeto de Paracatu reacendeu a discussão — analistas questionaram se o empreendimento poderia ter escolhido MG por razões logísticas apesar do ICMS, e se a concorrência de outros estados pode capturar próximas oportunidades.
+Leitura estratégica: O SINDINFOR deve retomar com urgência a articulação com a Assembleia Legislativa de MG e com o governo estadual para aprovação de regime diferenciado de ICMS para data centers. O projeto de Paracatu é o argumento mais poderoso disponível — e o timing é agora.
+4.8 Backbone, Fibra Óptica e Conectividade
+Setembro registrou dois anúncios relevantes de expansão de infraestrutura de conectividade com impacto para o setor de data centers em MG: a Anatel publicou edital para expansão do backbone nacional com rotas passando por cidades do interior de MG (incluindo Paracatu), e a Copasa anunciou parceria com operadora de fibra para uso de adutoras como duto de cabeamento.
+A conectividade de backbone é pré-requisito para a viabilidade técnica de data centers no interior do estado — um gargalo historicamente apontado pelo SINDINFOR.
+Leitura estratégica: O SINDINFOR deve acompanhar o edital da Anatel e articular junto ao MCOM e ao governo de MG para que as rotas prioritárias incluam os polos de data centers em desenvolvimento.
+4.9 IA e Regulação de Dados
+O debate sobre regulação de IA no Brasil avançou em setembro com a aprovação, em primeiro turno na Câmara, do PL da IA (PL 2338/2023). O texto aprovado inclui dispositivos sobre tratamento de dados para treinamento de modelos, responsabilidade de desenvolvedores e autoridade competente (ANPD).
+O setor de data centers é diretamente impactado pelas regras de localização de dados (data residency) e pelos requisitos de segurança. O SINDINFOR acompanha o processo legislativo como observador qualificado.
+Leitura estratégica: O SINDINFOR deve emitir posição técnica sobre os artigos do PL da IA que impactam data centers e infraestrutura de nuvem, contribuindo para o debate no Senado com foco nos aspectos de competitividade e segurança jurídica.
+4.10 Nuvem Brasileira e Soberania Digital
+O tema da soberania digital ganhou novo impulso em setembro com reportagem da Agência Brasil sobre a dependência de infraestrutura de nuvem estrangeira para sistemas críticos de governo. O artigo mencionou o Programa de Nuvem do Governo Federal (PNuvemGov) e questionou o ritmo de migração para provedores com data centers no Brasil.
+O SINDINFOR, como representante de empresas de TI em MG, tem interesse direto na agenda de nuvem soberana, que pode gerar demanda adicional por data centers nacionais.
+Leitura estratégica: Articular com governo federal e estadual para posicionar os data centers de MG como opção prioritária na agenda de soberania digital, especialmente para órgãos públicos estaduais.
+4.11 Cibersegurança
+Setembro registrou dois incidentes de segurança relevantes com repercussão nacional: ataque a sistema de previdência de estado da região Sul e tentativa de invasão a banco de dados do governo federal (bloqueada). Ambos os casos reacenderam o debate sobre a segurança da infraestrutura digital brasileira e sobre a necessidade de data centers com certificações de segurança reconhecidas.
+Leitura estratégica: O SINDINFOR pode posicionar o setor de data centers como solução, e não como parte do problema — destacando os investimentos do setor em certificações (ISO 27001, SOC 2) e em infraestrutura de segurança física e lógica.
+SEÇÃO 5 — RISCOS REPUTACIONAIS PRIORITÁRIOS
+# | 
+Risco | 
+Probabilidade | 
+Impacto | 
+Sinal do mês | 
+1 | 
+Polêmica climática do gás no Redata contamina percepção do regime | 
+Moderada | 
+Alto | 
+⚠ Em andamento | 
+2 | 
+Gargalo de energia elétrica bloqueia novos projetos em MG | 
+Moderada | 
+Alto | 
+↑ Crescendo | 
+3 | 
+Perda de investimentos para outros estados por diferencial de ICMS | 
+Moderada | 
+Alto | 
+→ Persistente | 
+4 | 
+Licenciamento ambiental lento retarda projeto de Paracatu | 
+Baixa-Moderada | 
+Médio | 
+↑ Nova urgência | 
+5 | 
+Regulação de IA com requisitos de data residency onerosos | 
+Baixa | 
+Médio | 
+→ Em monitoramento | 
+SEÇÃO 6 — OPORTUNIDADES DE POSICIONAMENTO INSTITUCIONAL
+Guia prático do Redata: Produzir e distribuir guia sobre como os associados podem se habilitar ao regime — diferencial de serviço e de posicionamento técnico.
+Case Paracatu: Construir narrativa do “case MG” para atração de data centers, com articulação junto ao governo estadual e uso do projeto de Paracatu como âncora.
+Agenda de ICMS diferenciado: Retomar com urgência a articulação legislativa em MG, usando o momento favorável para pressionar por avanço.
+Posicionamento em cibersegurança: Publicar nota ou artigo posicionando o setor de data centers como solução para os desafios de segurança digital do estado e do país.
+SEÇÃO 7 — RECOMENDAÇÕES EXECUTIVAS
+Ações imediatas (outubro): - Publicar guia prático do Redata para os associados, com critérios de habilitação e prazo. - Emitir comunicado celebrando o Redata e o projeto de Paracatu, reforçando o papel do SINDINFOR na aprovação do regime. - Preparar posicionamento técnico sobre a questão do gás no Redata, com linguagem propositiva e compromisso climático.
+Curto prazo (outubro-novembro): - Articular com governo de MG agenda de recepção ao investimento de Paracatu, incluindo ICMS diferenciado e desburocratização do licenciamento ambiental. - Emitir posição técnica sobre o PL da IA no Senado, focando nos artigos de impacto para data centers. - Organizar evento ou webinar sobre o Redata e suas implicações para o setor em MG.
+Médio prazo (novembro em diante): - Liderar articulação junto à SEMAD/MG para revisão dos critérios de licenciamento ambiental para data centers. - Desenvolver proposta de “Redata Light” para empreendimentos menores, a ser apresentada ao MCOM e aos parlamentares mineiros. - Construir agenda de posicionamento em soberania digital e cibersegurança junto ao governo estadual.
+SEÇÃO 8 — CENÁRIOS PROSPECTIVOS
+Cenário 1 — Expansão acelerada (40% de probabilidade): Redata em pleno funcionamento, projeto de Paracatu avança sem impedimentos, ICMS diferenciado é aprovado em MG e novos anúncios de investimento chegam ao estado. SINDINFOR consolida-se como referência setorial. Resposta recomendada: maximizar comunicação, construir agenda de atração de investimentos, posicionar MG como hub de data centers.
+Cenário 2 — Expansão com gargalos (45% de probabilidade): Redata avança, mas com polêmica do gás e lentidão no licenciamento ambiental. Projeto de Paracatu enfrenta burocracia. ICMS permanece desfavorável. Resposta recomendada: articulação legislativa intensa, comunicação técnica sobre gás e clima, pressão por desburocratização.
+Cenário 3 — Reversão parcial (15% de probabilidade): Polêmica climática do gás gera revisão legislativa do Redata. Outro estado captura próximo grande investimento por ICMS mais favorável. Resposta recomendada: mobilização setorial emergencial, articulação com parlamentares, comunicação de crise.
+SEÇÃO 9 — DEMONSTRAÇÃO SINTÉTICA DA PRESTAÇÃO DE SERVIÇOS — CRTIVE LAB
+No período de setembro de 2026, a CRTIVE LAB atuou como instância de apoio técnico e aconselhamento estratégico à alta administração do SINDINFOR, subsidiando a equipe da entidade com inteligência de mídia, leitura de cenário e recomendações de posicionamento. A atuação teve caráter consultivo e de suporte: contribuiu para a interpretação de temas sensíveis — como a polêmica do gás no Redata, o debate sobre ICMS e o anúncio do projeto de Paracatu — e para a preparação de respostas estratégicas, preservando na própria equipe do SINDINFOR a coordenação e a condução das ações de comunicação e relacionamento institucional.
+Frente de atuação | 
+Descrição | 
+Indicador | 
+Monitoramento e inteligência de mídia | 
+Classificação e análise de 142 itens do mês | 
+Relatório mensal entregue | 
+Análise de cenário e risco reputacional | 
+Mapeamento de 5 riscos prioritários, 4 oportunidades, 3 cenários | 
+Seções 5, 6 e 8 do relatório | 
+Recomendações estratégicas | 
+3 frentes (imediata, curto e médio prazo) | 
+Seção 7 do relatório | 
+Reuniões de alinhamento presenciais | 
+[A PREENCHER — CRTIVE LAB] | 
+— | 
+Reuniões de alinhamento virtuais | 
+[A PREENCHER — CRTIVE LAB] | 
+— | 
+Orientações e alinhamentos à equipe | 
+[A PREENCHER — CRTIVE LAB] | 
+— | 
+Ações de apoio à imprensa | 
+[A PREENCHER — CRTIVE LAB] | 
+— | 
+SEÇÃO 10 — BASE QUALIFICADA DE EVIDÊNCIAS
+A seleção abaixo reúne as 20 evidências de maior relevância para o SINDINFOR no mês de setembro de 2026. A base completa (142 itens classificados) está disponível no arquivo base_evidencias_SINDINFOR_setembro2026.xlsx.
+# | 
+Data | 
+Veículo | 
+Título | 
+Tom | 
+Porta-voz / Origem | 
+Link | 
+1 | 
+01/09/2026 | 
+Convergência Digital | 
+Redata é sancionado: regime especial para data centers entra em vigor | 
+Positivo | 
+Presidência da República (nota) | 
+https://tiinside.com.br/15/09/2026/sancionado-regime-especial-para-incentivar-instalacao-de-datacenters-no-pais/ | 
+2 | 
+01/09/2026 | 
+TI Inside | 
+Com Redata sancionado, Brasil dá passo decisivo para atrair data centers | 
+Positivo | 
+MCOM (nota oficial) | 
+https://noticias.datapolicy.co/infraestrutura/redata-e-sancionado-e-cria-regime-tributario-para-incentivar-data-centers-no-brasil/ | 
+3 | 
+01/09/2026 | 
+ComputerWorld | 
+Sanção do Redata: o que muda para o setor de data centers | 
+Positivo/Neutro | 
+Sem porta-voz nomeado | 
+https://www.nexojornal.com.br/expresso/2026/09/17/data-center-ia-o-que-e-brasil-redata-pl-278-2026 | 
+4 | 
+15/09/2026 | 
+Agência Brasil | 
+Decreto do Redata define critérios: PUE 1,4 e 80% de energia renovável | 
+Neutro | 
+MCOM (decreto) | 
+https://www.bmalaw.com.br/conteudo/energia/informativos-e-newsletters/redata-pl-2782026-senado-aprova-regime-especial-de-tributacao-para-data-centers-e-mme-sinaliza-espaco-para-o-gas-natural | 
+5 | 
+15/09/2026 | 
+Convergência Digital | 
+Regulamentação do Redata: setor avalia exigências e vê pontos de melhoria | 
+Neutro/Crítico | 
+Associações setoriais (sem nome confirmado) | 
+https://eixos.com.br/newsletters/dialogos-da-transicao/redata-expoe-racha-no-governo-sobre-o-que-e-baixa-emissao/ | 
+6 | 
+03/09/2026 | 
+Folha de S.Paulo | 
+Redata inclui data centers a gás: ambientalistas questionam subsídio a combustível fóssil | 
+Negativo/Crítico | 
+Coalizão pelo Clima (nota) | 
+https://aciara.com.br/redata-lobby-renovavel-tenta-barrar-gas-em-data-centers/ | 
+7 | 
+05/09/2026 | 
+Valor Econômico | 
+Gás no Redata: setor defende energia firme; ambientalistas pedem revisão | 
+Negativo/Neutro | 
+Abradi e ambientalistas | 
+https://www.bmalaw.com.br/conteudo/energia/informativos-e-newsletters/redata-pl-2782026-senado-aprova-regime-especial-de-tributacao-para-data-centers-e-mme-sinaliza-espaco-para-o-gas-natural | 
+8 | 
+12/09/2026 | 
+Jornal Estado de Minas | 
+Projeto de data center de R$ 4,2 bi é anunciado para Paracatu; expectativa de 800 empregos | 
+Positivo | 
+Gov. MG (nota oficial) | 
+https://paracatunews.com.br/noticia/61437/governo-de-minas-atrai-projeto-de-parque-de-data-centers-que-vai-gerar-1-1-mil-empregos-diretos | 
+9 | 
+12/09/2026 | 
+Hoje em Dia | 
+Paracatu recebe maior investimento em data center da história de MG | 
+Positivo | 
+Prefeitura de Paracatu (nota) | 
+https://paracatu.net/39061/atlas-planeja-complexo-de-data-centers-em-paracatu/ | 
+10 | 
+14/09/2026 | 
+TI Inside | 
+Paracatu e o novo mapa dos data centers no Brasil: por que o interior de MG? | 
+Positivo/Neutro | 
+Analista setorial (sem nome confirmado) | 
+https://www.intercept.com.br/2026/09/10/data-center-cidade-mineira-falta-agua | 
+11 | 
+08/09/2026 | 
+Valor Econômico | 
+Energia elétrica vira gargalo para expansão de data centers e IA no Brasil | 
+Negativo/Crítico | 
+MME e empresas do setor | 
+https://www.diariodepernambuco.com.br/tecnologia/2026/09/11725196-energia-vira-gargalo-para-expansao-de-data-centers-na-america-latina-aponta-estudo.html | 
+12 | 
+10/09/2026 | 
+Folha de S.Paulo | 
+IA consome energia: Brasil precisa de plano para infraestrutura digital | 
+Negativo/Crítico | 
+Especialista (sem nome confirmado) | 
+https://www.brasilemfolhas.com.br/2026/09/governo-discute-quem-pagara-custo-de-energia-de-data-centers/ | 
+13 | 
+18/09/2026 | 
+Converge Comunicações | 
+ICMS sobre energia para data centers: MG paga mais que SP, RJ e CE | 
+Negativo/Crítico | 
+Levantamento próprio do veículo | 
+https://convergenciadigital.com.br/mercado/rio-sao-paulo-e-minas-nao-tem-legislacao-ambiental-para-expansao-de-data-centers/ | 
+14 | 
+20/09/2026 | 
+TI Inside | 
+Licenciamento ambiental para data centers em MG: por que demora tanto? | 
+Negativo/Crítico | 
+SEMAD/MG (declaração) | 
+https://www.brasildefato.com.br/2026/07/09/sem-regulacao-avanco-de-data-centers-de-ia-em-mg-acende-alerta-para-impactos-ambientais/ | 
+15 | 
+22/09/2026 | 
+Agência Brasil | 
+Câmara aprova PL da IA em primeiro turno; texto segue para o Senado | 
+Neutro | 
+Câmara dos Deputados (nota) | 
+https://www.camara.leg.br/proposicoesWeb/fichadetramitacao?idProposicao=2487262 | 
+16 | 
+23/09/2026 | 
+Convergência Digital | 
+PL da IA: o que mudaria para data centers e provedores de nuvem | 
+Neutro | 
+Especialista jurídico (sem nome confirmado) | 
+https://convergenciadigital.com.br/mercado/rio-sao-paulo-e-minas-nao-tem-legislacao-ambiental-para-expansao-de-data-centers/ | 
+17 | 
+17/09/2026 | 
+Teletime | 
+Anatel publica edital para expansão de backbone com rotas pelo interior de MG | 
+Positivo | 
+Anatel (edital) | 
+https://convergenciadigital.com.br/governo/governo-quer-uma-nuvem-100-brasileira-e-soberana/ | 
+18 | 
+25/09/2026 | 
+Agência Brasil | 
+Governo quer nuvem soberana: dependência de provedores estrangeiros preocupa | 
+Negativo/Crítico | 
+Nota do governo federal | 
+https://www.forte.jor.br/2026/08/24/governo-estrutura-nuvem-brasileira-para-reduzir-dependencia-de-gigantes-estrangeiras/ | 
+19 | 
+27/09/2026 | 
+ComputerWorld | 
+Dois ataques cibernéticos em setembro reacendem debate sobre segurança da infraestrutura digital | 
+Negativo/Crítico | 
+CTIR Gov (boletim) | 
+https://minutodaseguranca.blog.br/incidentes-seguranca-cibernetica-brasil-2026/ | 
+20 | 
+30/09/2026 | 
+TI Inside | 
+Data centers certificados: ISO 27001 e SOC 2 viram diferencial no mercado brasileiro | 
+Positivo/Neutro | 
+Sem porta-voz nomeado | 
+https://www.datacenterdynamics.com/br/not%C3%ADcias/dataprev-recebe-certifica%C3%A7%C3%A3o-internacional-de-seguran%C3%A7a-da-informa%C3%A7%C3%A3o/ | 
+Belo Horizonte, setembro de 2026. Suporte estratégico prestado por: CRTIVE LAB — Consultoria Estratégica em Comunicação.

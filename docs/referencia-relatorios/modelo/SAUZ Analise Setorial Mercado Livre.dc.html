@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  doc-page:not(:defined){visibility:hidden}
+  *{box-sizing:border-box}
+  .rp p{orphans:3;widows:3}
+  .pgnum::after{content:counter(page)}
+</style>
+</helmet>
+<x-import component-from-global-scope="doc-page" from="./doc-page.js" size="a4" margin="17mm" hint-size="100%,100%">
+<div slot="footer" style="display:flex;justify-content:space-between;align-items:baseline;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.05em;color:#8b9096;border-top:1px solid #e6e6e0;padding-top:2mm">
+  <span>SAUZ · Análise Setorial · Agosto de 2026</span>
+  <span class="pgnum" style="color:#0f5563;font-weight:500"></span>
+</div>
+
+<div class="rp" style="font-family:'IBM Plex Sans',-apple-system,'Segoe UI',sans-serif;font-size:12.8px;line-height:1.55;color:#15171c;-webkit-font-smoothing:antialiased">
+
+<!-- ============ CAPA ============ -->
+<div data-screen-label="Capa" style="position:relative;overflow:hidden;background:#0d1f24;margin:-17mm -17mm 0;box-sizing:border-box;display:flex;flex-direction:column;break-after:page">
+  <div style="position:relative;height:208mm;overflow:hidden">
+    <img src="cover_baixa_tensao.jpg" alt="Transformador e rede de distribuição em poste de baixa tensão" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 38%"/>
+    <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(9,28,33,.88) 0%,rgba(12,38,44,.66) 24%,rgba(13,55,66,.62) 50%,rgba(10,30,36,.80) 74%,rgba(8,22,27,.97) 100%)"></div>
+
+    <div style="position:absolute;top:15mm;left:19mm;right:19mm;z-index:3;display:flex;justify-content:space-between;align-items:flex-start;gap:9mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#7fd0be">Análise Setorial · Edição Especial</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#9fb6b5;white-space:nowrap">Setor Elétrico</div>
+    </div>
+
+    <div style="position:absolute;top:20mm;right:10mm;height:178mm;z-index:3;writing-mode:vertical-rl;font-family:'IBM Plex Sans',sans-serif;font-weight:700;font-size:13.5px;letter-spacing:.11em;color:#fff;text-transform:uppercase;opacity:.95;white-space:nowrap">Abertura · Baixa Tensão · Supridor de Última Instância</div>
+
+    <div style="position:absolute;left:0;right:0;top:29%;z-index:3;display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 19mm">
+      <img src="sauz-logo.png" alt="SAUZ" style="height:70px;display:block"/>
+      <div style="width:50px;height:2px;background:#63b4bd;margin:13px 0 9px"></div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:#e4efee">Comunicação e Estratégia · Inteligência Reputacional</div>
+    </div>
+
+    <div style="position:absolute;left:0;right:0;top:22%;height:36%;background:linear-gradient(to bottom,rgba(8,22,27,0) 0%,rgba(8,22,27,.52) 26%,rgba(8,22,27,.56) 70%,rgba(8,22,27,0) 100%);z-index:2"></div>
+    <div style="position:absolute;left:0;right:0;bottom:0;height:48%;background:linear-gradient(to bottom,rgba(8,22,27,0) 0%,rgba(8,22,27,.72) 46%,rgba(8,22,27,.96) 100%);z-index:2"></div>
+    <div style="position:absolute;left:19mm;right:24mm;bottom:15mm;z-index:3;border-left:3px solid #7fd0be;padding-left:6mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#7fd0be;margin-bottom:5mm">Decreto nº 13.097/2026</div>
+      <h1 style="font-size:31px;font-weight:600;line-height:1.16;letter-spacing:-.015em;margin:0;color:#fff;max-width:146mm">A abertura do mercado livre de energia para a baixa tensão</h1>
+      <p style="margin:4mm 0 0;font-size:13.5px;color:#cfe0de;max-width:140mm;line-height:1.5">O que o novo marco estabelece, o que ainda está em aberto e o que ele exige de cada agente do setor nos próximos 18 meses.</p>
+    </div>
+  </div>
+
+  <div style="background:#0d1f24;padding:8mm 19mm 7mm;display:flex;justify-content:space-between;align-items:flex-end;gap:10mm">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#6f8a8c">Documento de análise produzido pela SAUZ</div>
+    <div style="text-align:right;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#9fb6b5;line-height:1.7">
+      <div>Agosto de 2026</div>
+      <div style="color:#607e80">Distribuição institucional</div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);height:6mm">
+    <div style="background:#0f5563"></div><div style="background:#23806e"></div><div style="background:#63b4bd"></div><div style="background:#d2ddd6"></div><div style="background:#3c4f52"></div>
+  </div>
+</div>
+
+<!-- ============ ABERTURA: O FATO ============ -->
+<div data-screen-label="O fato" style="break-after:page;padding-top:2mm">
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:#8b9096;margin-bottom:3mm">Sobre esta análise</div>
+  <div style="border-top:1.6px solid #15171c"></div>
+  <div style="background:#f2f6f6;border-left:3px solid #0f5563;padding:5mm 6mm;margin-top:4.5mm;max-width:162mm">
+    <p style="margin:0 0 2.4mm;text-align:justify;font-size:12.5px;color:#2a2f34">Esta é uma <strong>análise setorial produzida pela SAUZ</strong> a partir do acompanhamento contínuo do setor elétrico brasileiro, com base na norma publicada, em declarações oficiais e na repercussão registrada pela imprensa nacional e especializada.</p>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#2a2f34">O objetivo não é descrever a norma — isso os veículos setoriais já fazem —, mas <strong>traduzir o que ela significa para cada agente</strong>: onde estão as decisões ainda em aberto, quais pontos exigem construção de confiança e qual é a agenda de posicionamento dos próximos 18 meses.</p>
+  </div>
+
+  <div style="margin-top:8mm;border-top:1.6px solid #15171c;padding-top:4.5mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#0f5563;margin-bottom:3.5mm">O fato</div>
+    <div style="background:#f2f6f6;border-left:3px solid #0f5563;padding:6mm 7mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#5b7a80;margin-bottom:2.5mm">Decreto nº 13.097, de 12 de agosto de 2026 · publicado no DOU em 13/08 · em vigor</div>
+      <div style="font-size:22px;font-weight:600;line-height:1.22;letter-spacing:-.01em;margin-bottom:3.5mm;max-width:152mm">Todo consumidor brasileiro poderá escolher de quem compra energia</div>
+      <p style="margin:0 0 4mm;font-size:13px;color:#2a2f34;text-align:justify;max-width:158mm">Assinado pelo presidente Lula e pelo ministro de Minas e Energia, Alexandre Silveira, o decreto regulamenta a abertura do mercado livre para consumidores de <strong>baixa tensão</strong> (abaixo de 2,3 kV) e cria o <strong>Supridor de Última Instância</strong>. Detalha a Lei nº 15.269/2025, de 24 de novembro de 2025 — conversão da MP 1.304 —, que já havia estabelecido as bases legais da medida.</p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4mm">
+        <div style="background:#fff;padding:3.5mm 4mm;border-top:2px solid #0f5563"><div style="font-size:19px;font-weight:600;line-height:1;color:#0f5563">44,7%</div><div style="font-size:10.5px;color:#4a5054;line-height:1.4;margin-top:2mm">da energia consumida no país já vem do mercado livre — com apenas ~86 mil consumidores</div></div>
+        <div style="background:#fff;padding:3.5mm 4mm;border-top:2px solid #23806e"><div style="font-size:19px;font-weight:600;line-height:1;color:#23806e">6,4 mi</div><div style="font-size:10.5px;color:#4a5054;line-height:1.4;margin-top:2mm">pequenos comércios e indústrias alcançados só na primeira etapa, pela estimativa da Abraceel</div></div>
+        <div style="background:#fff;padding:3.5mm 4mm;border-top:2px solid #63b4bd"><div style="font-size:19px;font-weight:600;line-height:1;color:#15171c">2027<span style="font-size:13px;color:#8b9096">/28</span></div><div style="font-size:10.5px;color:#4a5054;line-height:1.4;margin-top:2mm">as duas datas que organizam a transição — novembro de cada ano</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CRONOGRAMA -->
+  <div style="margin-top:7mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#0f5563;margin-bottom:4mm">O cronograma</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4mm">
+      <div style="border-top:3px solid #d2ddd6;padding-top:3mm">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:#0f5563;margin-bottom:2mm">24/11/2025</div>
+        <div style="font-weight:600;font-size:12.5px;margin-bottom:1.6mm;line-height:1.3">Lei nº 15.269</div>
+        <div style="font-size:11px;color:#4a5054;line-height:1.45">Base legal da abertura, na conversão da MP 1.304</div>
+      </div>
+      <div style="border-top:3px solid #0f5563;padding-top:3mm">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:#0f5563;margin-bottom:2mm">12–13/08/2026</div>
+        <div style="font-weight:600;font-size:12.5px;margin-bottom:1.6mm;line-height:1.3">Decreto nº 13.097</div>
+        <div style="font-size:11px;color:#4a5054;line-height:1.45">Regulamentação e criação do Supridor de Última Instância</div>
+      </div>
+      <div style="border-top:3px solid #23806e;padding-top:3mm">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:#23806e;margin-bottom:2mm">25/11/2027</div>
+        <div style="font-weight:600;font-size:12.5px;margin-bottom:1.6mm;line-height:1.3">1ª etapa</div>
+        <div style="font-size:11px;color:#4a5054;line-height:1.45">Indústrias e comércios de baixa tensão escolhem fornecedor</div>
+      </div>
+      <div style="border-top:3px solid #63b4bd;padding-top:3mm">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:#0f5563;margin-bottom:2mm">25/11/2028</div>
+        <div style="font-weight:600;font-size:12.5px;margin-bottom:1.6mm;line-height:1.3">2ª etapa</div>
+        <div style="font-size:11px;color:#4a5054;line-height:1.45">Residenciais e demais classes de consumo</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUMÁRIO -->
+  <div style="margin-top:8mm">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:#8b9096;margin-bottom:3mm">Nesta análise</div>
+    <div style="border-top:1.6px solid #15171c"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;column-gap:14mm">
+      <div>
+        <a href="#s1" style="display:flex;gap:11px;align-items:baseline;padding:2.6mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#15171c"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0f5563;min-width:20px">01</span><span style="font-weight:500">Leitura Executiva</span></a>
+        <a href="#s2" style="display:flex;gap:11px;align-items:baseline;padding:2.6mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#15171c"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0f5563;min-width:20px">02</span><span style="font-weight:500">Os cinco pontos decisivos</span></a>
+        <a href="#s3" style="display:flex;gap:11px;align-items:baseline;padding:2.6mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#15171c"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0f5563;min-width:20px">03</span><span style="font-weight:500">A agenda que segue aberta</span></a>
+      </div>
+      <div>
+        <a href="#s4" style="display:flex;gap:11px;align-items:baseline;padding:2.6mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#15171c"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0f5563;min-width:20px">04</span><span style="font-weight:500">O que muda para cada agente</span></a>
+        <a href="#s5" style="display:flex;gap:11px;align-items:baseline;padding:2.6mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#15171c"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0f5563;min-width:20px">05</span><span style="font-weight:500">A agenda dos próximos 18 meses</span></a>
+        <a href="#s6" style="display:flex;gap:11px;align-items:baseline;padding:2.6mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#15171c"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0f5563;min-width:20px">06</span><span style="font-weight:500">Como a SAUZ apoia</span></a>
+        <a href="#s7" style="display:flex;gap:11px;align-items:baseline;padding:2.6mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#15171c"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0f5563;min-width:20px">07</span><span style="font-weight:500">Repercussão e base de evidências</span></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 01 ============ -->
+<div id="s1" data-screen-label="01 Leitura Executiva" style="margin-top:1mm">
+  <div style="border-top:1.6px solid #15171c;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#0f5563;font-weight:600">01</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b9096">Síntese</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Leitura Executiva</h2>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 2.4mm;text-align:justify">A abertura do mercado livre de energia para a baixa tensão é <strong>a maior mudança estrutural do setor elétrico brasileiro em duas décadas</strong> — e, ao contrário de tantas agendas que se arrastam, esta agora tem norma publicada, datas definidas e vigência imediata. O Decreto nº 13.097, assinado em 12 de agosto e publicado no dia seguinte, encerra a fase de debate e inaugura a fase de execução.</p>
+    <p style="margin:0 0 2.4mm;text-align:justify">A dimensão do que está em jogo fica clara em um único contraste: hoje o mercado livre reúne cerca de <strong>86 mil consumidores</strong> e já responde por <strong>44,7% de toda a energia consumida no país</strong>. A primeira etapa da abertura, sozinha, alcança um universo estimado pela Abraceel em <strong>6 milhões de pequenos comércios e 400 mil pequenas indústrias</strong>. A própria associação projeta um potencial de economia de <strong>R$ 35,8 bilhões por ano</strong> para o Grupo B, o que equivale a uma média de <strong>19% na conta</strong> — e cita pesquisa Datafolha segundo a qual 8 em cada 10 brasileiros querem poder trocar de fornecedor de energia. Ou seja: o número de agentes habilitados a escolher fornecedor pode crescer em duas ordens de magnitude, o apetite declarado existe — e ninguém, no setor, tem hoje projeção robusta de quantos efetivamente migrarão.</p>
+    <p style="margin:0 0 2.4mm;text-align:justify">É justamente essa indefinição que faz da comunicação uma variável crítica, e não acessória. A migração não é automática: depende de o consumidor entender a oferta, confiar no fornecedor e perceber vantagem real. Quando o governo anuncia redução de <strong>20% a 22%</strong> e compara a mudança à portabilidade de operadora de celular, cria uma expectativa que a conta de luz talvez não confirme — porque o percentual incide sobre a parcela de energia, não sobre o valor final, que carrega tributos e encargos fixos. <strong>A distância entre a promessa e o extrato é o primeiro risco reputacional da agenda</strong>, e ele recairá sobre quem estiver mais próximo do consumidor.</p>
+    <p style="margin:0 0 2.4mm;text-align:justify">Há um segundo ponto, de natureza distinta e igual relevância. A abertura chega num momento em que o segmento de comercialização passa por forte reorganização, com um rombo superior a R$ 6 bilhões e uma sequência de recuperações judiciais em curso. <strong>Ampliar o mercado para milhões de pequenos consumidores enquanto o elo se reestrutura é o desafio ainda em aberto desta agenda</strong> — e o Supridor de Última Instância, criado justamente para isso, será testado logo no início de sua vigência.</p>
+    <p style="margin:0;text-align:justify">A leitura de conjunto, porém, é de oportunidade. Uma transição bem comunicada converte incerteza em confiança, e confiança é o insumo de que este mercado precisa para funcionar. Os agentes que ocuparem desde agora o lugar de <strong>fonte clara, técnica e verificável</strong> — sobre preço, sobre risco, sobre o que se ganha e o que se perde ao migrar — chegarão a novembro de 2027 com autoridade construída. Os que esperarem o cronograma chegar vão comunicar sob pressão, disputando atenção com ruído. Esta análise mapeia o terreno para a primeira escolha.</p>
+  </div>
+
+  <div style="margin-top:6mm;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#0f5563;padding-bottom:2.5mm;border-bottom:1px solid #e4e4e0;margin-bottom:4mm">O essencial em seis pontos</div>
+    <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3mm">
+      <li style="display:grid;grid-template-columns:21px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0f5563;font-weight:600">01</span><span style="text-align:justify">O marco <strong>já está em vigor</strong>: decreto publicado em 13 de agosto, com abertura para comércio e indústria de baixa tensão em <strong>25/11/2027</strong> e para residenciais em <strong>25/11/2028</strong>.</span></li>
+      <li style="display:grid;grid-template-columns:21px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0f5563;font-weight:600">02</span><span style="text-align:justify">A <strong>escala é inédita</strong>: de ~86 mil consumidores livres para um universo potencial de milhões — sem projeção consolidada de adesão efetiva.</span></li>
+      <li style="display:grid;grid-template-columns:21px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0f5563;font-weight:600">03</span><span style="text-align:justify">A <strong>promessa de 20% a 22%</strong> incide sobre a parcela de energia, não sobre a conta final — a diferença entre os dois números é o principal risco de frustração pública.</span></li>
+      <li style="display:grid;grid-template-columns:21px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0f5563;font-weight:600">04</span><span style="text-align:justify">Quem migra <strong>perde a Tarifa Social</strong> e descontos de irrigação e aquicultura, e o retorno ao mercado regulado exige aviso prévio de um ano — informação ausente da maior parte da cobertura.</span></li>
+      <li style="display:grid;grid-template-columns:21px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0f5563;font-weight:600">05</span><span style="text-align:justify">A <strong>conta da transição</strong> — encargo de sobrecontratação e separação de custos entre livre e cativo — ainda será definida pela ANEEL. É a decisão de maior sensibilidade social da agenda.</span></li>
+      <li style="display:grid;grid-template-columns:21px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0f5563;font-weight:600">06</span><span style="text-align:justify">A abertura avança <strong>enquanto o segmento de comercialização se reorganiza</strong> (rombo acima de R$ 6 bi): é o desafio que define a agenda de confiança do período.</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 02 ============ -->
+<div id="s2" data-screen-label="02 Pontos decisivos" style="margin-top:8mm">
+  <div style="border-top:1.6px solid #15171c;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#0f5563;font-weight:600">02</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b9096">Análise</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Os cinco pontos decisivos</h2>
+
+  <!-- 2.1 -->
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:0 0 2.6mm;color:#15171c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0f5563;font-weight:500">2.1</span><span>O tamanho real do mercado — e a incógnita da adesão</span></h3>
+  <div style="max-width:160mm">
+    <p style="margin:0;text-align:justify">O mercado livre brasileiro já é maior do que sua visibilidade sugere: com aproximadamente <strong>86 mil consumidores</strong>, responde por <strong>44,7% de toda a energia consumida no país</strong>. A concentração é a chave para entender o que vem: são poucos agentes, de grande porte, com estrutura para negociar contratos. A abertura da baixa tensão inverte essa lógica — a Abraceel estima que a primeira etapa alcance <strong>6 milhões de pequenos comércios e 400 mil pequenas indústrias</strong>, agentes sem departamento de energia, sem assessoria contratual e sem familiaridade com risco de preço. O ponto crítico é que <strong>não existe projeção robusta de quantos efetivamente migrarão</strong>, e essa indefinição é estratégica: dela dependem o dimensionamento das distribuidoras, o plano comercial dos fornecedores e o esforço de comunicação necessário.</p>
+  </div>
+  <div style="background:#f2f6f6;border-left:3px solid #0f5563;padding:4mm 5mm;margin:3.5mm 0 0;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#0f5563;margin-bottom:2mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#2a2f34">A adesão será determinada menos pela norma e mais pela compreensão. Num universo de milhões de consumidores sem repertório técnico, <strong>quem explicar melhor conquista mercado</strong> — e quem explicar mal gera arrependimento, reclamação e retorno ao regulado. É uma agenda de comunicação antes de ser uma agenda comercial.</p>
+  </div>
+
+  <!-- 2.2 -->
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:6mm 0 2.6mm;color:#15171c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0f5563;font-weight:500">2.2</span><span>A promessa de preço e a letra miúda</span></h3>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 2.4mm;text-align:justify">O ministro Alexandre Silveira sustenta que a mudança pode reduzir de <strong>20% a 22%</strong> o custo da energia, e compara a troca de fornecedor à portabilidade de operadora de telefonia — analogia eficaz para explicar o mecanismo, mas que carrega uma promessa implícita de simplicidade e de ganho imediato.</p>
+    <p style="margin:0;text-align:justify">A ressalva técnica é decisiva: <strong>o percentual incide sobre a parcela de energia, e não sobre o valor final da fatura</strong>. Tributos, encargos setoriais, custo de distribuição e parcelas fixas permanecem — de modo que o efeito percebido na conta é sensivelmente menor do que o número anunciado. Não há incorreção no dado; há um risco de leitura. Quando o consumidor comparar a expectativa criada com o extrato recebido, a diferença será atribuída a alguém — e raramente a quem fez o anúncio.</p>
+  </div>
+  <div style="background:#f2f6f6;border-left:3px solid #0f5563;padding:4mm 5mm;margin:3.5mm 0 0;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#0f5563;margin-bottom:2mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#2a2f34">Este é o ponto em que a comunicação técnica tem mais valor a agregar. Recomenda-se, a todo agente próximo do consumidor, <strong>traduzir o ganho em reais sobre a conta inteira</strong>, e não em percentual sobre uma parcela. Antecipar a explicação é mais barato do que administrar a frustração depois.</p>
+  </div>
+
+  <!-- 2.3 -->
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:6mm 0 2.6mm;color:#15171c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0f5563;font-weight:500">2.3</span><span>O Supridor de Última Instância: a rede de proteção</span></h3>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 2.4mm;text-align:justify">A criação do <strong>Supridor de Última Instância (SUI)</strong> é a peça de engenharia institucional mais relevante do decreto. Ele responde a uma pergunta que a abertura torna inevitável: o que acontece com o consumidor cujo fornecedor falha? O SUI garante atendimento temporário nas hipóteses de falência do comercializador, resilição contratual e desligamento na CCEE — assegurando que ninguém fique sem energia por falha do elo comercial.</p>
+    <p style="margin:0;text-align:justify">O desenho é transitório e tem data: <strong>até 31 de dezembro de 2030 o serviço é exclusivo das distribuidoras</strong>; a partir de 2031, abre-se à concorrência. As distribuidoras terão remuneração adicional pela função, <strong>rateada entre os consumidores do mercado livre</strong> — o que é coerente, já que é esse grupo que gera a necessidade do mecanismo.</p>
+  </div>
+  <div style="background:#f2f6f6;border-left:3px solid #0f5563;padding:4mm 5mm;margin:3.5mm 0 0;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#0f5563;margin-bottom:2mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#2a2f34">O SUI é um <strong>ativo de comunicação subaproveitado</strong>. Ele é a resposta pronta à principal insegurança do consumidor que hesita em migrar — o medo de ficar sem fornecimento. Comunicá-lo bem reduz atrito de adesão e, para as distribuidoras, reposiciona a função como serviço de confiabilidade, não como ônus.</p>
+  </div>
+
+  <!-- 2.4 -->
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:6mm 0 2.6mm;color:#15171c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0f5563;font-weight:500">2.4</span><span>O que se perde ao migrar</span></h3>
+  <div style="max-width:160mm">
+    <p style="margin:0;text-align:justify">Há uma dimensão da medida que praticamente não aparece na cobertura oficial e que, no entanto, afeta diretamente as famílias e os produtores de menor renda: <strong>quem migra para o mercado livre perde a Tarifa Social de Energia Elétrica</strong>, assim como os <strong>descontos de irrigação e aquicultura</strong>. Existe direito de retorno ao ambiente regulado, mas condicionado a <strong>aviso prévio de um ano</strong> — prazo que transforma a escolha em compromisso de médio prazo, não em teste reversível. Para um pequeno comércio ou um produtor rural, a decisão de migrar envolve, portanto, renunciar a um benefício certo em troca de uma economia projetada.</p>
+  </div>
+  <div style="background:#fbeede;border-left:3px solid #c1732a;padding:4mm 5mm;margin:3.5mm 0 0;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#c1732a;margin-bottom:2mm">Ponto de atenção</div>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#2a2f34">É aqui que se concentra o maior risco de <strong>reclamação, judicialização e desgaste</strong> da agenda. Uma migração feita sem informação plena sobre a perda da Tarifa Social e sobre o prazo de retorno produz exatamente o tipo de caso que órgãos de defesa do consumidor e imprensa transformam em pauta. Transparência prévia, aqui, é proteção institucional.</p>
+  </div>
+
+  <!-- 2.5 -->
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:6mm 0 2.6mm;color:#15171c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0f5563;font-weight:500">2.5</span><span>A conta da transição — e quem a paga</span></h3>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 2.4mm;text-align:justify">O decreto determina que a ANEEL regulamente o <strong>encargo de sobrecontratação das distribuidoras</strong> e promova a <strong>separação de custos entre os ambientes livre e cativo</strong>. Em termos práticos: as distribuidoras compraram energia de longo prazo para atender uma base de clientes que agora poderá deixá-las, e é preciso definir quem absorve esse descasamento.</p>
+    <p style="margin:0;text-align:justify">Como observou o professor Pedro Côrtes em análise à CNN, a forma de dividir essa conta é decisiva para evitar que <strong>quem permanece no mercado cativo pague pela transição de quem sai</strong>. O alerta tem lastro histórico: em transições anteriores do setor, os que permaneceram no ambiente regulado foram, sistematicamente, os consumidores de menor renda e menor capacidade de negociação. É a decisão de maior sensibilidade social de toda a agenda — e ainda está aberta.</p>
+  </div>
+  <div style="background:#f2f6f6;border-left:3px solid #0f5563;padding:4mm 5mm;margin:3.5mm 0 0;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#0f5563;margin-bottom:2mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#2a2f34">Este é o tema com maior potencial de virar controvérsia pública de grande alcance — porque combina conta de luz, desigualdade e decisão regulatória. Os agentes envolvidos ganham ao sustentar posição técnica <strong>antes</strong> de a discussão se politizar, com números próprios e proposta de rateio defensável.</p>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 03 ============ -->
+<div id="s3" data-screen-label="03 Tensões" style="margin-top:8mm">
+  <div style="border-top:1.6px solid #15171c;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#0f5563;font-weight:600">03</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b9096">Contraponto</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">A agenda que segue aberta</h2>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 4.5mm;text-align:justify">Uma leitura útil da agenda não se limita ao que o governo anuncia. Três vozes qualificadas convergem, por caminhos distintos, para o mesmo ponto: o desenho está posto, e a execução ainda tem definições em aberto — é exatamente aí que a comunicação bem construída faz diferença.</p>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:4.5mm">
+    <div style="border-top:1px solid #e4e4e0;padding-top:4mm;break-inside:avoid;max-width:160mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#0f5563;margin-bottom:2mm">Defesa do consumidor · Idec</div>
+      <div style="font-weight:600;font-size:14px;margin-bottom:2mm">Ganho real, mas com contratos que o consumidor não domina</div>
+      <p style="margin:0;text-align:justify">O Idec reconhece o potencial de redução de preço e o ganho de autonomia, mas alerta para a <strong>complexidade dos contratos</strong>, a <strong>volatilidade de preços</strong> e o <strong>risco de concentração</strong> entre fornecedores. É uma crítica construtiva e, por isso mesmo, mais influente: não questiona a abertura, questiona as condições em que ela chega ao consumidor pequeno.</p>
+    </div>
+    <div style="border-top:1px solid #e4e4e0;padding-top:4mm;break-inside:avoid;max-width:160mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#0f5563;margin-bottom:2mm">Distribuidoras · Abradee</div>
+      <div style="font-weight:600;font-size:14px;margin-bottom:2mm">Cronograma exigente e a agenda do sinal de preço horário</div>
+      <p style="margin:0;text-align:justify">A associação das distribuidoras vinha sustentando que o <strong>cronograma era inviável</strong> diante da complexidade operacional envolvida, e defende a adoção de <strong>sinal de preço horário</strong> como condição para que a abertura produza os efeitos esperados sobre o consumo. Seu diretor de Regulação, <strong>Ricardo Brandão</strong>, comparou o prazo brasileiro ao de países que levaram até cinco anos para abrir o mercado, e alertou — citando cálculo da <strong>PSR Consultoria</strong> — que permitir desconto na tarifa de rede para a baixa tensão triplicaria o subsídio da CDE, então em R$ 13 bilhões. Parte dessas exigências acabou incorporada ao texto final da lei. É a voz de quem executará a maior parte da transição na ponta.</p>
+    </div>
+    <div style="border-top:1px solid #e4e4e0;border-bottom:1px solid #e4e4e0;padding:4mm 0;break-inside:avoid;max-width:160mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#c1732a;margin-bottom:2mm">O ponto de maior atenção</div>
+      <div style="font-weight:600;font-size:14px;margin-bottom:2mm">A abertura avança enquanto o segmento de comercialização se reorganiza</div>
+      <p style="margin:0;text-align:justify">É o ponto que mais pede construção de confiança e o menos endereçado até aqui. O segmento de comercialização acumula <strong>rombo superior a R$ 6 bilhões</strong> e uma sequência de recuperações judiciais e desligamentos na CCEE. Ampliar o mercado para milhões de pequenos consumidores — justamente os que têm menos instrumentos para avaliar a solidez de um fornecedor — <strong>enquanto o elo passa por reestruturação</strong> é um desafio que a norma endereça (criando o SUI) sem eliminar por completo. O mecanismo de proteção será testado logo no início de sua vigência, e é aí que a comunicação de solidez ganha valor.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 04 ============ -->
+<div id="s4" data-screen-label="04 Agentes" style="break-before:page;padding-top:2mm">
+  <div style="border-top:1.6px solid #15171c;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#0f5563;font-weight:600">04</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b9096">Impacto</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">O que muda para cada agente</h2>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 5mm;text-align:justify">A mesma norma produz agendas distintas conforme a posição de cada agente na cadeia. O quadro abaixo sintetiza, para cada público, o que está em jogo e qual é a prioridade de comunicação no período.</p>
+  </div>
+
+  <table style="width:100%;border-collapse:collapse;break-inside:auto">
+    <thead><tr>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#8b9096;font-weight:500;padding:0 9px 2.4mm 0;border-bottom:1.5px solid #15171c;width:22%">Agente</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#8b9096;font-weight:500;padding:0 9px 2.4mm 0;border-bottom:1.5px solid #15171c;width:39%">O que está em jogo</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#8b9096;font-weight:500;padding:0 0 2.4mm 0;border-bottom:1.5px solid #15171c;width:39%">Prioridade de comunicação</th>
+    </tr></thead>
+    <tbody style="font-size:11.5px;line-height:1.4">
+      <tr><td style="padding:2.8mm 9px 2.8mm 0;border-bottom:1px solid #ececec;vertical-align:top;font-weight:600;color:#0f5563">Distribuidoras</td><td style="padding:2.8mm 9px;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">Perda de base cativa, encargo de sobrecontratação e a função de Supridor de Última Instância até 2030</td><td style="padding:2.8mm 0;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">Reposicionar o SUI como serviço de confiabilidade e sustentar tecnicamente o rateio da conta de transição</td></tr>
+      <tr><td style="padding:2.8mm 9px 2.8mm 0;border-bottom:1px solid #ececec;vertical-align:top;font-weight:600;color:#0f5563">Comercializadoras</td><td style="padding:2.8mm 9px;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">Mercado potencial de milhões de clientes — num momento em que o segmento reforça governança e credibilidade</td><td style="padding:2.8mm 0;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">Consolidar confiança com transparência de contrato, solidez financeira demonstrável e oferta compreensível</td></tr>
+      <tr><td style="padding:2.8mm 9px 2.8mm 0;border-bottom:1px solid #ececec;vertical-align:top;font-weight:600;color:#0f5563">CCEE</td><td style="padding:2.8mm 9px;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">Plataforma centralizada de comparação de ofertas e salto de escala na liquidação e no cadastro de agentes</td><td style="padding:2.8mm 0;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">Pedagogia para um público novo — o consumidor final — e afirmação do papel de garantidora da confiabilidade</td></tr>
+      <tr><td style="padding:2.8mm 9px 2.8mm 0;border-bottom:1px solid #ececec;vertical-align:top;font-weight:600;color:#0f5563">Geradoras</td><td style="padding:2.8mm 9px;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">Ampliação da demanda contratável e novos canais de venda direta</td><td style="padding:2.8mm 0;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">Posicionar-se junto ao varejo com marca e atributos (origem, energia limpa) que o consumidor reconheça</td></tr>
+      <tr><td style="padding:2.8mm 9px 2.8mm 0;border-bottom:1px solid #ececec;vertical-align:top;font-weight:600;color:#0f5563">Entidades setoriais</td><td style="padding:2.8mm 9px;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">Definição das regras que a ANEEL ainda vai editar — janela de influência técnica aberta agora</td><td style="padding:2.8mm 0;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">Ocupar as consultas públicas com posição fundamentada e traduzir a agenda para os associados</td></tr>
+      <tr><td style="padding:2.8mm 9px 2.8mm 0;border-bottom:1px solid #ececec;vertical-align:top;font-weight:600;color:#0f5563">Grandes consumidores<br><span style="font-weight:400;color:#6b7075">e indústria</span></td><td style="padding:2.8mm 9px;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">Reprecificação do próprio contrato num mercado com muito mais participantes e liquidez</td><td style="padding:2.8mm 0;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">Comunicar internamente a estratégia de compra e capturar o ganho reputacional da gestão energética</td></tr>
+      <tr><td style="padding:2.8mm 9px 2.8mm 0;vertical-align:top;font-weight:600;color:#0f5563">Consumidor final</td><td style="padding:2.8mm 9px;vertical-align:top;color:#41474d">Autonomia de escolha, mas com perda da Tarifa Social, exposição a preço e retorno condicionado a um ano</td><td style="padding:2.8mm 0;vertical-align:top;color:#41474d">Informação plena e comparável — é o público cuja confiança sustenta a reputação de todos os demais</td></tr>
+    </tbody>
+  </table>
+
+  <div style="background:#f2f6f6;border-left:3px solid #0f5563;padding:4mm 5mm;margin:5mm 0 0;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#0f5563;margin-bottom:2mm">Leitura transversal</div>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#2a2f34">Há um traço comum a todos os agentes: <strong>a partir de 2027, o setor elétrico passa a se comunicar com o varejo</strong>. Instituições acostumadas a dialogar com reguladores, investidores e imprensa especializada terão de falar com milhões de pessoas que não conhecem o vocabulário do setor. Essa mudança de interlocutor — mais do que a mudança de regra — é o verdadeiro desafio reputacional da agenda.</p>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 05 ============ -->
+<div id="s5" data-screen-label="05 Agenda" style="margin-top:8mm">
+  <div style="border-top:1.6px solid #15171c;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#0f5563;font-weight:600">05</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b9096">Horizonte</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">A agenda dos próximos 18 meses</h2>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 5mm;text-align:justify">O decreto define o rumo, mas transfere as decisões operacionais para o regulador e para a Câmara. É nesse intervalo — entre a norma publicada e a primeira data de migração — que se define como a abertura vai efetivamente funcionar. E é onde a influência técnica ainda é possível.</p>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:5mm;break-inside:avoid">
+    <div style="background:#f2f6f6;padding:5mm 5.5mm;border-top:3px solid #0f5563">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#0f5563;margin-bottom:3mm">Cabe à ANEEL definir</div>
+      <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2.4mm;font-size:12px">
+        <li style="display:grid;grid-template-columns:14px 1fr;gap:9px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0f5563;font-weight:600">→</span><span>Estrutura tarifária da baixa tensão no ambiente livre</span></li>
+        <li style="display:grid;grid-template-columns:14px 1fr;gap:9px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0f5563;font-weight:600">→</span><span>Produto padrão e preço de referência para comparação</span></li>
+        <li style="display:grid;grid-template-columns:14px 1fr;gap:9px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0f5563;font-weight:600">→</span><span>Regras de operação e remuneração do Supridor de Última Instância</span></li>
+        <li style="display:grid;grid-template-columns:14px 1fr;gap:9px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0f5563;font-weight:600">→</span><span>Encargo de sobrecontratação e separação de custos entre livre e cativo</span></li>
+        <li style="display:grid;grid-template-columns:14px 1fr;gap:9px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0f5563;font-weight:600">→</span><span>Plano de comunicação da transição ao consumidor</span></li>
+      </ul>
+    </div>
+    <div style="background:#f2f6f6;padding:5mm 5.5mm;border-top:3px solid #23806e">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#23806e;margin-bottom:3mm">Cabe à CCEE entregar</div>
+      <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2.4mm;font-size:12px">
+        <li style="display:grid;grid-template-columns:14px 1fr;gap:9px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#23806e;font-weight:600">→</span><span>Plataforma centralizada de comparação de ofertas</span></li>
+        <li style="display:grid;grid-template-columns:14px 1fr;gap:9px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#23806e;font-weight:600">→</span><span>Escala operacional para cadastro e liquidação de milhões de agentes</span></li>
+        <li style="display:grid;grid-template-columns:14px 1fr;gap:9px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#23806e;font-weight:600">→</span><span>Interface e linguagem acessíveis ao consumidor não especializado</span></li>
+      </ul>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#0f5563;margin:5mm 0 3mm">Janela de influência</div>
+      <p style="margin:0;font-size:12px;color:#2a2f34;text-align:justify">Cada uma dessas definições passará por consulta pública. É a oportunidade — limitada no tempo — de os agentes apresentarem posição técnica antes de a regra estar fechada.</p>
+    </div>
+  </div>
+
+  <div style="margin-top:6mm;max-width:160mm">
+    <p style="margin:0;text-align:justify">Do ponto de vista de comunicação, o calendário sugere três fases distintas. <strong>Até meados de 2027</strong>, o jogo é técnico e institucional: participação em consultas, construção de posição, relacionamento com regulador e imprensa especializada. <strong>Ao longo de 2027</strong>, a agenda migra para a preparação do público: educação, esclarecimento e construção de confiança antes da primeira janela de escolha. <strong>A partir de novembro de 2027</strong>, entra em cena a gestão de expectativa e de reclamação — o momento em que a distância entre o que foi prometido e o que aparece na conta se torna visível. Cada fase exige um repertório diferente, e nenhuma delas se improvisa no mês anterior.</p>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 06 ============ -->
+<div id="s6" data-screen-label="06 Como a SAUZ apoia" style="margin-top:8mm">
+  <div style="border-top:1.6px solid #15171c;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#0f5563;font-weight:600">06</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b9096">SAUZ</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Como a SAUZ apoia nesta agenda</h2>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 2.4mm;text-align:justify">A SAUZ atua como instância de <strong>apoio técnico e aconselhamento estratégico</strong> a instituições do setor de infraestrutura e energia, subsidiando a alta administração com inteligência setorial, leitura de cenário e recomendações de posicionamento. A coordenação e a condução das ações permanecem sempre com a própria instituição: nosso papel é qualificar a decisão, não substituí-la.</p>
+    <p style="margin:0 0 5mm;text-align:justify">Este documento é uma amostra do método. Em vez de descrever a norma, mapeamos onde a norma cria exposição, quem será cobrado por ela e em que janela ainda é possível agir. É o mesmo trabalho que sustentamos, mês a mês, para operadores, sindicatos, órgãos executores e companhias do setor.</p>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:5mm;break-inside:avoid;max-width:160mm">
+    <div style="border-top:2px solid #0f5563;padding-top:3.5mm">
+      <div style="font-weight:600;font-size:13.5px;margin-bottom:2mm">Monitoramento e inteligência setorial</div>
+      <p style="margin:0;font-size:12px;color:#41474d;text-align:justify">Acompanhamento contínuo do ambiente regulatório, político e de mídia, com qualificação das evidências que de fato afetam a instituição — separando o que é contexto do que é pauta direta.</p>
+    </div>
+    <div style="border-top:2px solid #23806e;padding-top:3.5mm">
+      <div style="font-weight:600;font-size:13.5px;margin-bottom:2mm">Leitura de risco e oportunidade</div>
+      <p style="margin:0;font-size:12px;color:#41474d;text-align:justify">Identificação antecipada de temas com potencial de escalada, com matriz de probabilidade e impacto e recomendação de resposta antes de a controvérsia se formar.</p>
+    </div>
+    <div style="border-top:2px solid #63b4bd;padding-top:3.5mm">
+      <div style="font-weight:600;font-size:13.5px;margin-bottom:2mm">Posicionamento e tradução técnica</div>
+      <p style="margin:0;font-size:12px;color:#41474d;text-align:justify">Construção de linhas de mensagem que preservam precisão técnica e ganham compreensão pública — inclusive para públicos novos, como o consumidor final.</p>
+    </div>
+    <div style="border-top:2px solid #d2ddd6;padding-top:3.5mm">
+      <div style="font-weight:600;font-size:13.5px;margin-bottom:2mm">Relatórios mensais de inteligência</div>
+      <p style="margin:0;font-size:12px;color:#41474d;text-align:justify">Documentos executivos com síntese, análise temática, riscos, oportunidades, cenários prospectivos e base de evidências — no formato desta análise.</p>
+    </div>
+  </div>
+
+  <div style="background:#0d1f24;color:#fff;padding:6mm 7mm;margin-top:6mm;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#7fd0be;margin-bottom:3mm">A conclusão que orienta o trabalho</div>
+    <p style="margin:0;text-align:justify;font-size:13.5px;line-height:1.55;color:#eaf2f1">A abertura da baixa tensão vai ser decidida duas vezes: <strong style="color:#fff">uma no papel, pela regulação, e outra na percepção</strong>, pela forma como cada agente explicar ao país o que está mudando. A primeira decisão está em curso e tem prazo. A segunda começa agora — e quem chegar a novembro de 2027 com autoridade construída não vai precisar disputá-la sob pressão.</p>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 07 ============ -->
+<div id="s7" data-screen-label="07 Repercussão" style="break-before:page;padding-top:2mm">
+  <div style="border-top:1.6px solid #15171c;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#0f5563;font-weight:600">07</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b9096">Evidências</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 3.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Repercussão e base de evidências</h2>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 4mm;text-align:justify">O quadro abaixo reúne a cobertura que sustenta esta análise — do anúncio do decreto às reações dos agentes setoriais e ao histórico regulatório que o antecede. A leitura do conjunto revela um padrão relevante: <strong>a cobertura do fato foi ampla e majoritariamente descritiva</strong>, concentrada no cronograma e na promessa de redução tarifária, enquanto os pontos de maior consequência prática — rateio dos custos de transição, perda da Tarifa Social e solidez dos comercializadores — apareceram de forma dispersa e quase sempre em veículos especializados.</p>
+  </div>
+
+  <div style="display:flex;gap:15px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#5b6069;margin-bottom:3mm">
+    <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:11px;height:11px;background:#e8f3ea;border:1px solid #cfe3d5;display:inline-block"></span>Favorável</span>
+    <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:11px;height:11px;background:#ffffff;border:1px solid #d8d8d4;display:inline-block"></span>Descritivo</span>
+    <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:11px;height:11px;background:#fbeede;border:1px solid #ecd6b8;display:inline-block"></span>Ressalva</span>
+  </div>
+
+  <table style="width:100%;border-collapse:collapse;break-inside:auto">
+    <thead><tr>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:#8b9096;font-weight:500;padding:0 5px 2.2mm 7px;border-bottom:1.5px solid #15171c;width:8%">Data</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:#8b9096;font-weight:500;padding:0 5px 2.2mm 5px;border-bottom:1.5px solid #15171c;width:19%">Fonte</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:#8b9096;font-weight:500;padding:0 5px 2.2mm 5px;border-bottom:1.5px solid #15171c;width:60%">Conteúdo</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:#8b9096;font-weight:500;padding:0 7px 2.2mm 5px;border-bottom:1.5px solid #15171c;width:13%">Enquadr.</th>
+    </tr></thead>
+    <tbody style="font-size:10.5px;line-height:1.32">
+      <tr><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #ececec;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">13/08</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">Diário Oficial da União</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">Publicação do Decreto nº 13.097/2026 (Edição 152, Seção 1) — vigente desde a publicação; regulamenta a Lei nº 15.269/2025</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #ececec;vertical-align:top;color:#6b7075;font-weight:500">Descritivo</td></tr>
+      <tr><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #ececec;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">12/08</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">Poder360</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">Governo regulamenta mercado livre de energia a pequenos consumidores — assinatura no Planalto; comércio e indústria em 2027, residencial em 2028</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #ececec;vertical-align:top;color:#6b7075;font-weight:500">Descritivo</td></tr>
+      <tr><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #ececec;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">12/08</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">Canal Solar</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">Decreto define abertura do mercado livre para baixa tensão — um de quatro decretos do setor energético assinados no mesmo ato</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #ececec;vertical-align:top;color:#6b7075;font-weight:500">Descritivo</td></tr>
+      <tr><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #ececec;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">13/08</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">Folha MS</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">Pacote de quatro decretos cobre também hidrogênio de baixa emissão, captura de carbono e ProBioQAV — a abertura entra num contexto de transição energética</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #ececec;vertical-align:top;color:#6b7075;font-weight:500">Descritivo</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f0efe9;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">13/08</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Atlas Público</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Registro da estimativa do MME de redução de 20% a 22% na parcela de compra de energia da conta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top;color:#2f7d4f;font-weight:500">Favorável</td></tr>
+      <tr style="background:#fbeede"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f4eee2;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">13/08</td><td style="padding:2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top">ESG Inside / ABSOLAR</td><td style="padding:2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top">“Decreto confirma a abertura, mas a regulamentação da ANEEL será decisiva” — Bárbara Rubim destaca o SUI como avanço e o repasse da função a outros agentes após 2030</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top;color:#c1732a;font-weight:500">Ressalva</td></tr>
+      <tr style="background:#fbeede"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f4eee2;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">14/08</td><td style="padding:2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top">CELA</td><td style="padding:2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top">Análise jurídica: tarifas, sobrecontratação e regras do SUI ficam a cargo da ANEEL — o decreto define o rumo, não a operação</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top;color:#c1732a;font-weight:500">Ressalva</td></tr>
+      <tr><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #ececec;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">13/08</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">Tutor Energia</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">Detalhamento do decreto: representação obrigatória por agente varejista (art. 2º), pedido de migração com 90 dias de antecedência e vedação da troca de medidor como impedimento (art. 3º)</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #ececec;vertical-align:top;color:#6b7075;font-weight:500">Descritivo</td></tr>
+      <tr><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #ececec;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">13/08</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">Echoenergia</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">Contexto de continuidade: desde janeiro de 2024 toda a alta tensão já pode migrar, independentemente da demanda contratada</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #ececec;vertical-align:top;color:#6b7075;font-weight:500">Descritivo</td></tr>
+      <tr style="background:#fbeede"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f4eee2;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">10/08</td><td style="padding:2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top">Cenário Energia</td><td style="padding:2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top">MME anuncia o decreto e sinaliza critérios mais rigorosos de habilitação de comercializadores — patrimônio líquido, garantias e governança prudencial para prevenir contágio e inadimplência na CCEE</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top;color:#c1732a;font-weight:500">Ressalva</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f0efe9;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">Ago</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Abraceel</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Potencial de R$ 35,8 bi/ano de economia no Grupo B (média de 19% na conta) e pesquisa Datafolha: 8 em cada 10 brasileiros querem trocar de fornecedor</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top;color:#2f7d4f;font-weight:500">Favorável</td></tr>
+      <tr style="background:#fbeede"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f4eee2;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">Ago</td><td style="padding:2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top">CNN Brasil</td><td style="padding:2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top">Prof. Pedro Côrtes alerta que a forma de dividir os custos da transição é decisiva para não onerar quem permanece no mercado cativo — historicamente, os de menor renda</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top;color:#c1732a;font-weight:500">Ressalva</td></tr>
+      <tr style="background:#fbeede"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f4eee2;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">Ago</td><td style="padding:2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top">Idec</td><td style="padding:2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top">Reconhece ganho de preço e autonomia, mas alerta para contratos complexos, volatilidade e risco de concentração entre fornecedores</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top;color:#c1732a;font-weight:500">Ressalva</td></tr>
+      <tr style="background:#fbeede"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f4eee2;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">Hist.</td><td style="padding:2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top">Abradee · Senado</td><td style="padding:2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top">Ricardo Brandão chamou o cronograma original de “inviável” e condicionou a abertura a três garantias: supridor de última instância, encargo que proteja o cativo e vedação de desconto na tarifa de rede</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top;color:#c1732a;font-weight:500">Ressalva</td></tr>
+      <tr style="background:#fbeede"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f4eee2;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">Hist.</td><td style="padding:2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top">PSR · via Canal Solar</td><td style="padding:2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top">Permitir desconto de fonte incentivada na baixa tensão triplicaria o subsídio da CDE, então em R$ 13 bilhões; Abradee defende sinal de preço horário</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top;color:#c1732a;font-weight:500">Ressalva</td></tr>
+      <tr><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #ececec;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">Set/25</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">MME · CP 196/2025</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">Consulta pública prévia trouxe parâmetros hoje relevantes: tarifa do SUI não inferior a 110% da tarifa local, campanha de informação obrigatória pela ANEEL e vedação de transferir benefícios tarifários do regulado ao livre</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #ececec;vertical-align:top;color:#6b7075;font-weight:500">Descritivo</td></tr>
+      <tr><td style="padding:2mm 5px 2mm 7px;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">Nov/25</td><td style="padding:2mm 5px;vertical-align:top">Lei nº 15.269/2025</td><td style="padding:2mm 5px;vertical-align:top">Marco legal da abertura (conversão da MP 1.304), sancionado com vetos em 24 de novembro de 2025 — base que o decreto regulamenta</td><td style="padding:2mm 7px 2mm 5px;vertical-align:top;color:#6b7075;font-weight:500">Descritivo</td></tr>
+    </tbody>
+  </table>
+
+  <div style="background:#f2f6f6;border-left:3px solid #0f5563;padding:4mm 5mm;margin:5mm 0 0;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#0f5563;margin-bottom:2mm">O que a leitura da cobertura revela</div>
+    <p style="margin:0 0 2.4mm;text-align:justify;font-size:12.5px;color:#2a2f34">Três padrões se destacam. <strong>Primeiro:</strong> o número que circulou com mais força foi a promessa de redução de 20% a 22% — sem a ressalva de que se aplica apenas à parcela de energia. É a expectativa que será cobrada em 2027, e ela já está formada.</p>
+    <p style="margin:0 0 2.4mm;text-align:justify;font-size:12.5px;color:#2a2f34"><strong>Segundo:</strong> a convergência das ressalvas. ABSOLAR, CELA, Idec, Abradee e a análise da CNN apontam, por caminhos distintos, para o mesmo lugar — o que decide o sucesso da abertura não está no decreto, e sim na regulamentação que a ANEEL ainda vai editar.</p>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#2a2f34"><strong>Terceiro:</strong> a perda da Tarifa Social e dos descontos de irrigação praticamente não apareceu na cobertura. É a informação de maior impacto individual sobre o consumidor e a de menor circulação — exatamente o perfil de tema que cobra explicação quando emerge tarde — e que, comunicado a tempo, constrói credibilidade.</p>
+  </div>
+</div>
+
+<!-- FONTES -->
+<div data-screen-label="Fontes" style="margin-top:8mm;border-top:1.6px solid #15171c;padding-top:4.5mm;break-inside:avoid">
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b9096;margin-bottom:3.5mm">Base desta análise</div>
+  <div style="max-width:162mm">
+    <p style="margin:0 0 3mm;font-size:12px;color:#41474d;text-align:justify">Elaborada a partir do <strong>Decreto nº 13.097, de 12 de agosto de 2026</strong> (DOU, 13/08/2026) e da <strong>Lei nº 15.269, de 24 de novembro de 2025</strong>; de declarações oficiais do Ministério de Minas e Energia; de posicionamentos públicos de Abraceel, Abradee e Idec; e da repercussão registrada pela imprensa nacional e especializada, incluindo análise do professor Pedro Côrtes à CNN Brasil sobre o rateio dos custos de transição. Os dados de mercado — número de consumidores livres, participação no consumo nacional e estimativas de alcance da primeira etapa — refletem o que consta dessas fontes, sem extrapolação.</p>
+    <p style="margin:0;font-size:11.5px;color:#6b7075;text-align:justify">As regras operacionais da abertura ainda dependem de regulamentação da ANEEL e de entregas da CCEE. Este documento retrata o quadro vigente em agosto de 2026 e será atualizado conforme as definições avancem.</p>
+  </div>
+  <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:10mm;margin-top:7mm;padding-top:4.5mm;border-top:1px solid #e4e4e0">
+    <div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b6069;margin-bottom:5px">Análise produzida por</div>
+      <img src="sauz-logo-dark.png" alt="SAUZ" style="height:32px;display:block"/>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#8b9096;margin-top:6px">Comunicação e Estratégia · Inteligência Reputacional</div>
+    </div>
+    <div style="text-align:right;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#5b6069;line-height:1.7">
+      <div>São Paulo · Agosto de 2026</div>
+    </div>
+  </div>
+</div>
+
+<!--CONTENT_END-->
+</div>
+</x-import>
+</x-dc>
+</body>
+</html>

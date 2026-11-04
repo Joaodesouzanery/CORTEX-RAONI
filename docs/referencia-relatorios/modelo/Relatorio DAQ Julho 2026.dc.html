@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  doc-page:not(:defined){visibility:hidden}
+  *{box-sizing:border-box}
+  .rp p{orphans:3;widows:3}
+  .pgnum::after{content:counter(page)}
+</style>
+</helmet>
+<x-import component-from-global-scope="doc-page" from="./doc-page.js" size="a4" margin="17mm" hint-size="100%,100%">
+<div slot="footer" style="display:flex;justify-content:space-between;align-items:baseline;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.05em;color:#7c8a90;border-top:1px solid #e4e6e0;padding-top:2mm">
+  <span>SAUZ · DAQ · Julho 2026 — Confidencial</span>
+  <span class="pgnum" style="color:#0e5064;font-weight:500"></span>
+</div>
+
+<div class="rp" style="font-family:'IBM Plex Sans',-apple-system,'Segoe UI',sans-serif;font-size:12.8px;line-height:1.55;color:#17242c;-webkit-font-smoothing:antialiased">
+
+<!-- ============ CAPA ============ -->
+<div data-screen-label="Capa" style="position:relative;overflow:hidden;background:#0b1f26;margin:-17mm -17mm 0;box-sizing:border-box;display:flex;flex-direction:column;break-after:page">
+  <div style="position:relative;height:208mm;overflow:hidden">
+    <img src="cover_daq_jul.jpg" alt="Vista aérea de curva de rio amazônico entre a floresta — malha hidroviária" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 50%"/>
+    <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(9,26,32,.78) 0%,rgba(12,36,42,.46) 22%,rgba(14,80,100,.40) 48%,rgba(10,28,34,.74) 70%,rgba(7,20,25,.96) 100%)"></div>
+
+    <div style="position:absolute;top:15mm;left:19mm;right:19mm;z-index:3;display:flex;justify-content:space-between;align-items:flex-start;gap:9mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.02em;color:#e8f1f0;max-width:112mm;line-height:1.5">DNIT Aquaviária — Diretoria de Infraestrutura Aquaviária (DAQ)</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#9fb6b5;white-space:nowrap">Inteligência Reputacional</div>
+    </div>
+
+    <div style="position:absolute;top:20mm;right:10mm;height:178mm;z-index:3;writing-mode:vertical-rl;font-family:'IBM Plex Sans',sans-serif;font-weight:700;font-size:13.5px;letter-spacing:.11em;color:#fff;text-transform:uppercase;opacity:.95;white-space:nowrap">Tapajós · Licença Social · Estiagem · Hidrovias</div>
+
+    <div style="position:absolute;left:0;right:0;top:31%;z-index:3;display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 19mm">
+      <img src="sauz-logo.png" alt="SAUZ" style="height:72px;display:block"/>
+      <div style="width:50px;height:2px;background:#7fd0be;margin:13px 0 9px"></div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:#e4efee">Comunicação e Estratégia · Inteligência Reputacional</div>
+    </div>
+
+    <div style="position:absolute;left:0;right:0;bottom:0;height:44%;background:linear-gradient(to bottom,rgba(7,20,25,0) 0%,rgba(7,20,25,.62) 46%,rgba(7,20,25,.93) 100%);z-index:2"></div>
+
+    <div style="position:absolute;left:19mm;right:24mm;bottom:16mm;z-index:3;border-left:3px solid #7fd0be;padding-left:6mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:#7fd0be;margin-bottom:5mm">Relatório Mensal · Julho de 2026</div>
+      <h1 style="font-size:33px;font-weight:600;line-height:1.15;letter-spacing:-.015em;margin:0;color:#fff;max-width:148mm">Relatório Mensal de Comunicação Estratégica e Gestão de Imagem</h1>
+    </div>
+  </div>
+
+  <div style="background:#0b1f26;padding:8mm 19mm 7mm;display:flex;justify-content:space-between;align-items:flex-end;gap:10mm">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#6f8a8c">Suporte estratégico prestado por SAUZ</div>
+    <div style="text-align:right;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#9fb6b5;line-height:1.7">
+      <div>Aquaviário · Julho de 2026</div>
+      <div style="color:#607e80">Confidencial — uso interno da alta administração</div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);height:6mm">
+    <div style="background:#0e5064"></div><div style="background:#23806e"></div><div style="background:#0f3a47"></div><div style="background:#d2ddd6"></div><div style="background:#51636a"></div>
+  </div>
+</div>
+
+<!-- ============ NOTA DE MÉTODO + SUMÁRIO ============ -->
+<div data-screen-label="Nota de método" style="break-after:page;padding-top:2mm">
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:#7c8a90;margin-bottom:3mm">Nota de método</div>
+  <div style="border-top:1.6px solid #17242c"></div>
+  <div style="background:#eef4f2;border-left:3px solid #0e5064;padding:5mm 6mm;margin-top:4.5mm;max-width:162mm">
+    <p style="margin:0 0 2.4mm;text-align:justify;font-size:12.5px;color:#28323a"><strong>Ler antes.</strong> O monitoramento do período reuniu 350 itens sobre o setor aquaviário, compondo uma visão geral do ambiente do setor com inserções sobre a atuação do DNIT — o órgão aparece, na maior parte das vezes, como executor de uma agenda narrada sob outros protagonistas.</p>
+    <p style="margin:0 0 2.4mm;text-align:justify;font-size:12.5px;color:#28323a">Mantém-se o <strong>guardrail de precisão institucional</strong>: o <strong>MPor</strong> planeja, define prioridades e conduz concessões; a <strong>Marinha</strong> trata da segurança da navegação; a <strong>ANTAQ</strong> regula; e o <strong>DNIT/DAQ executa</strong> dragagem, sinalização, eclusas e IP4.</p>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#28323a"><strong>Atenção especial neste mês:</strong> a dragagem no Rio Amazonas, em Juruti, é obra da <strong>Alcoa</strong>, não do DNIT, e não deve ser confundida com as intervenções do órgão.</p>
+  </div>
+
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:#7c8a90;margin:9mm 0 3mm">Sumário</div>
+  <div style="border-top:1.6px solid #17242c"></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;column-gap:14mm">
+    <div>
+      <a href="#s1" style="display:flex;gap:11px;align-items:baseline;padding:2.7mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#17242c"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0e5064;min-width:20px">01</span><span style="font-weight:500">Sumário Executivo</span></a>
+      <a href="#s2" style="display:flex;gap:11px;align-items:baseline;padding:2.7mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#17242c"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0e5064;min-width:20px">02</span><span style="font-weight:500">Temas Estratégicos do Mês</span></a>
+      <a href="#s3" style="display:flex;gap:11px;align-items:baseline;padding:2.7mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#17242c"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0e5064;min-width:20px">03</span><span style="font-weight:500">Leitura Reputacional do Ambiente</span></a>
+      <a href="#s4" style="display:flex;gap:11px;align-items:baseline;padding:2.7mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#17242c"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0e5064;min-width:20px">04</span><span style="font-weight:500">Análise Temática Aprofundada</span></a>
+      <a href="#s5" style="display:flex;gap:11px;align-items:baseline;padding:2.7mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#17242c"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0e5064;min-width:20px">05</span><span style="font-weight:500">Riscos Reputacionais Prioritários</span></a>
+    </div>
+    <div>
+      <a href="#s6" style="display:flex;gap:11px;align-items:baseline;padding:2.7mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#17242c"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0e5064;min-width:20px">06</span><span style="font-weight:500">Oportunidades de Posicionamento</span></a>
+      <a href="#s7" style="display:flex;gap:11px;align-items:baseline;padding:2.7mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#17242c"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0e5064;min-width:20px">07</span><span style="font-weight:500">Recomendações Executivas</span></a>
+      <a href="#s8" style="display:flex;gap:11px;align-items:baseline;padding:2.7mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#17242c"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0e5064;min-width:20px">08</span><span style="font-weight:500">Cenários Prospectivos</span></a>
+      <a href="#s9" style="display:flex;gap:11px;align-items:baseline;padding:2.7mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#17242c"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0e5064;min-width:20px">09</span><span style="font-weight:500">Demonstração dos Serviços — SAUZ</span></a>
+      <a href="#s10" style="display:flex;gap:11px;align-items:baseline;padding:2.7mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#17242c"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0e5064;min-width:20px">10</span><span style="font-weight:500">Base Qualificada de Evidências</span></a>
+    </div>
+  </div>
+
+  <!-- DESTAQUE DO MÊS -->
+  <div style="margin-top:8mm;border-top:1.6px solid #17242c;padding-top:4.5mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#0e5064;margin-bottom:3.5mm">Tema central do mês</div>
+    <div style="background:#eef4f2;border-left:3px solid #0e5064;padding:6mm 7mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#5b7a80;margin-bottom:2.5mm">Hidrovia do Tapajós · julho de 2026</div>
+      <div style="font-size:22px;font-weight:600;line-height:1.22;letter-spacing:-.01em;margin-bottom:3.5mm;max-width:152mm">Obra necessária, respaldo a construir</div>
+      <p style="margin:0 0 3.5mm;font-size:13px;color:#28323a;text-align:justify;max-width:158mm">A dragagem do Tapajós é indispensável à navegabilidade e ao escoamento da safra. O mês mostrou que, para avançar, ela depende do respaldo formal — licença ambiental e acordo com as comunidades. O rito socioambiental é a etapa que viabiliza o projeto, não um obstáculo a ele.</p>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:3.5mm">
+        <div style="background:#fff;padding:3.5mm 4mm;border-top:2px solid #0e5064"><div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#0e5064;margin-bottom:1.4mm">01/07</div><div style="font-size:11px;color:#41474d;line-height:1.4">SEMAS-PA dispensa licenciamento</div></div>
+        <div style="background:#fff;padding:3.5mm 4mm;border-top:2px solid #23806e"><div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#0e5064;margin-bottom:1.4mm">03–06/07</div><div style="font-size:11px;color:#41474d;line-height:1.4">TCU exige licença e consulta</div></div>
+        <div style="background:#fff;padding:3.5mm 4mm;border-top:2px solid #c1732a"><div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#0e5064;margin-bottom:1.4mm">15–16/07</div><div style="font-size:11px;color:#41474d;line-height:1.4">MPF recomenda suspensão</div></div>
+        <div style="background:#fff;padding:3.5mm 4mm;border-top:2px solid #a5322d"><div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#0e5064;margin-bottom:1.4mm">24–25/07</div><div style="font-size:11px;color:#41474d;line-height:1.4">Obra suspensa após reunião presidencial</div></div>
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:6mm;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#7c8a90;letter-spacing:.02em">SAUZ · DAQ · Julho de 2026 — Confidencial</div>
+</div>
+
+<!-- ============ SEÇÃO 01 ============ -->
+<div id="s1" data-screen-label="01 Sumário Executivo" style="margin-top:1mm">
+  <div style="border-top:1.6px solid #17242c;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#0e5064;font-weight:600">01</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#7c8a90">Síntese</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Sumário Executivo</h2>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 2.4mm;text-align:justify">Julho de 2026 foi o mês em que a Hidrovia do Tapajós deixou de ser uma pauta técnica e se tornou uma questão política nacional — com desfecho adverso para o cronograma das obras e altamente instrutivo para a estratégia de comunicação do DAQ. O mês começou com a SEMAS-PA autorizando a dispensa de licenciamento ambiental para a dragagem emergencial no rio (REPAM; Tapajós de Fato, 01 e 02/07/2026) e terminou com o presidente da República desautorizando publicamente a obra após reunião com lideranças indígenas (G1; Jornal O Impacto, 25/07/2026). Entre os dois extremos, praticamente todos os órgãos de controle se manifestaram.</p>
+    <p style="margin:0 0 2.4mm;text-align:justify">A sequência é o retrato de um projeto que avançou mais rápido do que sua licença social. Logo após a dispensa concedida pelo órgão estadual, o <strong>TCU condicionou a retomada do edital da dragagem à obtenção de licença ambiental e à realização de consulta aos povos indígenas</strong> (O Globo; Agência Infra; Folha PE, 03 e 06/07/2026). Em seguida, indígenas pediram ao STF para ingressar na ação relativa à hidrovia (Campo Grande News, 08/07/2026); o <strong>MPF recomendou a suspensão da licença e da dragagem</strong> entre Santarém e Itaituba, por ausência de licenciamento e de consulta e por descumprimento de acordos (MPF; G1, 15 e 16/07/2026); e a SEMAS optou por não suspender a licença, levando o MPF a afirmar que a judicialização era inevitável (G1, 23/07/2026).</p>
+    <p style="margin:0 0 2.4mm;text-align:justify">O ponto de virada veio na última semana. Diante do risco de seca extrema e de prejuízo estimado em até R$ 850 milhões ao escoamento de grãos, o governo preparava uma dragagem emergencial (Folha de S.Paulo, 22/07/2026) — mas, sob pressão, o presidente desautorizou a medida e, após reunião com indígenas e ministros, a obra foi suspensa (CNN Brasil, 24/07/2026; G1, 25/07/2026). O impasse expôs, em praça pública, o conflito entre o corredor de grãos e as exigências ambientais (Portos e Navios, 26/07/2026), com forte repercussão no agronegócio de Mato Grosso e reação de colunistas.</p>
+    <p style="margin:0 0 2.4mm;text-align:justify">Para o DAQ, a leitura é construtiva: <strong>o órgão quer avançar com uma obra tecnicamente necessária, e o que falta é o respaldo formal — a licença e o acordo com as comunidades</strong>. A dragagem do Tapajós é indispensável para a navegabilidade e para o escoamento da safra; a questão não é o mérito da intervenção, e sim a construção do consenso que a viabiliza. O nome do órgão foi citado quando a contestação chegou — “DNIT é contestado por tentar dragar o Rio Tapajós sem licença ambiental” (Cenário Energia, 13/07/2026). O custo reputacional recaiu sobre o executor, ainda que a coordenação da política e do licenciamento envolva MPor e órgãos estaduais.</p>
+    <p style="margin:0 0 2.4mm;text-align:justify">Houve, contudo, um contraponto relevante e pouco explorado. No mesmo mês, o DNIT reforçou o monitoramento dos rios para garantir a segurança da navegação nas hidrovias brasileiras (Defesa em Foco, 22/07/2026); as hidrovias amazônicas foram contempladas com mais de R$ 500 milhões para enfrentar a estiagem (D24AM, 29/07/2026); e a imprensa especializada registrou que as hidrovias amazônicas ganham reforço em 2026, ainda que o Tapajós siga no centro do debate (Portos e Navios, 28/07/2026). A CNT, por sua vez, apresentou estudo inédito com propostas para “destravar” as hidrovias brasileiras (CNN Brasil; Transporte Moderno, 02 e 03/07/2026), colocando o modal na agenda nacional de logística.</p>
+    <p style="margin:0;text-align:justify">O mês também consolidou o avanço da agenda de concessões conduzida pelo MPor: negociações com o Paraguai sobre a Hidrovia do Rio Paraguai, com contraproposta e remodelagem em estudo, e a audiência pública sobre a concessão da Hidrovia da Lagoa Mirim marcada para agosto, cuja dragagem deve começar ainda em 2026. A leitura de conjunto é de um órgão tecnicamente demandado como nunca — estiagem, monitoramento, novas obras — e, ao mesmo tempo, exposto como nunca no ponto em que a engenharia encontra direitos territoriais.</p>
+  </div>
+
+  <div style="margin-top:6mm;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#0e5064;padding-bottom:2.5mm;border-bottom:1px solid #e2e4de;margin-bottom:4mm">Top Insights do Mês</div>
+    <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3mm">
+      <li style="display:grid;grid-template-columns:21px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0e5064;font-weight:600">01</span><span style="text-align:justify">O <strong>Tapajós</strong> dominou o mês: uma obra necessária ficou suspensa por faltar o respaldo formal — licença e acordo com as comunidades —, e não por questionamento à sua utilidade técnica.</span></li>
+      <li style="display:grid;grid-template-columns:21px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0e5064;font-weight:600">02</span><span style="text-align:justify"><strong>Todos os órgãos de controle se manifestaram</strong> (TCU, MPF, STF acionado), e o denominador comum foi o mesmo: falta de licença ambiental e de consulta prévia.</span></li>
+      <li style="display:grid;grid-template-columns:21px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0e5064;font-weight:600">03</span><span style="text-align:justify">O DNIT foi <strong>nominalmente associado</strong> à tentativa de dragar sem licença, embora o licenciamento tenha sido dispensado por órgão estadual — evidência de que o executor absorve o desgaste quando o respaldo não vem construído.</span></li>
+      <li style="display:grid;grid-template-columns:21px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0e5064;font-weight:600">04</span><span style="text-align:justify">O conflito expôs a tensão <strong>corredor de grãos × direitos territoriais</strong>, com prejuízo estimado em até R$ 850 milhões e forte reação do agronegócio.</span></li>
+      <li style="display:grid;grid-template-columns:21px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0e5064;font-weight:600">05</span><span style="text-align:justify">Há um <strong>contraponto positivo subcomunicado</strong>: monitoramento reforçado dos rios, mais de R$ 500 milhões para hidrovias amazônicas na estiagem e reforço geral das hidrovias em 2026.</span></li>
+      <li style="display:grid;grid-template-columns:21px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0e5064;font-weight:600">06</span><span style="text-align:justify"><strong>Não confundir com Juruti:</strong> a dragagem no Rio Amazonas contestada pelo MPF no mesmo período é da Alcoa — distinção que precisa ser feita ativamente para evitar contágio de imagem.</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 02 ============ -->
+<div id="s2" data-screen-label="02 Temas Estratégicos" style="margin-top:8mm">
+  <div style="border-top:1.6px solid #17242c;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#0e5064;font-weight:600">02</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#7c8a90">Mapeamento</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Temas Estratégicos do Mês</h2>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 4mm;text-align:justify">A leitura do período identificou sete temas-matriz. O quadro sintetiza cada um, sua relevância para o DAQ e o principal sinal do mês.</p>
+  </div>
+
+  <table style="width:100%;border-collapse:collapse;break-inside:auto">
+    <thead><tr>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#7c8a90;font-weight:500;padding:0 9px 2.4mm 0;border-bottom:1.5px solid #17242c;width:36%">Tema estratégico</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#7c8a90;font-weight:500;padding:0 9px 2.4mm 0;border-bottom:1.5px solid #17242c;width:14%">Relev.</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#7c8a90;font-weight:500;padding:0 0 2.4mm 0;border-bottom:1.5px solid #17242c;width:50%">Sinal do mês</th>
+    </tr></thead>
+    <tbody style="font-size:11.5px;line-height:1.35">
+      <tr><td style="padding:2.4mm 9px 2.4mm 0;border-bottom:1px solid #ececec;vertical-align:top;font-weight:500">Tapajós: licenciamento, consulta e suspensão</td><td style="padding:2.4mm 9px;border-bottom:1px solid #ececec;vertical-align:top">Alta</td><td style="padding:2.4mm 0;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">Dispensa da SEMAS, TCU, MPF e desautorização presidencial</td></tr>
+      <tr><td style="padding:2.4mm 9px 2.4mm 0;border-bottom:1px solid #ececec;vertical-align:top;font-weight:500">Licença social e consulta prévia na Amazônia</td><td style="padding:2.4mm 9px;border-bottom:1px solid #ececec;vertical-align:top">Alta</td><td style="padding:2.4mm 0;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">Indígenas acionam o STF; MPF aponta descumprimento de acordos</td></tr>
+      <tr><td style="padding:2.4mm 9px 2.4mm 0;border-bottom:1px solid #ececec;vertical-align:top;font-weight:500">Corredor de grãos × exigências ambientais</td><td style="padding:2.4mm 9px;border-bottom:1px solid #ececec;vertical-align:top">Alta</td><td style="padding:2.4mm 0;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">Prejuízo estimado em até R$ 850 mi; reação do agronegócio</td></tr>
+      <tr><td style="padding:2.4mm 9px 2.4mm 0;border-bottom:1px solid #ececec;vertical-align:top;font-weight:500">Estiagem e monitoramento dos rios</td><td style="padding:2.4mm 9px;border-bottom:1px solid #ececec;vertical-align:top">Alta</td><td style="padding:2.4mm 0;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">DNIT reforça monitoramento; R$ 500 mi para hidrovias amazônicas</td></tr>
+      <tr><td style="padding:2.4mm 9px 2.4mm 0;border-bottom:1px solid #ececec;vertical-align:top;font-weight:500">Concessões hidroviárias (MPor)</td><td style="padding:2.4mm 9px;border-bottom:1px solid #ececec;vertical-align:top">Alta</td><td style="padding:2.4mm 0;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">Rio Paraguai em negociação; Lagoa Mirim em audiência pública</td></tr>
+      <tr><td style="padding:2.4mm 9px 2.4mm 0;border-bottom:1px solid #ececec;vertical-align:top;font-weight:500">Agenda nacional das hidrovias</td><td style="padding:2.4mm 9px;border-bottom:1px solid #ececec;vertical-align:top">Média</td><td style="padding:2.4mm 0;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">Estudo da CNT propõe destravar o modal</td></tr>
+      <tr><td style="padding:2.4mm 9px 2.4mm 0;vertical-align:top;font-weight:500">Distinção com obras de terceiros (Juruti/Alcoa)</td><td style="padding:2.4mm 9px;vertical-align:top">Média</td><td style="padding:2.4mm 0;vertical-align:top;color:#41474d">MPF pede suspensão de dragagem da Alcoa no Rio Amazonas</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ============ SEÇÃO 03 ============ -->
+<div id="s3" data-screen-label="03 Leitura Reputacional" style="margin-top:8mm">
+  <div style="border-top:1.6px solid #17242c;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#0e5064;font-weight:600">03</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#7c8a90">Diagnóstico</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Leitura Reputacional do Ambiente Externo</h2>
+
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:0 0 2.6mm;color:#17242c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0e5064;font-weight:500">3.1</span><span>Narrativa predominante sobre o DAQ</span></h3>
+  <div style="max-width:160mm"><p style="margin:0 0 4.5mm;text-align:justify">A narrativa do mês foi a de um <strong>órgão que busca viabilizar uma obra necessária em ambiente de alta exigência institucional</strong>. Julho colocou o DNIT no centro de uma disputa entre desenvolvimento logístico e direitos socioambientais — não pelo mérito técnico da dragagem, mas pela ausência do respaldo formal que a autorizaria. O contraponto — monitoramento, investimentos e reforço das hidrovias amazônicas — existiu, mas ficou soterrado.</p></div>
+
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:0 0 2.6mm;color:#17242c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0e5064;font-weight:500">3.2</span><span>Risco reputacional dominante</span></h3>
+  <div style="max-width:160mm"><p style="margin:0 0 4.5mm;text-align:justify">O maior risco é que a necessidade técnica das obras seja ofuscada pelo debate sobre o rito. O caso Tapajós mostra que, <strong>sem o respaldo formal construído previamente, mesmo uma intervenção indispensável fica paralisada</strong> — com custo para a navegação, para o abastecimento e para o escoamento da safra. Se o enquadramento não for corrigido, cada nova obra necessária na Amazônia tende a ser lida pelo prisma do conflito, e não pelo da sua utilidade pública.</p></div>
+
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:0 0 2.6mm;color:#17242c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0e5064;font-weight:500">3.3</span><span>Oportunidade reputacional dominante</span></h3>
+  <div style="max-width:160mm"><p style="margin:0;text-align:justify">A principal oportunidade é converter o revés em <strong>reposicionamento de método</strong>: assumir publicamente o diálogo prévio e o cumprimento integral de licenciamento e consulta como parte do projeto de engenharia, e não como obstáculo. Somado à comunicação das entregas reais — monitoramento de rios, investimentos contra a estiagem, IP4 —, é o caminho para reconstruir a percepção de executor responsável.</p></div>
+</div>
+
+<!-- ============ SEÇÃO 04 ============ -->
+<div id="s4" data-screen-label="04 Análise Temática" style="margin-top:8mm">
+  <div style="border-top:1.6px solid #17242c;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#0e5064;font-weight:600">04</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#7c8a90">Análise</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Análise Temática Aprofundada</h2>
+
+  <!-- 4.1 -->
+  <div style="background:#0e5064;color:#fff;padding:3mm 5mm;margin-bottom:3.5mm;display:flex;align-items:baseline;gap:11px;break-after:avoid;max-width:160mm">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#bcdde3;font-weight:500">4.1</span>
+    <span style="font-weight:600;font-size:15px;line-height:1.25">Tapajós: a cronologia de um impasse</span>
+  </div>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 2.4mm;text-align:justify">O caso da Hidrovia do Tapajós organizou o mês e merece ser lido em sequência. Em 1º de julho, a SEMAS-PA autorizou a dispensa de licenciamento ambiental para a dragagem emergencial, decisão imediatamente contestada por organizações socioambientais e por veículos locais, que a acusaram de atropelar povos tradicionais (REPAM; Tapajós de Fato, 01 e 02/07/2026). Poucos dias depois, o TCU exigiu consulta prévia e condicionou a retomada do edital da dragagem ao avanço da licença ambiental e à consulta aos indígenas (Agência Infra, 03/07/2026; O Globo; Folha PE, 06/07/2026) — decisão que, na prática, impediu a retomada nos termos pretendidos.</p>
+    <p style="margin:0 0 2.4mm;text-align:justify">A pressão institucional cresceu. Em 8 de julho, indígenas pediram ao STF para participar da ação relativa à hidrovia (Campo Grande News). No dia 13, a imprensa setorial registrou que “o DNIT é contestado por tentar dragar o Rio Tapajós sem licença ambiental” (Cenário Energia), colocando o nome do órgão no centro da controvérsia. Entre 15 e 17 de julho, o MPF recomendou a suspensão da licença e da dragagem no trecho entre Santarém e Itaituba, apontando ausência de licenciamento e de consulta e descumprimento de acordos anteriores (MPF; G1; Jornal Folha do Progresso). Em 23 de julho, a SEMAS decidiu não suspender a licença, e o MPF declarou que a judicialização seria inevitável (G1).</p>
+    <p style="margin:0;text-align:justify">O desfecho veio na última semana. Diante do risco de seca extrema, o governo preparava uma dragagem urgente, com estimativa de prejuízo de até R$ 850 milhões ao escoamento (Folha de S.Paulo, 22/07/2026). Mas, sob pressão, o presidente desautorizou a dragagem emergencial (CNN Brasil, 24/07/2026) e, após reunião com lideranças indígenas e ministros, a obra foi suspensa, com as lideranças comemorando o resultado (O Globo; G1; Jornal O Impacto, 24 e 25/07/2026).</p>
+  </div>
+  <div style="background:#eef4f2;border-left:3px solid #0e5064;padding:4mm 5mm;margin:3.5mm 0 0;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#0e5064;margin-bottom:2mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#28323a">O aprendizado deve orientar toda a comunicação do órgão daqui em diante: <strong>a obra é necessária, e por isso mesmo precisa do respaldo formal para avançar</strong> — licença ambiental e acordo com as comunidades são o caminho para viabilizá-la, não obstáculos a ela. Recomenda-se que o DAQ afirme publicamente a relevância da dragagem para a navegabilidade e o abastecimento e, no mesmo movimento, assuma o compromisso com o licenciamento integral e a consulta prévia como etapas do projeto. É o enquadramento que protege o órgão e destrava as próximas obras.</p>
+  </div>
+
+  <!-- 4.2 -->
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:6mm 0 2.6mm;color:#17242c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0e5064;font-weight:500">4.2</span><span>Licença social, consulta prévia e a lição institucional</span></h3>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 2.4mm;text-align:justify">O denominador comum de todas as manifestações — TCU, MPF, comunidades e STF acionado — foi a exigência de <strong>consulta livre, prévia e informada</strong>, nos termos da Convenção 169 da OIT, e de licenciamento ambiental regular. Não se tratou de divergência sobre a técnica da dragagem, mas sobre o rito. Essa distinção é crucial para o DAQ: o questionamento não foi à competência de engenharia do órgão, e sim à sequência de atos administrativos que precederam a obra.</p>
+    <p style="margin:0;text-align:justify">Há ainda um efeito de percepção acumulada. A dragagem do Tapajós é lida por comunidades e organizações como parte de um projeto logístico maior — corredor de exportação de grãos, com portos associados —, o que amplifica a resistência mesmo diante de intervenções apresentadas como emergenciais. Nesse enquadramento, “emergência” soa como atalho.</p>
+  </div>
+  <div style="background:#eef4f2;border-left:3px solid #0e5064;padding:4mm 5mm;margin:3.5mm 0 0;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#0e5064;margin-bottom:2mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#28323a">O DAQ deve institucionalizar o diálogo socioambiental como fase formal de projeto, com presença local, comunicação prévia sobre cronogramas e métodos e transparência sobre estudos. Recomenda-se também evitar o uso do argumento de emergência como via de dispensa de ritos: no ambiente atual, ele produz mais contestação do que celeridade.</p>
+  </div>
+
+  <!-- 4.3 -->
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:6mm 0 2.6mm;color:#17242c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0e5064;font-weight:500">4.3</span><span>Corredor de grãos × exigências ambientais: o conflito exposto</span></h3>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 2.4mm;text-align:justify">A suspensão da dragagem expôs, com nitidez, a tensão estrutural entre a logística de exportação e os direitos territoriais. O impasse foi noticiado como ameaça ao escoamento e encarecimento do frete (Portal BE News, 24/07/2026), preocupou o agronegócio de Mato Grosso (Diário de Cuiabá, 26 e 27/07/2026) e gerou análise crítica de colunistas sobre a decisão presidencial (Poder360, 28/07/2026). Veículos setoriais sintetizaram o quadro como o conflito entre o corredor de grãos e as exigências ambientais (Portos e Navios, 26/07/2026).</p>
+    <p style="margin:0;text-align:justify">Para o DAQ, o risco é ser transformado em campo de batalha de terceiros: pressionado pelo agronegócio para executar e pelas comunidades para não executar, sem controlar nenhuma das duas variáveis de decisão.</p>
+  </div>
+  <div style="background:#eef4f2;border-left:3px solid #0e5064;padding:4mm 5mm;margin:3.5mm 0 0;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#0e5064;margin-bottom:2mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#28323a">O órgão deve manter-se rigorosamente no campo técnico — informar condições de navegabilidade, calados, cronogramas e limitações —, evitando posicionar-se como defensor de um lado do conflito. A neutralidade técnica, comunicada com clareza, é o que preserva a autoridade do DAQ em um debate que é, na origem, político.</p>
+  </div>
+
+  <!-- 4.4 -->
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:6mm 0 2.6mm;color:#17242c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0e5064;font-weight:500">4.4</span><span>Estiagem, monitoramento e as entregas subcomunicadas</span></h3>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 2.4mm;text-align:justify">Fora do foco do conflito, o mês registrou avanços concretos. O DNIT reforçou o monitoramento dos rios para garantir a segurança da navegação nas hidrovias brasileiras (Defesa em Foco, 22/07/2026), atuação diretamente ligada à prevenção dos efeitos da estiagem. As hidrovias amazônicas foram contempladas com mais de R$ 500 milhões para enfrentar o período seco (D24AM, 29/07/2026), e a imprensa especializada registrou que o modal amazônico ganha reforço em 2026 (Portos e Navios, 28/07/2026).</p>
+    <p style="margin:0;text-align:justify">Esses fatos deveriam sustentar a narrativa de um órgão que se antecipa à seca — exatamente o oposto da imagem de atropelo. No entanto, circularam em veículos setoriais e regionais, com alcance muito inferior ao da controvérsia.</p>
+  </div>
+  <div style="background:#eef4f2;border-left:3px solid #0e5064;padding:4mm 5mm;margin:3.5mm 0 0;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#0e5064;margin-bottom:2mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#28323a">O DAQ deve dar tratamento prioritário e sistemático a essa pauta, comunicando o preparo para a estiagem com antecedência, dados e presença regional. É a narrativa que reequilibra a percepção pública e demonstra planejamento — e ela já existe, faltando apenas amplificação.</p>
+  </div>
+
+  <!-- 4.5 -->
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:6mm 0 2.6mm;color:#17242c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0e5064;font-weight:500">4.5</span><span>Concessões hidroviárias: agenda do MPor com execução do DNIT</span></h3>
+  <div style="max-width:160mm">
+    <p style="margin:0;text-align:justify">O ciclo de concessões avançou sob condução do MPor. As negociações com o Paraguai sobre a Hidrovia do Rio Paraguai ocuparam boa parte do mês, com o governo preparando contraproposta e estudando remodelar a concessão diante do impasse com os vizinhos (Agência Infra; NeoFeed; Times Brasil, 27 a 29/07/2026). No Sul, a audiência pública sobre a concessão da Hidrovia da Lagoa Mirim foi marcada para 11 de agosto (A Hora do Sul, 27/07/2026), e a dragagem da hidrovia deve começar ainda em 2026 (Correio do Povo, 07/07/2026) — obra cuja execução técnica cabe ao DNIT. O debate público também tratou da fronteira entre dragagem nacional estratégica e concessões de acessos aquaviários (Portogente, 29/07/2026).</p>
+  </div>
+  <div style="background:#eef4f2;border-left:3px solid #0e5064;padding:4mm 5mm;margin:3.5mm 0 0;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#0e5064;margin-bottom:2mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#28323a">Mantém-se a recomendação do ciclo anterior — comunicar com precisão as competências (MPor conduz a concessão; o DNIT executa a obra) e afirmar o papel duradouro do órgão na malha não concedida, nas eclusas, na sinalização e nos IP4. Sem essa narrativa, o avanço das concessões alimenta a leitura de esvaziamento institucional.</p>
+  </div>
+
+  <!-- 4.6 -->
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:6mm 0 2.6mm;color:#17242c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0e5064;font-weight:500">4.6</span><span>A agenda nacional das hidrovias e a distinção necessária</span></h3>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 2.4mm;text-align:justify">Dois pontos completam o quadro. O primeiro é positivo: a CNT apresentou estudo inédito com propostas para destravar as hidrovias brasileiras, com repercussão nacional (CNN Brasil; Transporte Moderno, 02 e 03/07/2026), e o governo divulgou estudo propondo transformar as hidrovias em eixo estratégico da logística nacional (gov.br, 03/07/2026) — contexto favorável ao modal e, por extensão, ao órgão que o mantém.</p>
+    <p style="margin:0;text-align:justify">O segundo exige atenção defensiva: no mesmo período, a dragagem no Rio Amazonas, em Juruti (PA), gerou intensa cobertura negativa — contestação de ribeirinhos, peixes mortos, perícia do MPF apontando ilegalidades no licenciamento e pedidos de suspensão judicial. <strong>Essa obra é da Alcoa, não do DNIT.</strong> Num mês em que “dragagem na Amazônia” virou sinônimo de conflito, o risco de contágio por associação é real.</p>
+  </div>
+  <div style="background:#eef4f2;border-left:3px solid #0e5064;padding:4mm 5mm;margin:3.5mm 0 0;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#0e5064;margin-bottom:2mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#28323a">O DAQ deve, sempre que necessário, esclarecer publicamente quais obras são de sua responsabilidade, sem entrar no mérito de intervenções de terceiros. Ao mesmo tempo, pode capitalizar o contexto favorável criado pelos estudos da CNT e do governo, posicionando-se como o órgão que viabiliza tecnicamente o modal hidroviário no país.</p>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 05 ============ -->
+<div id="s5" data-screen-label="05 Riscos" style="margin-top:8mm">
+  <div style="border-top:1.6px solid #17242c;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#0e5064;font-weight:600">05</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#7c8a90">Riscos</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Riscos Reputacionais Prioritários</h2>
+
+  <div style="break-inside:avoid;margin-bottom:5mm">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#7c8a90;margin-bottom:4mm">Matriz de risco · probabilidade × impacto</div>
+    <div style="display:flex;gap:8px;max-width:148mm">
+      <div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#7c8a90;display:flex;align-items:center;justify-content:center;padding-bottom:16px">Impacto</div>
+      <div style="flex:1">
+        <div style="display:grid;grid-template-columns:20mm 1fr 1fr 1fr;grid-auto-rows:50px;gap:4px">
+          <div style="display:flex;align-items:center;justify-content:flex-end;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#5b6069;padding-right:5px">Muito alto</div>
+          <div style="background:#f4f5f3"></div>
+          <div style="background:#f7ddcf"></div>
+          <div style="background:#f2cfc9;display:flex;align-items:center;justify-content:center"><span style="width:27px;height:27px;border-radius:50%;background:#8f2723;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">1</span></div>
+
+          <div style="display:flex;align-items:center;justify-content:flex-end;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#5b6069;padding-right:5px">Alto</div>
+          <div style="background:#f7f8f6"></div>
+          <div style="background:#fbeede"></div>
+          <div style="background:#f6dcd7;display:flex;align-items:center;justify-content:center;gap:5px"><span style="width:27px;height:27px;border-radius:50%;background:#a5322d;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">2</span><span style="width:27px;height:27px;border-radius:50%;background:#a5322d;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">3</span></div>
+
+          <div style="display:flex;align-items:center;justify-content:flex-end;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#5b6069;padding-right:5px">Médio</div>
+          <div style="background:#f7f8f6"></div>
+          <div style="background:#f4f5f3;display:flex;align-items:center;justify-content:center"><span style="width:27px;height:27px;border-radius:50%;background:#6b7075;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">4</span></div>
+          <div style="background:#fbeede;display:flex;align-items:center;justify-content:center"><span style="width:27px;height:27px;border-radius:50%;background:#c1732a;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">5</span></div>
+        </div>
+        <div style="display:grid;grid-template-columns:20mm 1fr 1fr 1fr;gap:4px;margin-top:5px">
+          <div></div>
+          <div style="text-align:center;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#5b6069">Média</div>
+          <div style="text-align:center;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#5b6069">Média-alta</div>
+          <div style="text-align:center;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#5b6069">Alta</div>
+        </div>
+        <div style="text-align:center;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#7c8a90;margin-top:6px;padding-left:20mm">Probabilidade</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:4.5mm">
+    <div style="display:grid;grid-template-columns:29px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="width:27px;height:27px;border-radius:50%;background:#8f2723;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">1</div>
+      <div>
+        <div style="font-weight:600;font-size:14px;margin-bottom:2mm;line-height:1.3">Necessidade da obra ofuscada pelo debate sobre o rito</div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:10px;margin-bottom:2mm"><span><span style="color:#7c8a90">Probabilidade</span> <span style="color:#17242c;font-weight:500">Alta</span></span><span><span style="color:#7c8a90">Impacto</span> <span style="color:#b23b36;font-weight:500;white-space:nowrap">Muito alto</span></span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b6069;margin-bottom:2mm">Sinal do mês — DNIT citado por tentar dragar sem licença; TCU e MPF cobram consulta.</div>
+        <p style="margin:0;text-align:justify">Sem o respaldo formal construído previamente, a utilidade pública da intervenção deixa de ser percebida e a obra necessária fica paralisada.</p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:29px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="width:27px;height:27px;border-radius:50%;background:#a5322d;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">2</div>
+      <div>
+        <div style="font-weight:600;font-size:14px;margin-bottom:2mm;line-height:1.3">Judicialização e paralisação recorrente de obras</div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:10px;margin-bottom:2mm"><span><span style="color:#7c8a90">Probabilidade</span> <span style="color:#17242c;font-weight:500">Alta</span></span><span><span style="color:#7c8a90">Impacto</span> <span style="color:#b23b36;font-weight:500">Alto</span></span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b6069;margin-bottom:2mm">Sinal do mês — MPF declara judicialização inevitável; indígenas acionam o STF.</div>
+        <p style="margin:0;text-align:justify">Além do custo de imagem, há perda de cronograma, de recursos e de previsibilidade.</p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:29px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="width:27px;height:27px;border-radius:50%;background:#a5322d;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">3</div>
+      <div>
+        <div style="font-weight:600;font-size:14px;margin-bottom:2mm;line-height:1.3">Pressão cruzada entre agronegócio e comunidades</div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:10px;margin-bottom:2mm"><span><span style="color:#7c8a90">Probabilidade</span> <span style="color:#17242c;font-weight:500">Alta</span></span><span><span style="color:#7c8a90">Impacto</span> <span style="color:#b23b36;font-weight:500">Alto</span></span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b6069;margin-bottom:2mm">Sinal do mês — prejuízo estimado em R$ 850 mi e reação do agro de MT.</div>
+        <p style="margin:0;text-align:justify">O órgão é cobrado por ambos os lados sem controlar as variáveis de decisão política.</p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:29px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="width:27px;height:27px;border-radius:50%;background:#6b7075;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">4</div>
+      <div>
+        <div style="font-weight:600;font-size:14px;margin-bottom:2mm;line-height:1.3">Contágio por obras de terceiros</div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:10px;margin-bottom:2mm"><span><span style="color:#7c8a90">Probabilidade</span> <span style="color:#17242c;font-weight:500">Média-alta</span></span><span><span style="color:#7c8a90">Impacto</span> <span style="color:#c1732a;font-weight:500">Médio</span></span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b6069;margin-bottom:2mm">Sinal do mês — repercussão da dragagem da Alcoa em Juruti.</div>
+        <p style="margin:0;text-align:justify">“Dragagem na Amazônia” tornou-se tema sensível, e o público não distingue executores.</p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:29px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="width:27px;height:27px;border-radius:50%;background:#c1732a;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">5</div>
+      <div>
+        <div style="font-weight:600;font-size:14px;margin-bottom:2mm;line-height:1.3">Invisibilidade das entregas e do preparo para a estiagem</div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:10px;margin-bottom:2mm"><span><span style="color:#7c8a90">Probabilidade</span> <span style="color:#17242c;font-weight:500">Alta</span></span><span><span style="color:#7c8a90">Impacto</span> <span style="color:#c1732a;font-weight:500">Médio</span></span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b6069;margin-bottom:2mm">Sinal do mês — monitoramento e R$ 500 mi com baixa repercussão.</div>
+        <p style="margin:0;text-align:justify">Sem comunicação, o esforço preventivo não gera crédito reputacional.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 06 ============ -->
+<div id="s6" data-screen-label="06 Oportunidades" style="margin-top:8mm">
+  <div style="border-top:1.6px solid #17242c;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#0e5064;font-weight:600">06</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#7c8a90">Oportunidades</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Oportunidades de Posicionamento Institucional</h2>
+  <div style="display:flex;flex-direction:column;gap:4.5mm">
+    <div style="display:grid;grid-template-columns:29px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="width:27px;height:27px;border-radius:50%;background:#0e5064;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">1</div>
+      <div><div style="font-weight:600;font-size:14px;margin-bottom:1.6mm">Reposicionamento de método</div><p style="margin:0;text-align:justify">Assumir publicamente licenciamento integral e consulta prévia como etapas do projeto, transformando o revés do Tapajós em compromisso institucional.</p></div>
+    </div>
+    <div style="display:grid;grid-template-columns:29px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="width:27px;height:27px;border-radius:50%;background:#0e5064;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">2</div>
+      <div><div style="font-weight:600;font-size:14px;margin-bottom:1.6mm">Narrativa da prevenção à estiagem</div><p style="margin:0;text-align:justify">Amplificar o monitoramento dos rios e os investimentos nas hidrovias amazônicas como prova de planejamento antecipatório.</p></div>
+    </div>
+    <div style="display:grid;grid-template-columns:29px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="width:27px;height:27px;border-radius:50%;background:#23806e;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">3</div>
+      <div><div style="font-weight:600;font-size:14px;margin-bottom:1.6mm">Neutralidade técnica no conflito</div><p style="margin:0;text-align:justify">Posicionar-se como fonte técnica confiável sobre navegabilidade, sem se tornar porta-voz de nenhum dos lados do debate político.</p></div>
+    </div>
+    <div style="display:grid;grid-template-columns:29px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="width:27px;height:27px;border-radius:50%;background:#23806e;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">4</div>
+      <div><div style="font-weight:600;font-size:14px;margin-bottom:1.6mm">Protagonismo na agenda nacional do modal</div><p style="margin:0;text-align:justify">Capitalizar os estudos da CNT e do governo, posicionando o DAQ como o órgão que viabiliza tecnicamente as hidrovias brasileiras.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 07 ============ -->
+<div id="s7" data-screen-label="07 Recomendações" style="margin-top:8mm">
+  <div style="border-top:1.6px solid #17242c;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#0e5064;font-weight:600">07</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#7c8a90">Ação</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Recomendações Executivas</h2>
+
+  <div style="max-width:160mm;break-inside:avoid">
+    <div style="padding-bottom:2.4mm;border-bottom:1px solid #e2e4de;margin-bottom:3.2mm"><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#0e5064;font-weight:500">Ações Imediatas</span></div>
+    <ul style="list-style:none;margin:0 0 6mm;padding:0;display:flex;flex-direction:column;gap:2.6mm">
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0e5064;font-weight:600">→</span><span style="text-align:justify">Definir e comunicar uma posição institucional de método sobre licenciamento e consulta prévia, aplicável a todas as obras na Amazônia.</span></li>
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0e5064;font-weight:600">→</span><span style="text-align:justify">Esclarecer publicamente, quando necessário, a distinção entre obras do DNIT e intervenções de terceiros (caso Juruti/Alcoa).</span></li>
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0e5064;font-weight:600">→</span><span style="text-align:justify">Divulgar de forma proativa o monitoramento dos rios e o preparo para a estiagem, com dados e cronograma.</span></li>
+    </ul>
+  </div>
+
+  <div style="max-width:160mm;break-inside:avoid">
+    <div style="padding-bottom:2.4mm;border-bottom:1px solid #e2e4de;margin-bottom:3.2mm"><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#0e5064;font-weight:500">Ações de Curto Prazo</span></div>
+    <ul style="list-style:none;margin:0 0 6mm;padding:0;display:flex;flex-direction:column;gap:2.6mm">
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0e5064;font-weight:600">→</span><span style="text-align:justify">Estruturar canais permanentes de diálogo com comunidades ribeirinhas e indígenas nas áreas de intervenção, com comunicação local prévia.</span></li>
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0e5064;font-weight:600">→</span><span style="text-align:justify">Produzir conteúdo técnico acessível sobre o que é dragagem de manutenção, por que é feita e quais cuidados ambientais são adotados.</span></li>
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0e5064;font-weight:600">→</span><span style="text-align:justify">Comunicar com precisão as competências nas concessões (MPor conduz; DNIT executa).</span></li>
+    </ul>
+  </div>
+
+  <div style="max-width:160mm;break-inside:avoid">
+    <div style="padding-bottom:2.4mm;border-bottom:1px solid #e2e4de;margin-bottom:3.2mm"><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#0e5064;font-weight:500">Ações de Médio Prazo</span></div>
+    <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2.6mm">
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0e5064;font-weight:600">→</span><span style="text-align:justify">Reconstruir a narrativa de “executor responsável”, sustentada por evidências de cumprimento de ritos e de diálogo.</span></li>
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0e5064;font-weight:600">→</span><span style="text-align:justify">Dar visibilidade permanente às entregas de menor controvérsia e alto impacto social, como os IP4 e a manutenção da navegabilidade.</span></li>
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0e5064;font-weight:600">→</span><span style="text-align:justify">Manter monitoramento reputacional contínuo, com alertas para Tapajós, consulta prévia, estiagem e concessões.</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 08 ============ -->
+<div id="s8" data-screen-label="08 Cenários" style="margin-top:8mm">
+  <div style="border-top:1.6px solid #17242c;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#0e5064;font-weight:600">08</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#7c8a90">Cenários</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Cenários Prospectivos</h2>
+  <div style="display:flex;flex-direction:column;gap:0">
+    <div style="border-top:1px solid #e2e4de;padding:4mm 0;break-inside:avoid;max-width:160mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#7c8a90;margin-bottom:2mm">Cenário 01</div>
+      <div style="font-weight:600;font-size:14.5px;margin-bottom:2mm">Retomada com rito cumprido</div>
+      <p style="margin:0 0 2.4mm;text-align:justify">Licenciamento e consulta avançam e a dragagem é retomada com respaldo institucional.</p>
+      <div style="font-size:12.5px;color:#28323a"><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:#0e5064;font-weight:600">Resposta recomendada &nbsp;</span>Comunicar cada etapa do rito como prova de método, evitando tom de vitória.</div>
+    </div>
+    <div style="border-top:1px solid #e2e4de;padding:4mm 0;break-inside:avoid;max-width:160mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#7c8a90;margin-bottom:2mm">Cenário 02</div>
+      <div style="font-weight:600;font-size:14.5px;margin-bottom:2mm">Impasse prolongado e crise logística</div>
+      <p style="margin:0 0 2.4mm;text-align:justify">A seca compromete o escoamento e a pressão econômica se intensifica sem solução para a obra.</p>
+      <div style="font-size:12.5px;color:#28323a"><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:#0e5064;font-weight:600">Resposta recomendada &nbsp;</span>Comunicação estritamente técnica sobre condições de navegabilidade, sem assumir o conflito político.</div>
+    </div>
+    <div style="border-top:1px solid #e2e4de;border-bottom:1px solid #e2e4de;padding:4mm 0;break-inside:avoid;max-width:160mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#7c8a90;margin-bottom:2mm">Cenário 03</div>
+      <div style="font-weight:600;font-size:14.5px;margin-bottom:2mm">Novo conflito socioambiental em outra frente</div>
+      <p style="margin:0 0 2.4mm;text-align:justify">Uma nova obra na Amazônia enfrenta contestação semelhante.</p>
+      <div style="font-size:12.5px;color:#28323a"><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:#0e5064;font-weight:600">Resposta recomendada &nbsp;</span>Aplicação imediata do protocolo de diálogo prévio, evitando repetição do padrão Tapajós.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 09 ============ -->
+<div id="s9" data-screen-label="09 SAUZ" style="margin-top:8mm">
+  <div style="border-top:1.6px solid #17242c;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#0e5064;font-weight:600">09</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#7c8a90">SAUZ</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Demonstração dos Serviços — SAUZ</h2>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 2.4mm;text-align:justify">No período analisado, a SAUZ atuou como instância de apoio técnico e aconselhamento estratégico à alta administração do DNIT Aquaviária, subsidiando a equipe do órgão com inteligência de mídia, leitura de cenário e recomendações de posicionamento. A atuação teve caráter consultivo e de suporte: contribuiu para a interpretação do tema de maior sensibilidade do mês — a controvérsia da dragagem do Tapajós, com suas dimensões de licenciamento, consulta prévia e repercussão política — e para a preparação de subsídios à decisão, preservando na própria administração do DNIT Aquaviária a coordenação e a condução das ações institucionais.</p>
+    <p style="margin:0 0 4.5mm;text-align:justify">O esforço do período concentrou-se em reconstituir a cronologia do impasse, identificar o ponto de origem do desgaste — a ausência do respaldo formal (licença e acordo) para uma obra tecnicamente necessária — e apontar caminhos de reposicionamento, além de sinalizar entregas subcomunicadas com potencial de reequilibrar a percepção pública. A SAUZ manteve o monitoramento do ambiente de mídia, a qualificação das evidências e a produção de análises de apoio, sempre em posição de assessoria.</p>
+  </div>
+
+  <div style="max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#0e5064;padding-bottom:2.4mm;border-bottom:1px solid #e2e4de">Resumo das Atividades Realizadas</div>
+    <table style="width:100%;border-collapse:collapse">
+      <thead><tr>
+        <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#7c8a90;font-weight:500;padding:2.6mm 9px 2.6mm 0;border-bottom:1px solid #e2e4de">Indicador</th>
+        <th style="text-align:right;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#7c8a90;font-weight:500;padding:2.6mm 0;border-bottom:1px solid #e2e4de;width:32%">Quantidade</th>
+      </tr></thead>
+      <tbody style="font-size:12.5px">
+        <tr><td style="padding:3mm 9px 3mm 0;border-bottom:1px solid #ececec;vertical-align:middle">Reuniões presenciais</td><td style="padding:3mm 0;border-bottom:1px solid #ececec;text-align:right"><span style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;color:#17242c">3</span></td></tr>
+        <tr><td style="padding:3mm 9px 3mm 0;vertical-align:middle">Orientações estratégicas</td><td style="padding:3mm 0;text-align:right"><span style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;color:#17242c">4</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 10 ============ -->
+<div id="s10" data-screen-label="10 Base de Evidências" style="break-before:page;padding-top:2mm">
+  <div style="border-top:1.6px solid #17242c;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#0e5064;font-weight:600">10</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#7c8a90">Evidências</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 3.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Base Qualificada de Evidências Monitoradas no Mês</h2>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 3.5mm;text-align:justify">O monitoramento reuniu 350 itens, com forte concentração em dragagem (218 títulos), hidrovias (85) e Tapajós (54). A tabela apresenta a seleção qualificada que sustenta a análise.</p>
+  </div>
+
+  <div style="display:flex;gap:15px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#5b6069;margin-bottom:3mm">
+    <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:11px;height:11px;background:#e8f3ea;border:1px solid #cfe3d5;display:inline-block"></span>Positivo</span>
+    <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:11px;height:11px;background:#ffffff;border:1px solid #d8d8d4;display:inline-block"></span>Neutro</span>
+    <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:11px;height:11px;background:#fae9e8;border:1px solid #eccbc9;display:inline-block"></span>Negativo</span>
+    <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:11px;height:11px;background:#fbeede;border:1px solid #ecd6b8;display:inline-block"></span>Crítico</span>
+  </div>
+
+  <table style="width:100%;border-collapse:collapse;break-inside:auto">
+    <thead><tr>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:#7c8a90;font-weight:500;padding:0 5px 2.2mm 7px;border-bottom:1.5px solid #17242c;width:7%">Data</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:#7c8a90;font-weight:500;padding:0 5px 2.2mm 5px;border-bottom:1.5px solid #17242c;width:18%">Veículo</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:#7c8a90;font-weight:500;padding:0 5px 2.2mm 5px;border-bottom:1.5px solid #17242c;width:51%">Título</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:#7c8a90;font-weight:500;padding:0 5px 2.2mm 5px;border-bottom:1.5px solid #17242c;width:11%">Relev.</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:#7c8a90;font-weight:500;padding:0 7px 2.2mm 5px;border-bottom:1.5px solid #17242c;width:13%">Tom</th>
+    </tr></thead>
+    <tbody style="font-size:10.5px;line-height:1.32">
+      <tr style="background:#fae9e8"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f3eceb;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">01/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">REPAM</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">SEMAS autoriza dispensa de licenciamento para dragagem emergencial no Tapajós</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr style="background:#fbeede"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f4eee2;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">02/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top">Tapajós de Fato</td><td style="padding:2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top">Semas atropela povos tradicionais e autoriza dispensa de licenciamento</td><td style="padding:2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top;color:#c1732a;font-weight:500">Crítico</td></tr>
+      <tr style="background:#fae9e8"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f3eceb;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">03/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Agência Infra</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">TCU exige consulta prévia para dragagem do rio Tapajós</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr style="background:#fae9e8"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f3eceb;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">06/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">O Globo</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">TCU condiciona retomada do edital a licença ambiental e consulta a indígenas</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr style="background:#fae9e8"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f3eceb;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">06/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Folha PE</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">TCU condiciona edital da dragagem do Tapajós a licença e consulta indígena</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr style="background:#fae9e8"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f3eceb;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">08/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Campo Grande News</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Indígenas pedem ao STF para participar de ação da Hidrovia</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr style="background:#fbeede"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f4eee2;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">13/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top">Cenário Energia</td><td style="padding:2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top">DNIT é contestado por tentar dragar Rio Tapajós sem licença ambiental</td><td style="padding:2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top;color:#c1732a;font-weight:500">Crítico</td></tr>
+      <tr style="background:#fae9e8"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f3eceb;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">14/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">MundoLogística</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Dragagem do Tapajós entra em novo impasse após questionamento sobre licenciamento</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr style="background:#fbeede"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f4eee2;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">15/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top">MPF</td><td style="padding:2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top">MPF recomenda suspensão de dragagem no Rio Tapajós, sem licenciamento e consulta</td><td style="padding:2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top;color:#c1732a;font-weight:500">Crítico</td></tr>
+      <tr style="background:#fbeede"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f4eee2;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">16/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top">G1</td><td style="padding:2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top">MPF recomenda suspender dragagem no Tapajós entre Santarém e Itaituba</td><td style="padding:2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top;color:#c1732a;font-weight:500">Crítico</td></tr>
+      <tr style="background:#fae9e8"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f3eceb;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">22/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Folha de S.Paulo</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Governo prepara dragagem urgente no Tapajós por risco de seca e prejuízo de R$ 850 mi</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr style="background:#fae9e8"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f3eceb;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">23/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">G1</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Semas não suspende licença; MPF diz que judicialização é inevitável</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr style="background:#fbeede"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f4eee2;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">24/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top">CNN Brasil</td><td style="padding:2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top">Sob pressão, Lula desautoriza dragagem emergencial e El Niño ameaça Tapajós</td><td style="padding:2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top;color:#c1732a;font-weight:500">Crítico</td></tr>
+      <tr style="background:#fae9e8"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f3eceb;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">24/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">O Globo</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Indígenas saem de reunião com Lula confiantes em recuo da dragagem no Tapajós</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr style="background:#fbeede"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f4eee2;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">25/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top">G1</td><td style="padding:2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top">Dragagem no Rio Tapajós: Lula suspende obra após reunião com indígenas</td><td style="padding:2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top;color:#c1732a;font-weight:500">Crítico</td></tr>
+      <tr style="background:#fae9e8"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f3eceb;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">26/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Portos e Navios</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Impasse expõe conflito entre corredor de grãos e exigências ambientais</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr style="background:#fae9e8"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f3eceb;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">24/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Portal BE News</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Impasse ameaça dragagem do Tapajós e encarece escoamento de grãos</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr style="background:#fae9e8"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f3eceb;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">26/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Diário de Cuiabá</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Impasse sobre dragagem do Tapajós preocupa agronegócio de Mato Grosso</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Média</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr style="background:#fbeede"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f4eee2;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">28/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top">Poder360</td><td style="padding:2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top">Coluna: Lula despreza hidrovia do Tapajós</td><td style="padding:2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top">Média</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f4eee2;vertical-align:top;color:#c1732a;font-weight:500">Crítico</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f0efe9;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">22/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Defesa em Foco</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">DNIT reforça monitoramento dos rios para garantir segurança da navegação</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f0efe9;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">29/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">D24AM</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Hidrovias amazônicas receberão mais de R$ 500 milhões para enfrentar estiagem</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #ececec;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">28/07</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">Portos e Navios</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">Hidrovias amazônicas ganham reforço em 2026, enquanto Tapajós segue no debate</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #ececec;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f0efe9;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">02/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">CNT</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">CNT apresenta estudo inédito com propostas para destravar as hidrovias</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f0efe9;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">03/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">CNN Brasil</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">CNT sugere política nacional para destravar uso das hidrovias brasileiras</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f0efe9;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">03/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">gov.br</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Estudo propõe transformar as hidrovias em eixo estratégico da logística nacional</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Média</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f0efe9;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">07/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Correio do Povo</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Dragagem da Hidrovia da Lagoa Mirim deve começar ainda em 2026</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #ececec;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">27/07</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">A Hora do Sul</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">Audiência pública sobre concessão da hidrovia da Lagoa Mirim em 11 de agosto</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">Média</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #ececec;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #ececec;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">27/07</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">Agência Infra</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">Governo fará contraproposta ao Paraguai sobre concessão de hidrovia</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #ececec;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #ececec;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">29/07</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">Portogente</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">Dragagem Nacional Estratégica x Concessões dos Acessos Aquaviários</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">Média</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #ececec;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr style="background:#fae9e8"><td style="padding:2mm 5px 2mm 7px;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">14/07</td><td style="padding:2mm 5px;vertical-align:top">MPF</td><td style="padding:2mm 5px;vertical-align:top">MPF cobra suspensão da dragagem da Alcoa no Rio Amazonas em Juruti (obra de terceiro)</td><td style="padding:2mm 5px;vertical-align:top">Média</td><td style="padding:2mm 7px 2mm 5px;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+    </tbody>
+  </table>
+
+  <div style="max-width:160mm;margin-top:4mm">
+    <p style="margin:0;font-size:11.5px;color:#5b6069;text-align:justify"><span style="font-style:italic">Nota metodológica:</span> seleção qualificada do monitoramento do período. Os itens referentes à dragagem em Juruti dizem respeito a obra da Alcoa e constam apenas como contexto de risco de contágio, não como intervenção do DNIT.</p>
+  </div>
+</div>
+
+<!-- ENCERRAMENTO -->
+<div data-screen-label="Encerramento" style="margin-top:9mm;border-top:1.6px solid #17242c;padding-top:5mm;break-inside:avoid">
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#7c8a90;margin-bottom:3.5mm">Encerramento</div>
+  <p style="margin:0 0 5mm;font-size:13.5px;color:#28323a">Brasília/DF, agosto de 2026.</p>
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#5b6069;margin-bottom:5px">Suporte estratégico prestado por</div>
+  <img src="sauz-logo-dark.png" alt="SAUZ" style="height:32px;display:block"/>
+</div>
+
+<!--CONTENT_END-->
+</div>
+</x-import>
+</x-dc>
+</body>
+</html>

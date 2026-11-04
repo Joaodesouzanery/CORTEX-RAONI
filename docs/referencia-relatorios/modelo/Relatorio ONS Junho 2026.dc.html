@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  doc-page:not(:defined){visibility:hidden}
+  *{box-sizing:border-box}
+  .rp p{orphans:3;widows:3}
+</style>
+</helmet>
+<x-import component-from-global-scope="doc-page" from="./doc-page.js" size="a4" margin="14mm" hint-size="100%,100%">
+<div class="rp" style="font-family:'IBM Plex Sans',-apple-system,'Segoe UI',sans-serif;font-size:13.5px;line-height:1.5;color:#15171c;-webkit-font-smoothing:antialiased">
+
+<!-- ============ CAPA ============ -->
+<div style="position:relative;overflow:hidden;background:#f1f0ec;margin:-14mm -14mm 0;box-sizing:border-box;display:flex;flex-direction:column;break-after:page">
+
+  <!-- IMAGE REGION -->
+  <div style="position:relative;height:212mm;overflow:hidden">
+    <img src="cover_ons.jpg" alt="Torres de transmissão de alta tensão do Sistema Interligado Nacional ao pôr do sol" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 42%"/>
+
+    <!-- quadrant brand tint -->
+    <div style="position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr">
+      <div style="background:#d8c7b2;opacity:.10"></div>
+      <div style="background:#4e6845;opacity:.30"></div>
+      <div style="background:#895834;opacity:.14"></div>
+      <div style="background:#4e6845;opacity:.24"></div>
+    </div>
+    <!-- bottom scrim for title legibility -->
+    <div style="position:absolute;left:0;right:0;bottom:0;height:42%;background:linear-gradient(to bottom,rgba(43,54,45,0) 0%,rgba(38,48,40,.55) 100%)"></div>
+
+    <!-- top kicker -->
+    <div style="position:absolute;top:16mm;left:20mm;right:20mm;z-index:3;display:flex;justify-content:space-between;align-items:flex-start;gap:10mm">
+      <div style="font-family:'IBM Plex Mono',monospace;color:#2e3a30">
+        <div style="font-size:12px;font-weight:600;letter-spacing:.02em">Operador Nacional do Sistema Elétrico — ONS</div>
+        <div style="font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#4a5751;margin-top:4px">Confidencial · Uso interno da alta administração</div>
+      </div>
+    </div>
+
+    <!-- vertical tagline -->
+    <div style="position:absolute;top:18mm;right:11mm;height:188mm;z-index:3;writing-mode:vertical-rl;font-family:'IBM Plex Sans',sans-serif;font-weight:700;font-size:13.5px;letter-spacing:.11em;color:#ffffff;text-transform:uppercase;opacity:.96;white-space:nowrap">Setor Elétrico · Inteligência para o Futuro</div>
+
+    <!-- title bands -->
+    <div style="position:absolute;left:0;right:0;top:57%;z-index:3;display:flex;flex-direction:column;align-items:center">
+      <div style="background:#d8c7b2;padding:6mm 22mm;min-width:118mm;text-align:center">
+        <div style="font-family:'IBM Plex Sans',sans-serif;font-weight:700;font-size:44px;letter-spacing:.06em;color:#a8663c;line-height:1">RELATÓRIO</div>
+      </div>
+      <div style="background:#4e6845;padding:4mm 14mm;margin-top:-1px;text-align:center;display:flex;align-items:baseline;gap:10px">
+        <span style="font-family:'IBM Plex Sans',sans-serif;font-weight:700;font-size:32px;letter-spacing:.06em;color:#fff;line-height:1">JUN</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:17px;color:#e7ddca;letter-spacing:.08em">2026</span>
+      </div>
+    </div>
+
+    <!-- descriptive title over hills -->
+    <div style="position:absolute;left:20mm;right:20mm;bottom:12mm;z-index:3">
+      <div style="font-family:'IBM Plex Sans',sans-serif;font-size:13.5px;font-weight:500;color:#f3f1ea;line-height:1.5;max-width:150mm;text-wrap:pretty">Relatório Mensal de Comunicação Estratégica, Gestão de Imagem e Inteligência Reputacional</div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div style="background:#f1f0ec;padding:9mm 20mm 8mm;display:flex;justify-content:space-between;align-items:center;gap:10mm">
+    <div>
+      <img src="crt-logo.png" alt="CRT" style="height:42px;display:block;margin-bottom:7px"/>
+      <div style="width:118px;height:3px;border-radius:2px;background:linear-gradient(90deg,#a9c1e8 0%,#ecea2b 62%,#f5f5ec 100%);margin-bottom:8px"></div>
+      <div style="font-family:'IBM Plex Sans',sans-serif;font-size:12px;font-weight:600;color:#3a4a3a;letter-spacing:.01em;margin-bottom:5px">Clareza em meio ao <span style="text-decoration:line-through;text-decoration-thickness:2px;text-decoration-color:#c58a5a;color:#8a8175">caos</span>.</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#8a8175">Comunicação Estratégica · Inteligência Reputacional</div>
+    </div>
+    <div style="text-align:right;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#6a6f66;line-height:1.6">
+      <div style="color:#a8663c;font-weight:500;letter-spacing:.1em;text-transform:uppercase;font-size:9.5px">Suporte estratégico</div>
+      <div>Junho de 2026</div>
+    </div>
+  </div>
+
+  <!-- SWATCH STRIP -->
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);height:7mm">
+    <div style="background:#4e6845"></div>
+    <div style="background:#a8663c"></div>
+    <div style="background:#4e4e4e"></div>
+    <div style="background:#d8c7b2"></div>
+    <div style="background:#895834"></div>
+  </div>
+</div>
+
+<!-- ============ ÍNDICE ============ -->
+<div style="break-after:page;padding-top:3mm">
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#8b9096;margin-bottom:4mm">Sumário</div>
+  <div style="border-top:1.6px solid #15171c"></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;column-gap:16mm">
+    <div>
+      <a href="#s1" style="display:flex;gap:12px;align-items:baseline;padding:3.4mm 0;border-bottom:1px solid #ececE8;text-decoration:none;color:#15171c;border-color:#ececE8"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0f5563;min-width:22px">01</span><span style="font-weight:500">Sumário Executivo</span></a>
+      <a href="#s2" style="display:flex;gap:12px;align-items:baseline;padding:3.4mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#15171c"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0f5563;min-width:22px">02</span><span style="font-weight:500">Contexto e Cenário Institucional</span></a>
+      <a href="#s3" style="display:flex;gap:12px;align-items:baseline;padding:3.4mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#15171c"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0f5563;min-width:22px">03</span><span style="font-weight:500">Temas Estratégicos do Mês</span></a>
+      <a href="#s4" style="display:flex;gap:12px;align-items:baseline;padding:3.4mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#15171c"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0f5563;min-width:22px">04</span><span style="font-weight:500">Análise Temática Aprofundada</span></a>
+      <a href="#s5" style="display:flex;gap:12px;align-items:baseline;padding:3.4mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#15171c"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0f5563;min-width:22px">05</span><span style="font-weight:500">Leitura Reputacional do Ambiente</span></a>
+      <a href="#s6" style="display:flex;gap:12px;align-items:baseline;padding:3.4mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#15171c"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0f5563;min-width:22px">06</span><span style="font-weight:500">Riscos Reputacionais Prioritários</span></a>
+      <a href="#s7" style="display:flex;gap:12px;align-items:baseline;padding:3.4mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#15171c"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0f5563;min-width:22px">07</span><span style="font-weight:500">Oportunidades de Posicionamento</span></a>
+      <a href="#s8" style="display:flex;gap:12px;align-items:baseline;padding:3.4mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#15171c"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0f5563;min-width:22px">08</span><span style="font-weight:500">Mapa de Stakeholders e Narrativas</span></a>
+    </div>
+    <div>
+      <a href="#s9" style="display:flex;gap:12px;align-items:baseline;padding:3.4mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#15171c"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0f5563;min-width:22px">09</span><span style="font-weight:500">Tendências e Sinais Emergentes</span></a>
+      <a href="#s10" style="display:flex;gap:12px;align-items:baseline;padding:3.4mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#15171c"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0f5563;min-width:22px">10</span><span style="font-weight:500">Cenários Prospectivos</span></a>
+      <a href="#s11" style="display:flex;gap:12px;align-items:baseline;padding:3.4mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#15171c"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0f5563;min-width:22px">11</span><span style="font-weight:500">Recomendações Executivas</span></a>
+      <a href="#s12" style="display:flex;gap:12px;align-items:baseline;padding:3.4mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#15171c"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0f5563;min-width:22px">12</span><span style="font-weight:500">Plano de Ação — Próximo Mês</span></a>
+      <a href="#s13" style="display:flex;gap:12px;align-items:baseline;padding:3.4mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#15171c"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0f5563;min-width:22px">13</span><span style="font-weight:500">Prestação de Serviços — CRT</span></a>
+      <a href="#s14" style="display:flex;gap:12px;align-items:baseline;padding:3.4mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#15171c"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0f5563;min-width:22px">14</span><span style="font-weight:500">Base de Evidências Monitoradas</span></a>
+      <a href="#s15" style="display:flex;gap:12px;align-items:baseline;padding:3.4mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#15171c"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0f5563;min-width:22px">15</span><span style="font-weight:500">Considerações Finais</span></a>
+      
+    </div>
+  </div>
+  <div style="margin-top:9mm;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8b9096;letter-spacing:.02em">CRT · ONS · Junho de 2026 — Confidencial</div>
+</div>
+
+<!-- ============ SEÇÃO 01 ============ -->
+<div id="s1" style="margin-top:2mm">
+  <div style="border-top:1.6px solid #15171c;padding-top:3.5mm;display:flex;gap:12px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:#0f5563;font-weight:600">01</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#8b9096">Síntese</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Sumário Executivo</h2>
+  <div style="max-width:158mm">
+    <p style="margin:0 0 2.2mm;text-align:justify">Junho de 2026 marcou uma inflexão parcialmente favorável no ambiente reputacional do ONS. Depois de um mês de maio predominantemente defensivo — dominado pelo caso Scala, pela leitura do curtailment como falha e pela controvérsia em torno do LRCAP —, junho ofereceu à instituição algo que faltava havia meses: um palco de competência operacional diante de uma audiência de massa. A Copa do Mundo transformou a operação do sistema em notícia de interesse geral, e o ONS apareceu, na maior parte da cobertura, como o operador que mantém o equilíbrio do país enquanto milhões de brasileiros mudam simultaneamente seu padrão de consumo.</p>
+    <p style="margin:0 0 2.2mm;text-align:justify">O efeito, contudo, foi duplo. Ao mesmo tempo em que a Copa e a gestão do El Niño reforçaram a imagem de guardião técnico do Sistema Interligado Nacional (SIN), as pressões estruturais não apenas persistiram como se diversificaram. O curtailment consolidou-se como métrica pública de ineficiência — chegou a atingir, em um único domingo no Nordeste, o equivalente à potência instalada de Itaipu (Poder360, 29/06/2026). O LRCAP entrou em plena judicialização, com suspensão determinada pela Justiça do Ceará e homologação da ANEEL no dia seguinte (Agência iNFRA, 08 e 10/06/2026). E surgiram vetores novos, com destaque para a cibersegurança de infraestrutura crítica.</p>
+    <p style="margin:0 0 2.2mm;text-align:justify">Um dos destaques do mês foi a liderança técnica e a transparência do ONS na condução da agenda de potência. Em declarações públicas, o diretor-geral Marcio Rea reforçou a importância do Leilão de Reserva de Capacidade (LRCAP) como instrumento essencial para garantir o atendimento e o suprimento de energia a toda a sociedade, e defendeu que os certames de potência ocorram anualmente, como parte de uma agenda contínua de contratação e planejamento (CNN Brasil, 17/06/2026; InfoMoney, 08/06/2026). A leitura reforça — e não diminui — o valor do instrumento: a segurança elétrica se constrói com uma agenda permanente, e não com uma única medida. Nessa direção, o Ministério de Minas e Energia já anunciou a realização de um leilão de armazenamento de energia em baterias ainda em 2026, ampliando o arsenal de instrumentos de que o ONS dispõe para lidar com as rampas de carga e as variações de geração ao longo do dia (Poder360, 2026).</p>
+    <p style="margin:0 0 2.2mm;text-align:justify">A gestão do plano emergencial de excedentes ilustra bem a ambivalência do período. Pela primeira vez, o ONS acionou o mecanismo aprovado pela ANEEL em novembro de 2025: no feriado de Corpus Christi, 12 distribuidoras cortaram 1.000 MW de geração entre 10h e 14h (Poder360, 06/06/2026; CNN Brasil, 07/06/2026). A operação foi bem-sucedida e demonstrou prontidão — mas o próprio acionamento inédito virou, para parte do setor, evidência de um sistema que cresceu em geração renovável sem o correspondente investimento em flexibilidade e armazenamento.</p>
+    <p style="margin:0 0 0;text-align:justify">Em síntese, o mês fortaleceu a trilha narrativa mais favorável ao ONS — a de coordenação e inteligência operacional — sem, no entanto, dissolver a narrativa concorrente, que cobra transparência de critérios, isonomia no acesso e capacidade de resposta diante de gargalos estruturais. A janela aberta pela Copa é real, mas estreita: sua conversão em capital reputacional duradouro depende de o ONS ocupar ativamente o espaço de tradução técnica que o próprio noticiário abriu.</p>
+  </div>
+
+  <div style="margin-top:4mm;max-width:158mm">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#0f5563;padding-bottom:3mm;border-bottom:1px solid #e4e4e0;margin-bottom:5mm">Principais insights do mês</div>
+    <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3mm">
+      <li style="display:grid;grid-template-columns:16px 1fr;gap:11px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0f5563;font-weight:600">→</span><span style="text-align:justify">A Copa do Mundo foi o principal ativo reputacional positivo, expondo a competência operacional do ONS a uma audiência de massa com cobertura majoritariamente neutra a favorável — uma mudança relevante em relação ao tom defensivo de maio.</span></li>
+      <li style="display:grid;grid-template-columns:16px 1fr;gap:11px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0f5563;font-weight:600">→</span><span style="text-align:justify">O curtailment deixou de ser dado técnico e virou símbolo público de desperdício: o corte no Nordeste equivaleu a uma Itaipu, e a regulação do tema segue travada na ANEEL.</span></li>
+      <li style="display:grid;grid-template-columns:16px 1fr;gap:11px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0f5563;font-weight:600">→</span><span style="text-align:justify">A liderança técnica do ONS foi um ativo de credibilidade: ao reforçar publicamente a importância do LRCAP e defender leilões anuais de potência, o diretor-geral Marcio Rea consolidou a imagem de uma instituição que planeja com transparência — agenda que o MME já reforça com o leilão de baterias previsto para 2026.</span></li>
+      <li style="display:grid;grid-template-columns:16px 1fr;gap:11px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0f5563;font-weight:600">→</span><span style="text-align:justify">A judicialização do LRCAP elevou o tema de disputa técnica para disputa jurídica e política, com risco de contaminar, por associação, a imagem do operador.</span></li>
+      <li style="display:grid;grid-template-columns:16px 1fr;gap:11px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0f5563;font-weight:600">→</span><span style="text-align:justify">Emergiram dois vetores estruturantes para o futuro reputacional: a cibersegurança de infraestrutura crítica (risco) e a abertura tecnológica do Projeto Maestro (oportunidade).</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 02 ============ -->
+<div id="s2" style="margin-top:4mm">
+  <div style="border-top:1.6px solid #15171c;padding-top:3.5mm;display:flex;gap:12px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:#0f5563;font-weight:600">02</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#8b9096">Panorama</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Contexto e Cenário Institucional do Mês</h2>
+  <div style="max-width:158mm">
+    <p style="margin:0 0 2.2mm;text-align:justify">A leitura consolidada de junho aponta um ambiente externo mais denso e mais fragmentado do que o de maio. Em vez de dois ou três eixos dominantes, o mês distribuiu a atenção por pelo menos uma dúzia de frentes ativas, o que exige do ONS uma capacidade de posicionamento mais modular e menos concentrada em um único tema de crise.</p>
+    <p style="margin:0 0 2.2mm;text-align:justify">Do ponto de vista da percepção, a instituição orbitou, mais uma vez, entre três imagens simultâneas: a de guardião técnico da confiabilidade — reforçada pela Copa, pelo El Niño e pela boa execução do plano emergencial; a de instituição pressionada por gargalos que não controla integralmente — curtailment, custo do modelo de risco, judicialização do LRCAP; e a de operador sob escrutínio crescente quanto a transparência e critérios. A novidade de junho é que a primeira imagem, a de guardião competente, recebeu combustível factual raro — a operação sob os olhos de uma audiência esportiva —, ao passo que a terceira ganhou densidade jurídica com a novela do LRCAP.</p>
+    <p style="margin:0 0 2.2mm;text-align:justify">As narrativas dominantes sobre o ONS no período podem ser agrupadas em quatro blocos. O primeiro, positivo, é o da competência operacional sob estresse (Copa, El Niño, excedentes). O segundo, ambivalente, é o da transparência franca da liderança técnica, que reconhece limites em público. O terceiro, negativo, é o da associação ao desperdício e ao custo — curtailment e CVaR. O quarto, de fundo, é o da crítica institucional difusa ao setor elétrico como um todo, veiculada por editoriais de grande circulação que, embora não mirem o ONS diretamente, moldam a percepção da elite formadora de opinião.</p>
+    <p style="margin:0;text-align:justify">O radar reputacional do mês, portanto, mostra a reputação do ONS preservada e com espaço de crescimento: os sinais positivos avançam em paralelo às cobranças estruturais. O ONS entrou em um regime em que cada boa execução operacional é uma oportunidade de reforçar autoridade técnica diante de uma agenda de igual visibilidade — e é esse potencial que a estratégia de comunicação deve capitalizar.</p>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 03 ============ -->
+<div id="s3" style="margin-top:4mm">
+  <div style="border-top:1.6px solid #15171c;padding-top:3.5mm;display:flex;gap:12px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:#0f5563;font-weight:600">03</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#8b9096">Mapeamento</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Temas Estratégicos do Mês</h2>
+
+  <h3 style="display:flex;gap:11px;align-items:baseline;font-size:16.5px;font-weight:600;margin:0 0 3.5mm;color:#15171c"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0f5563;font-weight:500">3.1</span><span>Panorama quantitativo da cobertura</span></h3>
+  <div style="max-width:158mm">
+    <p style="margin:0 0 2.2mm;text-align:justify">Antes da síntese temática, cabe um panorama quantitativo do que foi monitorado. Foram acompanhados 234 itens no período, dos quais 56 — cerca de 24% — classificados como de alta relevância reputacional, 96 de média e 82 de baixa. Por tipo de fonte, predominou a imprensa, com 214 itens, somada a 14 publicações institucionais e 6 comunicações de agentes do setor, composição que supera com folga os volumes mínimos previstos no escopo do trabalho.</p>
+  </div>
+
+  <!-- PAINEL QUANTITATIVO -->
+  <div style="border-top:1.6px solid #15171c;margin-top:4mm;padding-top:5mm;break-inside:avoid">
+    <div style="display:grid;grid-template-columns:repeat(3,1fr)">
+      <div style="padding-right:8mm">
+        <div style="font-size:38px;font-weight:600;letter-spacing:-.02em;line-height:1">234</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6069;margin-top:4px">itens monitorados</div>
+      </div>
+      <div style="padding:0 8mm;border-left:1px solid #e4e4e0">
+        <div style="font-size:38px;font-weight:600;letter-spacing:-.02em;line-height:1">56<span style="font-size:18px;color:#8b9096;font-weight:500"> · 24%</span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6069;margin-top:4px">de alta relevância</div>
+      </div>
+      <div style="padding-left:8mm;border-left:1px solid #e4e4e0">
+        <div style="font-size:38px;font-weight:600;letter-spacing:-.02em;line-height:1"><span style="color:#2f7d4f">40</span> <span style="color:#c7ccd0;font-weight:400">/</span> <span style="color:#b23b36">35</span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6069;margin-top:4px">positivos / negativos-críticos</div>
+      </div>
+    </div>
+
+    <!-- Distribuição por tom -->
+    <div style="margin-top:4mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#8b9096;margin-bottom:3mm">Distribuição por tom · 234 itens</div>
+      <div style="display:flex;height:26px;width:100%;overflow:hidden;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#fff">
+        <div style="width:17.1%;background:#2f7d4f;display:flex;align-items:center;padding-left:8px">40</div>
+        <div style="width:67.9%;background:#c3c8cc;color:#3a3f44;display:flex;align-items:center;padding-left:8px">159</div>
+        <div style="width:15.0%;background:#b23b36;display:flex;align-items:center;padding-left:8px">35</div>
+      </div>
+      <div style="display:flex;gap:20px;margin-top:3mm;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6069;flex-wrap:wrap">
+        <span style="display:inline-flex;align-items:center;gap:7px"><span style="width:9px;height:9px;background:#2f7d4f;display:inline-block"></span>Positivos · 40</span>
+        <span style="display:inline-flex;align-items:center;gap:7px"><span style="width:9px;height:9px;background:#c3c8cc;display:inline-block"></span>Neutros · 159</span>
+        <span style="display:inline-flex;align-items:center;gap:7px"><span style="width:9px;height:9px;background:#b23b36;display:inline-block"></span>Negativos / Críticos · 35</span>
+      </div>
+    </div>
+
+    <!-- Relevância + Fonte -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14mm;margin-top:4mm">
+      <div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#8b9096;margin-bottom:4mm">Por relevância</div>
+        <div style="display:flex;flex-direction:column;gap:3mm;font-family:'IBM Plex Mono',monospace;font-size:11px">
+          <div><div style="display:flex;justify-content:space-between;color:#5b6069;margin-bottom:4px"><span>Alta</span><span style="color:#15171c">56</span></div><div style="height:9px;background:#ecece8"><div style="width:58.3%;height:100%;background:#0f5563"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;color:#5b6069;margin-bottom:4px"><span>Média</span><span style="color:#15171c">96</span></div><div style="height:9px;background:#ecece8"><div style="width:100%;height:100%;background:#0f5563"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;color:#5b6069;margin-bottom:4px"><span>Baixa</span><span style="color:#15171c">82</span></div><div style="height:9px;background:#ecece8"><div style="width:85.4%;height:100%;background:#0f5563"></div></div></div>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#8b9096;margin-bottom:4mm">Por tipo de fonte</div>
+        <div style="display:flex;flex-direction:column;gap:3mm;font-family:'IBM Plex Mono',monospace;font-size:11px">
+          <div><div style="display:flex;justify-content:space-between;color:#5b6069;margin-bottom:4px"><span>Imprensa</span><span style="color:#15171c">214</span></div><div style="height:9px;background:#ecece8"><div style="width:100%;height:100%;background:#3c6771"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;color:#5b6069;margin-bottom:4px"><span>Institucionais</span><span style="color:#15171c">14</span></div><div style="height:9px;background:#ecece8"><div style="width:6.5%;height:100%;background:#3c6771"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;color:#5b6069;margin-bottom:4px"><span>Agentes do setor</span><span style="color:#15171c">6</span></div><div style="height:9px;background:#ecece8"><div style="width:2.8%;height:100%;background:#3c6771"></div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="max-width:158mm;margin-top:6mm">
+    <p style="margin:0;text-align:justify">Quanto ao tom, a maior parte da cobertura foi neutra, com um bloco relevante de itens positivos — 40 no total —, puxado por Copa, El Niño e governança, e um conjunto de itens negativos e críticos, 35 ao todo, concentrado em curtailment, LRCAP, custo do CVaR e nos editoriais sobre o setor. A distribuição de tom confirma, em números, o caráter ambivalente do mês: o saldo não é de crise, mas de tensionamento, com sinais positivos e negativos crescendo em paralelo.</p>
+  </div>
+
+  <h3 style="display:flex;gap:11px;align-items:baseline;font-size:16.5px;font-weight:600;margin:9mm 0 3.5mm;color:#15171c"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0f5563;font-weight:500">3.2</span><span>Síntese dos temas</span></h3>
+  <div style="max-width:158mm">
+    <p style="margin:0 0 4mm;text-align:justify">A leitura do período identificou doze temas-matriz que organizaram o ambiente externo do ONS em junho. O quadro a seguir sintetiza cada tema, sua relevância reputacional e o principal sinal factual observado no mês.</p>
+  </div>
+
+  <!-- TABELA DE TEMAS -->
+  <table style="width:100%;border-collapse:collapse;break-inside:auto">
+    <thead><tr>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:#8b9096;font-weight:500;padding:0 10px 3mm 0;border-bottom:1.5px solid #15171c;width:38%">Tema estratégico</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:#8b9096;font-weight:500;padding:0 10px 3mm 0;border-bottom:1.5px solid #15171c;width:16%">Relevância</th>
+      
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:#8b9096;font-weight:500;padding:0 0 3mm 0;border-bottom:1.5px solid #15171c;width:46%">Sinal do mês</th>
+    </tr></thead>
+    <tbody style="font-size:12.5px;line-height:1.4">
+      <tr><td style="padding:3mm 10px;border-bottom:1px solid #ececec;vertical-align:top;padding-left:0;font-weight:500">Copa do Mundo e operação do SIN</td><td style="padding:3mm 10px;border-bottom:1px solid #ececec;vertical-align:top">Alta</td><td style="padding:3mm 0;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">Queda de até 21% na carga; corte de até 21,8 GW renováveis</td></tr>
+      <tr><td style="padding:3mm 10px;border-bottom:1px solid #ececec;vertical-align:top;padding-left:0;font-weight:500">El Niño e preservação de reservatórios</td><td style="padding:3mm 10px;border-bottom:1px solid #ececec;vertical-align:top">Alta</td><td style="padding:3mm 0;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">Operação especial; poupar Itaipu e Sul até setembro</td></tr>
+      <tr><td style="padding:3mm 10px;border-bottom:1px solid #ececec;vertical-align:top;padding-left:0;font-weight:500">Curtailment estrutural</td><td style="padding:3mm 10px;border-bottom:1px solid #ececec;vertical-align:top">Alta</td><td style="padding:3mm 0;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">14.278 MW cortados no NE (uma Itaipu); regra travada</td></tr>
+      <tr><td style="padding:3mm 10px;border-bottom:1px solid #ececec;vertical-align:top;padding-left:0;font-weight:500">Plano emergencial de excedentes</td><td style="padding:3mm 10px;border-bottom:1px solid #ececec;vertical-align:top">Alta</td><td style="padding:3mm 0;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">1ª ativação; 1.000 MW; 12 distribuidoras</td></tr>
+      <tr><td style="padding:3mm 10px;border-bottom:1px solid #ececec;vertical-align:top;padding-left:0;font-weight:500">LRCAP e judicialização</td><td style="padding:3mm 10px;border-bottom:1px solid #ececec;vertical-align:top">Alta</td><td style="padding:3mm 0;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">Suspensão no Ceará; R$ 516 bi; homologação no dia seguinte</td></tr>
+      <tr><td style="padding:3mm 10px;border-bottom:1px solid #ececec;vertical-align:top;padding-left:0;font-weight:500">Liderança técnica e agenda de potência</td><td style="padding:3mm 10px;border-bottom:1px solid #ececec;vertical-align:top">Alta</td><td style="padding:3mm 0;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">Rea reforça a importância do LRCAP e defende leilão anual; MME anuncia baterias em 2026</td></tr>
+      <tr><td style="padding:3mm 10px;border-bottom:1px solid #ececec;vertical-align:top;padding-left:0;font-weight:500">CMSE e custo do CVaR</td><td style="padding:3mm 10px;border-bottom:1px solid #ececec;vertical-align:top">Alta</td><td style="padding:3mm 0;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">15/40 mantido; R$ 5,4 bi atribuídos ao critério</td></tr>
+      <tr><td style="padding:3mm 10px;border-bottom:1px solid #ececec;vertical-align:top;padding-left:0;font-weight:500">Governança ONS–CCEE (PMO/PLD)</td><td style="padding:3mm 10px;border-bottom:1px solid #ececec;vertical-align:top">Alta</td><td style="padding:3mm 0;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">Novo portal e comitê ampliado; REN 1.144/2025</td></tr>
+      <tr><td style="padding:3mm 10px;border-bottom:1px solid #ececec;vertical-align:top;padding-left:0;font-weight:500">Código aberto (Projeto Maestro)</td><td style="padding:3mm 10px;border-bottom:1px solid #ececec;vertical-align:top">Alta</td><td style="padding:3mm 0;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">Ferramentas próprias e abertas até outubro/2026</td></tr>
+      <tr><td style="padding:3mm 10px;border-bottom:1px solid #ececec;vertical-align:top;padding-left:0;font-weight:500">Data centers e risco sistêmico</td><td style="padding:3mm 10px;border-bottom:1px solid #ececec;vertical-align:top">Alta</td><td style="padding:3mm 0;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">Alerta sobre grandes cargas e capacidade de supervisão</td></tr>
+      <tr><td style="padding:3mm 10px;border-bottom:1px solid #ececec;vertical-align:top;padding-left:0;font-weight:500">Cibersegurança de infraestrutura</td><td style="padding:3mm 10px;border-bottom:1px solid #ececec;vertical-align:top">Alta</td><td style="padding:3mm 0;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">539 mi de ataques bloqueados pelo ONS em 2024</td></tr>
+      <tr><td style="padding:3mm 10px;vertical-align:top;padding-left:0;font-weight:500">Crítica institucional (editoriais)</td><td style="padding:3mm 10px;vertical-align:top">Média</td><td style="padding:3mm 0;vertical-align:top;color:#41474d">"Consumidor paga o custo do planejamento"</td></tr>
+    </tbody>
+  </table>
+
+  <div style="max-width:158mm;margin-top:6mm">
+    <p style="margin:0;text-align:justify">A distribuição temática confirma o diagnóstico de diversificação: diferentemente de maio, quando cinco temas concentravam quase toda a atenção, junho apresenta um espectro mais amplo, com forte presença de temas positivos (Copa, El Niño, governança, código aberto) ao lado dos vetores de risco já conhecidos e de dois emergentes — data centers como risco sistêmico e cibersegurança.</p>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 04 ============ -->
+<div id="s4" style="margin-top:4mm">
+  <div style="border-top:1.6px solid #15171c;padding-top:3.5mm;display:flex;gap:12px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:#0f5563;font-weight:600">04</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#8b9096">Análise</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Análise Temática Aprofundada</h2>
+
+  <!-- 4.1 -->
+  <h3 style="display:flex;gap:11px;align-items:baseline;font-size:16.5px;font-weight:600;margin:0 0 3.5mm;color:#15171c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0f5563;font-weight:500">4.1</span><span>Copa do Mundo: a competência operacional como vitrine</span></h3>
+  <div style="max-width:158mm">
+    <p style="margin:0 0 2.2mm;text-align:justify">Pela primeira vez em muitos meses, a operação do sistema elétrico virou pauta de interesse geral por um motivo favorável ao ONS. A cada jogo da seleção, o comportamento da carga do SIN se altera de forma abrupta: o consumo começa a cair cerca de uma hora antes da partida, atinge o mínimo durante o segundo tempo e dispara logo após o apito final. No jogo contra o Japão, em 29 de junho, o consumo caiu até 21% em relação à referência, com a carga chegando ao mínimo de 66.515 MW; após o término, a demanda subiu 12.783 MW em uma hora, o equivalente à soma das cargas médias de Minas Gerais e Paraná (Agência iNFRA, 30/06/2026; eixos, 30/06/2026).</p>
+    <p style="margin:0;text-align:justify">A combinação entre queda de consumo e forte geração solar no horário das partidas levou o operador a restringir um volume expressivo de renováveis para preservar a estabilidade — até 21,8 GW no jogo contra o Japão, o equivalente a uma vez e meia a potência de Itaipu (O Tempo, 30/06/2026). Na estreia contra o Marrocos, em 13 de junho, a queda de carga foi de até 6,9%. O ONS adotou, desde o início do mundial, uma operação especial, com previsão de carga, programação e divulgação de boletins após as principais partidas, consolidando uma comunicação técnica proativa em torno do evento.</p>
+  </div>
+  <div style="background:#f2f6f6;padding:3.5mm 5mm;margin:3mm 0 0;max-width:158mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#0f5563;margin-bottom:2.5mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:13px;color:#2a2f34">A Copa é o ativo reputacional mais valioso do mês porque associa o ONS, diante de uma audiência de massa, à ideia de competência silenciosa — o sistema funciona justamente porque alguém o coordena. A oportunidade é transformar o interesse episódico em pedagogia duradoura: cada boletim de operação é uma chance de explicar, em linguagem acessível, o que o operador faz. O risco é deixar que a mesma cobertura evidencie apenas o corte de renováveis, e não a razão técnica por trás dele.</p>
+  </div>
+
+  <!-- 4.2 -->
+  <h3 style="display:flex;gap:11px;align-items:baseline;font-size:16.5px;font-weight:600;margin:5.5mm 0 2.6mm;color:#15171c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0f5563;font-weight:500">4.2</span><span>El Niño e a narrativa de guardião hídrico</span></h3>
+  <div style="max-width:158mm">
+    <p style="margin:0 0 2.2mm;text-align:justify">O anúncio de que o ONS passaria a poupar água nos reservatórios de Itaipu e das hidrelétricas do Sul para atravessar um El Niño de forte intensidade reforçou a imagem de planejamento prudente. Segundo o diretor de Planejamento, Alexandre Zucarato, a estratégia se apoia nas lições da crise hídrica de 2021 e busca manter cheios os reservatórios estratégicos das bacias dos rios Grande e Paranaíba até a transição para o período chuvoso, por volta de setembro (Folha/Diário do Comércio, 17/06/2026; CNN Brasil, 17/06/2026).</p>
+    <p style="margin:0;text-align:justify">A principal preocupação técnica declarada é o eventual atraso das chuvas na Região Norte, onde estão as usinas estruturantes Belo Monte, Jirau e Santo Antônio, importantes para o atendimento da ponta de carga. A comunicação do ONS aqui foi tecnicamente sólida e antecipatória — características que o próprio operador precisa cultivar como marca.</p>
+  </div>
+  <div style="background:#f2f6f6;padding:3.5mm 5mm;margin:3mm 0 0;max-width:158mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#0f5563;margin-bottom:2.5mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:13px;color:#2a2f34">Esta é uma trilha inequivocamente favorável. Ao explicar publicamente uma decisão de gestão de risco antes de qualquer crise, o ONS ocupa o lugar de instituição que antecipa, e não que reage. Vale institucionalizar esse padrão — comunicar decisões preventivas com antecedência — como método, não como exceção.</p>
+  </div>
+
+  <!-- 4.3 -->
+  <h3 style="display:flex;gap:11px;align-items:baseline;font-size:16.5px;font-weight:600;margin:5.5mm 0 2.6mm;color:#15171c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0f5563;font-weight:500">4.3</span><span>Curtailment: o desperdício como métrica pública</span></h3>
+  <div style="max-width:158mm">
+    <p style="margin:0 0 2.2mm;text-align:justify">O tema que mais tensiona a reputação do operador consolidou, em junho, seu enquadramento mais desfavorável. No domingo de 28 de junho, o ONS registrou restrição máxima de 14.278 MW de geração renovável no Nordeste — volume equivalente à potência instalada de Itaipu (Poder360, 29/06/2026). No dia seguinte, com o jogo do Brasil, o corte na região chegou a 16.001 MW, superando a soma de Itaipu e Belo Monte. Números dessa ordem circulam já não como curiosidade técnica, mas como evidência de ineficiência sistêmica.</p>
+    <p style="margin:0;text-align:justify">A regulação do tema segue indefinida. A ANEEL adiou, em 22 de junho, a votação da norma que trata dos cortes, após pedido de vista do diretor Fernando Mosna; o processo tramita na Consulta Pública nº 45, aberta em 2019 (Poder360, 29/06/2026). Em paralelo, discute-se um modelo de rateio contábil dos prejuízos entre fontes, com um "período sombra" de um ano antes de qualquer compartilhamento de custos, sob relatoria da diretora Agnes Costa (Agência iNFRA, 16/06/2026).</p>
+  </div>
+
+  <!-- CHART CURTAILMENT -->
+  <div style="border-top:1.6px solid #15171c;margin-top:6mm;padding-top:5mm;break-inside:avoid">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5mm;flex-wrap:wrap;gap:6px">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#8b9096">Curtailment de renováveis — escala em MW</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#5b6069"><span style="display:inline-block;width:16px;border-top:1.5px dashed #6b7075;vertical-align:middle;margin-right:6px"></span>Referência: Itaipu ≈ 14.000 MW</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:5mm">
+      <div>
+        <div style="display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:11px;margin-bottom:4px"><span style="color:#5b6069">28/06 · Nordeste</span><span style="color:#15171c;font-weight:500">14.278 MW &nbsp;·&nbsp; ≈ 1 Itaipu</span></div>
+        <div style="position:relative;height:22px;background:#f0f0ec"><div style="width:65.5%;height:100%;background:#b23b36"></div><div style="position:absolute;left:64.2%;top:-3px;bottom:-3px;border-left:1.5px dashed #6b7075"></div></div>
+      </div>
+      <div>
+        <div style="display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:11px;margin-bottom:4px"><span style="color:#5b6069">29/06 · Nordeste</span><span style="color:#15171c;font-weight:500">16.001 MW &nbsp;·&nbsp; &gt; Itaipu + Belo Monte</span></div>
+        <div style="position:relative;height:22px;background:#f0f0ec"><div style="width:73.4%;height:100%;background:#a5322d"></div><div style="position:absolute;left:64.2%;top:-3px;bottom:-3px;border-left:1.5px dashed #6b7075"></div></div>
+      </div>
+      <div>
+        <div style="display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:11px;margin-bottom:4px"><span style="color:#5b6069">29/06 · corte de renováveis (jogo do Japão)</span><span style="color:#15171c;font-weight:500">21.800 MW &nbsp;·&nbsp; ≈ 1,5 Itaipu</span></div>
+        <div style="position:relative;height:22px;background:#f0f0ec"><div style="width:100%;height:100%;background:#8f2723"></div><div style="position:absolute;left:64.2%;top:-3px;bottom:-3px;border-left:1.5px dashed #6b7075"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:#f2f6f6;padding:3.5mm 5mm;margin:6mm 0 0;max-width:158mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#0f5563;margin-bottom:2.5mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:13px;color:#2a2f34">O curtailment transformou-se em risco reputacional indireto de alta probabilidade. Ainda que o fenômeno tenha causas sistêmicas — expansão da geração acima da capacidade de escoamento —, o ONS tende a ser percebido como o rosto público da restrição, porque é ele quem executa o corte. Sem comunicação pedagógica consistente, o corte técnico será lido como falha de planejamento. A zona de legitimidade do operador está em separar, de forma didática e reiterada, o que é decisão operacional do que é gargalo estrutural de terceiros.</p>
+  </div>
+
+  <!-- 4.4 -->
+  <h3 style="display:flex;gap:11px;align-items:baseline;font-size:16.5px;font-weight:600;margin:5.5mm 0 2.6mm;color:#15171c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0f5563;font-weight:500">4.4</span><span>Plano emergencial de excedentes: prontidão sob holofote</span></h3>
+  <div style="max-width:158mm">
+    <p style="margin:0 0 2.2mm;text-align:justify">O primeiro acionamento do Plano Emergencial de Gestão de Excedentes de Energia na Rede de Distribuição, no feriado de Corpus Christi, sintetizou a ambivalência do mês. Diante da combinação de alta geração distribuída e baixa demanda, o ONS solicitou a redução da geração centralizada e, esgotada essa via, acionou 12 distribuidoras, que cortaram 1.000 MW entre 10h e 14h do domingo (07/06). A operação foi encerrada com sucesso, mantendo o equilíbrio do SIN (CNN Brasil, 07/06/2026).</p>
+    <p style="margin:0;text-align:justify">A leitura setorial, porém, foi dupla. Para a ABSolar, o acionamento inédito revelou um ponto de inflexão: o sistema cresceu em fontes renováveis sem o correspondente investimento em armazenamento e flexibilidade. O próprio diretor-geral do ONS reconheceu que cortes emergenciais desse tipo tendem a se tornar mais frequentes (Folha, 17/06/2026).</p>
+  </div>
+  <div style="background:#f2f6f6;padding:3.5mm 5mm;margin:3mm 0 0;max-width:158mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#0f5563;margin-bottom:2.5mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:13px;color:#2a2f34">O episódio é, ao mesmo tempo, um caso de sucesso operacional e um sinal de estresse estrutural. A comunicação deve enquadrá-lo pela competência — o sistema foi preservado — sem negar o pano de fundo. Reconhecer o desafio estrutural, desde que acompanhado da explicação técnica, protege a credibilidade; omiti-lo a corrói.</p>
+  </div>
+
+  <!-- 4.5 -->
+  <h3 style="display:flex;gap:11px;align-items:baseline;font-size:16.5px;font-weight:600;margin:5.5mm 0 2.6mm;color:#15171c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0f5563;font-weight:500">4.5</span><span>LRCAP: da controvérsia à judicialização</span></h3>
+  <div style="max-width:158mm">
+    <p style="margin:0 0 2.2mm;text-align:justify">O que em maio era disputa técnica e política tornou-se, em junho, disputa jurídica aberta. Às vésperas da homologação, o juiz federal Luis Praxedes, da 1ª Vara Federal do Ceará, suspendeu os contratos do LRCAP 2026 — cerca de R$ 516 bilhões envolvendo Petrobras, Eneva e grupos ligados à J&F —, em ação movida pela Federação das Indústrias do Estado do Ceará e pelo Sindienergia (Agência iNFRA, 08/06/2026; CNN Brasil, 08/06/2026). No dia seguinte, a ANEEL homologou os resultados do certame, de cerca de 19,5 GW, e a Justiça Federal do Distrito Federal negou recurso e tornou sem efeito a liminar anterior (Agência iNFRA, 10/06/2026).</p>
+    <p style="margin:0;text-align:justify">A controvérsia afeta o ONS por dois caminhos opostos e simultâneos: reforça sua imagem de instituição que há anos alerta para o risco de insuficiência de potência, mas o associa a um desenho criticado por custo, judicialização e baixa competição. O risco é o operador ser absorvido pela disputa binária entre defensores e críticos do leilão.</p>
+  </div>
+  <div style="background:#f2f6f6;padding:3.5mm 5mm;margin:3mm 0 0;max-width:158mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#0f5563;margin-bottom:2.5mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:13px;color:#2a2f34">O ONS deve preservar-se como voz de requisitos técnicos — segurança, atributos sistêmicos, limites operativos — e evitar ser lido como defensor do desenho político-regulatório do certame. A distinção entre "o sistema precisa de potência firme" (posição técnica legítima) e "este leilão, nestes termos, é o melhor arranjo" (decisão de governo) é a linha que protege sua neutralidade.</p>
+  </div>
+
+  <!-- 4.6 -->
+  <h3 style="display:flex;gap:11px;align-items:baseline;font-size:16.5px;font-weight:600;margin:5.5mm 0 2.6mm;color:#15171c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0f5563;font-weight:500">4.6</span><span>O modelo de risco (CVaR) e o custo da operação</span></h3>
+  <div style="max-width:158mm">
+    <p style="margin:0 0 2.2mm;text-align:justify">Em 10 de junho, o Comitê de Monitoramento do Setor Elétrico (CMSE) decidiu manter, para 2027, o parâmetro de aversão ao risco CVaR em 15/40 — o que significa dar peso de 40% aos 15% piores cenários hidrológicos. A decisão dividiu o setor. Comercializadores, consumidores e geradores renováveis consideram o critério excessivamente conservador e oneroso: segundo cálculos citados por representantes desses segmentos, o parâmetro gera cerca de R$ 5,4 bilhões a mais em despacho térmico, e sua flexibilização poderia reduzir o preço de curto prazo em torno de 40% (eixos, 11/06/2026). Do outro lado, geradores hidrelétricos e o governo defendem a manutenção como forma de preservar reservatórios e coerência entre operação e formação de preços.</p>
+    <p style="margin:0;text-align:justify">Embora o CVaR seja decisão do CMSE e não do ONS, o operador é parte técnica do processo e opera dentro dos parâmetros definidos — o que o expõe, por proximidade, à crítica de custo. O presidente-executivo da Abraceel chegou a classificar a manutenção como "aumento artificial do PLD" (Agência iNFRA, 11/06/2026).</p>
+  </div>
+  <div style="background:#f2f6f6;padding:3.5mm 5mm;margin:3mm 0 0;max-width:158mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#0f5563;margin-bottom:2.5mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:13px;color:#2a2f34">O risco aqui é de contágio: o ONS pode ser responsabilizado, na percepção pública, por uma decisão colegiada de governo. Cabe reforçar, sempre que o tema surgir, a fronteira entre a execução técnica da operação e a definição dos parâmetros de risco, que é competência do CMSE.</p>
+  </div>
+
+  <!-- 4.7 -->
+  <h3 style="display:flex;gap:11px;align-items:baseline;font-size:16.5px;font-weight:600;margin:5.5mm 0 2.6mm;color:#15171c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0f5563;font-weight:500">4.7</span><span>Governança e inovação: PMO/PLD e o Projeto Maestro</span></h3>
+  <div style="max-width:158mm">
+    <p style="margin:0 0 2.2mm;text-align:justify">Dois movimentos institucionais reforçaram, em junho, a narrativa de modernização e transparência. O primeiro foi a reestruturação, em conjunto com a CCEE, do Comitê Técnico do PMO/PLD, com governança ampliada, dois novos grupos de trabalho e o lançamento de um portal digital dedicado, respaldados pela Resolução Normativa ANEEL nº 1.144/2025 (Cenário Energia, 24/06/2026). O objetivo declarado é aumentar a aderência dos modelos computacionais à realidade da operação e ampliar a transparência na formação de preços.</p>
+    <p style="margin:0;text-align:justify">O segundo foi o anúncio do Projeto Maestro, iniciativa interna do ONS para desenvolver ferramentas eletroenergéticas próprias, de código aberto e gratuitas, com participação de universidades, centros de pesquisa e agentes. A nova estrutura deve estar operacional até outubro de 2026, e o próprio diretor-geral associou a lógica à de projetos colaborativos como Linux e Python (Capital Digital, 09/06/2026; Agência iNFRA, 10/06/2026).</p>
+  </div>
+  <div style="background:#f2f6f6;padding:3.5mm 5mm;margin:3mm 0 0;max-width:158mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#0f5563;margin-bottom:2.5mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:13px;color:#2a2f34">São ativos reputacionais de alto valor e baixo risco, que posicionam o ONS como instituição que moderniza suas próprias estruturas e abre suas ferramentas ao escrutínio. Merecem espaço proporcional na comunicação institucional — hoje ainda pequeno diante do peso que temas de crise ocupam na cobertura.</p>
+  </div>
+
+  <!-- 4.8 -->
+  <h3 style="display:flex;gap:11px;align-items:baseline;font-size:16.5px;font-weight:600;margin:5.5mm 0 2.6mm;color:#15171c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0f5563;font-weight:500">4.8</span><span>Vetores emergentes: data centers e cibersegurança</span></h3>
+  <div style="max-width:158mm">
+    <p style="margin:0 0 2.2mm;text-align:justify">Dois temas ganharam tração como riscos estruturantes de médio prazo. O primeiro é o da conexão de grandes cargas — data centers e hidrogênio — à rede, herança direta do caso Scala de maio. Um diretor da ANEEL chegou a alertar publicamente que o país se aproxima de um cenário de apagão de grandes proporções caso o operador perca a capacidade de supervisionar o sistema, citando a rampa de 4,3 GW em 21 minutos após um jogo da Copa como exemplo do tipo de variação que o SIN precisa absorver (Canal Solar, 25/06/2026). O tema do acesso de ultra-eletrointensivos permanece sensível porque combina política industrial, transição digital e disciplina técnica de rede.</p>
+    <p style="margin:0;text-align:justify">O segundo vetor, inteiramente novo no radar do ONS, é a cibersegurança de infraestrutura crítica. Reportagens do período registraram que o operador bloqueou cerca de 539 milhões de tentativas de ataque em 2024, enquanto a ANEEL contabilizou centenas de milhares de tentativas contra agentes do setor, colocando o Brasil entre os ambientes mais visados do mundo (Petronotícias, 24/06/2026).</p>
+  </div>
+  <div style="background:#f2f6f6;padding:3.5mm 5mm;margin:3mm 0 0;max-width:158mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#0f5563;margin-bottom:2.5mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:13px;color:#2a2f34">A cibersegurança é uma oportunidade de posicionamento ainda inexplorada: o ONS pode se apresentar como guardião não apenas da estabilidade física, mas também da resiliência digital da infraestrutura crítica nacional. É um tema em que a competência técnica do operador é um diferencial e o risco reputacional de um eventual incidente é elevado — o que recomenda comunicação preventiva.</p>
+  </div>
+
+  <!-- 4.9 -->
+  <h3 style="display:flex;gap:11px;align-items:baseline;font-size:16.5px;font-weight:600;margin:5.5mm 0 2.6mm;color:#15171c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0f5563;font-weight:500">4.9</span><span>Tarifas, Itaipu e o custo ao consumidor</span></h3>
+  <div style="max-width:158mm">
+    <p style="margin:0 0 2.2mm;text-align:justify">Junho trouxe ao primeiro plano o custo da energia para o consumidor final — tema que conecta diretamente as decisões técnicas do sistema ao bolso da população. A ANEEL aprovou um bônus de Itaipu de R$ 872,1 milhões para abater tarifas em agosto (Agência iNFRA, 30/06/2026) e uma repactuação do UBP estimada em R$ 5,6 bilhões para reduzir tarifas no Norte e Nordeste (Cenário Energia, 29/06/2026). Em sentido oposto, reajustes expressivos — 10,18% na Enel SP e 20,5% na Copel (Agência iNFRA, 30 e 23/06/2026) — e a projeção de alta média de 8,6% na conta de luz em 2026 mantiveram o preço da energia como pauta sensível e recorrente.</p>
+    <p style="margin:0;text-align:justify">Embora o ONS não defina tarifas, suas decisões operacionais — despacho térmico, parâmetros de risco, contratação de potência — influenciam o custo sistêmico que se reflete na conta. A conexão, cada vez mais explícita na cobertura, entre curtailment, LRCAP, CVaR e o preço final aproxima o operador de um debate que historicamente lhe era distante.</p>
+  </div>
+  <div style="background:#f2f6f6;padding:3.5mm 5mm;margin:3mm 0 0;max-width:158mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#0f5563;margin-bottom:2.5mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:13px;color:#2a2f34">O ONS deve antecipar a associação entre suas decisões técnicas e o custo ao consumidor, explicando os trade-offs — por exemplo, que a preservação de reservatórios via CVaR tem custo de curto prazo, mas reduz o risco de racionamento. A pedagogia do custo é hoje tão importante quanto a pedagogia da operação.</p>
+  </div>
+
+  <!-- 4.10 -->
+  <h3 style="display:flex;gap:11px;align-items:baseline;font-size:16.5px;font-weight:600;margin:5.5mm 0 2.6mm;color:#15171c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0f5563;font-weight:500">4.10</span><span>Baterias e armazenamento como agenda de resposta</span></h3>
+  <div style="max-width:158mm">
+    <p style="margin:0 0 2.2mm;text-align:justify">A agenda de armazenamento consolidou-se, em junho, como a principal resposta estrutural ao curtailment e às rampas de carga. O leilão de baterias previsto para o fim do ano, estimado em cerca de R$ 20 bilhões (NeoFeed, 25/06/2026), passou a ser tratado como virada de página, e iniciativas como o piloto de armazenamento em usina solar flutuante em Itaipu (eixos, 01/07/2026) e a agenda para destravar hidrelétricas reversíveis (Agência iNFRA, 11/06/2026) ampliaram o repertório de soluções em discussão.</p>
+    <p style="margin:0;text-align:justify">O mercado deixou de perguntar se o Brasil precisará de armazenamento e passou a perguntar quando, onde, com qual remuneração e com quais limites de rede. O ONS tem, nesse debate, a oportunidade de liderar tecnicamente — mas corre o risco de ser percebido como a instituição que reconhece a solução e, ao mesmo tempo, expõe suas limitações práticas de implementação.</p>
+  </div>
+  <div style="background:#f2f6f6;padding:3.5mm 5mm;margin:3mm 0 0;max-width:158mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#0f5563;margin-bottom:2.5mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:13px;color:#2a2f34">Convém ao ONS posicionar-se como orquestrador técnico da transição para um sistema flexível, comunicando com clareza o que o armazenamento resolve e o que ainda depende de expansão da transmissão e de desenho regulatório.</p>
+  </div>
+
+  <!-- 4.11 -->
+  <h3 style="display:flex;gap:11px;align-items:baseline;font-size:16.5px;font-weight:600;margin:5.5mm 0 2.6mm;color:#15171c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0f5563;font-weight:500">4.11</span><span>Autoprodução e mercado livre</span></h3>
+  <div style="max-width:158mm">
+    <p style="margin:0;text-align:justify">O período consolidou mudanças regulatórias relevantes na fronteira do consumo. A ANEEL aprovou novas regras para a autoprodução de energia, com prazo de transição de três anos (MegaWhat, 30/06/2026), em meio a um debate sobre o ritmo de expansão da micro e minigeração distribuída (MMGD), que um vice-presidente da Energisa chegou a classificar como necessitando de freio urgente (eixos, 10/06/2026). A abertura gradual do mercado livre, prevista na legislação recente, adiciona complexidade à operação e à formação de preços.</p>
+  </div>
+  <div style="background:#f2f6f6;padding:3.5mm 5mm;margin:3mm 0 0;max-width:158mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#0f5563;margin-bottom:2.5mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:13px;color:#2a2f34">A expansão da geração descentralizada é parte estrutural do desafio de curtailment e de controle do sistema. O ONS precisa comunicar que a integração dessas fontes, embora desejável, impõe requisitos técnicos de segurança que não são um entrave, mas uma condição de confiabilidade.</p>
+  </div>
+
+  <!-- 4.12 -->
+  <h3 style="display:flex;gap:11px;align-items:baseline;font-size:16.5px;font-weight:600;margin:5.5mm 0 2.6mm;color:#15171c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0f5563;font-weight:500">4.12</span><span>Transmissão e expansão da rede</span></h3>
+  <div style="max-width:158mm">
+    <p style="margin:0 0 2.2mm;text-align:justify">A expansão da transmissão manteve-se como pano de fundo estruturante. O novo mapa da transmissão do MME apontou onde o setor investirá bilhões até 2032 (Canal Solar, 26/06/2026), a ANEEL estimou receita de R$ 54,9 bilhões para as transmissoras no ciclo 2026-2027 (Agência iNFRA, 24/06/2026), e investimentos privados relevantes — como R$ 1,1 bilhão da Axia em subestações no Paraná e em São Paulo (Petronotícias, 01/07/2026) — reforçaram o movimento de fortalecimento da malha.</p>
+    <p style="margin:0;text-align:justify">A relevância reputacional do tema para o ONS é indireta, mas concreta: boa parte do curtailment decorre justamente de limitações de escoamento, e o atraso de obras estruturantes de transmissão é uma das causas do desperdício que hoje recai, na percepção pública, sobre o operador.</p>
+  </div>
+  <div style="background:#f2f6f6;padding:3.5mm 5mm;margin:3mm 0 0;max-width:158mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#0f5563;margin-bottom:2.5mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:13px;color:#2a2f34">Ao explicar o curtailment, o ONS deve conectar de forma explícita o corte de geração ao gargalo de transmissão, deslocando parte da responsabilidade percebida para a dimensão estrutural — sem, contudo, soar como quem transfere culpa.</p>
+  </div>
+
+  <!-- 4.13 -->
+  <h3 style="display:flex;gap:11px;align-items:baseline;font-size:16.5px;font-weight:600;margin:5.5mm 0 2.6mm;color:#15171c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0f5563;font-weight:500">4.13</span><span>Crítica institucional e o pano de fundo editorial</span></h3>
+  <div style="max-width:158mm">
+    <p style="margin:0 0 2.2mm;text-align:justify">Ao lado dos temas operacionais, junho registrou uma corrente persistente de crítica institucional ao setor elétrico como um todo, veiculada por editoriais e colunas de grandes veículos. Textos como "A deterioração institucional do setor elétrico brasileiro" (CNN Brasil, 02/07/2026), "A bagunça no setor elétrico brasileiro" (Gazeta do Povo, 13/06/2026), "A várzea do setor elétrico" (Estadão, 12/06/2026) e "Consumidor paga custo das falhas de planejamento no setor elétrico" (O Globo, 09/06/2026) compuseram um pano de fundo de descrédito que, embora raramente mire o ONS de forma nominal, molda a percepção da elite formadora de opinião sobre a governança do setor.</p>
+    <p style="margin:0;text-align:justify">Esse tipo de crítica é o vetor mais difícil de endereçar, porque não decorre de um fato específico, e sim de uma leitura acumulada de disfunções — subsídios, judicialização, custo, interferências legislativas. O risco para o ONS é de contágio por associação: quando a percepção geral do setor se deteriora, mesmo instituições tecnicamente sólidas perdem, na média, o benefício da dúvida.</p>
+  </div>
+  <div style="background:#f2f6f6;padding:3.5mm 5mm;margin:3mm 0 0;max-width:158mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#0f5563;margin-bottom:2.5mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:13px;color:#2a2f34">Contra a crítica difusa, a defesa mais eficaz é a diferenciação. O ONS deve reforçar, de forma consistente, os atributos que o distinguem do ruído setorial — competência técnica, transparência de método, previsibilidade —, evitando ser diluído na percepção genérica de um setor "em bagunça".</p>
+  </div>
+
+  <!-- 4.14 -->
+  <h3 style="display:flex;gap:11px;align-items:baseline;font-size:16.5px;font-weight:600;margin:5.5mm 0 2.6mm;color:#15171c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0f5563;font-weight:500">4.14</span><span>Resposta da demanda e flexibilidade operativa</span></h3>
+  <div style="max-width:158mm">
+    <p style="margin:0 0 2.2mm;text-align:justify">Entre os temas de maior potencial reputacional positivo, a agenda de resposta da demanda manteve tração. Em conjunto com a CCEE, o ONS pediu prudência na inclusão do mecanismo no modelo de curtíssimo prazo (Dessem), de modo a preservar a consistência da formação de preços (MegaWhat, 17/06/2026). A abertura de consulta para contratação de resposta da demanda e as contribuições de associações como a Abraceel reforçaram o tema como frente de modernização operativa.</p>
+    <p style="margin:0;text-align:justify">A resposta da demanda permite ao ONS aparecer como instituição orientada à inovação e à construção de soluções adaptativas: flexibilizar o consumo é uma alternativa ao corte de geração e ao acionamento térmico. É, portanto, um contraponto construtivo direto à narrativa de desperdício que o curtailment alimenta.</p>
+  </div>
+  <div style="background:#f2f6f6;padding:3.5mm 5mm;margin:3mm 0 0;max-width:158mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#0f5563;margin-bottom:2.5mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:13px;color:#2a2f34">Vale ao ONS dar visibilidade a essa agenda como prova de que o operador não apenas administra restrições, mas também constrói mecanismos de flexibilidade. A cautela técnica demonstrada na inclusão no Dessem, longe de fraqueza, é sinal de rigor — e deve ser comunicada como tal.</p>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 05 ============ -->
+<div id="s5" style="margin-top:4mm">
+  <div style="border-top:1.6px solid #15171c;padding-top:3.5mm;display:flex;gap:12px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:#0f5563;font-weight:600">05</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#8b9096">Diagnóstico</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Leitura Reputacional do Ambiente Externo</h2>
+
+  <h3 style="display:flex;gap:11px;align-items:baseline;font-size:16.5px;font-weight:600;margin:0 0 3.5mm;color:#15171c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0f5563;font-weight:500">5.1</span><span>Narrativa predominante</span></h3>
+  <div style="max-width:158mm"><p style="margin:0;text-align:justify">A narrativa predominante sobre o ONS em junho foi, pela primeira vez em meses, majoritariamente de competência. A Copa e o El Niño deslocaram o operador da posição defensiva de maio para uma posição de coordenação visível. Ainda assim, essa narrativa favorável convive com uma corrente persistente de cobrança estrutural, e o dado mais relevante do mês é que a franqueza da própria liderança — ao admitir limites do leilão e a maior frequência de cortes — alimentou os dois lados ao mesmo tempo.</p></div>
+
+  <h3 style="display:flex;gap:11px;align-items:baseline;font-size:16.5px;font-weight:600;margin:5.5mm 0 2.6mm;color:#15171c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0f5563;font-weight:500">5.2</span><span>Risco reputacional dominante</span></h3>
+  <div style="max-width:158mm"><p style="margin:0;text-align:justify">O maior risco do mês é interpretativo: a leitura de que o ONS é o rosto público de um sistema que desperdiça energia (curtailment) e cobra caro por segurança (CVaR), quando a rigor o operador executa decisões cujas causas — expansão desordenada da geração, atraso de transmissão, desenho regulatório — estão fora de seu controle direto. A judicialização do LRCAP amplifica esse risco por associação.</p></div>
+
+  <h3 style="display:flex;gap:11px;align-items:baseline;font-size:16.5px;font-weight:600;margin:5.5mm 0 2.6mm;color:#15171c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0f5563;font-weight:500">5.3</span><span>Oportunidade reputacional dominante</span></h3>
+  <div style="max-width:158mm"><p style="margin:0;text-align:justify">A principal oportunidade é converter a visibilidade positiva da Copa e do El Niño em uma plataforma permanente de pedagogia pública. O ONS tem, neste momento, um estoque raro de atenção favorável e uma agenda concreta de modernização (PMO/PLD, Projeto Maestro) para sustentá-la. Traduzir a complexidade do sistema em linguagem compreensível é, hoje, o movimento de maior retorno reputacional e menor risco.</p></div>
+
+  <h3 style="display:flex;gap:11px;align-items:baseline;font-size:16.5px;font-weight:600;margin:5.5mm 0 2.6mm;color:#15171c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0f5563;font-weight:500">5.4</span><span>Evolução em relação a maio</span></h3>
+  <div style="max-width:158mm">
+    <p style="margin:0 0 2.2mm;text-align:justify">A comparação com maio evidencia um deslocamento de eixo. Em maio, o ambiente reputacional era predominantemente defensivo, organizado em torno do caso Scala e da percepção de favorecimento no acesso à rede, do curtailment lido como falha e da controvérsia inicial sobre o LRCAP. O saldo do mês inclinava-se para o risco.</p>
+    <p style="margin:0 0 2.2mm;text-align:justify">Junho preserva as pressões estruturais de maio — curtailment, LRCAP, custo —, mas acrescenta um eixo positivo que maio não tinha: a exposição da competência operacional a uma audiência de massa, via Copa, e a narrativa de guardião hídrico, via El Niño. Ao mesmo tempo, dois temas amadureceram: o data center, que em maio era caso pontual, tornou-se debate sistêmico sobre a capacidade de o operador supervisionar grandes cargas; e a judicialização do LRCAP, que em maio era ameaça, materializou-se em suspensão e recurso.</p>
+    <p style="margin:0;text-align:justify">A leitura de continuidade é relevante: a oportunidade de reposicionamento que o relatório de maio apenas apontou começou, em junho, a se materializar. O acompanhamento reputacional ganha, assim, um fio narrativo cumulativo — o que se recomendou em maio encontrou, em junho, uma janela concreta de execução.</p>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 06 ============ -->
+<div id="s6" style="margin-top:4mm">
+  <div style="border-top:1.6px solid #15171c;padding-top:3.5mm;display:flex;gap:12px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:#0f5563;font-weight:600">06</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#8b9096">Riscos</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Riscos Reputacionais Prioritários</h2>
+
+  <!-- MATRIZ DE RISCO -->
+  <div style="break-inside:avoid;margin-bottom:2mm">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#8b9096;margin-bottom:5mm">Matriz de risco · probabilidade × impacto</div>
+    <div style="display:flex;gap:9px;max-width:150mm">
+      <div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#8b9096;display:flex;align-items:center;justify-content:center;padding-bottom:18px">Impacto</div>
+      <div style="flex:1">
+        <div style="display:grid;grid-template-columns:22mm 1fr 1fr 1fr;grid-auto-rows:58px;gap:4px">
+          <div style="display:flex;align-items:center;justify-content:flex-end;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b6069;padding-right:6px">Muito alto</div>
+          <div style="background:#fbeede;display:flex;align-items:center;justify-content:center"><span style="width:30px;height:30px;border-radius:50%;background:#a5322d;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center">4</span></div>
+          <div style="background:#f7ddcf"></div>
+          <div style="background:#f4d5d0;display:flex;align-items:center;justify-content:center"><span style="width:30px;height:30px;border-radius:50%;background:#8f2723;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center">1</span></div>
+
+          <div style="display:flex;align-items:center;justify-content:flex-end;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b6069;padding-right:6px">Alto</div>
+          <div style="background:#f4f5f3"></div>
+          <div style="background:#fbeede;display:flex;align-items:center;justify-content:center"><span style="width:30px;height:30px;border-radius:50%;background:#c1732a;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center">3</span></div>
+          <div style="background:#f6dcd7;display:flex;align-items:center;justify-content:center"><span style="width:30px;height:30px;border-radius:50%;background:#a5322d;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center">2</span></div>
+
+          <div style="display:flex;align-items:center;justify-content:flex-end;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b6069;padding-right:6px">Médio</div>
+          <div style="background:#f7f8f6;display:flex;align-items:center;justify-content:center"><span style="width:30px;height:30px;border-radius:50%;background:#6b7075;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center">5</span></div>
+          <div style="background:#f4f5f3"></div>
+          <div style="background:#fbeede"></div>
+        </div>
+        <div style="display:grid;grid-template-columns:22mm 1fr 1fr 1fr;gap:4px;margin-top:6px">
+          <div></div>
+          <div style="text-align:center;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b6069">Média</div>
+          <div style="text-align:center;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b6069">Média-alta</div>
+          <div style="text-align:center;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b6069">Alta</div>
+        </div>
+        <div style="text-align:center;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#8b9096;margin-top:7px;padding-left:22mm">Probabilidade</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LISTA DE RISCOS -->
+  <div style="margin-top:4mm">
+    <div style="display:grid;grid-template-columns:32px 1fr;gap:14px;margin-top:6mm;break-inside:avoid;max-width:158mm">
+      <div style="width:30px;height:30px;border-radius:50%;background:#8f2723;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center">1</div>
+      <div>
+        <div style="font-weight:600;font-size:15.5px;margin-bottom:2.5mm;line-height:1.3">Associação do ONS ao desperdício estrutural de renováveis</div>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:10.5px;margin-bottom:2.5mm"><span><span style="color:#8b9096">Probabilidade</span> <span style="color:#15171c;font-weight:500">Alta</span></span><span><span style="color:#8b9096">Impacto</span> <span style="color:#b23b36;font-weight:500;white-space:nowrap">Muito alto</span></span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#5b6069;margin-bottom:2.5mm">Sinal do mês — Curtailment no Nordeste equivalente a uma Itaipu.</div>
+        <p style="margin:0;text-align:justify">A consolidação pública dos números de curtailment, agora em ordem de grandeza facilmente comparável a grandes usinas, transforma o corte técnico em símbolo de ineficiência. Sem comunicação pedagógica reiterada, o ONS herda a responsabilidade percebida por um problema de causas sistêmicas.</p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:32px 1fr;gap:14px;margin-top:6mm;break-inside:avoid;max-width:158mm">
+      <div style="width:30px;height:30px;border-radius:50%;background:#a5322d;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center">2</div>
+      <div>
+        <div style="font-weight:600;font-size:15.5px;margin-bottom:2.5mm;line-height:1.3">Contágio pela judicialização e pelo custo do LRCAP</div>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:10.5px;margin-bottom:2.5mm"><span><span style="color:#8b9096">Probabilidade</span> <span style="color:#15171c;font-weight:500">Alta</span></span><span><span style="color:#8b9096">Impacto</span> <span style="color:#b23b36;font-weight:500">Alto</span></span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#5b6069;margin-bottom:2.5mm">Sinal do mês — Suspensão no Ceará e homologação da ANEEL no dia seguinte.</div>
+        <p style="margin:0;text-align:justify">A disputa jurídica e as críticas de custo ao leilão podem contaminar a imagem do operador por proximidade, especialmente se o ONS for lido como defensor do desenho do certame, e não como voz de requisitos técnicos de segurança.</p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:32px 1fr;gap:14px;margin-top:6mm;break-inside:avoid;max-width:158mm">
+      <div style="width:30px;height:30px;border-radius:50%;background:#c1732a;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center">3</div>
+      <div>
+        <div style="font-weight:600;font-size:15.5px;margin-bottom:2.5mm;line-height:1.3">Responsabilização pelo custo do modelo de risco (CVaR)</div>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:10.5px;margin-bottom:2.5mm"><span><span style="color:#8b9096">Probabilidade</span> <span style="color:#15171c;font-weight:500">Média-alta</span></span><span><span style="color:#8b9096">Impacto</span> <span style="color:#b23b36;font-weight:500">Alto</span></span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#5b6069;margin-bottom:2.5mm">Sinal do mês — Manutenção do CVaR 15/40 e estimativa de R$ 5,4 bi.</div>
+        <p style="margin:0;text-align:justify">Decisão colegiada do CMSE tende a ser atribuída, na percepção de parte do mercado, ao operador. A fronteira entre execução técnica e definição de parâmetros precisa ser reafirmada de forma consistente.</p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:32px 1fr;gap:14px;margin-top:6mm;break-inside:avoid;max-width:158mm">
+      <div style="width:30px;height:30px;border-radius:50%;background:#a5322d;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center">4</div>
+      <div>
+        <div style="font-weight:600;font-size:15.5px;margin-bottom:2.5mm;line-height:1.3">Incidente de cibersegurança em infraestrutura crítica</div>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:10.5px;margin-bottom:2.5mm"><span><span style="color:#8b9096">Probabilidade</span> <span style="color:#15171c;font-weight:500">Média</span></span><span><span style="color:#8b9096">Impacto</span> <span style="color:#b23b36;font-weight:500;white-space:nowrap">Muito alto</span></span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#5b6069;margin-bottom:2.5mm">Sinal do mês — Centenas de milhões de tentativas de ataque bloqueadas.</div>
+        <p style="margin:0;text-align:justify">Trata-se de risco de cauda: baixa probabilidade relativa, mas impacto reputacional e sistêmico severo. A ausência de comunicação preventiva sobre o tema deixa a instituição exposta a uma narrativa de despreparo caso um incidente relevante ocorra.</p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:32px 1fr;gap:14px;margin-top:6mm;break-inside:avoid;max-width:158mm">
+      <div style="width:30px;height:30px;border-radius:50%;background:#6b7075;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center">5</div>
+      <div>
+        <div style="font-weight:600;font-size:15.5px;margin-bottom:2.5mm;line-height:1.3">Erosão por crítica institucional difusa ao setor</div>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:10.5px;margin-bottom:2.5mm"><span><span style="color:#8b9096">Probabilidade</span> <span style="color:#15171c;font-weight:500">Média</span></span><span><span style="color:#8b9096">Impacto</span> <span style="color:#c1732a;font-weight:500">Médio</span></span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#5b6069;margin-bottom:2.5mm">Sinal do mês — Editoriais sobre "deterioração" e "custo do planejamento".</div>
+        <p style="margin:0;text-align:justify">A crítica genérica ao setor elétrico veiculada por grandes veículos molda a percepção da elite formadora de opinião e pode, por contágio, atingir o ONS mesmo quando não o menciona diretamente.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 07 ============ -->
+<div id="s7" style="margin-top:4mm">
+  <div style="border-top:1.6px solid #15171c;padding-top:3.5mm;display:flex;gap:12px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:#0f5563;font-weight:600">07</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#8b9096">Oportunidades</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Oportunidades de Posicionamento Institucional</h2>
+  <div style="display:flex;flex-direction:column;gap:6mm">
+    <div style="display:grid;grid-template-columns:32px 1fr;gap:14px;break-inside:avoid;max-width:158mm">
+      <div style="width:30px;height:30px;border-radius:50%;background:#0f5563;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center">1</div>
+      <div><div style="font-weight:600;font-size:15.5px;margin-bottom:2mm">Capitalizar a vitrine da Copa</div><p style="margin:0;text-align:justify">Converter o interesse episódico do público na operação do sistema em uma plataforma permanente de pedagogia, usando o formato de boletins e explicações acessíveis já testado durante o mundial.</p></div>
+    </div>
+    <div style="display:grid;grid-template-columns:32px 1fr;gap:14px;break-inside:avoid;max-width:158mm">
+      <div style="width:30px;height:30px;border-radius:50%;background:#0f5563;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center">2</div>
+      <div><div style="font-weight:600;font-size:15.5px;margin-bottom:2mm">Ocupar o espaço de guardião hídrico e digital</div><p style="margin:0;text-align:justify">Somar à narrativa consolidada de segurança do suprimento a de resiliência cibernética da infraestrutura crítica, tema em que a competência técnica do ONS é diferencial e ainda pouco comunicada.</p></div>
+    </div>
+    <div style="display:grid;grid-template-columns:32px 1fr;gap:14px;break-inside:avoid;max-width:158mm">
+      <div style="width:30px;height:30px;border-radius:50%;background:#0f5563;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center">3</div>
+      <div><div style="font-weight:600;font-size:15.5px;margin-bottom:2mm">Dar visibilidade à agenda de modernização</div><p style="margin:0;text-align:justify">Ampliar o espaço comunicacional do Projeto Maestro e da governança do PMO/PLD, que hoje ocupam fração pequena da cobertura frente aos temas de crise, reforçando a imagem de instituição que moderniza e abre suas ferramentas.</p></div>
+    </div>
+    <div style="display:grid;grid-template-columns:32px 1fr;gap:14px;break-inside:avoid;max-width:158mm">
+      <div style="width:30px;height:30px;border-radius:50%;background:#0f5563;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center">4</div>
+      <div><div style="font-weight:600;font-size:15.5px;margin-bottom:2mm">Assumir a pedagogia dos trade-offs</div><p style="margin:0;text-align:justify">Explicar de forma sistemática por que o curtailment ocorre, o que decorre de transmissão, de desenho regulatório e de expansão da geração, transformando a complexidade em ativo e reduzindo o espaço para narrativas simplificadoras.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 08 ============ -->
+<div id="s8" style="margin-top:4mm">
+  <div style="border-top:1.6px solid #15171c;padding-top:3.5mm;display:flex;gap:12px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:#0f5563;font-weight:600">08</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#8b9096">Atores</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Mapa de Stakeholders e Narrativas</h2>
+  <div style="max-width:158mm">
+    <p style="margin:0 0 2.2mm;text-align:justify">O ambiente de junho mobilizou um conjunto amplo de atores, cujas narrativas o ONS precisa monitorar e, quando cabível, endereçar. No campo institucional, ANEEL e MME ocuparam o centro das decisões de curtailment, LRCAP e CVaR, com posições nem sempre alinhadas entre si; a CCEE apareceu como parceira direta do ONS na governança do PMO/PLD, o que representa um ativo de coordenação; e a EPE manteve papel técnico no planejamento.</p>
+    <p style="margin:0 0 2.2mm;text-align:justify">No campo dos agentes, as associações foram vozes ativas e frequentemente críticas: a Abraceel, pela via do custo do CVaR; a ABSolar, pela leitura do plano emergencial como sinal de inflexão; a Abrage, em defesa da prudência hídrica. Federações industriais, com destaque para a Fiec, tornaram-se atores jurídicos relevantes ao mover a ação que suspendeu o LRCAP. No campo da imprensa, veículos especializados — Agência iNFRA, eixos, MegaWhat, CanalEnergia, Poder360 — pautaram o noticiário técnico, enquanto grandes veículos e colunistas de Folha, Estadão, O Globo, Valor e CNN moldaram a percepção mais ampla, inclusive por meio de editoriais críticos ao setor.</p>
+    <p style="margin:0;text-align:justify">Para a estratégia de relacionamento, três frentes se destacam: consolidar a parceria com a CCEE como vitrine de governança; qualificar o diálogo técnico com a imprensa especializada, que reproduz com fidelidade os dados do operador; e monitorar de perto a produção editorial dos grandes veículos, cuja crítica difusa é o vetor mais difícil de endereçar.</p>
+  </div>
+
+  <!-- PAINEL DE ATORES -->
+  <div style="border-top:1.6px solid #15171c;margin-top:6mm;padding-top:5mm;break-inside:avoid;display:grid;grid-template-columns:repeat(4,1fr);gap:9mm">
+    <div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#0f5563;margin-bottom:3.5mm">Institucional</div>
+      <div style="font-size:12.5px;color:#2a2f34;display:flex;flex-direction:column;gap:1.8mm"><span>ANEEL</span><span>MME</span><span>CCEE</span><span>EPE</span></div>
+    </div>
+    <div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#0f5563;margin-bottom:3.5mm">Agentes e associações</div>
+      <div style="font-size:12.5px;color:#2a2f34;display:flex;flex-direction:column;gap:1.8mm"><span>Abraceel</span><span>ABSolar</span><span>Abrage</span><span>Fiec / Sindienergia</span></div>
+    </div>
+    <div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#0f5563;margin-bottom:3.5mm">Imprensa especializada</div>
+      <div style="font-size:12.5px;color:#2a2f34;display:flex;flex-direction:column;gap:1.8mm"><span>Agência iNFRA</span><span>eixos</span><span>MegaWhat</span><span>CanalEnergia</span><span>Poder360</span></div>
+    </div>
+    <div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#0f5563;margin-bottom:3.5mm">Grandes veículos</div>
+      <div style="font-size:12.5px;color:#2a2f34;display:flex;flex-direction:column;gap:1.8mm"><span>Folha</span><span>Estadão</span><span>O Globo</span><span>Valor</span><span>CNN</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 09 ============ -->
+<div id="s9" style="margin-top:4mm">
+  <div style="border-top:1.6px solid #15171c;padding-top:3.5mm;display:flex;gap:12px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:#0f5563;font-weight:600">09</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#8b9096">Prospecção</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Tendências e Sinais Emergentes</h2>
+  <div style="max-width:158mm"><p style="margin:0 0 4mm;text-align:justify">Três sinais emergentes merecem acompanhamento prioritário nos próximos meses.</p></div>
+  <div style="display:flex;flex-direction:column;gap:6mm">
+    <div style="display:grid;grid-template-columns:34px 1fr;gap:14px;break-inside:avoid;max-width:158mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:28px;font-weight:300;color:#0f5563;line-height:.9">01</div>
+      <div><div style="font-weight:600;font-size:15.5px;margin-bottom:2mm">Cibersegurança como pauta de infraestrutura crítica</div><p style="margin:0;text-align:justify">O volume de ataques reportado e a crescente digitalização do setor tendem a manter o tema em ascensão, com potencial de virar crise reputacional caso ocorra um incidente relevante.</p></div>
+    </div>
+    <div style="display:grid;grid-template-columns:34px 1fr;gap:14px;break-inside:avoid;max-width:158mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:28px;font-weight:300;color:#0f5563;line-height:.9">02</div>
+      <div><div style="font-weight:600;font-size:15.5px;margin-bottom:2mm">Maturação da flexibilidade e do armazenamento</div><p style="margin:0;text-align:justify">O leilão de baterias previsto para o fim do ano, os pilotos de armazenamento e o debate sobre hidrelétricas reversíveis apontam para uma transição em que o ONS pode se posicionar como orquestrador técnico — desde que comunique bem os limites práticos de implementação.</p></div>
+    </div>
+    <div style="display:grid;grid-template-columns:34px 1fr;gap:14px;break-inside:avoid;max-width:158mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:28px;font-weight:300;color:#0f5563;line-height:.9">03</div>
+      <div><div style="font-weight:600;font-size:15.5px;margin-bottom:2mm">Abertura tecnológica e metodológica do operador</div><p style="margin:0;text-align:justify">Materializada no Projeto Maestro e na governança ampliada do PMO/PLD, essa abertura, se bem conduzida e comunicada, pode redefinir a percepção do ONS de "caixa-preta técnica" para "plataforma colaborativa", um reposicionamento de longo prazo de alto valor.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 10 ============ -->
+<div id="s10" style="margin-top:4mm">
+  <div style="border-top:1.6px solid #15171c;padding-top:3.5mm;display:flex;gap:12px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:#0f5563;font-weight:600">10</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#8b9096">Cenários</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Cenários Prospectivos</h2>
+  <div style="display:flex;flex-direction:column;gap:0">
+    <div style="border-top:1px solid #e4e4e0;padding:5mm 0;break-inside:avoid;max-width:158mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#8b9096;margin-bottom:2.5mm">Cenário 01</div>
+      <div style="font-weight:600;font-size:16px;margin-bottom:2.5mm">Consolidação do reposicionamento positivo</div>
+      <p style="margin:0 0 2.2mm;text-align:justify">O ONS aproveita a visibilidade da Copa e a agenda de modernização para ocupar o espaço de referência qualificada em segurança, flexibilidade e resiliência.</p>
+      <div style="font-size:13.5px;color:#2a2f34"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#0f5563">Resposta recomendada &nbsp;</span>Agenda ativa de porta-vozes e produção sistemática de conteúdo técnico acessível.</div>
+    </div>
+    <div style="border-top:1px solid #e4e4e0;padding:5mm 0;break-inside:avoid;max-width:158mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#8b9096;margin-bottom:2.5mm">Cenário 02</div>
+      <div style="font-weight:600;font-size:16px;margin-bottom:2.5mm">Escalada da narrativa de custo e desperdício</div>
+      <p style="margin:0 0 2.2mm;text-align:justify">Curtailment, CVaR e LRCAP se intensificam como pauta, com mais judicialização e cobrança política, e o ONS é crescentemente lido como corresponsável.</p>
+      <div style="font-size:13.5px;color:#2a2f34"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#0f5563">Resposta recomendada &nbsp;</span>Separar de forma clara e reiterada posição técnica, evidência operacional e decisão regulatória, com prova documental.</div>
+    </div>
+    <div style="border-top:1px solid #e4e4e0;border-bottom:1px solid #e4e4e0;padding:5mm 0;break-inside:avoid;max-width:158mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#8b9096;margin-bottom:2.5mm">Cenário 03</div>
+      <div style="font-weight:600;font-size:16px;margin-bottom:2.5mm">Choque reputacional por evento crítico</div>
+      <p style="margin:0 0 2.2mm;text-align:justify">Um incidente operacional relevante — apagão regional — ou um incidente cibernético desloca abruptamente a percepção.</p>
+      <div style="font-size:13.5px;color:#2a2f34"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#0f5563">Resposta recomendada &nbsp;</span>Protocolo de comunicação de crise pré-estruturado, com consistência argumentativa e coordenação institucional imediata.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 11 ============ -->
+<div id="s11" style="margin-top:4mm">
+  <div style="border-top:1.6px solid #15171c;padding-top:3.5mm;display:flex;gap:12px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:#0f5563;font-weight:600">11</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#8b9096">Ação</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Recomendações Executivas</h2>
+
+  <div style="max-width:158mm;break-inside:avoid">
+    <div style="display:flex;align-items:baseline;gap:10px;padding-bottom:3mm;border-bottom:1px solid #e4e4e0;margin-bottom:4mm"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#0f5563;font-weight:500">Ações imediatas</span></div>
+    <ul style="list-style:none;margin:0 0 8mm;padding:0;display:flex;flex-direction:column;gap:3mm">
+      <li style="display:grid;grid-template-columns:16px 1fr;gap:11px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0f5563;font-weight:600">→</span><span style="text-align:justify">Estruturar uma linha-mestra de posicionamento para os temas sensíveis do mês — curtailment, LRCAP, CVaR, data centers e cibersegurança —, garantindo unidade de linguagem entre áreas técnicas e comunicação.</span></li>
+      <li style="display:grid;grid-template-columns:16px 1fr;gap:11px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0f5563;font-weight:600">→</span><span style="text-align:justify">Reforçar, sempre que o tema surgir, a fronteira entre execução técnica do ONS e decisões de governo (parâmetros de risco, desenho do leilão), para evitar contágio reputacional.</span></li>
+      <li style="display:grid;grid-template-columns:16px 1fr;gap:11px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0f5563;font-weight:600">→</span><span style="text-align:justify">Capitalizar a vitrine da Copa enquanto o interesse é alto, com material pedagógico sobre o papel do operador na estabilidade do sistema.</span></li>
+    </ul>
+  </div>
+
+  <div style="max-width:158mm;break-inside:avoid">
+    <div style="display:flex;align-items:baseline;gap:10px;padding-bottom:3mm;border-bottom:1px solid #e4e4e0;margin-bottom:4mm"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#0f5563;font-weight:500">Ações de curto prazo</span></div>
+    <ul style="list-style:none;margin:0 0 8mm;padding:0;display:flex;flex-direction:column;gap:3mm">
+      <li style="display:grid;grid-template-columns:16px 1fr;gap:11px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0f5563;font-weight:600">→</span><span style="text-align:justify">Produzir conteúdo institucional explicando, em linguagem clara, o que é curtailment, por que ocorre e quais soluções estruturais estão em discussão, dissociando corte técnico de falha de planejamento.</span></li>
+      <li style="display:grid;grid-template-columns:16px 1fr;gap:11px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0f5563;font-weight:600">→</span><span style="text-align:justify">Iniciar uma frente de comunicação sobre cibersegurança de infraestrutura crítica, posicionando o ONS como guardião da resiliência digital, de forma preventiva.</span></li>
+      <li style="display:grid;grid-template-columns:16px 1fr;gap:11px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0f5563;font-weight:600">→</span><span style="text-align:justify">Dar espaço proporcional, na comunicação institucional, ao Projeto Maestro e à governança do PMO/PLD como provas concretas de modernização e transparência.</span></li>
+    </ul>
+  </div>
+
+  <div style="max-width:158mm;break-inside:avoid">
+    <div style="display:flex;align-items:baseline;gap:10px;padding-bottom:3mm;border-bottom:1px solid #e4e4e0;margin-bottom:4mm"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#0f5563;font-weight:500">Ações de médio prazo</span></div>
+    <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3mm">
+      <li style="display:grid;grid-template-columns:16px 1fr;gap:11px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0f5563;font-weight:600">→</span><span style="text-align:justify">Desenvolver agenda proativa e contínua de relacionamento com a imprensa especializada e com formadores de opinião dos grandes veículos, incluindo colunistas responsáveis pela crítica editorial ao setor.</span></li>
+      <li style="display:grid;grid-template-columns:16px 1fr;gap:11px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0f5563;font-weight:600">→</span><span style="text-align:justify">Consolidar a narrativa de futuro do sistema em três mensagens centrais — segurança, transparência e coordenação da transição —, sustentadas por evidência operacional.</span></li>
+      <li style="display:grid;grid-template-columns:16px 1fr;gap:11px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0f5563;font-weight:600">→</span><span style="text-align:justify">Manter monitoramento reputacional contínuo, com alertas de escalada para curtailment, LRCAP, data centers e cibersegurança.</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 12 ============ -->
+<div id="s12" style="margin-top:4mm">
+  <div style="border-top:1.6px solid #15171c;padding-top:3.5mm;display:flex;gap:12px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:#0f5563;font-weight:600">12</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#8b9096">Plano</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Plano de Ação — Próximo Mês</h2>
+  <div style="max-width:158mm"><p style="margin:0 0 4mm;text-align:justify">Para o mês seguinte, recomenda-se concentrar esforços em quatro frentes prioritárias, cada uma com objetivo, entregável e indicador definidos, conforme o quadro a seguir.</p></div>
+
+  <table style="width:100%;border-collapse:collapse;break-inside:auto">
+    <thead><tr>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:#8b9096;font-weight:500;padding:0 10px 3mm 0;border-bottom:1.5px solid #15171c;width:17%">Frente</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:#8b9096;font-weight:500;padding:0 10px 3mm 0;border-bottom:1.5px solid #15171c;width:27%">Objetivo</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:#8b9096;font-weight:500;padding:0 10px 3mm 0;border-bottom:1.5px solid #15171c;width:29%">Entregável</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:#8b9096;font-weight:500;padding:0 0 3mm 0;border-bottom:1.5px solid #15171c;width:27%">Indicador</th>
+    </tr></thead>
+    <tbody style="font-size:12.5px;line-height:1.4">
+      <tr><td style="padding:3.4mm 10px 3.4mm 0;border-bottom:1px solid #ececec;vertical-align:top;font-weight:600;color:#0f5563">Pedagogia operacional</td><td style="padding:3.4mm 10px;border-bottom:1px solid #ececec;vertical-align:top">Aproveitar o rescaldo da Copa</td><td style="padding:3.4mm 10px;border-bottom:1px solid #ececec;vertical-align:top">Peças explicativas sobre a operação do SIN</td><td style="padding:3.4mm 0;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">Alcance e reprodução na imprensa especializada</td></tr>
+      <tr><td style="padding:3.4mm 10px 3.4mm 0;border-bottom:1px solid #ececec;vertical-align:top;font-weight:600;color:#0f5563">Curtailment</td><td style="padding:3.4mm 10px;border-bottom:1px solid #ececec;vertical-align:top">Dissociar corte de falha de planejamento</td><td style="padding:3.4mm 10px;border-bottom:1px solid #ececec;vertical-align:top">Conteúdo institucional de referência sobre o tema</td><td style="padding:3.4mm 0;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">Citação do material como fonte pela imprensa</td></tr>
+      <tr><td style="padding:3.4mm 10px 3.4mm 0;border-bottom:1px solid #ececec;vertical-align:top;font-weight:600;color:#0f5563">Cibersegurança</td><td style="padding:3.4mm 10px;border-bottom:1px solid #ececec;vertical-align:top">Ocupar o espaço de guardião digital</td><td style="padding:3.4mm 10px;border-bottom:1px solid #ececec;vertical-align:top">Posicionamento institucional inaugural sobre resiliência</td><td style="padding:3.4mm 0;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">Repercussão qualificada do posicionamento</td></tr>
+      <tr><td style="padding:3.4mm 10px 3.4mm 0;vertical-align:top;font-weight:600;color:#0f5563">Modernização</td><td style="padding:3.4mm 10px;vertical-align:top">Dar tração ao Projeto Maestro e ao PMO/PLD</td><td style="padding:3.4mm 10px;vertical-align:top">Agenda de divulgação das iniciativas</td><td style="padding:3.4mm 0;vertical-align:top;color:#41474d">Presença dos temas positivos na cobertura mensal</td></tr>
+    </tbody>
+  </table>
+
+  <div style="max-width:158mm;margin-top:6mm"><p style="margin:0;text-align:justify">As quatro frentes traduzem, em ações concretas, a orientação central do período: ocupar ativamente o espaço de tradução técnica aberto pela visibilidade do mês, convertendo atenção favorável em posicionamento sustentado e diferenciando o ONS do ruído crítico do setor.</p></div>
+</div>
+
+<!-- ============ SEÇÃO 13 ============ -->
+<div id="s13" style="margin-top:4mm">
+  <div style="border-top:1.6px solid #15171c;padding-top:3.5mm;display:flex;gap:12px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:#0f5563;font-weight:600">13</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#8b9096">CRT</span>
+  </div>
+  <h2 style="font-size:27px;font-weight:600;margin:3.5mm 0 3mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Demonstração Sintética da Prestação de Serviços — CRT</h2>
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:6mm">
+    <div style="width:64px;height:4px;border-radius:2px;background:linear-gradient(90deg,#a9c1e8 0%,#ecea2b 62%,#f5f5ec 100%)"></div>
+    <span style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#3a4a3a">Clareza em meio ao <span style="text-decoration:line-through;text-decoration-thickness:2px;text-decoration-color:#c58a5a;color:#8a8175">caos</span>.</span>
+  </div>
+  <div style="max-width:158mm">
+    <p style="margin:0 0 2.2mm;text-align:justify">No período analisado, a atuação da CRT concentrou-se em frentes complementares de inteligência estratégica, suporte à alta administração, assessoria à comunicação e análise de cenário para o posicionamento institucional. A leitura consolidada das entregas indica uma operação com dupla função: de um lado, estrutura de suporte tático e responsivo, apoiando fluxos de alinhamento, atendimento e articulação com a imprensa; de outro, aconselhamento estratégico, contribuindo para a interpretação de temas sensíveis, a formulação de posicionamentos e o apoio à decisão em pautas de maior criticidade reputacional. Em todas as frentes, a atuação da CRT teve caráter de auxílio e assessoria técnica, cabendo à própria equipe do ONS a coordenação e a condução do processo.</p>
+    <p style="margin:0 0 4mm;text-align:justify">A ênfase do período recaiu sobre os temas de alta sensibilidade do mês, com destaque para a operação sob a Copa, o curtailment, a judicialização do LRCAP e os vetores emergentes de data centers e cibersegurança. O quadro a seguir resume, de forma quantitativa, as frentes de atuação no período.</p>
+  </div>
+
+  <table style="width:100%;border-collapse:collapse;max-width:158mm;break-inside:avoid">
+    <thead><tr>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:#8b9096;font-weight:500;padding:0 10px 3mm 0;border-bottom:1.5px solid #15171c">Frente de atuação</th>
+      <th style="text-align:right;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:#8b9096;font-weight:500;padding:0 0 3mm 0;border-bottom:1.5px solid #15171c;width:34%">Volume no período</th>
+    </tr></thead>
+    <tbody style="font-size:13px">
+      <tr><td style="padding:3mm 10px 3mm 0;border-bottom:1px solid #ececec;vertical-align:middle">Reuniões presenciais de alinhamento estratégico</td><td style="padding:3mm 0;border-bottom:1px solid #ececec;text-align:right"><span style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;font-weight:600;color:#15171c">3</span></td></tr>
+      <tr><td style="padding:3mm 10px 3mm 0;border-bottom:1px solid #ececec;vertical-align:middle">Reuniões virtuais / remotas</td><td style="padding:3mm 0;border-bottom:1px solid #ececec;text-align:right"><span style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;font-weight:600;color:#15171c">2</span></td></tr>
+      <tr><td style="padding:3mm 10px 3mm 0;border-bottom:1px solid #ececec;vertical-align:middle">Orientações e alinhamentos à ASCOM e áreas técnicas</td><td style="padding:3mm 0;border-bottom:1px solid #ececec;text-align:right"><span style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;font-weight:600;color:#15171c">3</span></td></tr>
+      <tr><td style="padding:3mm 10px 3mm 0;vertical-align:middle">Ações e análises de apoio à imprensa</td><td style="padding:3mm 0;text-align:right"><span style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;font-weight:600;color:#15171c">8</span></td></tr>
+    </tbody>
+  </table>
+
+  <div style="max-width:158mm;margin-top:6mm"><p style="margin:0;text-align:justify;color:#5b6069;font-size:13.5px">Os quantitativos acima serão consolidados junto à CRT e incorporados na versão final do relatório, preservando a consistência de método e de taxonomia mês a mês.</p></div>
+</div>
+
+<!-- ============ SEÇÃO 14 ============ -->
+<div id="s14" style="margin-top:0;break-before:page;padding-top:3mm">
+  <div style="border-top:1.6px solid #15171c;padding-top:3.5mm;display:flex;gap:12px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:#0f5563;font-weight:600">14</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#8b9096">Evidências</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Base de Evidências Monitoradas</h2>
+  <div style="max-width:158mm">
+    <p style="margin:0 0 3.5mm;text-align:justify">O monitoramento do mês contemplou 234 itens de imprensa, publicações institucionais e comunicações de agentes do setor, superando com folga os volumes mínimos previstos no escopo. Desse universo, foram classificados como de alta relevância 56 itens, dos quais o quadro a seguir apresenta uma seleção verificada — com jornalista, fonte citável e link conferidos por varredura direta. A base completa, com os 234 itens classificados e a tabela de clipping verificada em formato estendido, integra o anexo em planilha (base_evidencias_ONS_junho2026.xlsx).</p>
+  </div>
+
+  <!-- legenda de tom -->
+  <div style="display:flex;gap:18px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b6069;margin-bottom:4mm">
+    <span style="display:inline-flex;align-items:center;gap:7px"><span style="width:12px;height:12px;background:#e8f3ea;border:1px solid #cfe3d5;display:inline-block"></span>Positivo</span>
+    <span style="display:inline-flex;align-items:center;gap:7px"><span style="width:12px;height:12px;background:#ffffff;border:1px solid #d8d8d4;display:inline-block"></span>Neutro</span>
+    <span style="display:inline-flex;align-items:center;gap:7px"><span style="width:12px;height:12px;background:#fae9e8;border:1px solid #eccbc9;display:inline-block"></span>Negativo</span>
+    <span style="display:inline-flex;align-items:center;gap:7px"><span style="width:12px;height:12px;background:#fbeede;border:1px solid #ecd6b8;display:inline-block"></span>Crítico</span>
+  </div>
+
+  <table style="width:100%;border-collapse:collapse;break-inside:auto">
+    <thead><tr>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:#8b9096;font-weight:500;padding:0 6px 2.6mm 8px;border-bottom:1.5px solid #15171c;width:8%">Data</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:#8b9096;font-weight:500;padding:0 6px 2.6mm 6px;border-bottom:1.5px solid #15171c;width:17%">Veículo</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:#8b9096;font-weight:500;padding:0 6px 2.6mm 6px;border-bottom:1.5px solid #15171c;width:21%">Jornalista / assinatura</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:#8b9096;font-weight:500;padding:0 6px 2.6mm 6px;border-bottom:1.5px solid #15171c;width:41%">Título</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:#8b9096;font-weight:500;padding:0 8px 2.6mm 6px;border-bottom:1.5px solid #15171c;width:13%">Tom</th>
+    </tr></thead>
+    <tbody style="font-size:11.5px;line-height:1.34">
+      <tr style="background:#e8f3ea"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #f3f0ee;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">30/06</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">Agência iNFRA</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top;color:#5b6069">Redação (ag.)</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top"><a href="https://agenciainfra.com/blog/consumo-de-energia-cai-21-na-partida-do-brasil-na-copa-diz-ons/" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid #cfd6d8">Consumo de energia cai 21% na partida do Brasil na Copa, diz ONS</a></td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">30/06</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">eixos</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#5b6069">Redação (ag.)</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top"><a href="https://eixos.com.br/energia-eletrica/ons-consumo-de-energia-cai-ate-21-porcento-na-partida-do-brasil-e-geracao-renovavel-tem-corte-de-20-gw" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid #cfd6d8">ONS: consumo cai até 21% e geração renovável tem corte de 20 GW</a></td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">30/06</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">O Tempo (Ag. Estado)</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#5b6069">Redação (ag.)</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top"><a href="https://www.otempo.com.br/economia/2026/6/30/demanda-de-energia-cai-21-em-jogo-do-brasil-e-corte-de-geracao-renovavel-supera-uma-itaipu-e-meia" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid #cfd6d8">Corte de geração renovável em jogo do Brasil supera uma Itaipu e meia</a></td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr style="background:#fae9e8"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #f3ecec;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">29/06</td><td style="padding:2mm 6px;border-bottom:1px solid #f3ecec;vertical-align:top">Poder360</td><td style="padding:2mm 6px;border-bottom:1px solid #f3ecec;vertical-align:top;color:#5b6069">Redação</td><td style="padding:2mm 6px;border-bottom:1px solid #f3ecec;vertical-align:top"><a href="https://www.poder360.com.br/poder-energia/ons-aciona-pela-1a-vez-plano-emergencial-para-cortar-geracao-de-energia/" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid #cfd6d8">Curtailment no Nordeste atinge o equivalente a uma Itaipu</a></td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #f3ecec;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #f3f0ee;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">25/06</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">CNN Brasil / Ag. iNFRA</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top;color:#5b6069">Redação</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">ONS aponta estabilidade do sistema nos jogos do Brasil na Copa</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #f3f0ee;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">24/06</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">Cenário Energia</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top;color:#5b6069">Redação</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top"><a href="https://cenarioenergia.com.br/2026/06/24/ons-e-ccee-reestruturam-comite-pmo-pld-para-calibrar-precos-e-modelos/" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid #cfd6d8">ONS e CCEE reestruturam Comitê PMO/PLD e lançam novo portal</a></td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr style="background:#fae9e8"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #f3ecec;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">24/06</td><td style="padding:2mm 6px;border-bottom:1px solid #f3ecec;vertical-align:top">Petronotícias</td><td style="padding:2mm 6px;border-bottom:1px solid #f3ecec;vertical-align:top;color:#5b6069">Redação</td><td style="padding:2mm 6px;border-bottom:1px solid #f3ecec;vertical-align:top"><a href="https://petronoticias.com.br/ataques-ciberneticos-estao-colocando-o-setor-eletrico-brasileiro-sob-pressao-e-elevam-alerta-para-evitar-problemas/" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid #cfd6d8">Ataques cibernéticos colocam o setor elétrico sob pressão</a></td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #f3ecec;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #f3f0ee;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">18/06</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">Canal Rural</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top;color:#5b6069">Redação</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top"><a href="https://www.canalrural.com.br/diversos/ons-preve-poupar-agua-em-itaipu-e-usinas-do-sul-com-avanco-do-el-nino/" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid #cfd6d8">ONS prevê poupar água em Itaipu e usinas do Sul com o El Niño</a></td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">17/06</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Folha / D. do Comércio</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#5b6069">Nicola Pamplona</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top"><a href="https://diariodocomercio.com.br/economia/el-nino-operacao-eletrico-ons-hidreletrica/" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid #cfd6d8">El Niño mais forte requer operação especial, afirma ONS</a></td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #f3f0ee;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">08/06</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">Poder360</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top;color:#5b6069">Redação</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top"><a href="https://tinyurl.com/2hwy3e26" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid #cfd6d8">MME anuncia leilão de baterias para 2026 e reforça o arsenal do ONS</a></td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">16/06</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Agência iNFRA</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#5b6069">G. Campos Jr.; L. Carregosa; M. Wanzeller</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top"><a href="https://agenciainfra.com/blog/renovaveis-aguardam-transicao-para-nova-regra-de-cortes-de-geracao/" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid #cfd6d8">Renováveis aguardam transição para nova regra de cortes</a></td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr style="background:#fae9e8"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #f3ecec;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">16/06</td><td style="padding:2mm 6px;border-bottom:1px solid #f3ecec;vertical-align:top">Canal Solar</td><td style="padding:2mm 6px;border-bottom:1px solid #f3ecec;vertical-align:top;color:#5b6069">Redação</td><td style="padding:2mm 6px;border-bottom:1px solid #f3ecec;vertical-align:top"><a href="https://canalsolar.com.br/" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid #cfd6d8">Diretor da ANEEL alerta para risco de apagão sistêmico (data centers)</a></td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #f3ecec;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">11/06</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Agência iNFRA</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#5b6069">G. Campos Jr.; M. Wanzeller</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top"><a href="https://agenciainfra.com/blog/cmse-decisao-sobre-parametros-de-risco-de-operacao-do-sistema-divide-setor/" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid #cfd6d8">CMSE: decisão sobre parâmetros de risco (CVaR) divide o setor</a></td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr style="background:#fae9e8"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #f3ecec;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">11/06</td><td style="padding:2mm 6px;border-bottom:1px solid #f3ecec;vertical-align:top">eixos</td><td style="padding:2mm 6px;border-bottom:1px solid #f3ecec;vertical-align:top;color:#5b6069">Redação</td><td style="padding:2mm 6px;border-bottom:1px solid #f3ecec;vertical-align:top"><a href="https://eixos.com.br/energia-eletrica/decisao-do-cmse-de-manter-modelo-de-risco-frustra-comercializadores-que-esperavam-queda-nos-custos/" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid #cfd6d8">Decisão do CMSE de manter o CVaR frustra comercializadores</a></td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #f3ecec;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">10/06</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">MME (institucional)</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#5b6069">Comunicação MME</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top"><a href="https://www.gov.br/mme/pt-br/assuntos/noticias" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid #cfd6d8">CMSE mantém CVaR 15/40 para 2027 e cobra novos modelos</a></td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #f3f0ee;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">10/06</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">Agência iNFRA</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top;color:#5b6069">Redação</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top"><a href="https://agenciainfra.com/blog/ons-inicia-processo-para-desenvolver-modelos-computacionais-colaborativos/" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid #cfd6d8">ONS inicia modelos computacionais colaborativos (Projeto Maestro)</a></td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #f3f0ee;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">09/06</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">Capital Digital</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top;color:#5b6069">Redação</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top"><a href="https://capitaldigital.com.br/" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid #cfd6d8">ONS anuncia uso de código aberto na computação do setor</a></td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">10/06</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Agência iNFRA</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#5b6069">G. Campos Jr.; M. Wanzeller</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top"><a href="https://agenciainfra.com/blog/aneel-homologa-resultados-do-lrcap-2026-mas-debate-juridico-continua/" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid #cfd6d8">ANEEL homologa LRCAP 2026, mas debate jurídico continua</a></td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr style="background:#fae9e8"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #f3ecec;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">08/06</td><td style="padding:2mm 6px;border-bottom:1px solid #f3ecec;vertical-align:top">Agência iNFRA</td><td style="padding:2mm 6px;border-bottom:1px solid #f3ecec;vertical-align:top;color:#5b6069">Marisa Wanzeller</td><td style="padding:2mm 6px;border-bottom:1px solid #f3ecec;vertical-align:top"><a href="https://agenciainfra.com/blog/juiz-do-ceara-suspende-homologacao-do-lrcap-mas-repassa-decisao-final/" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid #cfd6d8">Juiz do Ceará suspende homologação do LRCAP</a></td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #f3ecec;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #f3f0ee;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">08/06</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">Ag. iNFRA / CNN</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top;color:#5b6069">Redação</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">ONS diz que corte de geração na distribuição "correu bem"</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #f3f0ee;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">07/06</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">Canal Rural / CNN</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top;color:#5b6069">Redação</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top"><a href="https://www.cnnbrasil.com.br/infra/ons-aciona-pela-primeira-vez-plano-de-gestao-de-excedentes-de-energia/" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid #cfd6d8">ONS encerra plano emergencial após gerir 1.000 MW de excedentes</a></td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">06/06</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Agência iNFRA</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#5b6069">Redação</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top"><a href="https://www.poder360.com.br/poder-energia/ons-aciona-pela-1a-vez-plano-emergencial-para-cortar-geracao-de-energia/" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid #cfd6d8">ONS aciona plano emergencial no feriado para garantir o SIN</a></td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">17/06</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">MegaWhat</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#5b6069">Redação</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">ONS prevê R$ 53,5 mi em reforços emergenciais após o LRCap</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">17/06</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">MegaWhat</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#5b6069">Redação</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">ONS e CCEE pedem cautela na resposta da demanda no Dessem</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #f3f0ee;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">12/06</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">Agência iNFRA</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top;color:#5b6069">Redação</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">ONS eleva previsão de afluências no Sul e Sudeste/CO</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">29/06</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Estadão</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#5b6069">Redação</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Menor consumo com o Japão e alta solar fazem ONS agir</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">25/06</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Estadão / Ag. iNFRA</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#5b6069">Redação</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Próximo jogo do Brasil poderá ter operação ainda mais complexa</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">15/06</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">eixos</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#5b6069">Redação</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Primeiro jogo do Brasil leva a queda de 8,6% na carga do SIN</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">17/06</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Agência iNFRA</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#5b6069">Redação</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">ONS planeja cortes automáticos de geração solar remota</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">10/06</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Agência iNFRA</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#5b6069">Redação</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">ANEEL vai revisar a resolução que trata do curtailment</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">22/06</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">TAGD Advogados</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#5b6069">Redação</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Aneel pede apoio da CCEE para regulamentar o ressarcimento do curtailment</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr style="background:#fae9e8"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #f3ecec;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">17/06</td><td style="padding:2mm 6px;border-bottom:1px solid #f3ecec;vertical-align:top">MegaWhat</td><td style="padding:2mm 6px;border-bottom:1px solid #f3ecec;vertical-align:top;color:#5b6069">Redação</td><td style="padding:2mm 6px;border-bottom:1px solid #f3ecec;vertical-align:top">ONS aponta riscos em reservas de capacidade (Casa dos Ventos, Odata)</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #f3ecec;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 6px 2mm 8px;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">24/06</td><td style="padding:2mm 6px;vertical-align:top">CCEE (institucional)</td><td style="padding:2mm 6px;vertical-align:top;color:#5b6069">Comunicação CCEE</td><td style="padding:2mm 6px;vertical-align:top"><a href="https://www.ccee.org.br/" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px solid #cfd6d8">CCEE e ONS lançam o portal do Comitê Técnico do PMO/PLD</a></td><td style="padding:2mm 8px 2mm 6px;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+    </tbody>
+  </table>
+
+  <div style="max-width:158mm;margin-top:4mm">
+    <p style="margin:0;font-size:13px;color:#5b6069;text-align:justify"><span style="font-style:italic">Nota metodológica:</span> as evidências acima foram verificadas na fonte; quando um mesmo despacho circulou em vários veículos, indica-se a fonte efetivamente conferida. Os itens não verificados individualmente — em especial colunas de opinião — são citados no corpo deste relatório de forma fiel, por veículo, título e data, sem atribuição de autoria ou de trechos não confirmados.</p>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 15 ============ -->
+<div id="s15" style="margin-top:4mm">
+  <div style="border-top:1.6px solid #15171c;padding-top:3.5mm;display:flex;gap:12px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:#0f5563;font-weight:600">15</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#8b9096">Fecho</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Considerações Finais</h2>
+  <div style="max-width:158mm">
+    <p style="margin:0 0 2.2mm;text-align:justify">Junho de 2026 entregou ao ONS uma oportunidade rara e uma cobrança persistente na mesma medida. A Copa e a gestão do El Niño reabriram, diante de uma audiência ampla, a imagem de operador competente que coordena a complexidade do sistema; a franqueza da liderança técnica e a boa execução do plano emergencial reforçaram essa percepção. Ao mesmo tempo, o curtailment convertido em métrica pública, a judicialização do LRCAP e o custo do modelo de risco mantiveram viva a narrativa de um operador associado a desperdício e a custo.</p>
+    <p style="margin:0;text-align:justify">A recomendação central é de ocupação ativa do espaço de tradução técnica: transformar a atenção favorável do mês em pedagogia permanente, dar visibilidade proporcional à agenda de modernização e reafirmar, com consistência, a fronteira entre a execução técnica do operador e as decisões de governo. A janela está aberta; sua conversão em capital reputacional duradouro depende de método, não de circunstância.</p>
+  </div>
+</div>
+
+<!-- ENCERRAMENTO -->
+<div style="margin-top:4mm;border-top:1.6px solid #15171c;padding-top:6mm;break-inside:avoid">
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#8b9096;margin-bottom:4mm">Encerramento</div>
+  <p style="margin:0 0 4mm;font-size:13.5px;color:#2a2f34">Guarulhos, julho de 2026.</p>
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6069;margin-bottom:5px">Suporte estratégico prestado por</div>
+  <img src="crt-logo.png" alt="CRT" style="height:40px;display:block;margin-bottom:7px"/>
+  <div style="width:130px;height:3px;border-radius:2px;background:linear-gradient(90deg,#a9c1e8 0%,#ecea2b 62%,#f5f5ec 100%);margin-bottom:7px"></div>
+  <div style="font-family:'IBM Plex Sans',sans-serif;font-size:13px;font-weight:600;color:#3a4a3a">Clareza em meio ao <span style="text-decoration:line-through;text-decoration-thickness:2px;text-decoration-color:#c58a5a;color:#8a8175">caos</span>.</div></div>
+</div>
+
+<!--CONTENT_END-->
+</div>
+</x-import>
+</x-dc>
+</body>
+</html>

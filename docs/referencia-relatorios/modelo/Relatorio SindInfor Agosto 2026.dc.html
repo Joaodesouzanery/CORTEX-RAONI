@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+  doc-page:not(:defined){visibility:hidden}
+  *{box-sizing:border-box}
+  .rp p{orphans:3;widows:3}
+  .pgnum::after{content:counter(page)}
+</style>
+</helmet>
+<x-import component-from-global-scope="doc-page" from="./doc-page.js" size="a4" margin="17mm" hint-size="100%,100%">
+<div slot="footer" style="display:flex;justify-content:space-between;align-items:baseline;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.05em;color:#8b90a2;border-top:1px solid #e7e7f0;padding-top:2mm">
+  <span>SindInfor · Boletim de Notícias · Agosto 2026</span>
+  <span class="pgnum" style="color:#4f46e5;font-weight:500"></span>
+</div>
+
+<div class="rp" style="font-family:'IBM Plex Sans',-apple-system,'Segoe UI',sans-serif;font-size:15.5px;line-height:1.68;color:#172032;-webkit-font-smoothing:antialiased">
+
+<!-- ============ CAPA ============ -->
+<div data-screen-label="Capa" style="position:relative;overflow:hidden;background:#080d1c;margin:-17mm -17mm 0;box-sizing:border-box;display:flex;flex-direction:column;break-after:page">
+  <div style="position:relative;height:208mm;overflow:hidden">
+    <img src="cover_sind_aug.jpg" alt="Rede digital abstrata com trilhas de dados conectadas" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 52%">
+    <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(8,13,28,.80) 0%,rgba(12,18,40,.50) 24%,rgba(58,38,140,.36) 50%,rgba(10,14,30,.66) 74%,rgba(6,9,20,.96) 100%)"></div>
+    <div style="position:absolute;top:22%;height:34%;left:0;right:0;background:linear-gradient(to bottom,rgba(6,9,20,0) 0%,rgba(6,9,20,.52) 26%,rgba(6,9,20,.56) 70%,rgba(6,9,20,0) 100%)"></div>
+
+    <div style="position:absolute;top:15mm;left:19mm;right:19mm;z-index:3;display:flex;justify-content:space-between;align-items:flex-start;gap:9mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.02em;color:#e8ebf7;max-width:112mm;line-height:1.5">SindInfor — Sindicato da Indústria de Software e da Tecnologia da Informação do Estado de Minas Gerais</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#9aa2c4;white-space:nowrap">Boletim de Notícias</div>
+    </div>
+
+    <div style="position:absolute;top:20mm;right:10mm;height:178mm;z-index:3;writing-mode:vertical-rl;font-family:'IBM Plex Sans',sans-serif;font-weight:700;font-size:13.5px;letter-spacing:.11em;color:#fff;text-transform:uppercase;opacity:.95;white-space:nowrap">REDATA · Data Centers · Tributação · IA</div>
+
+    <div style="position:absolute;left:0;right:0;top:31%;z-index:3;display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 19mm">
+      <img src="sindinfor-logo-white.png" alt="SindInfor" style="height:74px;display:block;filter:drop-shadow(0 3px 20px rgba(6,9,20,.7))">
+      <div style="width:50px;height:2px;background:#8b8cf0;margin:14px 0 9px"></div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:#e6e9f7;text-shadow:0 1px 12px rgba(6,9,20,.9)">Boletim de Notícias do Setor</div>
+    </div>
+
+    <div style="position:absolute;left:19mm;right:24mm;bottom:16mm;z-index:3">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:#a5a6f5;margin-bottom:6mm">Boletim Mensal · Agosto de 2026</div>
+      <h1 style="font-size:31px;font-weight:600;line-height:1.15;letter-spacing:-.015em;margin:0;color:#fff;max-width:148mm">Boletim Mensal de Notícias do Setor de Software e TI</h1>
+    </div>
+  </div>
+
+  <div style="background:#080d1c;padding:8mm 19mm 7mm;display:flex;justify-content:space-between;align-items:flex-end;gap:10mm">
+    <div style="display:flex;align-items:center;gap:9px"><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:#6a7196">Elaborado por</span><img src="sauz-logo.png" alt="SAUZ" style="height:20px;display:block;opacity:.85"></div>
+    <div style="text-align:right;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#9aa2c4;line-height:1.7">
+      <div>Setor de Tecnologia · Agosto de 2026</div>
+      <div style="color:#5f6688">Uso interno da diretoria</div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);height:6mm">
+    <div style="background:#4f46e5"></div><div style="background:#6366f1"></div><div style="background:#7c3aed"></div><div style="background:#0891b2"></div><div style="background:#1e293b"></div>
+  </div>
+</div>
+
+<!-- ============ NOTA + SUMÁRIO ============ -->
+<div data-screen-label="Sobre este boletim" style="break-after:page;padding-top:2mm">
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:#8b90a2;margin-bottom:3.5mm">Sobre este boletim</div>
+  <div style="border-top:1.6px solid #172032"></div>
+  <div style="background:#f2f2fb;border-left:3px solid #4f46e5;padding:8mm 8mm;margin-top:6mm;max-width:162mm">
+    <p style="margin:0 0 4mm;text-align:justify;font-size:15.5px;color:#2a2f42"><strong>Ler antes.</strong> O monitoramento do período reuniu 102 itens sobre o setor de tecnologia, compondo uma visão geral do ambiente setorial com inserções sobre o ecossistema mineiro.</p>
+    <p style="margin:0;text-align:justify;font-size:15.5px;color:#2a2f42">Este boletim organiza as principais notícias do período por tema — REDATA e data centers; reforma tributária; IA e regulação; talento e mercado de software — com o resumo do que foi noticiado e a fonte de cada informação. Nada foi atribuído ao SindInfor ou a Minas Gerais sem base factual.</p>
+  </div>
+
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:#8b90a2;margin:9mm 0 3mm">Sumário</div>
+  <div style="border-top:1.6px solid #172032"></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;column-gap:14mm">
+    <div>
+      <a href="#s1" style="display:flex;gap:11px;align-items:baseline;padding:4.2mm 0;border-bottom:1px solid #e7e7f0;text-decoration:none;color:#172032"><span style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#4f46e5;min-width:24px">01</span><span style="font-weight:500">Resumo do Mês</span></a>
+      <a href="#s2" style="display:flex;gap:11px;align-items:baseline;padding:4.2mm 0;border-bottom:1px solid #e7e7f0;text-decoration:none;color:#172032"><span style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#4f46e5;min-width:24px">02</span><span style="font-weight:500">Temas em Destaque</span></a>
+    </div>
+    <div>
+      <a href="#s4" style="display:flex;gap:11px;align-items:baseline;padding:4.2mm 0;border-bottom:1px solid #e7e7f0;text-decoration:none;color:#172032"><span style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#4f46e5;min-width:24px">03</span><span style="font-weight:500">As Notícias por Tema</span></a>
+      <a href="#s10" style="display:flex;gap:11px;align-items:baseline;padding:4.2mm 0;border-bottom:1px solid #e7e7f0;text-decoration:none;color:#172032"><span style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:#4f46e5;min-width:24px">04</span><span style="font-weight:500">Base de Notícias Monitoradas</span></a>
+    </div>
+  </div>
+
+  <div style="margin-top:8mm;border-top:1.6px solid #172032;padding-top:4.5mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#4f46e5;margin-bottom:3.5mm">Destaque do mês</div>
+    <div style="background:#f2f2fb;border-left:3px solid #4f46e5;padding:6mm 7mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#6a6fa0;margin-bottom:2.5mm">REDATA · pauta para 01/09/2026</div>
+      <div style="font-size:30px;font-weight:600;line-height:1.22;letter-spacing:-.01em;margin-bottom:5mm;max-width:152mm">A iminência que virou hábito — mas a janela nunca esteve tão estreita</div>
+      <p style="margin:0;font-size:16px;color:#2a2f42;text-align:justify;max-width:158mm">Prometida por Alcolumbre, listada como primeiro item da pauta do Senado — e não votada em agosto. Com a eleição se aproximando, setembro pode ser a última chance antes de um interregno eleitoral.</p>
+    </div>
+  </div>
+  <div style="margin-top:6mm;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#8b90a2;letter-spacing:.02em">SindInfor · Boletim de Notícias · Agosto de 2026</div>
+</div>
+
+<!-- ============ SEÇÃO 01 ============ -->
+<div id="s1" data-screen-label="01 Resumo do Mês" style="margin-top:1mm">
+  <div style="border-top:1.6px solid #172032;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#4f46e5;font-weight:600">01</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b90a2">Resumo</span>
+  </div>
+  <h2 style="font-size:29px;font-weight:600;margin:5mm 0 7mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Resumo do Mês</h2>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 4mm;text-align:justify">Agosto de 2026 foi o mês da iminência legislativa para o setor de tecnologia — e da frustração de prazo que se repete. A REDATA, projeto que cria o regime especial de tributação para a economia digital e os ativos tecnológicos, foi prometida para votação no "último esforço concentrado" antes das eleições, chegou a ser listada como primeiro item da pauta do Senado para 1º de setembro, mas atravessou o mês inteiro sem ser aprovada. Ao mesmo tempo, o país viveu uma semana de ebulição em torno dos data centers e dos minerais críticos, com o Senado definindo relatores para ambos os projetos no mesmo dia — sinal de que a pauta da economia digital ganhou urgência política que não tinha antes.</p>
+    <p style="margin:0 0 4mm;text-align:justify">Para o SindInfor, o mês sintetiza um paradoxo que persiste: o setor de software e TI é identificado como motor da economia digital e alvo de atenção legislativa crescente, mas as empresas — especialmente as de menor porte, que formam a maioria da base associada — chegam despreparadas às mudanças que se aproximam. Um estudo da Softex publicado no período projeta que a receita da indústria de software no Brasil pode dobrar até 2030, chegando a cerca de R$ 320 bilhões (Softex; Convergência Digital, 17/08/2026). A outra face: pesquisa mostra que apenas 1% das empresas de TI afirma ter sistemas prontos para enfrentar a reforma tributária (Convergência Digital, 21/08/2026). A distância entre o potencial e a preparação é o dado que mais chama atenção na cobertura do mês.</p>
+    <p style="margin:0 0 4mm;text-align:justify">A agenda legislativa do mês girou em torno de três frentes. A REDATA seguiu como pauta quente, com a Brasscom lançando uma nova força-tarefa em agosto (Convergência Digital, 06/08/2026) e com Alcolumbre prometendo votação antes das eleições (Convergência Digital, 27/08/2026) — mas o mês terminou sem aprovação, com a votação empurrada para 1º de setembro. O Marco da Economia Digital avançou em paralelo, com projeto que cria regras para uso de IA no Brasil (Estadão; estadomaior.com.br, 07/08/2026). E o Senado definiu relatores tanto para o projeto de data centers quanto para o de minerais críticos (Cenário Energia, 27/08/2026), sinalizando que a infraestrutura digital ganhou prioridade política.</p>
+    <p style="margin:0;text-align:justify">O pano de fundo tecnológico foi dominado pela IA. O SECOP 2026 debateu a necessidade de o Brasil ser mais ambicioso para liderar a inteligência artificial (Convergência Digital, 06/08/2026), e o EU AI Act europeu começa a respingar nas empresas brasileiras que atuam com clientes e parceiros na Europa (Estadão Blue Studio; Convergência Digital, 07 e 14/08/2026). Para as empresas de software que atuam com clientes internacionais, a regulação europeia passa a ser um fator concreto de compliance.</p>
+  </div>
+
+  <div style="margin-top:6mm;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:#4f46e5;padding-bottom:3mm;border-bottom:1px solid #e4e4ef;margin-bottom:4mm">Destaques do Mês</div>
+    <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:5.5mm">
+      <li style="display:grid;grid-template-columns:28px 1fr;gap:14px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#4f46e5;font-weight:600">01</span><span style="text-align:justify">A <strong>REDATA não foi votada</strong> em agosto, mas está como prioridade para 01/09 — chegou mais perto do que nunca da aprovação, numa janela pré-eleitoral estreita.</span></li>
+      <li style="display:grid;grid-template-columns:28px 1fr;gap:14px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#4f46e5;font-weight:600">02</span><span style="text-align:justify">O estudo <strong>Softex projeta receita em dobro até 2030</strong> — mas apenas 1% das empresas de TI diz estar preparado para a reforma tributária.</span></li>
+      <li style="display:grid;grid-template-columns:28px 1fr;gap:14px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#4f46e5;font-weight:600">03</span><span style="text-align:justify">O <strong>Senado definiu relatores</strong> para data centers e minerais críticos no mesmo dia — a infraestrutura digital é agora pauta de Estado.</span></li>
+      <li style="display:grid;grid-template-columns:28px 1fr;gap:14px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#4f46e5;font-weight:600">04</span><span style="text-align:justify">O <strong>Marco da Economia Digital</strong> avança em paralelo à REDATA, criando regras para IA no Brasil.</span></li>
+      <li style="display:grid;grid-template-columns:28px 1fr;gap:14px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#4f46e5;font-weight:600">05</span><span style="text-align:justify">O <strong>EU AI Act</strong> começa a afetar empresas brasileiras — compliance europeu vira requisito para quem exporta software.</span></li>
+      <li style="display:grid;grid-template-columns:28px 1fr;gap:14px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#4f46e5;font-weight:600">06</span><span style="text-align:justify"><strong>Data centers</strong> seguem como fronteira de infraestrutura: a ZPE Ceará ganha protagonismo; Minas aparece no mapa via Cemig/Invest Minas.</span></li>
+      <li style="display:grid;grid-template-columns:28px 1fr;gap:14px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#4f46e5;font-weight:600">07</span><span style="text-align:justify">A <strong>reforma tributária</strong> segue como a pauta de maior materialidade: o marco de 3 de agosto passou, e o ciclo de adequação está em curso.</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 02 ============ -->
+<div id="s2" data-screen-label="02 Temas em Destaque" style="break-before:page;padding-top:2mm">
+  <div style="border-top:1.6px solid #172032;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#4f46e5;font-weight:600">02</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b90a2">Mapeamento</span>
+  </div>
+  <h2 style="font-size:29px;font-weight:600;margin:5mm 0 7mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Temas em Destaque</h2>
+  <div style="max-width:160mm"><p style="margin:0 0 6mm;text-align:justify">O monitoramento reuniu 102 itens. A leitura do período identificou oito temas-matriz.</p></div>
+
+  <table style="width:100%;border-collapse:collapse;break-inside:auto">
+    <thead><tr>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#8b90a2;font-weight:500;padding:0 9px 2.4mm 0;border-bottom:1.5px solid #172032;width:36%">Tema</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#8b90a2;font-weight:500;padding:0 9px 2.4mm 0;border-bottom:1.5px solid #172032;width:14%">Relev.</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#8b90a2;font-weight:500;padding:0 0 2.4mm 0;border-bottom:1.5px solid #172032;width:50%">Sinal do mês</th>
+    </tr></thead>
+    <tbody style="font-size:14.5px;line-height:1.5">
+      <tr><td style="padding:4.2mm 9px 4.2mm 0;border-bottom:1px solid #ececf2;vertical-align:top;font-weight:500">REDATA: iminência e nova frustração</td><td style="padding:4.2mm 9px;border-bottom:1px solid #ececf2;vertical-align:top">Alta</td><td style="padding:4.2mm 0;border-bottom:1px solid #ececf2;vertical-align:top;color:#41474d">Prometida por Alcolumbre; "primeiro da lista" para 01/09; não votada</td></tr>
+      <tr><td style="padding:4.2mm 9px 4.2mm 0;border-bottom:1px solid #ececf2;vertical-align:top;font-weight:500">Política de data centers: relator definido</td><td style="padding:4.2mm 9px;border-bottom:1px solid #ececf2;vertical-align:top">Alta</td><td style="padding:4.2mm 0;border-bottom:1px solid #ececf2;vertical-align:top;color:#41474d">Senado define relatores para data centers e minerais críticos</td></tr>
+      <tr><td style="padding:4.2mm 9px 4.2mm 0;border-bottom:1px solid #ececf2;vertical-align:top;font-weight:500">Reforma tributária: IBS/CBS e o 1% pronto</td><td style="padding:4.2mm 9px;border-bottom:1px solid #ececf2;vertical-align:top">Alta</td><td style="padding:4.2mm 0;border-bottom:1px solid #ececf2;vertical-align:top;color:#41474d">Apenas 1% das empresas de TI diz ter sistemas prontos</td></tr>
+      <tr><td style="padding:4.2mm 9px 4.2mm 0;border-bottom:1px solid #ececf2;vertical-align:top;font-weight:500">Potencial do setor: estudo Softex</td><td style="padding:4.2mm 9px;border-bottom:1px solid #ececf2;vertical-align:top">Alta</td><td style="padding:4.2mm 0;border-bottom:1px solid #ececf2;vertical-align:top;color:#41474d">Receita da indústria de software pode dobrar até 2030</td></tr>
+      <tr><td style="padding:4.2mm 9px 4.2mm 0;border-bottom:1px solid #ececf2;vertical-align:top;font-weight:500">Marco da Economia Digital e IA</td><td style="padding:4.2mm 9px;border-bottom:1px solid #ececf2;vertical-align:top">Alta</td><td style="padding:4.2mm 0;border-bottom:1px solid #ececf2;vertical-align:top;color:#41474d">Projeto cria regras para IA; avanço paralelo à REDATA</td></tr>
+      <tr><td style="padding:4.2mm 9px 4.2mm 0;border-bottom:1px solid #ececf2;vertical-align:top;font-weight:500">EU AI Act e compliance internacional</td><td style="padding:4.2mm 9px;border-bottom:1px solid #ececf2;vertical-align:top">Média</td><td style="padding:4.2mm 0;border-bottom:1px solid #ececf2;vertical-align:top;color:#41474d">Regulação europeia respinga em empresas brasileiras</td></tr>
+      <tr><td style="padding:4.2mm 9px 4.2mm 0;border-bottom:1px solid #ececf2;vertical-align:top;font-weight:500">Minas Gerais e o polo de data centers</td><td style="padding:4.2mm 9px;border-bottom:1px solid #ececf2;vertical-align:top">Média</td><td style="padding:4.2mm 0;border-bottom:1px solid #ececf2;vertical-align:top;color:#41474d">ZPE Ceará ganha protagonismo; Cemig/Invest Minas mapeiam regiões aptas</td></tr>
+      <tr><td style="padding:4.2mm 9px 4.2mm 0;vertical-align:top;font-weight:500">IA na gestão e no modelo de negócio</td><td style="padding:4.2mm 9px;vertical-align:top">Média</td><td style="padding:4.2mm 0;vertical-align:top;color:#41474d">SECOP 2026: Brasil precisa de mais ambição em IA</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ============ SEÇÃO 04 ============ -->
+<div id="s4" data-screen-label="03 As Notícias por Tema" style="break-before:page;padding-top:2mm">
+  <div style="border-top:1.6px solid #172032;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#4f46e5;font-weight:600">03</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b90a2">Notícias</span>
+  </div>
+  <h2 style="font-size:29px;font-weight:600;margin:5mm 0 7mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">As Notícias por Tema</h2>
+
+  <!-- 4.1 -->
+  <div style="background:#4f46e5;color:#fff;padding:3mm 5mm;margin-bottom:3.5mm;display:flex;align-items:baseline;gap:11px;break-after:avoid;max-width:160mm">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#cfcdfa;font-weight:500">3.1</span>
+    <span style="font-weight:600;font-size:19px;line-height:1.25">A REDATA: iminência que virou hábito — mas a janela nunca esteve tão estreita</span>
+  </div>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 4mm;text-align:justify">O Regime Especial de Tributação para a Economia Digital e os Ativos Tecnológicos é, há meses, o projeto mais aguardado do setor. Em agosto, chegou mais perto da aprovação do que nunca: a Brasscom lançou uma nova força-tarefa dedicada a fazer o projeto passar no Congresso (Convergência Digital, 06/08/2026), o presidente do Senado prometeu votação no "último esforço concentrado antes das eleições" (Convergência Digital, 27/08/2026) e, ao fim do mês, o projeto estava listado como primeiro item da pauta para 01/09 (Convergência Digital, 31/08/2026). O mês terminou, porém, sem aprovação.</p>
+    <p style="margin:0;text-align:justify">O padrão se repete, mas o contexto mudou. Com a eleição presidencial se aproximando, o calendário legislativo encolhe rapidamente — o que torna setembro e outubro de 2026 possivelmente a última janela antes de um interregno eleitoral. Se a REDATA não for aprovada nesse período, o projeto provavelmente será retomado apenas num novo governo, com risco de renegociação do texto.</p>
+  </div>
+
+  <!-- 4.2 -->
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:19px;font-weight:600;margin:10mm 0 4mm;color:#172032;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#4f46e5;font-weight:500">3.2</span><span>Política de data centers: Senado define relatores e ZPE Ceará ganha protagonismo</span></h3>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 4mm;text-align:justify">Em 27 de agosto, o Senado definiu relatores tanto para o projeto de incentivo a data centers quanto para o de minerais críticos — no mesmo despacho (Cenário Energia, 27/08/2026). O movimento indica que a infraestrutura digital passou a ser tratada como pauta prioritária de Estado. A ZPE Ceará ganhou protagonismo como referência de polo de data centers (Balada IN, 25/08/2026), e parcerias como a da NTT DATA com a ENGIE para abastecer data centers de IA com energia renovável (Cenário Energia, 17/08/2026) mostram o nível de integração entre infraestrutura de dados e energia limpa.</p>
+    <p style="margin:0;text-align:justify">Em Minas Gerais, o movimento noticiado no período é o mapeamento conduzido por Cemig e Invest Minas de regiões aptas a receber data centers de grande porte, com foco em disponibilidade de energia e conectividade. Em paralelo, a ZPE do Ceará ganhou protagonismo na cobertura como polo de atração de infraestrutura digital, e a parceria NTT DATA/ENGIE para data centers voltados a IA foi destaque entre os anúncios do setor.</p>
+  </div>
+
+  <!-- 4.3 -->
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:19px;font-weight:600;margin:10mm 0 4mm;color:#172032;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#4f46e5;font-weight:500">3.3</span><span>O estudo Softex e o paradoxo do 1%</span></h3>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 4mm;text-align:justify">O Observatório Softex publicou em agosto um estudo projetando que a receita da indústria de software no Brasil pode dobrar até 2030, chegando a cerca de R$ 320 bilhões (Softex; Convergência Digital, 17/08/2026). O número é o melhor argumento disponível para a agenda do setor — uma indústria que pode dobrar de tamanho em quatro anos merece atenção legislativa, financiamento e formação de talentos.</p>
+    <p style="margin:0;text-align:justify">A outra face é sóbria: uma pesquisa mostrou que apenas 1% das empresas de TI afirma ter sistemas preparados para a reforma tributária (Convergência Digital, 21/08/2026). Isso significa que a quase totalidade das empresas do setor — incluindo a maioria dos associados do SindInfor — ainda não completou a adequação para um regime que já gerou obrigações (o marco de 3 de agosto para destaque de IBS e CBS nas notas fiscais) e que aprofundará as exigências até 2027 e 2028.</p>
+  </div>
+
+  <!-- 4.4 -->
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:19px;font-weight:600;margin:10mm 0 4mm;color:#172032;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#4f46e5;font-weight:500">3.4</span><span>O Marco da Economia Digital e o AI Act europeu</span></h3>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 4mm;text-align:justify">Dois movimentos regulatórios avançaram em agosto, com implicações diretas para as empresas de software. No plano doméstico, um projeto criou o Marco da Economia Digital e definiu regras para uso de IA no Brasil (estadomaior.com.br; Convergência Digital, 07/08/2026), avançando em paralelo à REDATA como parte de um conjunto legislativo que redesenha o ambiente regulatório do setor para a próxima década.</p>
+    <p style="margin:0;text-align:justify">No plano internacional, o AI Act da União Europeia começa a respingar nas empresas brasileiras (Estadão Blue Studio; Convergência Digital, 07 e 14/08/2026). A regulação europeia impõe requisitos de transparência, auditabilidade e gestão de risco a sistemas de IA que atendam cidadãos ou empresas europeias — o que inclui softwares exportados por empresas mineiras ou que integrem cadeias de fornecimento internacionais. O SECOP 2026, realizado no período, debateu o tema e alertou que o Brasil precisa de "mais ambição para liderar a IA" (Convergência Digital, 06/08/2026).</p>
+  </div>
+
+  <!-- 4.5 -->
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:19px;font-weight:600;margin:10mm 0 4mm;color:#172032;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#4f46e5;font-weight:500">3.5</span><span>A agenda de IA e o novo perfil profissional</span></h3>
+  <div style="max-width:160mm">
+    <p style="margin:0;text-align:justify">Agosto trouxe também a dimensão humana da transformação digital. O SECOP 2026 debateu Estado inteligente, IA e governança de dados (Convergência Digital, 05/08/2026), e a mudança do perfil profissional exigido teve destaque, com a IA como nova competência transversal. Apenas 17% dos CIOs classificam entregas de IA como prioridade efetiva (Exame, 21/08/2026), indicando que a adoção ainda está abaixo do discurso. E o setor de software brasileiro segue majoritariamente consumidor de tecnologia, com importações crescendo 116% em relação às exportações (Convergência Digital, 17/08/2026) — dado que coloca em perspectiva crítica o otimismo do estudo Softex.</p>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 10 ============ -->
+<div id="s10" data-screen-label="04 Base de Notícias" style="break-before:page;padding-top:2mm">
+  <div style="border-top:1.6px solid #172032;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#4f46e5;font-weight:600">04</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b90a2">Fontes</span>
+  </div>
+  <h2 style="font-size:29px;font-weight:600;margin:5mm 0 6mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Base de Notícias Monitoradas no Mês</h2>
+  <div style="max-width:160mm"><p style="margin:0 0 3.5mm;text-align:justify">O monitoramento reuniu 102 itens, tendo destaque os indicados na seleção a seguir.</p></div>
+
+  <div style="display:flex;gap:15px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#5b6069;margin-bottom:3mm">
+    <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:11px;height:11px;background:#e8f3ea;border:1px solid #cfe3d5;display:inline-block"></span>Positivo</span>
+    <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:11px;height:11px;background:#ffffff;border:1px solid #d8d8d4;display:inline-block"></span>Neutro</span>
+    <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:11px;height:11px;background:#fae9e8;border:1px solid #eccbc9;display:inline-block"></span>Negativo</span>
+  </div>
+
+  <table style="width:100%;border-collapse:collapse;break-inside:auto">
+    <thead><tr>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:#8b90a2;font-weight:500;padding:0 5px 2.2mm 7px;border-bottom:1.5px solid #172032;width:7%">Data</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:#8b90a2;font-weight:500;padding:0 5px 2.2mm 5px;border-bottom:1.5px solid #172032;width:19%">Veículo</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:#8b90a2;font-weight:500;padding:0 5px 2.2mm 5px;border-bottom:1.5px solid #172032;width:50%">Título</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:#8b90a2;font-weight:500;padding:0 5px 2.2mm 5px;border-bottom:1.5px solid #172032;width:11%">Relev.</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:#8b90a2;font-weight:500;padding:0 7px 2.2mm 5px;border-bottom:1.5px solid #172032;width:13%">Tom</th>
+    </tr></thead>
+    <tbody style="font-size:13px;line-height:1.48">
+      <tr><td style="padding:3.4mm 5px 2mm 7px;border-bottom:1px solid #ececf2;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">31/08</td><td style="padding:3.4mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Convergência Digital</td><td style="padding:3.4mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Redata: votação é o primeiro da lista do Senado para terça-feira, 01/09</td><td style="padding:3.4mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Alta</td><td style="padding:3.4mm 7px 2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr><td style="padding:3.4mm 5px 2mm 7px;border-bottom:1px solid #ececf2;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">27/08</td><td style="padding:3.4mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Convergência Digital</td><td style="padding:3.4mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Alcolumbre promete votar REDATA no último esforço concentrado antes das eleições</td><td style="padding:3.4mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Alta</td><td style="padding:3.4mm 7px 2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr><td style="padding:3.4mm 5px 2mm 7px;border-bottom:1px solid #ececf2;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">06/08</td><td style="padding:3.4mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Convergência Digital</td><td style="padding:3.4mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Brasscom: REDATA ganha nova força-tarefa em agosto para passar no Congresso</td><td style="padding:3.4mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Alta</td><td style="padding:3.4mm 7px 2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr style="background:#fae9e8"><td style="padding:3.4mm 5px 2mm 7px;border-bottom:1px solid #f3eceb;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">14/08</td><td style="padding:3.4mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Convergência Digital</td><td style="padding:3.4mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">REDATA: força-tarefa se esforça, mas projeto ficou fora da prioridade do Congresso</td><td style="padding:3.4mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Alta</td><td style="padding:3.4mm 7px 2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr><td style="padding:3.4mm 5px 2mm 7px;border-bottom:1px solid #ececf2;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">27/08</td><td style="padding:3.4mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Cenário Energia</td><td style="padding:3.4mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Senado define relatores para projetos de data centers e minerais críticos</td><td style="padding:3.4mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Alta</td><td style="padding:3.4mm 7px 2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr><td style="padding:3.4mm 5px 2mm 7px;border-bottom:1px solid #ececf2;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">25/08</td><td style="padding:3.4mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Balada IN</td><td style="padding:3.4mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">ZPE Ceará ganha protagonismo com a nova economia digital de data centers</td><td style="padding:3.4mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Alta</td><td style="padding:3.4mm 7px 2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:3.4mm 5px 2mm 7px;border-bottom:1px solid #f0efe9;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">17/08</td><td style="padding:3.4mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Cenário Energia</td><td style="padding:3.4mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">NTT DATA e ENGIE fecham parceria para abastecer data centers de IA com energia renovável</td><td style="padding:3.4mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Média</td><td style="padding:3.4mm 7px 2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:3.4mm 5px 2mm 7px;border-bottom:1px solid #f0efe9;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">17/08</td><td style="padding:3.4mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Convergência Digital</td><td style="padding:3.4mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Estudo Softex: Brasil pode dobrar receita da indústria de software até 2030</td><td style="padding:3.4mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Alta</td><td style="padding:3.4mm 7px 2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr style="background:#fae9e8"><td style="padding:3.4mm 5px 2mm 7px;border-bottom:1px solid #f3eceb;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">21/08</td><td style="padding:3.4mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Convergência Digital</td><td style="padding:3.4mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Reforma tributária: apenas 1% das empresas de TI diz ter sistemas prontos</td><td style="padding:3.4mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Alta</td><td style="padding:3.4mm 7px 2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr><td style="padding:3.4mm 5px 2mm 7px;border-bottom:1px solid #ececf2;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">07/08</td><td style="padding:3.4mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">estadomaior.com.br</td><td style="padding:3.4mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Projeto cria Marco da Economia Digital e define regras para uso de IA no Brasil</td><td style="padding:3.4mm 5px;border-bottom:1px solid #ececf2;vertical-align:top">Alta</td><td style="padding:3.4mm 7px 2mm 5px;border-bottom:1px solid #ececf2;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr style="background:#fae9e8"><td style="padding:3.4mm 5px 2mm 7px;border-bottom:1px solid #f3eceb;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">14/08</td><td style="padding:3.4mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Estadão Blue Studio</td><td style="padding:3.4mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">AI Act da UE pode atingir empresas brasileiras de IA</td><td style="padding:3.4mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Alta</td><td style="padding:3.4mm 7px 2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr style="background:#fae9e8"><td style="padding:3.4mm 5px 2mm 7px;border-bottom:1px solid #f3eceb;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">06/08</td><td style="padding:3.4mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Convergência Digital</td><td style="padding:3.4mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">SECOP 2026: Brasil precisa de mais ambição para liderar Inteligência Artificial</td><td style="padding:3.4mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Alta</td><td style="padding:3.4mm 7px 2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr style="background:#fae9e8"><td style="padding:3.4mm 5px 2mm 7px;border-bottom:1px solid #f3eceb;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">17/08</td><td style="padding:3.4mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Convergência Digital</td><td style="padding:3.4mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Brasil segue mero consumidor de tecnologia; importações crescem 116% vs. exportações</td><td style="padding:3.4mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Alta</td><td style="padding:3.4mm 7px 2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:3.4mm 5px 2mm 7px;border-bottom:1px solid #f0efe9;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">27/08</td><td style="padding:3.4mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Agência Sebrae</td><td style="padding:3.4mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Sudeste e Nordeste concentram 64% das GovTechs; software domina contratos governamentais</td><td style="padding:3.4mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Média</td><td style="padding:3.4mm 7px 2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:3.4mm 5px 2mm 7px;border-bottom:1px solid #f0efe9;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">27/08</td><td style="padding:3.4mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Brasil Journal</td><td style="padding:3.4mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">SaaSholic levanta 3º fundo e mira os "agentic software"</td><td style="padding:3.4mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Média</td><td style="padding:3.4mm 7px 2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr style="background:#fae9e8"><td style="padding:3.4mm 5px 2mm 7px;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">21/08</td><td style="padding:3.4mm 5px;vertical-align:top">Exame</td><td style="padding:3.4mm 5px;vertical-align:top">Apenas 17% dos CIOs classificam entregas de IA como prioridade</td><td style="padding:3.4mm 5px;vertical-align:top">Média</td><td style="padding:3.4mm 7px 2mm 5px;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+    </tbody>
+  </table>
+
+  <div style="max-width:160mm;margin-top:4mm">
+    <p style="margin:0;font-size:11.5px;color:#5b6069;text-align:justify"><span style="font-style:italic">Nota metodológica:</span> a seleção privilegia as evidências ligadas ao setor de software e às prioridades do SindInfor.</p>
+  </div>
+</div>
+
+<!-- ENCERRAMENTO -->
+<div data-screen-label="Encerramento" style="margin-top:9mm;border-top:1.6px solid #172032;padding-top:5mm;break-inside:avoid">
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b90a2;margin-bottom:3.5mm">Encerramento</div>
+  <p style="margin:0 0 5mm;font-size:13.5px;color:#2a2f42">Belo Horizonte/MG, setembro de 2026.</p>
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:10mm"><img src="sindinfor-logo.png" alt="SindInfor" style="height:40px;display:block"><div style="display:flex;align-items:center;gap:8px"><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#8b90a2">Elaborado por</span><img src="sauz-logo-dark.png" alt="SAUZ" style="height:18px;display:block"></div></div>
+</div>
+
+<!--CONTENT_END-->
+</div>
+</x-import>
+</x-dc>
+</body>
+</html>

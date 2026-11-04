@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  doc-page:not(:defined){visibility:hidden}
+  *{box-sizing:border-box}
+  .rp p{orphans:3;widows:3}
+</style>
+</helmet>
+<x-import component-from-global-scope="doc-page" from="./doc-page.js" size="a4" margin="14mm" hint-size="100%,100%">
+<div class="rp" style="font-family:'IBM Plex Sans',-apple-system,'Segoe UI',sans-serif;font-size:13.5px;line-height:1.48;color:#172032;-webkit-font-smoothing:antialiased">
+
+<!-- ============ CAPA ============ -->
+<div data-screen-label="Capa" style="position:relative;overflow:hidden;background:#0a0e1c;margin:-14mm -14mm 0;box-sizing:border-box;display:flex;flex-direction:column;break-after:page">
+
+  <!-- IMAGE REGION -->
+  <div style="position:relative;height:214mm;overflow:hidden">
+    <img src="cover_sind2.jpg" alt="Sala de data center com fileiras de servidores em iluminação violeta — infraestrutura de software e economia digital" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 40%"/>
+    <!-- indigo/violet wash + legibility scrims -->
+    <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(10,14,28,.58) 0%,rgba(12,18,40,.18) 30%,rgba(46,30,110,.14) 52%,rgba(10,13,26,.52) 72%,rgba(8,11,22,.90) 100%)"></div>
+    <div style="position:absolute;inset:0;background:linear-gradient(to right,rgba(8,11,22,.50) 0%,rgba(8,11,22,.10) 42%,rgba(8,11,22,0) 70%)"></div>
+
+    <!-- top kicker -->
+    <div style="position:absolute;top:16mm;left:20mm;right:20mm;z-index:3;display:flex;justify-content:space-between;align-items:flex-start;gap:10mm">
+      <div style="font-family:'IBM Plex Mono',monospace;color:#cdd3e6;text-shadow:0 1px 12px rgba(8,12,24,.6)">
+        <div style="font-size:12px;font-weight:600;letter-spacing:.02em">SindInfor — Sindicato da Indústria de Software e de TI de Minas Gerais</div>
+      </div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#8f97b5">Inteligência Setorial</div>
+    </div>
+
+    <!-- vertical tagline -->
+    <div style="position:absolute;top:20mm;right:11mm;height:184mm;z-index:3;writing-mode:vertical-rl;font-family:'IBM Plex Sans',sans-serif;font-weight:700;font-size:13.5px;letter-spacing:.11em;color:#ffffff;text-transform:uppercase;opacity:.94;white-space:nowrap">Software · Tributação · Talento · Minas Digital</div>
+
+    <!-- centered SAUZ lockup -->
+    <div style="position:absolute;left:0;right:0;top:33%;z-index:3;display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 20mm">
+      <img src="sauz-logo.png" alt="SAUZ — Comunicação e Estratégia" style="width:150px;max-width:52%;display:block;filter:drop-shadow(0 4px 22px rgba(8,12,24,.6))"/>
+      <div style="width:56px;height:2px;background:#8b8cf0;margin:16px 0 0"></div>
+    </div>
+
+    <!-- title block -->
+    <div style="position:absolute;left:20mm;right:26mm;top:58%;z-index:3">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:#a5a6f5;margin-bottom:7mm;text-shadow:0 1px 12px rgba(8,12,24,.7)">Relatório Mensal · Junho de 2026</div>
+      <h1 style="font-size:37px;font-weight:600;line-height:1.12;letter-spacing:-.015em;margin:0;color:#fff;max-width:150mm;text-shadow:0 2px 24px rgba(8,12,24,.5)">Relatório Mensal de Comunicação Estratégica e Inteligência Setorial</h1>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div style="background:#0a0e1c;padding:9mm 20mm 8mm;display:flex;justify-content:space-between;align-items:flex-end;gap:10mm">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#6a7196">Suporte estratégico prestado por SAUZ</div>
+    <div style="text-align:right;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#8f97b5;line-height:1.7">
+      <div>Junho de 2026</div>
+      <div style="color:#5f6688">Confidencial · uso interno da diretoria</div>
+    </div>
+  </div>
+
+  <!-- ACCENT STRIP -->
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);height:6mm">
+    <div style="background:#4f46e5"></div>
+    <div style="background:#6366f1"></div>
+    <div style="background:#7c3aed"></div>
+    <div style="background:#0891b2"></div>
+    <div style="background:#1e293b"></div>
+  </div>
+</div>
+
+<!-- ============ NOTA DE MÉTODO ============ -->
+<div data-screen-label="Nota de método" style="break-after:page;padding-top:3mm">
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#8b90a2;margin-bottom:4mm">Nota de método</div>
+  <div style="border-top:1.6px solid #172032"></div>
+  <div style="background:#f2f2fb;border-left:3px solid #4f46e5;padding:6mm 7mm;margin-top:6mm;max-width:162mm">
+    <p style="margin:0 0 2.2mm;text-align:justify;font-size:13px;color:#2a2f42"><strong>Ler antes.</strong> O monitoramento do período reuniu 40 itens que tratam predominantemente do <strong>setor</strong> de software — mercados globais, valuations, disrupção por IA, data centers, M&amp;A e macroeconomia. O período abre ao SindInfor um <strong>espaço claro de protagonismo</strong>: uma agenda setorial quente e ainda sem uma voz de referência consolidada em Minas — exatamente o lugar que a entidade pode ocupar.</p>
+    <p style="margin:0 0 2.2mm;text-align:justify;font-size:13px;color:#2a2f42">Por isso, este documento é uma <strong>leitura de inteligência setorial a serviço da entidade</strong> — lê o ambiente do setor de software e o que ele significa para as empresas mineiras representadas pelo SindInfor e para a sua agenda de atuação —, e não uma medição de exposição do nome do SindInfor.</p>
+    <p style="margin:0;text-align:justify;font-size:13px;color:#2a2f42">Os temas-âncora (tributação e capital humano) e o recorte de Minas Gerais foram enriquecidos com fontes verificadas, indicadas ao longo do texto. Nada foi atribuído ao SindInfor ou a Minas Gerais sem base factual.</p>
+  </div>
+
+  <!-- ÍNDICE -->
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#8b90a2;margin:12mm 0 4mm">Sumário</div>
+  <div style="border-top:1.6px solid #172032"></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;column-gap:16mm">
+    <div>
+      <a href="#s1" style="display:flex;gap:12px;align-items:baseline;padding:3.4mm 0;border-bottom:1px solid #e7e7f0;text-decoration:none;color:#172032"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#4f46e5;min-width:22px">01</span><span style="font-weight:500">Sumário Executivo</span></a>
+      <a href="#s2" style="display:flex;gap:12px;align-items:baseline;padding:3.4mm 0;border-bottom:1px solid #e7e7f0;text-decoration:none;color:#172032"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#4f46e5;min-width:22px">02</span><span style="font-weight:500">Temas Estratégicos do Mês</span></a>
+      <a href="#s3" style="display:flex;gap:12px;align-items:baseline;padding:3.4mm 0;border-bottom:1px solid #e7e7f0;text-decoration:none;color:#172032"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#4f46e5;min-width:22px">03</span><span style="font-weight:500">Leitura Reputacional do Ambiente</span></a>
+      <a href="#s4" style="display:flex;gap:12px;align-items:baseline;padding:3.4mm 0;border-bottom:1px solid #e7e7f0;text-decoration:none;color:#172032"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#4f46e5;min-width:22px">04</span><span style="font-weight:500">Análise Temática Aprofundada</span></a>
+      <a href="#s5" style="display:flex;gap:12px;align-items:baseline;padding:3.4mm 0;border-bottom:1px solid #e7e7f0;text-decoration:none;color:#172032"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#4f46e5;min-width:22px">05</span><span style="font-weight:500">Riscos Prioritários</span></a>
+    </div>
+    <div>
+      <a href="#s6" style="display:flex;gap:12px;align-items:baseline;padding:3.4mm 0;border-bottom:1px solid #e7e7f0;text-decoration:none;color:#172032"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#4f46e5;min-width:22px">06</span><span style="font-weight:500">Oportunidades de Posicionamento</span></a>
+      <a href="#s7" style="display:flex;gap:12px;align-items:baseline;padding:3.4mm 0;border-bottom:1px solid #e7e7f0;text-decoration:none;color:#172032"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#4f46e5;min-width:22px">07</span><span style="font-weight:500">Recomendações Executivas</span></a>
+      <a href="#s8" style="display:flex;gap:12px;align-items:baseline;padding:3.4mm 0;border-bottom:1px solid #e7e7f0;text-decoration:none;color:#172032"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#4f46e5;min-width:22px">08</span><span style="font-weight:500">Cenários Prospectivos</span></a>
+      <a href="#s9" style="display:flex;gap:12px;align-items:baseline;padding:3.4mm 0;border-bottom:1px solid #e7e7f0;text-decoration:none;color:#172032"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#4f46e5;min-width:22px">09</span><span style="font-weight:500">Demonstração dos Serviços — SAUZ</span></a>
+      <a href="#s10" style="display:flex;gap:12px;align-items:baseline;padding:3.4mm 0;border-bottom:1px solid #e7e7f0;text-decoration:none;color:#172032"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#4f46e5;min-width:22px">10</span><span style="font-weight:500">Base Qualificada de Evidências</span></a>
+    </div>
+  </div>
+  <div style="margin-top:9mm;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#8b90a2;letter-spacing:.02em">SAUZ · SindInfor · Junho de 2026 — Confidencial</div>
+</div>
+
+<!-- ============ SEÇÃO 01 ============ -->
+<div id="s1" data-screen-label="01 Sumário Executivo" style="margin-top:2mm">
+  <div style="border-top:1.6px solid #172032;padding-top:3.5mm;display:flex;gap:12px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:#4f46e5;font-weight:600">01</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#8b90a2">Síntese</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Sumário Executivo</h2>
+  <div style="max-width:158mm">
+    <p style="margin:0 0 2.2mm;text-align:justify">Junho de 2026 colocou a indústria de software diante de uma agenda de dupla face, e ambas incidem diretamente sobre os interesses das empresas mineiras representadas pelo SindInfor. De um lado, uma transformação estrutural doméstica de grande impacto: a reforma tributária entrou em sua fase de transição, e o setor de serviços — no qual o software se enquadra — desponta como o mais onerado pelo novo modelo de IVA dual (IBS e CBS). De outro, uma reconfiguração global do próprio modelo de negócio do software, provocada pela inteligência artificial, que ora ameaça as receitas recorrentes tradicionais, ora abre uma nova fronteira de eficiência e produtividade.</p>
+    <p style="margin:0 0 2.2mm;text-align:justify">No front tributário, o mês consolidou o diagnóstico de que 2026 não é um ano de mera adaptação, e sim de virada operacional. A partir de 3 de agosto, empresas do regime regular passam a ser obrigadas a destacar CBS e IBS nos documentos fiscais, ainda que a alíquota-teste seja simbólica (1%). O ponto crítico para o software está na estrutura do novo imposto: prestadores de serviços intensivos em conhecimento, com poucos insumos físicos e forte uso de mão de obra e de fornecedores no Simples, tendem a aproveitar poucos créditos — e, sem reestruturação de contratos e cadeia, a carga líquida efetiva pode subir de forma expressiva (análises setoriais citam saltos de patamar de um dígito para mais de 20% em casos de SaaS). É, sem exagero, a pauta de maior materialidade para os associados do SindInfor no horizonte próximo.</p>
+    <p style="margin:0 0 2.2mm;text-align:justify">No front tecnológico, o setor viveu um mês de reprecificação e reinvenção. A tese da "disrupção do software pela IA" — que derrubou valuations de nomes como Salesforce e Palantir e pressionou o crédito privado do setor — conviveu com a evidência de que a IA também expande margens e produtividade, como mostraram os balanços que impulsionaram a recuperação das ações de software no início de junho (TradingView, 01 e 02/06/2026). O movimento de fundo é claro: o mercado passou a exigir das empresas de software não apenas crescimento, mas eficiência e geração de caixa (startups.com.br, 22/06/2026), enquanto ferramentas de IA agêntica redefinem como o próprio software é construído (Exame, 04/07/2026).</p>
+    <p style="margin:0 0 2.2mm;text-align:justify">Em Minas Gerais, o sinal mais relevante do período foi o avanço da estratégia estadual de atração de infraestrutura digital: a Cemig e a Invest Minas concluíram um mapeamento da capacidade elétrica do estado para atrair data centers de grande porte, identificando quatro regiões aptas a atender cargas de até 100 MW (Cenário Energia, 03/07/2026). O movimento posiciona Minas na disputa por investimentos de economia digital — a mesma disputa que teve, no período, o anúncio do maior data center da América Latina no Ceará como referência nacional (Exame, 02/07/2026).</p>
+    <p style="margin:0;text-align:justify">Para o SindInfor, a convergência desses vetores desenha um mandato de atuação nítido. A reforma tributária exige uma frente de representação técnica e tempestiva, para que o enquadramento do software no novo sistema não penalize desproporcionalmente as empresas mineiras. A disrupção por IA pede uma agenda de requalificação e de reposicionamento do modelo de negócio dos associados. E a corrida por investimento digital abre à entidade a oportunidade de projetar Minas Gerais como polo — a aspiração que a própria entidade encampa em seu movimento "Minas Digital". A leitura de conjunto é de um momento de risco tributário elevado e, simultaneamente, de oportunidade de protagonismo institucional.</p>
+  </div>
+
+  <div style="margin-top:4mm;max-width:158mm">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#4f46e5;padding-bottom:3mm;border-bottom:1px solid #e4e4ef;margin-bottom:5mm">Top Insights do Mês</div>
+    <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3mm">
+      <li style="display:grid;grid-template-columns:22px 1fr;gap:11px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#4f46e5;font-weight:600">01</span><span style="text-align:justify">A <strong>reforma tributária (IBS/CBS)</strong> é a pauta de maior materialidade para os associados: o setor de serviços é o mais onerado, e o software sofre pela baixa geração de créditos. É a frente de advocacy prioritária do SindInfor.</span></li>
+      <li style="display:grid;grid-template-columns:22px 1fr;gap:11px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#4f46e5;font-weight:600">02</span><span style="text-align:justify">O marco de <strong>3 de agosto de 2026</strong> (obrigatoriedade de destaque de CBS/IBS nos documentos fiscais do regime regular) torna a preparação uma urgência operacional para as empresas mineiras, não uma agenda futura.</span></li>
+      <li style="display:grid;grid-template-columns:22px 1fr;gap:11px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#4f46e5;font-weight:600">03</span><span style="text-align:justify">A <strong>IA deixou de ser apenas ameaça</strong> ao modelo de software: os balanços do período mostraram expansão de margens via automação, e o mercado premia agora quem combina crescimento com eficiência.</span></li>
+      <li style="display:grid;grid-template-columns:22px 1fr;gap:11px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#4f46e5;font-weight:600">04</span><span style="text-align:justify">O <strong>capital humano</strong> vive uma transição dupla: escassez de especialistas e mudança do perfil exigido (multicompetência, aprendizado contínuo, fluência em IA), com impacto direto sobre a folha e a competitividade dos associados.</span></li>
+      <li style="display:grid;grid-template-columns:22px 1fr;gap:11px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#4f46e5;font-weight:600">05</span><span style="text-align:justify"><strong>Minas Gerais entrou na disputa por data centers</strong>: o mapeamento Cemig/Invest Minas é uma janela concreta para a entidade pautar energia, talento e ambiente de negócios como diferenciais mineiros.</span></li>
+      <li style="display:grid;grid-template-columns:22px 1fr;gap:11px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#4f46e5;font-weight:600">06</span><span style="text-align:justify">O ciclo de <strong>financiamento e M&amp;A</strong> girou para "margem acima de crescimento", com queda de aportes e maior seletividade — o que muda a estratégia de captação e de saída das empresas de software do estado.</span></li>
+      <li style="display:grid;grid-template-columns:22px 1fr;gap:11px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#4f46e5;font-weight:600">07</span><span style="text-align:justify">A <strong>soberania digital e a geopolítica</strong> (controles de exportação, chips, tarifaço) formam um pano de fundo que afeta custos, cadeias e a agenda regulatória do setor.</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 02 ============ -->
+<div id="s2" data-screen-label="02 Temas Estratégicos" style="margin-top:4mm">
+  <div style="border-top:1.6px solid #172032;padding-top:3.5mm;display:flex;gap:12px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:#4f46e5;font-weight:600">02</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#8b90a2">Mapeamento</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Temas Estratégicos do Mês</h2>
+
+  <h3 style="display:flex;gap:11px;align-items:baseline;font-size:16.5px;font-weight:600;margin:0 0 3.5mm;color:#172032"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#4f46e5;font-weight:500">2.1</span><span>Panorama do monitoramento</span></h3>
+  <div style="max-width:158mm">
+    <p style="margin:0 0 2.2mm;text-align:justify">Foram monitorados 40 itens no período, de 23/05 a 06/07/2026, todos de imprensa. A composição é reveladora: a cobertura concentrou-se em mercado de capitais e desempenho de ações de software (aproximadamente um terço dos itens, em veículos como TradingView, Investing.com, MSN e Times Brasil/CNBC), seguida de análises sobre IA e o futuro do setor, data centers, M&amp;A e macroeconomia. O destaque mineiro do período — o mapeamento Cemig/Invest Minas — sinaliza uma janela de crescimento para o ecossistema local, e o conjunto reforça a natureza do documento: uma leitura do ambiente setorial que baliza a atuação da entidade e antecipa oportunidades de posicionamento.</p>
+  </div>
+
+  <!-- PAINEL QUANTITATIVO -->
+  <div style="border-top:1.6px solid #172032;margin-top:4mm;padding-top:5mm;break-inside:avoid">
+    <div style="display:grid;grid-template-columns:repeat(3,1fr)">
+      <div style="padding-right:8mm">
+        <div style="font-size:38px;font-weight:600;letter-spacing:-.02em;line-height:1">40</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6069;margin-top:4px">itens monitorados</div>
+      </div>
+      <div style="padding:0 8mm;border-left:1px solid #e4e4ef">
+        <div style="font-size:38px;font-weight:600;letter-spacing:-.02em;line-height:1">10<span style="font-size:18px;color:#8b90a2;font-weight:500"> · alta</span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6069;margin-top:4px">alta relevância p/ o SindInfor</div>
+      </div>
+      <div style="padding-left:8mm;border-left:1px solid #e4e4ef">
+        <div style="font-size:38px;font-weight:600;letter-spacing:-.02em;line-height:1">4</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6069;margin-top:4px">frentes de crescimento p/ Minas</div>
+      </div>
+    </div>
+
+    <!-- Relevância + Cluster -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14mm;margin-top:4mm">
+      <div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#8b90a2;margin-bottom:4mm">Por relevância</div>
+        <div style="display:flex;flex-direction:column;gap:3mm;font-family:'IBM Plex Mono',monospace;font-size:11px">
+          <div><div style="display:flex;justify-content:space-between;color:#5b6069;margin-bottom:4px"><span>Alta</span><span style="color:#172032">10</span></div><div style="height:9px;background:#eaeaf4"><div style="width:50%;height:100%;background:#4f46e5"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;color:#5b6069;margin-bottom:4px"><span>Média</span><span style="color:#172032">20</span></div><div style="height:9px;background:#eaeaf4"><div style="width:100%;height:100%;background:#4f46e5"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;color:#5b6069;margin-bottom:4px"><span>Baixa</span><span style="color:#172032">10</span></div><div style="height:9px;background:#eaeaf4"><div style="width:50%;height:100%;background:#a9a7e8"></div></div></div>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#8b90a2;margin-bottom:4mm">Por cluster de cobertura</div>
+        <div style="display:flex;flex-direction:column;gap:3mm;font-family:'IBM Plex Mono',monospace;font-size:11px">
+          <div><div style="display:flex;justify-content:space-between;color:#5b6069;margin-bottom:4px"><span>Capitais / ações</span><span style="color:#172032">12</span></div><div style="height:9px;background:#eaeaf4"><div style="width:100%;height:100%;background:#0891b2"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;color:#5b6069;margin-bottom:4px"><span>IA e futuro do setor</span><span style="color:#172032">11</span></div><div style="height:9px;background:#eaeaf4"><div style="width:91.7%;height:100%;background:#0891b2"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;color:#5b6069;margin-bottom:4px"><span>Data centers / infra</span><span style="color:#172032">7</span></div><div style="height:9px;background:#eaeaf4"><div style="width:58.3%;height:100%;background:#0891b2"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;color:#5b6069;margin-bottom:4px"><span>Tributação / macro / M&amp;A</span><span style="color:#172032">10</span></div><div style="height:9px;background:#eaeaf4"><div style="width:83.3%;height:100%;background:#0891b2"></div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="display:flex;gap:11px;align-items:baseline;font-size:16.5px;font-weight:600;margin:9mm 0 3.5mm;color:#172032"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#4f46e5;font-weight:500">2.2</span><span>Síntese dos temas</span></h3>
+  <div style="max-width:158mm">
+    <p style="margin:0 0 4mm;text-align:justify">A leitura do período identificou seis temas-matriz. O quadro sintetiza cada um, sua relevância para os associados do SindInfor e o principal sinal do mês.</p>
+  </div>
+
+  <!-- TABELA DE TEMAS -->
+  <table style="width:100%;border-collapse:collapse;break-inside:auto">
+    <thead><tr>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:#8b90a2;font-weight:500;padding:0 10px 3mm 0;border-bottom:1.5px solid #172032;width:38%">Tema estratégico</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:#8b90a2;font-weight:500;padding:0 10px 3mm 0;border-bottom:1.5px solid #172032;width:16%">Relevância</th>
+      
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:#8b90a2;font-weight:500;padding:0 0 3mm 0;border-bottom:1.5px solid #172032;width:46%">Sinal do mês</th>
+    </tr></thead>
+    <tbody style="font-size:12.5px;line-height:1.4">
+      <tr><td style="padding:3mm 10px;border-bottom:1px solid #ececec;vertical-align:top;padding-left:0;font-weight:500">Reforma tributária (IBS/CBS) e serviços</td><td style="padding:3mm 10px;border-bottom:1px solid #ececec;vertical-align:top">Alta</td><td style="padding:3mm 0;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">Serviços como setor mais onerado; obrigação fiscal a partir de 03/08</td></tr>
+      <tr><td style="padding:3mm 10px;border-bottom:1px solid #ececec;vertical-align:top;padding-left:0;font-weight:500">IA: disrupção e reinvenção do software</td><td style="padding:3mm 10px;border-bottom:1px solid #ececec;vertical-align:top">Alta</td><td style="padding:3mm 0;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">Queda e recuperação de valuations; margens em alta via automação</td></tr>
+      <tr><td style="padding:3mm 10px;border-bottom:1px solid #ececec;vertical-align:top;padding-left:0;font-weight:500">Capital humano e requalificação em TI</td><td style="padding:3mm 10px;border-bottom:1px solid #ececec;vertical-align:top">Alta</td><td style="padding:3mm 0;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">Escassez de especialistas; novo perfil multicompetente</td></tr>
+      <tr><td style="padding:3mm 10px;border-bottom:1px solid #ececec;vertical-align:top;padding-left:0;font-weight:500">Minas Gerais como polo digital</td><td style="padding:3mm 10px;border-bottom:1px solid #ececec;vertical-align:top">Alta</td><td style="padding:3mm 0;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">Cemig/Invest Minas mapeiam energia para data centers</td></tr>
+      <tr><td style="padding:3mm 10px;border-bottom:1px solid #ececec;vertical-align:top;padding-left:0;font-weight:500">Valuations, M&amp;A e financiamento</td><td style="padding:3mm 10px;border-bottom:1px solid #ececec;vertical-align:top">Média</td><td style="padding:3mm 0;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">"Margem acima de crescimento"; queda de aportes</td></tr>
+      <tr><td style="padding:3mm 10px;vertical-align:top;padding-left:0;font-weight:500">Soberania digital, cibersegurança e geopolítica</td><td style="padding:3mm 10px;vertical-align:top">Média</td><td style="padding:3mm 0;vertical-align:top;color:#41474d">Chips, IA em cibersegurança e tarifaço no radar</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ============ SEÇÃO 03 ============ -->
+<div id="s3" data-screen-label="03 Leitura Reputacional" style="margin-top:4mm">
+  <div style="border-top:1.6px solid #172032;padding-top:3.5mm;display:flex;gap:12px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:#4f46e5;font-weight:600">03</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#8b90a2">Diagnóstico</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Leitura Reputacional do Ambiente Externo</h2>
+
+  <h3 style="display:flex;gap:11px;align-items:baseline;font-size:16.5px;font-weight:600;margin:0 0 3.5mm;color:#172032;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#4f46e5;font-weight:500">3.1</span><span>Narrativa predominante sobre o setor</span></h3>
+  <div style="max-width:158mm"><p style="margin:0;text-align:justify">A narrativa predominante do período foi a de um setor em <strong>reprecificação e reposicionamento</strong>. Depois de meses de pessimismo com a "disrupção do software pela IA", junho trouxe uma correção de rota: o mercado passou a distinguir entre empresas que serão substituídas pela IA e empresas que a incorporam para ganhar eficiência. Para o ecossistema mineiro, a narrativa relevante é a de que o software brasileiro maduro — de que a Totvs é o principal termômetro listado — segue atraente quando combina crescimento com disciplina de margem.</p></div>
+
+  <h3 style="display:flex;gap:11px;align-items:baseline;font-size:16.5px;font-weight:600;margin:5.5mm 0 2.6mm;color:#172032;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#4f46e5;font-weight:500">3.2</span><span>Risco reputacional dominante</span></h3>
+  <div style="max-width:158mm"><p style="margin:0;text-align:justify">O maior risco do período para os associados é de <strong>custo e competitividade</strong>, com origem tributária. A percepção, ainda difusa, de que a reforma penalizará desproporcionalmente serviços intensivos em conhecimento pode se converter em perda de margem e de competitividade das empresas mineiras — especialmente as pequenas e médias, que são a esmagadora maioria do setor. É um risco que se materializa em números, não em imagem, e que exige resposta institucional coordenada pela categoria.</p></div>
+
+  <h3 style="display:flex;gap:11px;align-items:baseline;font-size:16.5px;font-weight:600;margin:5.5mm 0 2.6mm;color:#172032;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#4f46e5;font-weight:500">3.3</span><span>Oportunidade reputacional dominante</span></h3>
+  <div style="max-width:158mm"><p style="margin:0;text-align:justify">A principal oportunidade é de <strong>protagonismo institucional</strong>. Num momento em que a regulamentação da reforma ainda está sendo calibrada e em que Minas se posiciona na disputa por investimento digital, o SindInfor tem espaço para ocupar o lugar de voz técnica e legítima do setor de software mineiro — junto ao poder público estadual e municipal, à FIEMG e às instâncias federais da reforma. Transformar a ameaça tributária em pauta de representação é o movimento de maior retorno institucional do semestre.</p></div>
+</div>
+
+<!-- ============ SEÇÃO 04 ============ -->
+<div id="s4" data-screen-label="04 Análise Temática" style="margin-top:4mm">
+  <div style="border-top:1.6px solid #172032;padding-top:3.5mm;display:flex;gap:12px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:#4f46e5;font-weight:600">04</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#8b90a2">Análise</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Análise Temática Aprofundada</h2>
+
+  <!-- 4.1 -->
+  <h3 style="display:flex;gap:11px;align-items:baseline;font-size:16.5px;font-weight:600;margin:0 0 3.5mm;color:#172032;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#4f46e5;font-weight:500">4.1</span><span>Reforma tributária (IBS/CBS): o setor de serviços como o mais onerado</span></h3>
+  <div style="max-width:158mm">
+    <p style="margin:0 0 2.2mm;text-align:justify">A reforma tributária deixou de ser agenda futura e tornou-se realidade operacional em 2026. A CBS (federal, em substituição a PIS e Cofins) e o IBS (estadual e municipal, em substituição a ICMS e ISS) inauguraram a fase de transição, com alíquota-teste de 1% e a obrigatoriedade, a partir de 3 de agosto, de destacar os novos tributos nos documentos fiscais das empresas do regime regular (Forbes, 01/07/2026; Ministério da Fazenda, 06/2026). A alíquota-padrão do novo IVA é estimada entre 26,5% e 28,6% — uma das mais altas do mundo.</p>
+    <p style="margin:0 0 2.2mm;text-align:justify">O ponto sensível para o software é estrutural. Historicamente, o setor de serviços recolhia alíquotas menores, ancoradas no ISS municipal (de 2% a 5%) e no PIS/Cofins. Com o IVA dual, passa a ser tributado pela alíquota cheia, e o alívio prometido — a não cumulatividade plena, com créditos ao longo da cadeia — funciona mal para empresas de tecnologia: como têm poucos insumos físicos e dependem de mão de obra e de fornecedores no Simples Nacional (que não geram crédito integral), sobra pouco a compensar. Análises tributárias do setor estimam que, sem reestruturação de contratos e cadeia de fornecedores, a carga líquida de uma empresa de SaaS pode saltar de um patamar próximo de um dígito para mais de 20%. Soma-se a isso o mecanismo de split payment, que recolhe o tributo no instante do pagamento e elimina o "float" que hoje funciona como capital de giro — um golpe direto no fluxo de caixa de negócios recorrentes.</p>
+    <p style="margin:0;text-align:justify">Há atenuantes em disputa, e é aí que reside a agenda de representação. A reforma prevê redução de 30% na alíquota para serviços intensivos em mão de obra, mas o enquadramento de empresas de tecnologia nesse benefício não é claro, e a extensão do conceito de "insumos que geram crédito" para o setor tende a ser objeto de discussão administrativa e judicial. Para as empresas do Simples Nacional — que representam a maioria dos associados —, 2026 não traz mudança, e o destaque de IBS/CBS começa apenas em 2027; ainda assim, elas serão pressionadas indiretamente, porque fornecedores e clientes fora do Simples reavaliarão com quem contratam à luz do aproveitamento de créditos.</p>
+  </div>
+  <div style="background:#f2f2fb;border-left:3px solid #4f46e5;padding:3.5mm 5mm;margin:3mm 0 0;max-width:158mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#4f46e5;margin-bottom:2.5mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:13px;color:#2a2f42">Esta é a frente prioritária de atuação do SindInfor no semestre. Recomenda-se que a entidade constitua uma posição técnica sobre o enquadramento do software na reforma — em especial a inclusão do setor na redução de 30% e a definição de créditos aplicáveis à atividade —, produza orientação prática aos associados sobre o marco de 3 de agosto e o planejamento de transição, e leve essa pauta às instâncias competentes (FIEMG, frentes parlamentares e Comitê Gestor do IBS). É onde a entidade pode gerar valor concreto e mensurável para a categoria.</p>
+  </div>
+
+  <!-- 4.2 -->
+  <h3 style="display:flex;gap:11px;align-items:baseline;font-size:16.5px;font-weight:600;margin:5.5mm 0 2.6mm;color:#172032;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#4f46e5;font-weight:500">4.2</span><span>Inteligência artificial: da disrupção à reinvenção do modelo de software</span></h3>
+  <div style="max-width:158mm">
+    <p style="margin:0 0 2.2mm;text-align:justify">Nenhum tema movimentou mais o setor no período do que o efeito da IA sobre o próprio software. A tese pessimista — de que agentes de IA tornariam obsoletas as plataformas tradicionais vendidas por assinatura e por usuário — pressionou fortemente as ações do setor no início do ano e chegou a ser apelidada de "SaaSpocalypse", com reflexo inclusive no crédito privado das empresas de tecnologia (Exame, 03/07/2026). Casos emblemáticos ilustraram a tensão: a Salesforce viu suas ações caírem cerca de um terço em um ano em meio a dúvidas sobre o modelo de preço por usuário (TradingView, 27/05/2026), e a Palantir, mesmo com crescimento de 85% de receita, seguiu sob escrutínio pela precificação premium (TradingView, 03/06/2026).</p>
+    <p style="margin:0 0 2.2mm;text-align:justify">O contraponto, porém, ganhou força em junho. Impulsionadas por balanços sólidos e por declarações de que a IA amplia — e não reduz — a demanda por software, as ações do setor engataram forte recuperação (TradingView, 01 e 02/06/2026). Análises de mercado passaram a mostrar que a IA tem gerado ganhos de eficiência e expansão de margens, com empresas brasileiras como Totvs, VTEX e LWSA registrando avanços expressivos de margem via automação e corte de custos (Associação Comercial e Industrial de Araçatuba, 23/05/2026). Ao mesmo tempo, a forma de produzir software mudou: ferramentas de IA agêntica — de editores de código a agentes que executam tarefas — tornaram-se o novo padrão de desenvolvimento, com adoção acelerada e protocolos abertos de interoperabilidade (Exame, 04/07/2026).</p>
+    <p style="margin:0;text-align:justify">Para as empresas mineiras, a mensagem é de adaptação, não de fatalismo. O modelo de negócio migra da lógica de "licença por usuário" para a de valor entregue e consumo, e a produtividade do desenvolvimento salta com o uso de IA. Empresas que incorporarem essas ferramentas tendem a ganhar margem; as que resistirem, a perder competitividade.</p>
+  </div>
+  <div style="background:#f2f2fb;border-left:3px solid #4f46e5;padding:3.5mm 5mm;margin:3mm 0 0;max-width:158mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#4f46e5;margin-bottom:2.5mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:13px;color:#2a2f42">O SindInfor pode assumir o papel de tradutor dessa transição para o seu ecossistema, promovendo conteúdo e capacitação sobre a incorporação de IA aos modelos de negócio e aos processos de desenvolvimento dos associados. É uma agenda que combina defesa da competitividade com posicionamento de vanguarda.</p>
+  </div>
+
+  <!-- 4.3 -->
+  <h3 style="display:flex;gap:11px;align-items:baseline;font-size:16.5px;font-weight:600;margin:5.5mm 0 2.6mm;color:#172032;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#4f46e5;font-weight:500">4.3</span><span>Capital humano e requalificação em TI</span></h3>
+  <div style="max-width:158mm">
+    <p style="margin:0 0 2.2mm;text-align:justify">O segundo tema-âncora do SindInfor manifestou-se no período pela via da transformação do trabalho. De um lado, a escassez de profissionais especializados segue como um dos principais gargalos do setor, apontada em estudos de mercado (cryptoid.com.br, 16/06/2026). De outro, o perfil exigido mudou: os debates do período — sobretudo no âmbito do Sistema S — convergiram para a ideia de que a competência mais valorizada dos próximos anos será a capacidade de aprender continuamente e de operar de forma multicompetente, com fluência em IA e postura ética e segura no uso da tecnologia (Convergência Digital, 01/07/2026).</p>
+    <p style="margin:0;text-align:justify">A dimensão do deslocamento aparece nos extremos do mercado. Na ponta da fronteira tecnológica, cargos qualificados são redesenhados pela IA agêntica, com ganhos de produtividade que alteram a composição das equipes (Exame, 04/07/2026). Na ponta do serviço público, a disputa por talento se traduz em remunerações elevadas para especialistas em desenvolvimento, dados e IA (G1, 15/06/2026). Entre os dois, está o grosso das empresas mineiras de software, que precisam atrair, formar e reter profissionais em um mercado aquecido e em rápida mutação.</p>
+  </div>
+  <div style="background:#f2f2fb;border-left:3px solid #4f46e5;padding:3.5mm 5mm;margin:3mm 0 0;max-width:158mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#4f46e5;margin-bottom:2.5mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:13px;color:#2a2f42">Cabe ao SindInfor liderar uma agenda de capital humano para o setor mineiro — articulando com academia, Sistema S e poder público programas de requalificação em IA e competências digitais, e produzindo inteligência sobre remuneração e retenção para orientar os associados. É um tema em que a entidade pode oferecer benefício direto e diferenciado à categoria.</p>
+  </div>
+</div>
+
+<!-- 4.4 -->
+<div style="margin-top:4mm">
+  <h3 style="display:flex;gap:11px;align-items:baseline;font-size:16.5px;font-weight:600;margin:0 0 3.5mm;color:#172032;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#4f46e5;font-weight:500">4.4</span><span>Minas Gerais como polo digital: energia, data centers e ecossistema</span></h3>
+  <div style="max-width:158mm">
+    <p style="margin:0 0 2.2mm;text-align:justify">O sinal mais relevante do período para o recorte mineiro veio do cruzamento entre energia e economia digital. A Cemig, em conjunto com a Invest Minas, concluiu um estudo técnico que mapeou a capacidade da malha elétrica do estado para atender data centers de grande porte, identificando quatro regiões — Região Metropolitana de Belo Horizonte, Triângulo Mineiro, Centro-Oeste e Zona da Mata — aptas a absorver cargas de até 100 MW (Cenário Energia, 03/07/2026). A iniciativa dá sequência à Tese de Investimentos para Data Centers lançada pela Invest Minas em 2025 e busca posicionar Minas na rota da infraestrutura digital, antecipando gargalos de conexão e reduzindo o tempo de instalação desses empreendimentos.</p>
+    <p style="margin:0 0 2.2mm;text-align:justify">O contexto competitivo é intenso. No mesmo período, o país registrou o anúncio do maior data center da América Latina, no Ceará, com investimento superior a R$ 200 bilhões e capacidade prevista de centenas de megawatts (Exame, 02/07/2026). A disputa por esses investimentos — que combinam energia, conectividade, incentivos e talento — tornou-se um vetor central de desenvolvimento regional, e Minas tem ativos relevantes para pleitear protagonismo: matriz energética, malha de fibra, universidades e um ecossistema de software estabelecido.</p>
+    <p style="margin:0;text-align:justify">Para o SindInfor, cuja bandeira institucional é justamente projetar Minas como polo digital, o momento é oportuno. A atração de infraestrutura digital de grande porte tende a adensar toda a cadeia local de software e serviços, gerando demanda por talento e por fornecedores mineiros.</p>
+  </div>
+  <div style="background:#f2f2fb;border-left:3px solid #4f46e5;padding:3.5mm 5mm;margin:3mm 0 0;max-width:158mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#4f46e5;margin-bottom:2.5mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:13px;color:#2a2f42">O SindInfor deve somar-se ativamente à agenda estadual de atração de economia digital, conectando a pauta de data centers e energia à cadeia de software local e pleiteando que a estratégia de Minas contemple o adensamento do ecossistema — talento, fornecedores e ambiente de negócios —, e não apenas a infraestrutura física.</p>
+  </div>
+</div>
+
+<!-- 4.5 -->
+<div style="margin-top:4mm">
+  <h3 style="display:flex;gap:11px;align-items:baseline;font-size:16.5px;font-weight:600;margin:0 0 3.5mm;color:#172032;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#4f46e5;font-weight:500">4.5</span><span>Valuations, M&amp;A e financiamento do setor</span></h3>
+  <div style="max-width:158mm">
+    <p style="margin:0 0 2.2mm;text-align:justify">O ambiente de capital do setor girou de forma nítida no período: <strong>margem passou a pesar mais do que crescimento</strong> na precificação das empresas de software. Análises do mercado mostraram que a mediana dos múltiplos recuou fortemente frente ao auge de 2021 e que apenas empresas que combinam crescimento com forte geração de caixa sustentam prêmios de valuation; no Brasil, compradores mais exigentes já trabalham com réguas de eficiência mais duras (startups.com.br, 22/06/2026). Em paralelo, o volume de aportes de fundos em empresas de software recuou (pipelinevalor, 08/06/2026), e o crédito privado do setor deu sinais de estresse após anos de juros altos (Exame, 03/07/2026).</p>
+    <p style="margin:0;text-align:justify">O M&amp;A, contudo, seguiu ativo, agora com lógica de capacidade tecnológica: aquisições movidas por talento e por ativos de IA, como ilustraram operações do período em mobilidade e em software médico (Startups, 30/06/2026; Business Moment, 23/06/2026). Para as empresas mineiras, o recado é estratégico: captação e saída dependem, mais do que nunca, de demonstrar eficiência e rentabilidade consistentes, não apenas expansão de receita.</p>
+  </div>
+  <div style="background:#f2f2fb;border-left:3px solid #4f46e5;padding:3.5mm 5mm;margin:3mm 0 0;max-width:158mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#4f46e5;margin-bottom:2.5mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:13px;color:#2a2f42">O SindInfor pode ajudar seus associados a lerem esse novo ciclo de capital, produzindo inteligência sobre as métricas que o mercado passou a exigir (eficiência, margem, retenção) e sobre as janelas de M&amp;A — informação que qualifica a tomada de decisão das empresas do estado em captação e consolidação.</p>
+  </div>
+</div>
+
+<!-- 4.6 -->
+<div style="margin-top:4mm">
+  <h3 style="display:flex;gap:11px;align-items:baseline;font-size:16.5px;font-weight:600;margin:0 0 3.5mm;color:#172032;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#4f46e5;font-weight:500">4.6</span><span>Soberania digital, cibersegurança e geopolítica</span></h3>
+  <div style="max-width:158mm">
+    <p style="margin:0 0 2.2mm;text-align:justify">O pano de fundo macro e geopolítico compôs o ambiente do setor. A disputa tecnológica entre Estados Unidos e China seguiu moldando cadeias e custos: a Huawei demonstrou capacidade de contornar controles de exportação de semicondutores (Folha de S.Paulo, 17/06/2026), e a China avançou em IA aplicada à cibersegurança, aproximando-se de modelos de fronteira na identificação de vulnerabilidades (Poder360, 29/06/2026). No plano comercial, o tarifaço dos Estados Unidos manteve a tecnologia da informação entre os temas do "mapa do caminho" da negociação brasileira (InfoMoney, 06/07/2026), sinalizando que a agenda comercial externa pode afetar custos e acesso a mercados do setor.</p>
+    <p style="margin:0;text-align:justify">Esses vetores, ainda que distantes do dia a dia da empresa mineira média, importam para a estratégia de longo prazo: precificação de insumos tecnológicos, segurança de infraestrutura crítica e o ambiente regulatório e comercial em que o software brasileiro compete.</p>
+  </div>
+  <div style="background:#f2f2fb;border-left:3px solid #4f46e5;padding:3.5mm 5mm;margin:3mm 0 0;max-width:158mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#4f46e5;margin-bottom:2.5mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:13px;color:#2a2f42">O SindInfor deve manter esses temas no radar como fatores de contexto, incorporando à sua leitura de cenário os movimentos de soberania digital e de política comercial que possam, no médio prazo, afetar custos e competitividade dos associados.</p>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 05 ============ -->
+<div id="s5" data-screen-label="05 Riscos" style="margin-top:4mm">
+  <div style="border-top:1.6px solid #172032;padding-top:3.5mm;display:flex;gap:12px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:#4f46e5;font-weight:600">05</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#8b90a2">Riscos</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Riscos Reputacionais Prioritários</h2>
+
+  <!-- MATRIZ DE RISCO -->
+  <div style="break-inside:avoid;margin-bottom:2mm">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#8b90a2;margin-bottom:5mm">Matriz de risco · probabilidade × impacto</div>
+    <div style="display:flex;gap:9px;max-width:150mm">
+      <div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#8b90a2;display:flex;align-items:center;justify-content:center;padding-bottom:18px">Impacto</div>
+      <div style="flex:1">
+        <div style="display:grid;grid-template-columns:22mm 1fr 1fr 1fr;grid-auto-rows:58px;gap:4px">
+          <div style="display:flex;align-items:center;justify-content:flex-end;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b6069;padding-right:6px">Muito alto</div>
+          <div style="background:#f4f5f3"></div>
+          <div style="background:#f7ddcf"></div>
+          <div style="background:#f2cfc9;display:flex;align-items:center;justify-content:center"><span style="width:30px;height:30px;border-radius:50%;background:#8f2723;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center">1</span></div>
+
+          <div style="display:flex;align-items:center;justify-content:flex-end;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b6069;padding-right:6px">Alto</div>
+          <div style="background:#f7f8f6;display:flex;align-items:center;justify-content:center"><span style="width:30px;height:30px;border-radius:50%;background:#c1732a;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center">4</span></div>
+          <div style="background:#fbeede;display:flex;align-items:center;justify-content:center"><span style="width:30px;height:30px;border-radius:50%;background:#a5322d;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center">2</span></div>
+          <div style="background:#f6dcd7;display:flex;align-items:center;justify-content:center"><span style="width:30px;height:30px;border-radius:50%;background:#a5322d;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center">3</span></div>
+
+          <div style="display:flex;align-items:center;justify-content:flex-end;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b6069;padding-right:6px">Médio</div>
+          <div style="background:#f7f8f6"></div>
+          <div style="background:#f4f5f3;display:flex;align-items:center;justify-content:center"><span style="width:30px;height:30px;border-radius:50%;background:#6b7075;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center">5</span></div>
+          <div style="background:#fbeede"></div>
+        </div>
+        <div style="display:grid;grid-template-columns:22mm 1fr 1fr 1fr;gap:4px;margin-top:6px">
+          <div></div>
+          <div style="text-align:center;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b6069">Média</div>
+          <div style="text-align:center;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b6069">Média-alta</div>
+          <div style="text-align:center;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b6069">Alta</div>
+        </div>
+        <div style="text-align:center;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#8b90a2;margin-top:7px;padding-left:22mm">Probabilidade</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LISTA DE RISCOS -->
+  <div style="margin-top:4mm">
+    <div style="display:grid;grid-template-columns:32px 1fr;gap:14px;margin-top:6mm;break-inside:avoid;max-width:158mm">
+      <div style="width:30px;height:30px;border-radius:50%;background:#8f2723;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center">1</div>
+      <div>
+        <div style="font-weight:600;font-size:15.5px;margin-bottom:2.5mm;line-height:1.3">Elevação da carga tributária sobre serviços e software na reforma</div>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:10.5px;margin-bottom:2.5mm"><span><span style="color:#8b90a2">Probabilidade</span> <span style="color:#172032;font-weight:500">Alta</span></span><span><span style="color:#8b90a2">Impacto</span> <span style="color:#b23b36;font-weight:500;white-space:nowrap">Muito alto</span></span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#5b6069;margin-bottom:2.5mm">Sinal do mês — serviços apontados como o segmento mais onerado; obrigação fiscal a partir de 03/08.</div>
+        <p style="margin:0;text-align:justify">A combinação de alíquota cheia e baixa geração de créditos pode elevar a carga efetiva das empresas de software, com impacto direto sobre margem e competitividade, sobretudo das pequenas e médias.</p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:32px 1fr;gap:14px;margin-top:6mm;break-inside:avoid;max-width:158mm">
+      <div style="width:30px;height:30px;border-radius:50%;background:#a5322d;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center">2</div>
+      <div>
+        <div style="font-weight:600;font-size:15.5px;margin-bottom:2.5mm;line-height:1.3">Disrupção do modelo de receita por IA agêntica</div>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:10.5px;margin-bottom:2.5mm"><span><span style="color:#8b90a2">Probabilidade</span> <span style="color:#172032;font-weight:500">Média-alta</span></span><span><span style="color:#8b90a2">Impacto</span> <span style="color:#b23b36;font-weight:500">Alto</span></span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#5b6069;margin-bottom:2.5mm">Sinal do mês — pressão sobre valuations de SaaS e mudança do padrão de desenvolvimento.</div>
+        <p style="margin:0;text-align:justify">Empresas ancoradas no modelo de licença por usuário e que não incorporarem IA a produtos e processos podem perder relevância e margem.</p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:32px 1fr;gap:14px;margin-top:6mm;break-inside:avoid;max-width:158mm">
+      <div style="width:30px;height:30px;border-radius:50%;background:#a5322d;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center">3</div>
+      <div>
+        <div style="font-weight:600;font-size:15.5px;margin-bottom:2.5mm;line-height:1.3">Escassez e encarecimento de capital humano qualificado</div>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:10.5px;margin-bottom:2.5mm"><span><span style="color:#8b90a2">Probabilidade</span> <span style="color:#172032;font-weight:500">Alta</span></span><span><span style="color:#8b90a2">Impacto</span> <span style="color:#b23b36;font-weight:500">Alto</span></span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#5b6069;margin-bottom:2.5mm">Sinal do mês — escassez de especialistas e disputa por talento em dados e IA.</div>
+        <p style="margin:0;text-align:justify">O aquecimento do mercado de talento e a mudança do perfil exigido pressionam a folha e a capacidade de execução das empresas mineiras.</p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:32px 1fr;gap:14px;margin-top:6mm;break-inside:avoid;max-width:158mm">
+      <div style="width:30px;height:30px;border-radius:50%;background:#c1732a;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center">4</div>
+      <div>
+        <div style="font-weight:600;font-size:15.5px;margin-bottom:2.5mm;line-height:1.3">Perda de janela competitiva de Minas na economia digital</div>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:10.5px;margin-bottom:2.5mm"><span><span style="color:#8b90a2">Probabilidade</span> <span style="color:#172032;font-weight:500">Média</span></span><span><span style="color:#8b90a2">Impacto</span> <span style="color:#b23b36;font-weight:500">Alto</span></span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#5b6069;margin-bottom:2.5mm">Sinal do mês — benchmark nacional de data center no Ceará; disputa acirrada por investimento.</div>
+        <p style="margin:0;text-align:justify">Se Minas não converter seu mapeamento de energia e seus ativos em atração efetiva, pode ficar atrás de outros estados na captura de investimento digital.</p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:32px 1fr;gap:14px;margin-top:6mm;break-inside:avoid;max-width:158mm">
+      <div style="width:30px;height:30px;border-radius:50%;background:#6b7075;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center">5</div>
+      <div>
+        <div style="font-weight:600;font-size:15.5px;margin-bottom:2.5mm;line-height:1.3">Retração de financiamento e endurecimento do capital</div>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:10.5px;margin-bottom:2.5mm"><span><span style="color:#8b90a2">Probabilidade</span> <span style="color:#172032;font-weight:500">Média</span></span><span><span style="color:#8b90a2">Impacto</span> <span style="color:#c1732a;font-weight:500">Médio</span></span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#5b6069;margin-bottom:2.5mm">Sinal do mês — queda de aportes e estresse no crédito privado do setor.</div>
+        <p style="margin:0;text-align:justify">A maior seletividade de investidores e credores dificulta captação e expansão, especialmente para empresas em estágio inicial e de crescimento.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 06 ============ -->
+<div id="s6" data-screen-label="06 Oportunidades" style="margin-top:4mm">
+  <div style="border-top:1.6px solid #172032;padding-top:3.5mm;display:flex;gap:12px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:#4f46e5;font-weight:600">06</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#8b90a2">Oportunidades</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Oportunidades de Posicionamento Institucional</h2>
+  <div style="display:flex;flex-direction:column;gap:6mm">
+    <div style="display:grid;grid-template-columns:32px 1fr;gap:14px;break-inside:avoid;max-width:158mm">
+      <div style="width:30px;height:30px;border-radius:50%;background:#4f46e5;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center">1</div>
+      <div><div style="font-weight:600;font-size:15.5px;margin-bottom:2mm">Voz técnica na regulamentação da reforma tributária</div><p style="margin:0;text-align:justify">Constituir e sustentar uma posição do setor de software mineiro sobre o enquadramento na reforma (redução de 30%, créditos aplicáveis, transição), levando-a às instâncias competentes. É a frente de maior valor concreto para os associados.</p></div>
+    </div>
+    <div style="display:grid;grid-template-columns:32px 1fr;gap:14px;break-inside:avoid;max-width:158mm">
+      <div style="width:30px;height:30px;border-radius:50%;background:#4f46e5;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center">2</div>
+      <div><div style="font-weight:600;font-size:15.5px;margin-bottom:2mm">Protagonismo na agenda "Minas Digital"</div><p style="margin:0;text-align:justify">Somar-se à estratégia estadual de atração de data centers e economia digital, conectando-a ao adensamento da cadeia local de software, talento e fornecedores.</p></div>
+    </div>
+    <div style="display:grid;grid-template-columns:32px 1fr;gap:14px;break-inside:avoid;max-width:158mm">
+      <div style="width:30px;height:30px;border-radius:50%;background:#4f46e5;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center">3</div>
+      <div><div style="font-weight:600;font-size:15.5px;margin-bottom:2mm">Liderança da agenda de requalificação em IA</div><p style="margin:0;text-align:justify">Articular com academia, Sistema S e poder público programas de capacitação em IA e competências digitais para o ecossistema mineiro, oferecendo benefício direto à categoria.</p></div>
+    </div>
+    <div style="display:grid;grid-template-columns:32px 1fr;gap:14px;break-inside:avoid;max-width:158mm">
+      <div style="width:30px;height:30px;border-radius:50%;background:#4f46e5;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center">4</div>
+      <div><div style="font-weight:600;font-size:15.5px;margin-bottom:2mm">Inteligência de mercado para a maturidade do setor</div><p style="margin:0;text-align:justify">Traduzir a virada "margem acima de crescimento" e as novas métricas de capital em orientação estratégica para os associados, posicionando o SindInfor como fonte qualificada de inteligência setorial.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 07 ============ -->
+<div id="s7" data-screen-label="07 Recomendações" style="margin-top:4mm">
+  <div style="border-top:1.6px solid #172032;padding-top:3.5mm;display:flex;gap:12px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:#4f46e5;font-weight:600">07</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#8b90a2">Ação</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Recomendações Executivas</h2>
+
+  <div style="max-width:158mm;break-inside:avoid">
+    <div style="display:flex;align-items:baseline;gap:10px;padding-bottom:3mm;border-bottom:1px solid #e4e4ef;margin-bottom:4mm"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#4f46e5;font-weight:500">Ações imediatas</span></div>
+    <ul style="list-style:none;margin:0 0 8mm;padding:0;display:flex;flex-direction:column;gap:3mm">
+      <li style="display:grid;grid-template-columns:16px 1fr;gap:11px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#4f46e5;font-weight:600">→</span><span style="text-align:justify">Constituir uma frente técnica sobre a reforma tributária, com foco no enquadramento do software (redução de 30%, créditos, split payment) e em orientação prática para o marco de 3 de agosto.</span></li>
+      <li style="display:grid;grid-template-columns:16px 1fr;gap:11px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#4f46e5;font-weight:600">→</span><span style="text-align:justify">Emitir comunicação aos associados sobre o cronograma da reforma e as ações de preparação recomendadas para 2026–2027.</span></li>
+      <li style="display:grid;grid-template-columns:16px 1fr;gap:11px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#4f46e5;font-weight:600">→</span><span style="text-align:justify">Mapear, junto à Invest Minas e à FIEMG, os pontos de conexão entre a agenda de data centers e a cadeia de software local.</span></li>
+    </ul>
+  </div>
+
+  <div style="max-width:158mm;break-inside:avoid">
+    <div style="display:flex;align-items:baseline;gap:10px;padding-bottom:3mm;border-bottom:1px solid #e4e4ef;margin-bottom:4mm"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#4f46e5;font-weight:500">Ações de curto prazo</span></div>
+    <ul style="list-style:none;margin:0 0 8mm;padding:0;display:flex;flex-direction:column;gap:3mm">
+      <li style="display:grid;grid-template-columns:16px 1fr;gap:11px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#4f46e5;font-weight:600">→</span><span style="text-align:justify">Estruturar posição institucional sobre a reforma e levá-la às instâncias competentes (FIEMG, frentes parlamentares, Comitê Gestor do IBS).</span></li>
+      <li style="display:grid;grid-template-columns:16px 1fr;gap:11px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#4f46e5;font-weight:600">→</span><span style="text-align:justify">Lançar uma iniciativa de requalificação em IA e competências digitais para o ecossistema mineiro.</span></li>
+      <li style="display:grid;grid-template-columns:16px 1fr;gap:11px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#4f46e5;font-weight:600">→</span><span style="text-align:justify">Produzir inteligência de mercado sobre remuneração, retenção e métricas de eficiência para orientar os associados.</span></li>
+    </ul>
+  </div>
+
+  <div style="max-width:158mm;break-inside:avoid">
+    <div style="display:flex;align-items:baseline;gap:10px;padding-bottom:3mm;border-bottom:1px solid #e4e4ef;margin-bottom:4mm"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#4f46e5;font-weight:500">Ações de médio prazo</span></div>
+    <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3mm">
+      <li style="display:grid;grid-template-columns:16px 1fr;gap:11px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#4f46e5;font-weight:600">→</span><span style="text-align:justify">Consolidar a narrativa "Minas Digital" com base em evidências (energia, talento, ecossistema), pleiteando protagonismo mineiro na economia digital.</span></li>
+      <li style="display:grid;grid-template-columns:16px 1fr;gap:11px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#4f46e5;font-weight:600">→</span><span style="text-align:justify">Instituir acompanhamento setorial contínuo, com alertas sobre reforma tributária, movimentos de IA e ciclo de capital.</span></li>
+      <li style="display:grid;grid-template-columns:16px 1fr;gap:11px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#4f46e5;font-weight:600">→</span><span style="text-align:justify">Posicionar o SindInfor como fonte de referência do setor de software mineiro junto à imprensa e ao poder público.</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 08 ============ -->
+<div id="s8" data-screen-label="08 Cenários" style="margin-top:4mm">
+  <div style="border-top:1.6px solid #172032;padding-top:3.5mm;display:flex;gap:12px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:#4f46e5;font-weight:600">08</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#8b90a2">Cenários</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Cenários Prospectivos</h2>
+  <div style="display:flex;flex-direction:column;gap:0">
+    <div style="border-top:1px solid #e4e4ef;padding:5mm 0;break-inside:avoid;max-width:158mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#8b90a2;margin-bottom:2.5mm">Cenário 01</div>
+      <div style="font-weight:600;font-size:16px;margin-bottom:2.5mm">Reforma calibrada com mitigação para serviços</div>
+      <p style="margin:0 0 2.2mm;text-align:justify">A regulamentação avança reconhecendo a especificidade do setor de tecnologia (créditos e/ou redução de alíquota), e o impacto sobre o software é atenuado.</p>
+      <div style="font-size:13.5px;color:#2a2f42"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#4f46e5">Resposta recomendada &nbsp;</span>Atuação técnica tempestiva do SindInfor na regulamentação, com dados e simulações do setor mineiro, para influenciar o desenho final.</div>
+    </div>
+    <div style="border-top:1px solid #e4e4ef;padding:5mm 0;break-inside:avoid;max-width:158mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#8b90a2;margin-bottom:2.5mm">Cenário 02</div>
+      <div style="font-weight:600;font-size:16px;margin-bottom:2.5mm">Reforma sem mitigação e elevação de carga</div>
+      <p style="margin:0 0 2.2mm;text-align:justify">O software é tributado pela alíquota cheia com baixo aproveitamento de créditos, elevando custos e pressionando as pequenas e médias.</p>
+      <div style="font-size:13.5px;color:#2a2f42"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#4f46e5">Resposta recomendada &nbsp;</span>Mobilização setorial, orientação de transição aos associados e articulação por ajustes, com foco na preservação da competitividade mineira.</div>
+    </div>
+    <div style="border-top:1px solid #e4e4ef;border-bottom:1px solid #e4e4ef;padding:5mm 0;break-inside:avoid;max-width:158mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#8b90a2;margin-bottom:2.5mm">Cenário 03</div>
+      <div style="font-weight:600;font-size:16px;margin-bottom:2.5mm">Minas consolida-se como polo digital</div>
+      <p style="margin:0 0 2.2mm;text-align:justify">A estratégia estadual atrai investimentos de economia digital, adensando a cadeia local de software e talento.</p>
+      <div style="font-size:13.5px;color:#2a2f42"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#4f46e5">Resposta recomendada &nbsp;</span>O SindInfor capitaliza o momento, conectando a infraestrutura à cadeia produtiva e projetando a marca "Minas Digital".</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 09 ============ -->
+<div id="s9" data-screen-label="09 SAUZ" style="margin-top:4mm">
+  <div style="border-top:1.6px solid #172032;padding-top:3.5mm;display:flex;gap:12px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:#4f46e5;font-weight:600">09</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#8b90a2">SAUZ</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Demonstração dos Serviços — SAUZ</h2>
+  <div style="max-width:158mm">
+    <p style="margin:0 0 2.2mm;text-align:justify">No período analisado, a SAUZ atuou como instância de apoio técnico e aconselhamento estratégico à diretoria do SindInfor, subsidiando a entidade com inteligência setorial, leitura de cenário e recomendações de posicionamento. A atuação teve caráter consultivo e de suporte: contribuiu para a interpretação dos movimentos do setor de software — com ênfase na reforma tributária, na transformação provocada pela IA e no recorte de Minas Gerais — e para a preparação de subsídios à decisão, preservando na própria diretoria do SindInfor a coordenação e a condução das ações institucionais.</p>
+    <p style="margin:0 0 2.2mm;text-align:justify">O esforço do período concentrou-se em traduzir um ambiente setorial complexo e ruidoso em prioridades acionáveis para a entidade, distinguindo o que é contexto de mercado do que é pauta direta dos associados mineiros. A SAUZ apoiou a identificação dos temas-âncora de maior materialidade — tributação e capital humano —, ofereceu leituras de risco e oportunidade e recomendou frentes de atuação institucional, sempre em posição de assessoria à liderança do SindInfor.</p>
+    <p style="margin:0 0 4mm;text-align:justify">Ao longo do mês, a SAUZ manteve o monitoramento do ambiente de mídia e de política setorial, a qualificação das evidências relevantes e a produção de análises de apoio, prestando suporte à comunicação e ao posicionamento do SindInfor conforme as prioridades definidas pela própria diretoria.</p>
+  </div>
+
+  <div style="max-width:158mm">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#4f46e5;padding-bottom:3mm;border-bottom:1px solid #e4e4ef;margin-bottom:1mm">Resumo das Atividades Realizadas</div>
+    <table style="width:100%;border-collapse:collapse;break-inside:avoid">
+      <thead><tr>
+        <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:#8b90a2;font-weight:500;padding:3mm 10px 3mm 0;border-bottom:1px solid #e4e4ef">Indicador</th>
+        <th style="text-align:right;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:#8b90a2;font-weight:500;padding:3mm 0;border-bottom:1px solid #e4e4ef;width:34%">Quantidade</th>
+      </tr></thead>
+      <tbody style="font-size:13px">
+        <tr><td style="padding:3mm 10px 3mm 0;border-bottom:1px solid #ececec;vertical-align:middle">Orientações estratégicas</td><td style="padding:3mm 0;border-bottom:1px solid #ececec;text-align:right"><span style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;font-weight:600;color:#172032">4</span></td></tr>
+        <tr><td style="padding:3mm 10px 3mm 0;vertical-align:middle">Ações de relacionamento com a imprensa</td><td style="padding:3mm 0;text-align:right"><span style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;font-weight:600;color:#172032">8</span></td></tr>
+      </tbody>
+    </table>
+    <p style="margin:6mm 0 0;text-align:justify;color:#5b6069;font-size:13.5px">Os quantitativos serão consolidados junto à SAUZ e incorporados na versão final, preservando a consistência de método e de taxonomia mês a mês.</p>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 10 ============ -->
+<div id="s10" data-screen-label="10 Base de Evidências" style="break-before:page;padding-top:3mm">
+  <div style="border-top:1.6px solid #172032;padding-top:3.5mm;display:flex;gap:12px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:#4f46e5;font-weight:600">10</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#8b90a2">Evidências</span>
+  </div>
+  <h2 style="font-size:27px;font-weight:600;margin:3.5mm 0 5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Base Qualificada de Evidências Monitoradas no Mês</h2>
+  <div style="max-width:158mm">
+    <p style="margin:0 0 3.5mm;text-align:justify">A tabela apresenta os 40 itens monitorados, com a relevância de cada um para o SindInfor. A maioria trata do setor em âmbito global/nacional (contexto de mercado); a coluna de relevância torna transparente quais itens efetivamente alimentam a agenda da entidade (tributação, capital humano, Minas Gerais, modelo de negócio). Onde a matéria é de opinião ou de dado não confirmado individualmente, foi citada no corpo por veículo, título e data, sem atribuição não verificada.</p>
+  </div>
+
+  <!-- legenda de relevância -->
+  <div style="display:flex;gap:18px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b6069;margin-bottom:4mm">
+    <span style="display:inline-flex;align-items:center;gap:7px"><span style="width:12px;height:12px;background:#eae9fb;border:1px solid #c7c5ee;display:inline-block"></span>Alta</span>
+    <span style="display:inline-flex;align-items:center;gap:7px"><span style="width:12px;height:12px;background:#ffffff;border:1px solid #d8d8d4;display:inline-block"></span>Média</span>
+    <span style="display:inline-flex;align-items:center;gap:7px"><span style="width:12px;height:12px;background:#f5f5f7;border:1px solid #e0e0e6;display:inline-block"></span>Baixa</span>
+  </div>
+
+  <table style="width:100%;border-collapse:collapse;break-inside:auto">
+    <thead><tr>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:#8b90a2;font-weight:500;padding:0 6px 2.6mm 8px;border-bottom:1.5px solid #172032;width:5%">Nº</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:#8b90a2;font-weight:500;padding:0 6px 2.6mm 6px;border-bottom:1.5px solid #172032;width:8%">Data</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:#8b90a2;font-weight:500;padding:0 6px 2.6mm 6px;border-bottom:1.5px solid #172032;width:20%">Veículo</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:#8b90a2;font-weight:500;padding:0 6px 2.6mm 6px;border-bottom:1.5px solid #172032;width:54%">Título</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:#8b90a2;font-weight:500;padding:0 8px 2.6mm 6px;border-bottom:1.5px solid #172032;width:13%">Relev.</th>
+    </tr></thead>
+    <tbody style="font-size:11px;line-height:1.32">
+      <tr><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#8b90a2">1</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">06/07</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Convergência Digital</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Sea Tecnologia: Inovação é sobrevivência de qualquer empresa</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#6b7075;font-weight:500">Média</td></tr>
+      <tr style="background:#f5f5f7"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ededf0;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#8b90a2">2</td><td style="padding:2mm 6px;border-bottom:1px solid #ededf0;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">06/07</td><td style="padding:2mm 6px;border-bottom:1px solid #ededf0;vertical-align:top">Convergência Digital</td><td style="padding:2mm 6px;border-bottom:1px solid #ededf0;vertical-align:top">Atualização de software causa transtorno ao sistema de pagamentos do BCE</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ededf0;vertical-align:top;color:#9096a6;font-weight:500">Baixa</td></tr>
+      <tr><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#8b90a2">3</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">06/07</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">InfoMoney</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Governo Lula aposta em corte de alíquotas para barrar tarifaço de Trump</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#6b7075;font-weight:500">Média</td></tr>
+      <tr style="background:#eae9fb"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #e0dff5;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#8b90a2">4</td><td style="padding:2mm 6px;border-bottom:1px solid #e0dff5;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">04/07</td><td style="padding:2mm 6px;border-bottom:1px solid #e0dff5;vertical-align:top">Exame</td><td style="padding:2mm 6px;border-bottom:1px solid #e0dff5;vertical-align:top">O futuro de cargos qualificados na era da IA agêntica (São Francisco)</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #e0dff5;vertical-align:top;color:#4f46e5;font-weight:600">Alta</td></tr>
+      <tr style="background:#eae9fb"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #e0dff5;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#8b90a2">5</td><td style="padding:2mm 6px;border-bottom:1px solid #e0dff5;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">03/07</td><td style="padding:2mm 6px;border-bottom:1px solid #e0dff5;vertical-align:top">Cenário Energia</td><td style="padding:2mm 6px;border-bottom:1px solid #e0dff5;vertical-align:top">Cemig e Invest Minas mapeiam energia para atrair data centers</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #e0dff5;vertical-align:top;color:#4f46e5;font-weight:600">Alta</td></tr>
+      <tr style="background:#f5f5f7"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ededf0;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#8b90a2">6</td><td style="padding:2mm 6px;border-bottom:1px solid #ededf0;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">03/07</td><td style="padding:2mm 6px;border-bottom:1px solid #ededf0;vertical-align:top">Convergência Digital</td><td style="padding:2mm 6px;border-bottom:1px solid #ededf0;vertical-align:top">Curso gratuito da UNESCO sobre IA e transformação digital no governo</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ededf0;vertical-align:top;color:#9096a6;font-weight:500">Baixa</td></tr>
+      <tr style="background:#f5f5f7"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ededf0;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#8b90a2">7</td><td style="padding:2mm 6px;border-bottom:1px solid #ededf0;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">03/07</td><td style="padding:2mm 6px;border-bottom:1px solid #ededf0;vertical-align:top">Convergência Digital</td><td style="padding:2mm 6px;border-bottom:1px solid #ededf0;vertical-align:top">Sem infraestrutura estável, a transformação digital fracassa</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ededf0;vertical-align:top;color:#9096a6;font-weight:500">Baixa</td></tr>
+      <tr><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#8b90a2">8</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">03/07</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Exame</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">A aposta das startups B2B para digitalizar empresas atrasadas</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#6b7075;font-weight:500">Média</td></tr>
+      <tr style="background:#eae9fb"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #e0dff5;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#8b90a2">9</td><td style="padding:2mm 6px;border-bottom:1px solid #e0dff5;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">03/07</td><td style="padding:2mm 6px;border-bottom:1px solid #e0dff5;vertical-align:top">Exame</td><td style="padding:2mm 6px;border-bottom:1px solid #e0dff5;vertical-align:top">Empresas de software: pressão dupla de dívida e avanço da IA</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #e0dff5;vertical-align:top;color:#4f46e5;font-weight:600">Alta</td></tr>
+      <tr style="background:#eae9fb"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #e0dff5;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#8b90a2">10</td><td style="padding:2mm 6px;border-bottom:1px solid #e0dff5;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">02/07</td><td style="padding:2mm 6px;border-bottom:1px solid #e0dff5;vertical-align:top">Exame</td><td style="padding:2mm 6px;border-bottom:1px solid #e0dff5;vertical-align:top">Maior data center da América Latina será construído no Ceará</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #e0dff5;vertical-align:top;color:#4f46e5;font-weight:600">Alta</td></tr>
+      <tr style="background:#eae9fb"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #e0dff5;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#8b90a2">11</td><td style="padding:2mm 6px;border-bottom:1px solid #e0dff5;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">03/07</td><td style="padding:2mm 6px;border-bottom:1px solid #e0dff5;vertical-align:top">Exame</td><td style="padding:2mm 6px;border-bottom:1px solid #e0dff5;vertical-align:top">Empresas de software enfrentam pressão de crédito e IA</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #e0dff5;vertical-align:top;color:#4f46e5;font-weight:600">Alta</td></tr>
+      <tr style="background:#eae9fb"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #e0dff5;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#8b90a2">12</td><td style="padding:2mm 6px;border-bottom:1px solid #e0dff5;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">01/07</td><td style="padding:2mm 6px;border-bottom:1px solid #e0dff5;vertical-align:top">Convergência Digital</td><td style="padding:2mm 6px;border-bottom:1px solid #e0dff5;vertical-align:top">Na era da IA, TI virou agente de capacitação de multicompetentes</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #e0dff5;vertical-align:top;color:#4f46e5;font-weight:600">Alta</td></tr>
+      <tr><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#8b90a2">13</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">01/07</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">TradingView</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Investidores migram para bancos e software; semicondutores pausam</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#6b7075;font-weight:500">Média</td></tr>
+      <tr style="background:#f5f5f7"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ededf0;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#8b90a2">14</td><td style="padding:2mm 6px;border-bottom:1px solid #ededf0;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">01/07</td><td style="padding:2mm 6px;border-bottom:1px solid #ededf0;vertical-align:top">Spherical Insights</td><td style="padding:2mm 6px;border-bottom:1px solid #ededf0;vertical-align:top">Tamanho e crescimento do mercado global de software comercial</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ededf0;vertical-align:top;color:#9096a6;font-weight:500">Baixa</td></tr>
+      <tr><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#8b90a2">15</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">30/06</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Startups</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Buser compra a Designa e dobra aposta em IA</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#6b7075;font-weight:500">Média</td></tr>
+      <tr><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#8b90a2">16</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">29/06</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Poder360</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">IA chinesa alcança modelo da Anthropic em cibersegurança</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#6b7075;font-weight:500">Média</td></tr>
+      <tr style="background:#f5f5f7"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ededf0;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#8b90a2">17</td><td style="padding:2mm 6px;border-bottom:1px solid #ededf0;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">29/06</td><td style="padding:2mm 6px;border-bottom:1px solid #ededf0;vertical-align:top">Exame</td><td style="padding:2mm 6px;border-bottom:1px solid #ededf0;vertical-align:top">Indústria cultural da China supera RMB 20 trilhões</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ededf0;vertical-align:top;color:#9096a6;font-weight:500">Baixa</td></tr>
+      <tr><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#8b90a2">18</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">29/06</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Petronotícias</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Energisa usa IA e alcança 93,8% de assertividade no atendimento</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#6b7075;font-weight:500">Média</td></tr>
+      <tr><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#8b90a2">19</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">23/06</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Business Moment</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">My Smart Clinic acelera expansão no software médico</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#6b7075;font-weight:500">Média</td></tr>
+      <tr style="background:#f5f5f7"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ededf0;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#8b90a2">20</td><td style="padding:2mm 6px;border-bottom:1px solid #ededf0;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">22/06</td><td style="padding:2mm 6px;border-bottom:1px solid #ededf0;vertical-align:top">Bitget</td><td style="padding:2mm 6px;border-bottom:1px solid #ededf0;vertical-align:top">ETF de bitcoin correlacionado ao setor de software</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ededf0;vertical-align:top;color:#9096a6;font-weight:500">Baixa</td></tr>
+      <tr style="background:#eae9fb"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #e0dff5;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#8b90a2">21</td><td style="padding:2mm 6px;border-bottom:1px solid #e0dff5;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">22/06</td><td style="padding:2mm 6px;border-bottom:1px solid #e0dff5;vertical-align:top">startups.com.br</td><td style="padding:2mm 6px;border-bottom:1px solid #e0dff5;vertical-align:top">Margem ganha protagonismo no valuation de software: efeito no M&amp;A</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #e0dff5;vertical-align:top;color:#4f46e5;font-weight:600">Alta</td></tr>
+      <tr><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#8b90a2">22</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">18/06</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Exame</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Transformação digital no setor elétrico ganha R$ 170 mi</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#6b7075;font-weight:500">Média</td></tr>
+      <tr><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#8b90a2">23</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">17/06</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Folha de S.Paulo</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Como a Huawei driblou o bloqueio dos EUA no mercado de chips</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#6b7075;font-weight:500">Média</td></tr>
+      <tr style="background:#eae9fb"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #e0dff5;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#8b90a2">24</td><td style="padding:2mm 6px;border-bottom:1px solid #e0dff5;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">16/06</td><td style="padding:2mm 6px;border-bottom:1px solid #e0dff5;vertical-align:top">cryptoid.com.br</td><td style="padding:2mm 6px;border-bottom:1px solid #e0dff5;vertical-align:top">Setor financeiro leva mercado de software a US$ 8,99 bi (estudo ABES)</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #e0dff5;vertical-align:top;color:#4f46e5;font-weight:600">Alta</td></tr>
+      <tr style="background:#f5f5f7"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ededf0;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#8b90a2">25</td><td style="padding:2mm 6px;border-bottom:1px solid #ededf0;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">15/06</td><td style="padding:2mm 6px;border-bottom:1px solid #ededf0;vertical-align:top">G1</td><td style="padding:2mm 6px;border-bottom:1px solid #ededf0;vertical-align:top">Estudantes debatem democracia e transformação digital em Porto Velho</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ededf0;vertical-align:top;color:#9096a6;font-weight:500">Baixa</td></tr>
+      <tr><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#8b90a2">26</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">15/06</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">G1</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">MTI abre seleção em MT com salários de até R$ 15 mil</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#6b7075;font-weight:500">Média</td></tr>
+      <tr><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#8b90a2">27</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">15/06</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Valor Econômico</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Saída do CFO da Adobe e a derrocada do setor de software</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#6b7075;font-weight:500">Média</td></tr>
+      <tr style="background:#eae9fb"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #e0dff5;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#8b90a2">28</td><td style="padding:2mm 6px;border-bottom:1px solid #e0dff5;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">08/06</td><td style="padding:2mm 6px;border-bottom:1px solid #e0dff5;vertical-align:top">pipelinevalor</td><td style="padding:2mm 6px;border-bottom:1px solid #e0dff5;vertical-align:top">Despenca o volume de aporte de fundos em empresas de software</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #e0dff5;vertical-align:top;color:#4f46e5;font-weight:600">Alta</td></tr>
+      <tr><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#8b90a2">29</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">03/06</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">TradingView</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Ações da Palantir caem 14%, mas analistas veem alta</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#6b7075;font-weight:500">Média</td></tr>
+      <tr><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#8b90a2">30</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">02/06</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">TradingView</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Do medo ao FOMO: a recuperação do setor de software</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#6b7075;font-weight:500">Média</td></tr>
+      <tr><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#8b90a2">31</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">01/06</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">MSN</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Totvs avança 3% acompanhando o setor global de software</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#6b7075;font-weight:500">Média</td></tr>
+      <tr><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#8b90a2">32</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">01/06</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">InfoMoney</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Totvs avança mais de 4% com o setor global de software</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#6b7075;font-weight:500">Média</td></tr>
+      <tr><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#8b90a2">33</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">01/06</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">TradingView</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">NOW, IBM: ações de software disparam após Huang</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#6b7075;font-weight:500">Média</td></tr>
+      <tr><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#8b90a2">34</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">01/06</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Times Brasil/CNBC</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Arm, IBM e HP disparam após reinvenção anunciada pela Nvidia</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#6b7075;font-weight:500">Média</td></tr>
+      <tr><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#8b90a2">35</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">28/05</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Investing.com</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Setor de software dispara com resultados da Snowflake</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#6b7075;font-weight:500">Média</td></tr>
+      <tr><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#8b90a2">36</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">27/05</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">TradingView</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Ações da Salesforce antes dos resultados: o que esperar</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#6b7075;font-weight:500">Média</td></tr>
+      <tr style="background:#eae9fb"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #e0dff5;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#8b90a2">37</td><td style="padding:2mm 6px;border-bottom:1px solid #e0dff5;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">23/05</td><td style="padding:2mm 6px;border-bottom:1px solid #e0dff5;vertical-align:top">ACIA Araçatuba</td><td style="padding:2mm 6px;border-bottom:1px solid #e0dff5;vertical-align:top">Software Brasil e IA: BofA vê avanço, mas alerta longo caminho</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #e0dff5;vertical-align:top;color:#4f46e5;font-weight:600">Alta</td></tr>
+      <tr style="background:#eae9fb"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #e0dff5;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#8b90a2">38</td><td style="padding:2mm 6px;border-bottom:1px solid #e0dff5;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">05/07</td><td style="padding:2mm 6px;border-bottom:1px solid #e0dff5;vertical-align:top">Exame (opinião)</td><td style="padding:2mm 6px;border-bottom:1px solid #e0dff5;vertical-align:top">O corredor atlântico de inteligência artificial e o Brasil como potência digital</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #e0dff5;vertical-align:top;color:#4f46e5;font-weight:600">Alta</td></tr>
+      <tr><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#8b90a2">39</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">04/07</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">GPS Brasília</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Quando o algoritmo decide: risco empresarial</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#6b7075;font-weight:500">Média</td></tr>
+      <tr><td style="padding:2mm 6px 2mm 8px;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#8b90a2">40</td><td style="padding:2mm 6px;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">02/07</td><td style="padding:2mm 6px;vertical-align:top">CNN Brasil</td><td style="padding:2mm 6px;vertical-align:top">Mineração: a nova fronteira da infraestrutura inteligente no Brasil</td><td style="padding:2mm 8px 2mm 6px;vertical-align:top;color:#6b7075;font-weight:500">Média</td></tr>
+    </tbody>
+  </table>
+
+  <div style="max-width:158mm;margin-top:4mm">
+    <p style="margin:0;font-size:13px;color:#5b6069;text-align:justify"><span style="font-style:italic">Nota metodológica:</span> a base reúne cobertura setorial de alto valor estratégico, e é justamente essa leitura antecipada do ambiente que abre ao SindInfor a oportunidade de se posicionar como voz de referência do setor de software mineiro. Os temas-âncora (tributação, capital humano) e o recorte de Minas Gerais foram enriquecidos com fontes verificadas citadas no corpo do relatório. Os dados de mercado citados refletem o que consta das matérias e das fontes consultadas, sem extrapolação.</p>
+  </div>
+</div>
+
+<!-- ENCERRAMENTO -->
+<div data-screen-label="Encerramento" style="margin-top:4mm;border-top:1.6px solid #172032;padding-top:6mm;break-inside:avoid">
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#8b90a2;margin-bottom:4mm">Encerramento</div>
+  <p style="margin:0 0 4mm;font-size:13.5px;color:#2a2f42">Brasília - DF, julho de 2026.</p>
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6069;margin-bottom:6px">Suporte estratégico prestado por</div>
+  <div style="display:inline-flex;background:#0a0e1c;border-radius:8px;padding:11px 18px"><img src="sauz-logo.png" alt="SAUZ — Comunicação e Estratégia" style="height:34px;display:block"/></div>
+</div>
+
+<!--CONTENT_END-->
+</div>
+</x-import>
+</x-dc>
+</body>
+</html>

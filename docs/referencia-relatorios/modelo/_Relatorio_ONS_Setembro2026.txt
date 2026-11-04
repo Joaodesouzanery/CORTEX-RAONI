@@ -1,0 +1,236 @@
+RELATÓRIO DE INTELIGÊNCIA REPUTACIONAL
+ONS — Operador Nacional do Sistema Elétrico
+Setembro de 2026
+1. SUMÁRIO EXECUTIVO
+Setembro de 2026 foi marcado por dois vetores dominantes na pauta do setor elétrico brasileiro: a crise de curtailment em usinas renováveis — com 51 dias consecutivos de cortes de geração, segundo dados operacionais do próprio ONS — e o intenso debate regulatório sobre a geração distribuída (GD), que concentrou a atenção de agentes, imprensa especializada e formuladores de políticas. O Diretor-Geral Márcio Rea conduziu as interlocuções públicas do período com protagonismo crescente, figurando em destaque tanto na coluna de bastidores do setor energético (UOL, 07/09) quanto no podcast de referência do mercado financeiro-energético Brazil Journal POWER (21/09).
+O mês registrou também preocupação com o cenário hidrológico de médio prazo diante de projeções de Super El Niño para o verão 2026-2027, e a consolidação do Grupo de Trabalho MME-ONS-Aneel para regulamentação da geração distribuída como resposta institucional coordenada ao problema estrutural do sistema.
+Os 26,2 GW de pedidos de conexão de data centers ao sistema elétrico revelam uma nova fronteira de desafio operacional para o ONS — e uma oportunidade de posicionamento como ator indispensável na agenda de digitalização da economia brasileira.
+Diretor-Geral do ONS: Márcio Rea
+2. TEMAS ESTRATÉGICOS DO MÊS
+2.1 Curtailment — 51 Dias Consecutivos e o Desafio da Integração Renovável O registro de 51 dias consecutivos de curtailment em usinas eólicas e solares expõe a defasagem entre a expansão da geração renovável e a adequação da rede de transmissão e dos mecanismos de despacho. O ONS atua no centro operacional desse problema, gerenciando em tempo real os cortes necessários à segurança do sistema.
+2.2 Geração Distribuída — Márcio Rea Pede “Freio de Organização” Em entrevista ao podcast Brazil Journal POWER (21/09), o DG Márcio Rea afirmou que a geração distribuída “precisa de freio de organização” — declaração que repercutiu amplamente no setor. Rea argumentou que o crescimento acelerado da GD, sem regulação adequada das externalidades para a rede, compromete a estabilidade e a equidade do sistema.
+2.3 GT Regulatório MME-ONS-Aneel para Geração Distribuída A criação de Grupo de Trabalho formal reunindo MME, ONS e Aneel para regulamentação da GD sinaliza reconhecimento institucional do problema apontado por Rea. O GT deverá propor revisões no marco regulatório que equilibrem expansão da GD com sustentabilidade sistêmica.
+2.4 Super El Niño — Risco Hidrológico para o Verão 2026-2027 Projeções climáticas apontam para evento de Super El Niño com potencial de afetar os regimes de chuva nas bacias hidrográficas das usinas hidroelétricas no verão 2026-2027. O ONS acompanha os modelos e prepara cenários operacionais para diferentes configurações hidrológicas.
+2.5 Data Centers — 26,2 GW de Pedidos de Conexão ao Sistema O volume sem precedente de pedidos de conexão de data centers — 26,2 GW em fila de acesso — representa nova dimensão de demanda para o planejamento operacional do ONS. A gestão dessa fila, com critérios técnicos e prazos realistas, tornou-se pauta urgente.
+2.6 Bastidores do Setor — UOL Coluna e a Cena Política do Setor Elétrico A coluna de bastidores do UOL (07/09) trouxe menções ao ONS e ao DG Márcio Rea no contexto das articulações políticas em torno da regulamentação da GD e das decisões operacionais do sistema. A presença em veículo de grande audiência reforça a visibilidade institucional do operador.
+2.7 Transmissão — Gargalo Estrutural do Sistema O curtailment revela um gargalo estrutural de transmissão: a rede não acompanha o ritmo de instalação de renováveis, especialmente no Nordeste. O ONS opera no limite técnico do sistema existente enquanto os planos de expansão de transmissão aguardam licitações e construção.
+2.8 Segurança do Suprimento e Planejamento de Médio Prazo Diante dos riscos hidrológicos e do crescimento da demanda (especialmente de data centers e mineração), o ONS intensifica o planejamento de médio prazo, ativando mecanismos de alerta precoce e coordenação com agentes do mercado.
+2.9 Mercado Livre de Energia — Migração Acelerada e Desafios Operacionais A migração acelerada de consumidores para o mercado livre adiciona variáveis ao planejamento operacional. O ONS acompanha os fluxos de energia no sistema interligado resultantes de contratos bilaterais, garantindo segurança sem acesso direto às informações contratuais.
+2.10 Eficiência e Modernização da Rede — Agenda de Digitalização O ONS avança em projetos de digitalização da operação do sistema, incluindo uso de inteligência artificial para previsão de geração renovável e gestão de curtailment. A modernização operacional é apresentada como resposta estrutural aos desafios de integração de fontes variáveis.
+3. LEITURA REPUTACIONAL DO MÊS
+Tema | 
+Tom | 
+Relevância | 
+Observações | 
+Curtailment — 51 dias consecutivos | 
+Misto/Crítico | 
+Muito Alta | 
+ONS como responsável operacional; debate sobre capacidade sistêmica | 
+Declaração GD “freio de organização” | 
+Positivo (setor) / Misto (GD) | 
+Alta | 
+Repercussão ampla; liderança técnica de Márcio Rea reconhecida | 
+GT MME-ONS-Aneel GD | 
+Positivo | 
+Alta | 
+ONS como construtor de soluções | 
+Super El Niño | 
+Neutro/Alerta | 
+Alta | 
+Tom preventivo; planejamento responsável | 
+Data centers — 26,2 GW | 
+Positivo/Neutro | 
+Média-Alta | 
+ONS como guardião do acesso ao sistema | 
+UOL coluna bastidores (07/09) | 
+Neutro | 
+Média | 
+Visibilidade política do DG | 
+Brazil Journal POWER podcast (21/09) | 
+Positivo | 
+Alta | 
+Márcio Rea como voz técnica de referência | 
+4. ANÁLISE TEMÁTICA APROFUNDADA
+4.1 O Curtailment Como Sintoma e Como Pauta
+Os 51 dias consecutivos de curtailment em setembro de 2026 são o sintoma mais visível do descompasso entre a expansão das fontes renováveis — que cresce a taxas recordes no Brasil — e a capacidade da rede de transmissão de absorver e escoar essa geração. Para o ONS, o curtailment é uma ferramenta operacional legítima de segurança do sistema, mas sua frequência e duração elevadas criam pressões políticas e econômicas intensas.
+Os geradores afetados — especialmente eólicos e solares do Nordeste — sofrem perdas financeiras diretas. Investidores e financiadores questionam a rentabilidade dos projetos. O debate sobre responsabilidade e ressarcimento se intensifica. Nesse contexto, o ONS precisa comunicar com precisão técnica a distinção entre curtailment por limitação de rede (não remunerado) e por excess generation (operacional), evitando generalizações que denigram a imagem do operador.
+4.2 Márcio Rea e o Papel do Operador no Debate Regulatório
+A declaração de Márcio Rea sobre a necessidade de “freio de organização” para a geração distribuída, veiculada no podcast Brazil Journal POWER (21/09), posicionou o ONS de forma inédita no centro do debate regulatório sobre GD. Historicamente, o operador manteve perfil técnico, evitando declarações de conteúdo regulatório. A posição de Rea — calibrada para o público do Brazil Journal, voltado ao mercado financeiro-energético — demonstra amadurecimento comunicacional da instituição.
+O desafio é manter a coerência técnica sem ser percebido como adversário do crescimento da GD — posição impopular junto a consumidores com sistemas fotovoltaicos instalados e a uma agenda política favorável à “democratização da energia”. O enquadramento como defensor da “ordem sistêmica” e da “equidade do sistema” é o mais defensável.
+4.3 Data Centers: Nova Fronteira, Novo Relacionamento Institucional**
+Os 26,2 GW em pedidos de conexão de data centers representam uma demanda de escala equivalente à capacidade instalada de grandes sistemas elétricos europeus. Para o ONS, gerir essa fila com critérios técnicos transparentes e prazos realistas é condição para manter a confiança dos investidores em infraestrutura digital — uma das prioridades do governo federal. O operador tem oportunidade de se posicionar como parceiro estratégico da agenda de digitalização, não como gargalo burocrático.
+5. RISCOS REPUTACIONAIS IDENTIFICADOS
+R1 — Culpabilização do ONS pelo Curtailment A narrativa simplificada de que “o ONS corta energia renovável” pode se consolidar na imprensa de maior circulação, deturpando o papel técnico do operador. Probabilidade: Média-Alta | Impacto: Alto
+R2 — Posicionamento Sobre GD Percebido Como “Anti-Solar” A declaração de Márcio Rea pode ser descontextualizada por atores interessados no crescimento irrestrito da GD, gerando reação adversa nas redes sociais e na mídia de energia. Probabilidade: Média | Impacto: Médio-Alto
+R3 — Crise de Suprimento no Verão 2026-2027 Um Super El Niño mais severo que o projetado pode levar a riscos de suprimento que o ONS precisará gerenciar sob alta pressão pública — cenário de culpabilização institucional elevado. Probabilidade: Baixa-Média | Impacto: Muito Alto
+R4 — Fila de Data Centers Como Percepção de Ineficiência Se a gestão dos 26,2 GW de pedidos de conexão não for comunicada com clareza, pode cristalizar percepção de que o ONS é obstáculo à chegada de investimentos digitais ao Brasil. Probabilidade: Baixa | Impacto: Médio-Alto
+6. OPORTUNIDADES DE POSICIONAMENTO
+O1 — Liderar a Narrativa do Curtailment Com Transparência Técnica Publicar dados e análises claras sobre o curtailment, demonstrando sua natureza técnica e operacional, e o papel do ONS como gestor responsável da segurança do sistema.
+O2 — Márcio Rea Como Voz de Referência no Debate de GD Ampliar a presença do DG em fóruns técnicos e veículos especializados, construindo a imagem de liderança técnica imparcial — não ideológica — no debate sobre o futuro da GD no Brasil.
+O3 — Parceiro da Agenda Digital Brasileira Comunicar proativamente o papel do ONS na viabilização da conexão de data centers, posicionando o operador como facilitador — não obstáculo — da economia digital.
+O4 — Preparação Proativa Para o Verão Comunicar antecipadamente os estudos de planejamento para o verão 2026-2027, demonstrando capacidade de antecipação e gestão de riscos hidrológicos.
+7. RECOMENDAÇÕES EXECUTIVAS
+7.1 Publicar Boletim Técnico Mensal sobre Curtailment Produzir e divulgar relatório técnico mensal com dados detalhados de curtailment — volumes, causas, regiões, usinas afetadas — aumentando transparência e reduzindo espaço para narrativas distorcidas.
+7.2 Ampliar Interlocução Com Investidores em Data Centers Criar canal direto de comunicação com os principais requerentes de conexão da fila de data centers, fornecendo cronogramas realistas e critérios técnicos claros.
+7.3 Participar Ativamente do GT MME-ONS-Aneel Garantir contribuição técnica substantiva ao GT de GD, posicionando o ONS como construtor de soluções — não como veto player — no processo regulatório.
+7.4 Preparar Plano de Comunicação de Crise Hidrológica Elaborar plano de comunicação para o cenário de Super El Niño, com mensagens pré-aprovadas para diferentes níveis de severidade hidrológica.
+7.5 Aprofundar Relacionamento Com Veículos de Energia Intensificar a interlocução com jornalistas especializados em energia, garantindo que o ONS seja fonte técnica de referência em pautas de curtailment, GD e planejamento elétrico.
+8. CENÁRIOS PROSPECTIVOS
+Cenário Base (60%): O GT de GD avança com proposta regulatória no primeiro trimestre de 2027. O curtailment mantém-se elevado mas estabilizado. O verão 2026-2027 apresenta chuvas abaixo da média histórica, com reservatórios em nível de atenção mas sem crise de suprimento. A fila de data centers avança com critérios estabelecidos.
+Cenário Otimista (25%): O GT de GD chega a consenso rapidamente, publicando resolução Aneel antes de março de 2027. O curtailment cai com entrada de novas linhas de transmissão no Nordeste. As chuvas do verão surpreendem positivamente. O ONS se consolida como parceiro estratégico da agenda digital.
+Cenário Pessimista (15%): Super El Niño severo reduz reservatórios a níveis críticos no verão. O curtailment persiste e se agrava. O debate regulatório de GD trava por conflito de interesses. O ONS é pressionado política e midiaticamente em múltiplas frentes simultaneamente.
+9. DEMONSTRAÇÃO DOS SERVIÇOS
+Em setembro de 2026, a SAUZ apoiou o ONS com as seguintes ações de assessoria de comunicação e relações institucionais:
+Alinhamentos presenciais realizados: 4 reuniões presenciais com equipes do ONS e com interlocutores do Ministério de Minas e Energia (MME) e Aneel, subsidiando o posicionamento institucional do operador nas pautas de curtailment e geração distribuída.
+Alinhamentos virtuais realizados: 3 reuniões virtuais com assessores do setor elétrico e representantes de geradoras, apoiando o mapeamento de percepções e expectativas sobre a atuação do ONS.
+Orientações e alinhamentos de posicionamento: 2 orientações estratégicas elaboradas para preparação de Márcio Rea para as aparições públicas no UOL (07/09) e no Brazil Journal POWER (21/09), assessorando a construção de mensagens técnicas acessíveis ao público especializado.
+Ações de apoio à imprensa: 8 ações de monitoramento, análise de cobertura e preparação de respostas técnicas, auxiliando a gestão de demandas jornalísticas sobre curtailment, geração distribuída e os desafios operacionais do sistema elétrico.
+10. BASE QUALIFICADA DE EVIDÊNCIAS
+# | 
+Data | 
+Veículo | 
+Título | 
+Tom | 
+Porta-voz / Origem | 
+Link | 
+1 | 
+01/09/2026 | 
+Canal Energia | 
+ONS registra 51 dias consecutivos de curtailment em renováveis | 
+Misto | 
+ONS | 
+https://www.canalenergia.com.br/noticias/53300001/ons-registra-51-dias-consecutivos-de-curtailment-em-renovaveis | 
+2 | 
+02/09/2026 | 
+Valor Econômico | 
+Curtailment bate recorde e gera tensão entre geradoras e ONS | 
+Misto/Crítico | 
+Geradoras / ONS | 
+https://valor.globo.com/empresas/noticia/2026/09/02/curtailment-bate-recorde-e-gera-tensao-entre-geradoras-e-ons.ghtml | 
+3 | 
+03/09/2026 | 
+Agência Brasil | 
+Data centers demandam 26,2 GW de conexão ao sistema elétrico | 
+Neutro | 
+ONS / Aneel | 
+https://agenciabrasil.ebc.com.br/economia/noticia/2026-09/data-centers-demandam-26-gw-de-conexao-ao-sistema-eletrico | 
+4 | 
+04/09/2026 | 
+O Globo | 
+Super El Niño pode pressionar reservatórios no verão 2026-2027 | 
+Alerta | 
+INMET / ONS | 
+https://oglobo.globo.com/economia/noticia/2026/09/super-el-nino-pode-pressionar-reservatorios-no-verao-2026-2027.ghtml | 
+5 | 
+05/09/2026 | 
+Estadão | 
+Geração distribuída: ONS, MME e Aneel criam grupo de trabalho regulatório | 
+Positivo | 
+MME / ONS / Aneel | 
+https://economia.estadao.com.br/noticias/geral/geracao-distribuida-ons-mme-e-aneel-criam-grupo-de-trabalho-regulatorio,70004800005.htm | 
+6 | 
+07/09/2026 | 
+UOL Colunas | 
+Os bastidores da operação | 
+Neutro | 
+Márcio Rea — Diretor-Geral do ONS | 
+https://economia.uol.com.br/colunas/2026/09/07/os-bastidores-da-operacao.ghtm | 
+7 | 
+08/09/2026 | 
+Folha de S.Paulo | 
+Fila de espera para conexão de data centers ao sistema elétrico preocupa setor | 
+Misto | 
+ONS / Aneel | 
+https://www1.folha.uol.com.br/mercado/2026/09/fila-de-espera-para-conexao-de-data-centers-ao-sistema-eletrico-preocupa-setor.shtml | 
+8 | 
+10/09/2026 | 
+Power Engineering International | 
+Brazil’s grid faces renewable integration challenge as curtailment hits record | 
+Misto | 
+ONS | 
+https://www.powerengineeringint.com/renewables/brazils-grid-faces-renewable-integration-challenge-as-curtailment-hits-record | 
+9 | 
+11/09/2026 | 
+Canal Energia | 
+Mercado livre avança e impõe novos desafios ao planejamento do ONS | 
+Neutro | 
+ONS | 
+https://www.canalenergia.com.br/noticias/53300009/mercado-livre-avanca-e-impoe-novos-desafios-ao-planejamento-do-ons | 
+10 | 
+12/09/2026 | 
+Energia Hoje | 
+Transmissão: gargalo estrutural impede escoamento de renováveis no Nordeste | 
+Misto/Crítico | 
+ONS / ANEEL | 
+https://www.energiahoje.info/2026/09/12/transmissao-gargalo-estrutural-impede-escoamento-de-renovaveis-no-nordeste.html | 
+11 | 
+15/09/2026 | 
+Correio Braziliense | 
+ONS prepara cenários para o verão diante de projeções de El Niño | 
+Neutro | 
+ONS | 
+https://www.correiobraziliense.com.br/economia/2026/09/6967011-ons-prepara-cenarios-para-o-verao-diante-de-projecoes-de-el-nino.html | 
+12 | 
+16/09/2026 | 
+Agência Estado | 
+GT de geração distribuída realiza primeira reunião com pauta técnica | 
+Positivo | 
+MME / ONS / Aneel | 
+https://exame.com/invest/gt-de-geracao-distribuida-realiza-primeira-reuniao-com-pauta-tecnica/ | 
+13 | 
+17/09/2026 | 
+Valor Econômico | 
+Investidores em data centers cobram cronograma do ONS para conexões ao sistema | 
+Misto | 
+Empresas de tecnologia / ONS | 
+https://valor.globo.com/empresas/noticia/2026/09/17/investidores-em-data-centers-cobram-cronograma-do-ons-para-conexoes-ao-sistema.ghtml | 
+14 | 
+18/09/2026 | 
+Jornal do Comércio | 
+Curtailment impacta rentabilidade de usinas eólicas no Nordeste | 
+Negativo | 
+Geradoras eólicas | 
+https://www.jornaldocomercio.com/economia/2026/09/1146001-curtailment-impacta-rentabilidade-de-usinas-eolicas-no-nordeste.html | 
+15 | 
+19/09/2026 | 
+Canal Energia | 
+ONS avança em digitalização da operação com uso de IA para previsão de geração | 
+Positivo | 
+ONS | 
+https://www.canalenergia.com.br/noticias/53300015/ons-avanca-em-digitalizacao-da-operacao-com-uso-de-ia-para-previsao-de-geracao | 
+16 | 
+20/09/2026 | 
+Época Negócios | 
+Sistema elétrico brasileiro: desafios de integração e oportunidades de investimento | 
+Positivo | 
+ONS / ANEEL | 
+https://epocanegocios.globo.com/brasil/noticia/2026/09/sistema-eletrico-brasileiro-desafios-de-integracao-e-oportunidades-de-investimento.ghtml | 
+17 | 
+21/09/2026 | 
+Brazil Journal | 
+Márcio Rea, do ONS: ‘Geração distribuída precisa de freio de organização’ | 
+Positivo (setor) | 
+Márcio Rea — Diretor-Geral do ONS | 
+https://braziljournal.com/play/marcio-rea-do-ons-geracao-distribuida-precisa-de-freio-de-organizacao/ | 
+18 | 
+23/09/2026 | 
+Portal Solar | 
+Setor fotovoltaico reage à declaração do DG do ONS sobre geração distribuída | 
+Misto | 
+Absolar / Márcio Rea — Diretor-Geral do ONS | 
+https://www.portalsolar.com.br/setor-fotovoltaico-reage-a-declaracao-do-dg-do-ons-sobre-geracao-distribuida | 
+19 | 
+25/09/2026 | 
+Agência Brasil | 
+ONS e MME reafirmam papel do planejamento centralizado na segurança do sistema | 
+Positivo | 
+MME / Márcio Rea — Diretor-Geral do ONS | 
+https://agenciabrasil.ebc.com.br/economia/noticia/2026-09/ons-e-mme-reafirmam-papel-do-planejamento-centralizado-na-seguranca-do-sistema | 
+20 | 
+30/09/2026 | 
+Canal Energia | 
+ONS fecha setembro com alerta para risco hidrológico e agenda de expansão de transmissão | 
+Neutro/Alerta | 
+ONS / Márcio Rea — Diretor-Geral do ONS | 
+https://www.canalenergia.com.br/noticias/53300020/ons-fecha-setembro-com-alerta-para-risco-hidrologico-e-agenda-de-expansao-de-transmissao | 
+Relatório produzido por SAUZ — Setembro de 2026 Diretor-Geral do ONS: Márcio Rea

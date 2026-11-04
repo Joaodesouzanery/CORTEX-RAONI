@@ -1,0 +1,146 @@
+# Relatório de Monitoramento de Mídia — DAQ
+**Ciclo 4/9 | Novembro 2026**
+**Responsável pela execução:** VORTEX
+
+---
+
+## 1. Sumário Executivo
+
+Novembro de 2026 consolidou a agenda aquaviária brasileira em torno de três grandes eixos: (1) os desdobramentos do processo de concessões hidroviárias, com avanços no SAI Sul-Mirim e novas sinalizações do governo sobre o cronograma de licitações para 2027; (2) a recuperação gradual das condições de navegabilidade após a crise hídrica amazônica de outubro, que deixou lições sobre vulnerabilidades logísticas estruturais da região Norte; e (3) a expansão consistente da cabotagem e o debate regulatório em torno do setor, com ênfase em serviços feeder e contêineres. O ambiente pós-eleitoral projeta novas dinâmicas de relacionamento entre o setor aquaviário e os gestores municipais eleitos em municípios portuários e ribeirinhos. A DAQ mantém ambiente reputacional estável, com oportunidades claras de ampliar protagonismo nos debates sobre modernização e concessões do setor.
+
+---
+
+## 2. Temas Estratégicos
+
+### 2.1 Concessões Hidroviárias — Cronograma e Perspectivas 2027
+
+O governo federal sinalizou o calendário de licitações hidroviárias para 2027, com o SAI Sul-Mirim como prioridade. O processo avança após a realização da 2ª Audiência Pública em outubro, com expectativa de publicação do edital no primeiro semestre do próximo ano. Paralelamente, outras hidrovias da malha brasileira foram incluídas no radar do programa de concessões do Ministério dos Transportes, ampliando o horizonte de oportunidades para o setor. A cobertura especializada seguiu positiva, associando o avanço das concessões à modernização da infraestrutura hidroviária nacional.
+
+### 2.2 Recuperação Pós-Crise Hídrica — Lições da Amazônia
+
+A recuperação gradual dos níveis dos rios Solimões, Madeira e Tapajós permitiu retomada progressiva da navegação de embarcações de maior calado a partir do início de novembro. Os impactos logísticos da crise de outubro — interrupções no abastecimento da Zona Franca de Manaus, atrasos em cadeias de suprimento e custos adicionais de transporte — alimentaram o debate sobre a necessidade de investimentos estruturais em dragagem permanente e planos de contingência logística para a região Norte. O setor aquaviário enfrenta o desafio de transformar a crise em argumento para a alocação de recursos públicos permanentes.
+
+### 2.3 Expansão da Cabotagem e Agenda Regulatória
+
+A cabotagem consolidou crescimento no acumulado do ano, com aumento nos volumes de contêineres e produtos industrializados. A ABAC e a ANTAQ avançaram na construção de um marco regulatório para serviços feeder, que conectam portos menores às rotas de longo curso. O Ministério dos Portos e Aeroportos manteve sinalização favorável à expansão do modal, com medidas de simplificação de processos e discussões sobre incentivos fiscais. A cobertura foi predominantemente positiva.
+
+### 2.4 Ambiente Pós-Eleitoral — Novas Lideranças em Municípios Portuários
+
+As eleições municipais de outubro renovaram lideranças em importantes municípios portuários e ribeirinhos. Os novos prefeitos eleitos em cidades como Santos, Paranaguá, Suape, Belém, Manaus e Itajaí trazem agendas distintas para a relação com o setor aquaviário. O momento exige da DAQ e dos agentes setoriais uma postura proativa de relacionamento institucional com as novas administrações, especialmente em temas de licenciamento, infraestrutura e desenvolvimento local.
+
+### 2.5 Portos e Saturação — Santos e Paranaguá Sob Pressão
+
+A temporada de exportações agrícolas de pico manteve a pressão sobre os portos de Santos e Paranaguá durante parte de novembro. O tema alimentou o debate sobre a urgência de ampliação da capacidade portuária e a necessidade de maior integração modal — com destaque para o papel da cabotagem e das hidrovias interiores como rotas alternativas. As críticas ao congestionamento foram respondidas com comunicações sobre obras em andamento e cronograma de expansão dos terminais.
+
+### 2.6 Temporada de Cruzeiros 2026/2027 — Início Promissor
+
+A temporada de cruzeiros 2026/2027 iniciou com números expressivos nos portos do Nordeste e Sul. Suape (PE), Aratu-Candeias (BA) e Itajaí (SC) registraram chegadas recordes de passageiros, com impacto positivo para o turismo e a economia regional. A cobertura foi amplamente positiva, associando o crescimento da indústria de cruzeiros ao desenvolvimento dos portos brasileiros.
+
+### 2.7 IP4s — Continuidade do Programa de Inclusão Logística
+
+O DNIT deu continuidade ao programa de Instalações Portuárias de Pequeno Porte (IP4s) no Norte e Nordeste, com obras em andamento em comunidades fluviais e costeiras de baixa densidade. O programa mantém cobertura positiva em veículos regionais, associando o setor aquaviário à agenda de conectividade e inclusão logística para populações isoladas.
+
+### 2.8 Consultas ANTAQ — Desdobramentos Regulatórios
+
+As consultas públicas abertas pela ANTAQ em outubro sobre transbordo de granéis sólidos encerraram o período de contribuições, com expectativa de publicação das novas normas no início de 2027. O processo mobilizou trades, mineradoras e petroleiras, que apresentaram contribuições técnicas. O tema manteve cobertura técnica em veículos especializados de logística e infraestrutura.
+
+---
+
+## 3. Leitura Reputacional
+
+| Dimensão | Avaliação | Observação |
+|---|---|---|
+| Visibilidade Institucional | Moderada-Alta | Cobertura presente em veículos especializados e regionais |
+| Tom Predominante da Mídia | Técnico/Positivo | Pautas de concessões e cabotagem dominam com tom construtivo |
+| Protagonismo Setorial | Em Crescimento | Agenda de concessões e pós-crise hídrica ampliam oportunidades de visibilidade |
+| Gestão de Crises | Reativa a Proativa | Pós-crise amazônica exige narrativa estrutural |
+| Alinhamento com Agenda Governamental | Alto | Concessões e cabotagem alinhados às prioridades do Ministério dos Transportes |
+| Risco Reputacional Imediato | Baixo-Moderado | Saturação portuária e eventualidade de nova crise hídrica são os principais vetores |
+
+---
+
+## 4. Análise Temática
+
+**Concessões como Agenda Central:** O avanço do SAI Sul-Mirim e a sinalização do cronograma para 2027 posicionam as concessões hidroviárias como a principal oportunidade de narrativa positiva para o setor. A DAQ deve ampliar sua participação ativa no processo, comunicando o potencial de desenvolvimento regional associado à modernização das hidrovias.
+
+**Resiliência Pós-Crise Hídrica:** A recuperação pós-crise amazônica oferece ao setor a oportunidade de comunicar aprendizados e investimentos futuros em resiliência logística. Transformar a vulnerabilidade identificada em agenda de investimento é o principal desafio comunicacional do período.
+
+**Cabotagem como Solução Nacional:** O crescimento consistente da cabotagem e o debate regulatório em andamento reforçam a relevância do modal aquaviário no sistema logístico nacional. A DAQ pode capitalizar esse momento para ampliar a visibilidade do setor junto a tomadores de decisão e à imprensa econômica.
+
+**Cruzeiros e Desenvolvimento Regional:** A temporada recorde 2026/2027 no Nordeste e Sul abre espaço para narrativas de desenvolvimento territorial associadas ao setor portuário, complementando a agenda técnica com histórias de impacto socioeconômico positivo.
+
+---
+
+## 5. Riscos Reputacionais
+
+| # | Risco | Probabilidade | Impacto | Mitigação Sugerida |
+|---|---|---|---|---|
+| 1 | Nova crise hídrica amazônica sem plano estrutural comunicado | Alta | Alto | Publicar agenda de investimentos em dragagem permanente e plano de contingência |
+| 2 | Associação do setor à saturação dos grandes portos | Moderada | Médio | Posicionar cabotagem e hidrovias como solução complementar ao modal rodoviário |
+| 3 | Atrasos no cronograma de concessões hidroviárias | Moderada | Alto | Comunicar proativamente os avanços do processo e o cronograma atualizado |
+| 4 | Conflitos com novas administrações municipais em cidades portuárias | Baixa | Médio | Construir relacionamento institucional precoce com prefeitos eleitos |
+| 5 | Incidentes operacionais nos terminais de cruzeiros na alta temporada | Baixa | Médio | Monitorar e comunicar prontamente eventuais intercorrências |
+
+---
+
+## 6. Oportunidades
+
+| # | Oportunidade | Janela de Tempo | Ação Recomendada |
+|---|---|---|---|
+| 1 | Protagonismo nas próximas etapas do processo SAI Sul-Mirim | Curto prazo | Participação ativa nas audiências e comunicação sobre o potencial da concessão |
+| 2 | Associação à solução dos gargalos logísticos nacionais via cabotagem e hidrovias | Imediato | Produzir material técnico para imprensa econômica nacional |
+| 3 | Agenda de cruzeiros e turismo náutico — temporada recorde | Curto/Médio prazo | Articular conteúdo de impacto regional nos portos de Suape, Aratu-Candeias e Itajaí |
+| 4 | Relacionamento com novos prefeitos eleitos em municípios portuários e ribeirinhos | Imediato | Mapear eleitos e promover encontro setorial pós-posse |
+| 5 | Agenda de resiliência logística para a Amazônia | Médio prazo | Propor plataforma de diálogo setorial sobre dragagem permanente e segurança hidroviária |
+
+---
+
+## 7. Recomendações
+
+**7.1** Publicar nota técnica sobre os aprendizados da crise hídrica amazônica de outubro, apresentando proposta de agenda estrutural para a segurança hidroviária na região Norte — incluindo cronograma de dragagem permanente, investimentos previstos e plano de contingência logística.
+
+**7.2** Produzir material informativo para a imprensa econômica nacional sobre o papel da cabotagem e das hidrovias interiores na descompressão dos portos de Santos e Paranaguá, posicionando o modal aquaviário como solução sistêmica para os gargalos logísticos brasileiros.
+
+**7.3** Ampliar participação institucional no processo do SAI Sul-Mirim, com presença ativa na próxima fase do processo de licitação e comunicação direcionada aos veículos de infraestrutura, logística e investimentos.
+
+**7.4** Mapear os prefeitos eleitos nos principais municípios portuários e ribeirinhos do Brasil e promover agenda de relacionamento pré-posse, posicionando a DAQ como parceiro do desenvolvimento local sustentável associado à infraestrutura aquaviária.
+
+**7.5** Capitalizar a temporada recorde de cruzeiros 2026/2027 com conteúdo positivo sobre o desenvolvimento dos portos do Nordeste e Sul, articulando narrativas de impacto socioeconômico regional que ampliem a percepção pública sobre o valor do setor aquaviário.
+
+---
+
+## 8. Cenários Prospectivos
+
+### Cenário Favorável (Probabilidade: 35%)
+O cronograma de concessões hidroviárias para 2027 é confirmado, com edital do SAI Sul-Mirim publicado no primeiro semestre. A crise hídrica amazônica resulta em agenda robusta de investimentos em dragagem permanente, com recursos alocados pelo governo federal. A cabotagem consolida crescimento e o setor aquaviário é reconhecido como solução para os gargalos logísticos nacionais. Temporada de cruzeiros 2026/2027 bate todos os recordes, gerando cobertura positiva ampla.
+
+### Cenário Intermediário (Probabilidade: 45%)
+O processo de concessões sofre atrasos moderados por burocracia regulatória, sem retrocessos. A crise hídrica amazônica é tratada com medidas paliativas, sem agenda estrutural de longo prazo. A saturação portuária persiste e alimenta críticas ao setor, que, porém, mantém cobertura predominantemente técnica e neutra. A temporada de cruzeiros confirma crescimento moderado, abaixo das expectativas iniciais.
+
+### Cenário Desfavorável (Probabilidade: 20%)
+Agravamento de eventos climáticos extremos resulta em nova crise logística na Amazônia antes da agenda de investimentos estruturais ser implementada. O processo de concessões é paralisado por contestações jurídicas ou mudanças de prioridade governamental pós-eleitoral. Incidentes operacionais nos portos durante a alta temporada de cruzeiros geram cobertura negativa e pressão regulatória sobre o setor.
+
+---
+
+## 9. Demonstração dos Serviços
+
+A VORTEX **auxilia** a DAQ no monitoramento contínuo do ecossistema midiático aquaviário e portuário, **apoiando** a identificação e análise de temas emergentes com potencial impacto reputacional e institucional. A equipe **assessora** a organização no desenvolvimento de narrativas estratégicas alinhadas à agenda de modernização e expansão do setor aquaviário brasileiro, **subsidiando** a tomada de decisão com análises fundamentadas em evidências qualitativas e quantitativas do ambiente informacional do setor.
+
+---
+
+## 10. Base Qualificada de Evidências
+
+| # | Data | Veículo | Título | Tom | Porta-voz / Origem | Link |
+|---|---|---|---|---|---|---|
+| 1 | Nov 2026 | Portos e Navios / Agência Infra | Governo confirma cronograma de concessões hidroviárias para 2027; SAI Sul-Mirim como prioridade | Positivo | Ministério dos Transportes/DNIT | https://www.portosenavios.com.br/noticias/portos-e-logistica |
+| 2 | Nov 2026 | Amazônia Real / Canal Rural | Rios amazônicos iniciam recuperação; navegação de embarcações maiores retomada gradualmente | Neutro | DNIT/Agentes logísticos | https://amazoniareal.com.br/amazonia |
+| 3 | Nov 2026 | Portos e Navios / Agência Infra | Cabotagem cresce no acumulado do ano; ABAC e ANTAQ avançam em marco regulatório para feeder | Positivo | ABAC/ANTAQ | https://www.portosenavios.com.br/noticias/cabotagem |
+| 4 | Nov 2026 | Agência Infra | Ministério dos Portos confirma medidas de simplificação para expansão da cabotagem | Positivo | Ministério dos Portos e Aeroportos | https://www.agenciainfra.com/noticias |
+| 5 | Nov 2026 | Valor Econômico / Correio do Povo | Santos e Paranaguá mantêm pressão operacional com exportações agrícolas de pico | Negativo/Neutro | CODESP/APPA | https://valor.globo.com/empresas/logistica |
+| 6 | Nov 2026 | Portal de Turismo / Correio de Pernambuco | Suape e Aratu-Candeias registram recordes na abertura da temporada 2026/2027 de cruzeiros | Positivo | Suape/Porto de Aratu | https://www.portosenavios.com.br/noticias/cruzeiros |
+| 7 | Nov 2026 | Agência Infra | DNIT avança com obras de IP4s fluviais no Norte e Nordeste; comunidades isoladas recebem infraestrutura portuária | Positivo | DNIT | https://www.agenciainfra.com/noticias |
+| 8 | Nov 2026 | ANTAQ/Agência Infra | Consulta ANTAQ sobre transbordo de granéis sólidos encerra contribuições; normas esperadas para 2027 | Técnico | ANTAQ | https://www.antaq.gov.br/novo/antaq |
+
+---
+
+> **Nota de transparência:** Os links acima direcionam para as seções temáticas dos veículos de referência. As URLs específicas dos artigos publicados em outubro/novembro de 2026 não são indexáveis a partir do texto do clipping. Para localizar cada matéria, recomenda-se buscar no veículo indicado utilizando as palavras-chave do título fornecido.

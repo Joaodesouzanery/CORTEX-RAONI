@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  doc-page:not(:defined){visibility:hidden}
+  *{box-sizing:border-box}
+  .rp p{orphans:3;widows:3}
+</style>
+</helmet>
+<x-import component-from-global-scope="doc-page" from="./doc-page.js" size="a4" margin="14mm" hint-size="100%,100%">
+<div class="rp" style="font-family:'IBM Plex Sans',-apple-system,'Segoe UI',sans-serif;font-size:13.5px;line-height:1.48;color:#17242c;-webkit-font-smoothing:antialiased">
+
+<!-- ============ CAPA ============ -->
+<div data-screen-label="Capa" style="position:relative;overflow:hidden;background:#eef1ea;margin:-14mm -14mm 0;box-sizing:border-box;display:flex;flex-direction:column;break-after:page">
+
+  <!-- IMAGE REGION -->
+  <div style="position:relative;height:212mm;overflow:hidden">
+    <img src="cover_daq.jpg" alt="Vista aérea de comboio de chatas transportando carga na Hidrovia Tietê-Paraná" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 50%"/>
+
+    <!-- petroleum wash + legibility scrims over photo -->
+    <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(11,38,46,.60) 0%,rgba(12,44,54,.12) 22%,rgba(14,64,80,.10) 48%,rgba(12,44,54,.34) 74%,rgba(10,34,42,.78) 100%)"></div>
+    <div style="position:absolute;inset:0;background:rgba(14,72,90,.16)"></div>
+
+    <!-- top kicker -->
+    <div style="position:absolute;top:16mm;left:20mm;right:20mm;z-index:3;display:flex;justify-content:space-between;align-items:flex-start;gap:10mm">
+      <div style="font-family:'IBM Plex Mono',monospace;color:#eef3ef;text-shadow:0 1px 10px rgba(10,30,38,.55)">
+        <div style="font-size:12px;font-weight:600;letter-spacing:.02em">DNIT Aquaviária — Diretoria de Infraestrutura Aquaviária (DAQ)</div>
+      </div>
+    </div>
+
+    <!-- centered brand lockup -->
+    <div style="position:absolute;left:0;right:0;top:31%;z-index:3;display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 20mm">
+      <img src="sauz-logo.png" alt="SAUZ" style="height:74px;display:block;filter:drop-shadow(0 3px 18px rgba(9,28,36,.55))"/>
+      <div style="width:52px;height:2px;background:#7fd0be;margin:12px 0 9px"></div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#eef5f6;text-shadow:0 1px 12px rgba(9,28,36,.85)">Comunicação e Estratégia · Inteligência Reputacional</div>
+    </div>
+
+    <!-- vertical tagline -->
+    <div style="position:absolute;top:18mm;right:11mm;height:188mm;z-index:3;writing-mode:vertical-rl;font-family:'IBM Plex Sans',sans-serif;font-weight:700;font-size:13.5px;letter-spacing:.11em;color:#ffffff;text-transform:uppercase;opacity:.96;white-space:nowrap">Navegabilidade · Inteligência para o Setor Aquaviário</div>
+
+    <!-- title bands -->
+    <div style="position:absolute;left:0;right:0;top:56%;z-index:3;display:flex;flex-direction:column;align-items:center">
+      <div style="background:#d2ddd6;padding:6mm 22mm;min-width:118mm;text-align:center">
+        <div style="font-family:'IBM Plex Sans',sans-serif;font-weight:700;font-size:44px;letter-spacing:.06em;color:#0e5064;line-height:1">RELATÓRIO</div>
+      </div>
+      <div style="background:#0f3a47;padding:4mm 14mm;margin-top:-1px;text-align:center;display:flex;align-items:baseline;gap:10px">
+        <span style="font-family:'IBM Plex Sans',sans-serif;font-weight:700;font-size:32px;letter-spacing:.06em;color:#fff;line-height:1">JUN</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:17px;color:#7fd0be;letter-spacing:.08em">2026</span>
+      </div>
+    </div>
+
+    <!-- descriptive title over water -->
+    <div style="position:absolute;left:20mm;right:20mm;bottom:12mm;z-index:3">
+      <div style="font-family:'IBM Plex Sans',sans-serif;font-size:13.5px;font-weight:500;color:#eef3ef;line-height:1.5;max-width:150mm;text-wrap:pretty">Relatório Mensal de Comunicação Estratégica e Gestão de Imagem</div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div style="background:#eef1ea;padding:9mm 20mm 8mm;display:flex;justify-content:space-between;align-items:center;gap:10mm">
+    <div>
+      <img src="sauz-logo-dark.png" alt="SAUZ" style="height:30px;display:block;margin-bottom:6px"/>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#7f8a86">Comunicação e Estratégia · Inteligência Reputacional</div>
+    </div>
+    <div style="text-align:right;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#5c6a66;line-height:1.6">
+      <div style="color:#23806e;font-weight:500;letter-spacing:.1em;text-transform:uppercase;font-size:9.5px">Suporte estratégico</div>
+      <div>Junho de 2026</div>
+    </div>
+  </div>
+
+  <!-- SWATCH STRIP -->
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);height:7mm">
+    <div style="background:#0e5064"></div>
+    <div style="background:#23806e"></div>
+    <div style="background:#0f3a47"></div>
+    <div style="background:#d2ddd6"></div>
+    <div style="background:#51636a"></div>
+  </div>
+</div>
+
+<!-- ============ ÍNDICE ============ -->
+<div data-screen-label="Sumário" style="break-after:page;padding-top:3mm">
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#7c8a90;margin-bottom:4mm">Sumário</div>
+  <div style="border-top:1.6px solid #17242c"></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;column-gap:16mm">
+    <div>
+      <a href="#s1" style="display:flex;gap:12px;align-items:baseline;padding:3.6mm 0;border-bottom:1px solid #ececE8;text-decoration:none;color:#17242c;border-color:#ececE8"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0e5064;min-width:22px">01</span><span style="font-weight:500">Sumário Executivo</span></a>
+      <a href="#s2" style="display:flex;gap:12px;align-items:baseline;padding:3.6mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#17242c"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0e5064;min-width:22px">02</span><span style="font-weight:500">Temas Estratégicos do Mês</span></a>
+      <a href="#s3" style="display:flex;gap:12px;align-items:baseline;padding:3.6mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#17242c"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0e5064;min-width:22px">03</span><span style="font-weight:500">Leitura Reputacional do Ambiente</span></a>
+      <a href="#s4" style="display:flex;gap:12px;align-items:baseline;padding:3.6mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#17242c"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0e5064;min-width:22px">04</span><span style="font-weight:500">Análise Temática Aprofundada</span></a>
+      <a href="#s5" style="display:flex;gap:12px;align-items:baseline;padding:3.6mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#17242c"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0e5064;min-width:22px">05</span><span style="font-weight:500">Riscos Reputacionais Prioritários</span></a>
+    </div>
+    <div>
+      <a href="#s6" style="display:flex;gap:12px;align-items:baseline;padding:3.6mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#17242c"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0e5064;min-width:22px">06</span><span style="font-weight:500">Oportunidades de Posicionamento</span></a>
+      <a href="#s7" style="display:flex;gap:12px;align-items:baseline;padding:3.6mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#17242c"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0e5064;min-width:22px">07</span><span style="font-weight:500">Recomendações Executivas</span></a>
+      <a href="#s8" style="display:flex;gap:12px;align-items:baseline;padding:3.6mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#17242c"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0e5064;min-width:22px">08</span><span style="font-weight:500">Cenários Prospectivos</span></a>
+      <a href="#s9" style="display:flex;gap:12px;align-items:baseline;padding:3.6mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#17242c"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0e5064;min-width:22px">09</span><span style="font-weight:500">Demonstração dos Serviços — CRTIVE LAB</span></a>
+      <a href="#s10" style="display:flex;gap:12px;align-items:baseline;padding:3.6mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#17242c"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0e5064;min-width:22px">10</span><span style="font-weight:500">Base Qualificada de Evidências</span></a>
+    </div>
+  </div>
+  <div style="margin-top:9mm;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#7c8a90;letter-spacing:.02em">SAUZ · DNIT Aquaviária · Junho de 2026 — Confidencial</div>
+</div>
+
+<!-- ============ SEÇÃO 01 ============ -->
+<div id="s1" data-screen-label="01 Sumário Executivo" style="margin-top:2mm">
+  <div style="border-top:1.6px solid #17242c;padding-top:3.5mm;display:flex;gap:12px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:#0e5064;font-weight:600">01</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#7c8a90">Síntese</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Sumário Executivo</h2>
+  <div style="max-width:158mm">
+    <p style="margin:0 0 2.2mm;text-align:justify">Junho de 2026 posicionou a Diretoria de Infraestrutura Aquaviária (DAQ) do DNIT no cruzamento entre uma agenda aquaviária aquecida e um teste operacional que se aproxima: a seca associada ao El Niño. De um lado, o mês concentrou avanços expressivos em projetos e obras de navegabilidade — com destaque para a ordem de serviço da dragagem da Lagoa Mirim, no âmbito do Novo PAC, e o adensamento da agenda de manutenção das hidrovias. De outro, o setor pede dragagens preventivas antes do pico da estiagem, num cenário em que a experiência das secas de 2023 e 2024 reforça a importância do planejamento antecipado — exatamente o terreno em que a DAQ entrega valor.</p>
+    <p style="margin:0 0 2.2mm;text-align:justify">O dado estruturante para a leitura reputacional do mês é o papel institucional da DAQ. No arranjo do setor, o Ministério de Portos e Aeroportos (MPor) planeja e define prioridades; a Marinha regula a segurança da navegação; a ANTAQ regula e fiscaliza; e o DNIT, por meio da DAQ, executa os projetos, as obras e os serviços de manutenção da navegabilidade — dragagem, sinalização, eclusas e instalações portuárias de pequeno porte. A reputação da DAQ se constrói, sobretudo, pela entrega técnica: canais navegáveis quando os rios baixam, obras no cronograma e contratos de manutenção em pleno funcionamento.</p>
+    <p style="margin:0 0 2.2mm;text-align:justify">O tema de maior sensibilidade foi a dragagem na Amazônia diante do El Niño. A Associação Brasileira de Armadores de Cabotagem (Abac) manifestou temor de que as dragagens não sejam concluídas a tempo e defendeu que as intervenções estejam prontas até agosto, antes do período crítico (Agência iNFRA, 23/06/2026). O DNIT respondeu tecnicamente, informando que os levantamentos batimétricos da campanha 2026/2027 começaram em 15 de junho e que as dragagens nos trechos amazônicos têm início em agosto, no âmbito de um plano de manutenção contratado em 2024. A divergência entre governo e setor privado, é importante registrar, recai sobre o calendário, não sobre a necessidade — o que abre à DAQ um espaço claro de posicionamento como executora preventiva.</p>
+    <p style="margin:0 0 2.2mm;text-align:justify">No eixo positivo, o Rio Grande do Sul concentrou boas notícias: a assinatura da ordem de serviço para a dragagem de manutenção da Lagoa Mirim foi apresentada como parte da reconstrução do estado após as enchentes de 2024 (Brasil de Fato, 24/06/2026). A DAQ é a executora da dragagem e peça técnica do arranjo — uma associação favorável, que reforça a contribuição do órgão à navegabilidade e à integração regional.</p>
+    <p style="margin:0 0 2.2mm;text-align:justify">No campo da governança, o tema das contratações públicas ganhou visibilidade no período, com o Tribunal de Contas da União recomendando aprimoramentos em processos licitatórios e a autarquia acolhendo os ajustes no rito normal de controle (Agência iNFRA, 24/06/2026). É um movimento de aperfeiçoamento institucional contínuo, que reforça a cultura de transparência das contratações — e abre à DAQ a oportunidade de evidenciar o rigor técnico de seus próprios processos na área aquaviária.</p>
+    <p style="margin:0;text-align:justify">Em síntese, o mês combinou oportunidade e exposição em igual medida. A DAQ tem, neste momento, um estoque raro de investimento e visibilidade para consolidar a imagem de executora competente e preventiva da navegabilidade — e, ao mesmo tempo, um risco concreto de ser lida como a face de uma eventual falha logística, caso a seca avance mais rápido do que a dragagem. A conversão desse momento em capital reputacional depende de a DAQ ocupar ativamente o espaço técnico da entrega.</p>
+  </div>
+
+  <div style="margin-top:4mm;max-width:158mm">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#0e5064;padding-bottom:3mm;border-bottom:1px solid #e2e4de;margin-bottom:5mm">Top Insights do Mês</div>
+    <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3mm">
+      <li style="display:grid;grid-template-columns:22px 1fr;gap:11px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0e5064;font-weight:600">01</span><span style="text-align:justify">A reputação da DAQ é uma reputação de <strong>execução</strong>: dragagem no prazo, canais navegáveis e contratos de manutenção operantes valem mais, para a imagem do órgão, do que qualquer anúncio.</span></li>
+      <li style="display:grid;grid-template-columns:22px 1fr;gap:11px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0e5064;font-weight:600">02</span><span style="text-align:justify">O <strong>El Niño</strong> é o principal risco do semestre. A divergência com os armadores é de calendário, não de mérito — o que permite à DAQ se posicionar como executora preventiva, e não como gargalo.</span></li>
+      <li style="display:grid;grid-template-columns:22px 1fr;gap:11px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0e5064;font-weight:600">03</span><span style="text-align:justify">Grande parte da visibilidade positiva do mês (obras e ordens de serviço) tem <strong>liderança do MPor</strong>; a DAQ deve comunicar seu papel no registro correto — executora técnica e partícipe —, dando visibilidade própria às suas entregas.</span></li>
+      <li style="display:grid;grid-template-columns:22px 1fr;gap:11px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0e5064;font-weight:600">04</span><span style="text-align:justify">O <strong>papel duradouro da DAQ</strong> na malha hidroviária federal — planejamento, projetos e obras, fiscalização técnica, eclusas e IP4 — é um ativo a afirmar de forma clara, projetando a relevância crescente do órgão.</span></li>
+      <li style="display:grid;grid-template-columns:22px 1fr;gap:11px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0e5064;font-weight:600">05</span><span style="text-align:justify">A <strong>dimensão socioambiental</strong> da dragagem (Rio Madeira, Pantanal, comunidades ribeirinhas e indígenas) é um vetor de risco crescente que pede comunicação técnica e transparente desde já.</span></li>
+      <li style="display:grid;grid-template-columns:22px 1fr;gap:11px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0e5064;font-weight:600">06</span><span style="text-align:justify">A <strong>governança das contratações</strong> segue em aprimoramento contínuo no setor público — uma oportunidade para a DAQ evidenciar o rigor técnico e a transparência de seus próprios processos aquaviários.</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 02 ============ -->
+<div id="s2" data-screen-label="02 Temas Estratégicos" style="margin-top:4mm">
+  <div style="border-top:1.6px solid #17242c;padding-top:3.5mm;display:flex;gap:12px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:#0e5064;font-weight:600">02</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#7c8a90">Mapeamento</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Temas Estratégicos do Mês</h2>
+
+  <h3 style="display:flex;gap:11px;align-items:baseline;font-size:16.5px;font-weight:600;margin:0 0 3.5mm;color:#17242c"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0e5064;font-weight:500">2.1</span><span>Panorama quantitativo da cobertura</span></h3>
+  <div style="max-width:158mm">
+    <p style="margin:0 0 2.2mm;text-align:justify">O monitoramento do período contemplou 234 itens entre imprensa e fontes institucionais. Na classificação orientada ao DAQ, 93 itens foram considerados de alta relevância, 70 de média e 71 de baixa — estas últimas concentradas em pautas rodoviárias do DNIT e em temas de portos marítimos e da ANTAQ, tangenciais à infraestrutura aquaviária interior. Por tipo de fonte, predominou a imprensa (174 itens), ao lado de um bloco expressivo de comunicação institucional e de reguladores (60 itens), refletindo o peso das agências oficiais (gov.br, MPor, ANTAQ) na pauta do setor.</p>
+  </div>
+
+  <!-- PAINEL QUANTITATIVO -->
+  <div style="border-top:1.6px solid #17242c;margin-top:4mm;padding-top:5mm;break-inside:avoid">
+    <div style="display:grid;grid-template-columns:repeat(3,1fr)">
+      <div style="padding-right:8mm">
+        <div style="font-size:38px;font-weight:600;letter-spacing:-.02em;line-height:1">234</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6069;margin-top:4px">itens monitorados</div>
+      </div>
+      <div style="padding:0 8mm;border-left:1px solid #e2e4de">
+        <div style="font-size:38px;font-weight:600;letter-spacing:-.02em;line-height:1">93<span style="font-size:18px;color:#7c8a90;font-weight:500"> · 40%</span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6069;margin-top:4px">de alta relevância</div>
+      </div>
+      <div style="padding-left:8mm;border-left:1px solid #e2e4de">
+        <div style="font-size:38px;font-weight:600;letter-spacing:-.02em;line-height:1"><span style="color:#2f7d4f">79</span> <span style="color:#c7ccd0;font-weight:400">/</span> <span style="color:#b23b36">36</span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6069;margin-top:4px">positivos / negativos</div>
+      </div>
+    </div>
+
+    <!-- Distribuição por tom -->
+    <div style="margin-top:4mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#7c8a90;margin-bottom:3mm">Distribuição por tom · 234 itens</div>
+      <div style="display:flex;height:26px;width:100%;overflow:hidden;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#fff">
+        <div style="width:33.8%;background:#2f7d4f;display:flex;align-items:center;padding-left:8px">79</div>
+        <div style="width:50.8%;background:#c3c8cc;color:#3a3f44;display:flex;align-items:center;padding-left:8px">119</div>
+        <div style="width:15.4%;background:#b23b36;display:flex;align-items:center;padding-left:8px">36</div>
+      </div>
+      <div style="display:flex;gap:20px;margin-top:3mm;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6069;flex-wrap:wrap">
+        <span style="display:inline-flex;align-items:center;gap:7px"><span style="width:9px;height:9px;background:#2f7d4f;display:inline-block"></span>Positivos · 79</span>
+        <span style="display:inline-flex;align-items:center;gap:7px"><span style="width:9px;height:9px;background:#c3c8cc;display:inline-block"></span>Neutros · 119</span>
+        <span style="display:inline-flex;align-items:center;gap:7px"><span style="width:9px;height:9px;background:#b23b36;display:inline-block"></span>Negativos · 36</span>
+      </div>
+    </div>
+
+    <!-- Relevância + Fonte -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14mm;margin-top:4mm">
+      <div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#7c8a90;margin-bottom:4mm">Por relevância</div>
+        <div style="display:flex;flex-direction:column;gap:3mm;font-family:'IBM Plex Mono',monospace;font-size:11px">
+          <div><div style="display:flex;justify-content:space-between;color:#5b6069;margin-bottom:4px"><span>Alta</span><span style="color:#17242c">93</span></div><div style="height:9px;background:#e8eae4"><div style="width:100%;height:100%;background:#0e5064"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;color:#5b6069;margin-bottom:4px"><span>Média</span><span style="color:#17242c">70</span></div><div style="height:9px;background:#e8eae4"><div style="width:75.3%;height:100%;background:#0e5064"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;color:#5b6069;margin-bottom:4px"><span>Baixa</span><span style="color:#17242c">71</span></div><div style="height:9px;background:#e8eae4"><div style="width:76.3%;height:100%;background:#0e5064"></div></div></div>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#7c8a90;margin-bottom:4mm">Por tipo de fonte</div>
+        <div style="display:flex;flex-direction:column;gap:3mm;font-family:'IBM Plex Mono',monospace;font-size:11px">
+          <div><div style="display:flex;justify-content:space-between;color:#5b6069;margin-bottom:4px"><span>Imprensa</span><span style="color:#17242c">174</span></div><div style="height:9px;background:#e8eae4"><div style="width:100%;height:100%;background:#23806e"></div></div></div>
+          <div><div style="display:flex;justify-content:space-between;color:#5b6069;margin-bottom:4px"><span>Institucional / reguladores</span><span style="color:#17242c">60</span></div><div style="height:9px;background:#e8eae4"><div style="width:34.5%;height:100%;background:#23806e"></div></div></div>
+        </div>
+        <div style="margin-top:6mm;display:flex;gap:9mm">
+          <div><div style="font-size:23px;font-weight:600;line-height:1">66</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b6069;margin-top:3px">citam o DNIT diretamente</div></div>
+          <div><div style="font-size:23px;font-weight:600;line-height:1">124</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b6069;margin-top:3px">temas do DAQ sob outro protagonista</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="max-width:158mm;margin-top:6mm">
+    <p style="margin:0;text-align:justify">Quanto ao tom, a maior parte da cobertura foi neutra (119 itens), com um bloco relevante de itens positivos (79), puxado por investimentos, ordens de serviço e concessões, e um conjunto de itens negativos (36), concentrado em seca, adiamentos, riscos socioambientais e controle. Quanto à menção ao cliente, 66 itens citam o DNIT diretamente e 124 tratam de temas próprios do DAQ (hidrovias, dragagem, navegabilidade) ainda que sob outro protagonista — o que confirma que o órgão opera, com frequência, como executor de uma agenda cuja narrativa é conduzida por terceiros.</p>
+  </div>
+
+  <h3 style="display:flex;gap:11px;align-items:baseline;font-size:16.5px;font-weight:600;margin:9mm 0 3.5mm;color:#17242c"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0e5064;font-weight:500">2.2</span><span>Síntese dos temas</span></h3>
+  <div style="max-width:158mm">
+    <p style="margin:0 0 4mm;text-align:justify">A leitura do período identificou oito temas-matriz. O quadro a seguir sintetiza cada um, sua relevância para o DAQ e o principal sinal factual do mês.</p>
+  </div>
+
+  <!-- TABELA DE TEMAS -->
+  <table style="width:100%;border-collapse:collapse;break-inside:auto">
+    <thead><tr>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:#7c8a90;font-weight:500;padding:0 10px 3mm 0;border-bottom:1.5px solid #17242c;width:38%">Tema estratégico</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:#7c8a90;font-weight:500;padding:0 10px 3mm 0;border-bottom:1.5px solid #17242c;width:16%">Relevância</th>
+      
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:#7c8a90;font-weight:500;padding:0 0 3mm 0;border-bottom:1.5px solid #17242c;width:46%">Sinal do mês</th>
+    </tr></thead>
+    <tbody style="font-size:12.5px;line-height:1.4">
+      <tr><td style="padding:3mm 10px;border-bottom:1px solid #ececec;vertical-align:top;padding-left:0;font-weight:500">El Niño, seca e dragagem na Amazônia</td><td style="padding:3mm 10px;border-bottom:1px solid #ececec;vertical-align:top">Alta</td><td style="padding:3mm 0;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">Armadores pedem dragagem até agosto; DNIT inicia batimetria em 15/06</td></tr>
+      <tr><td style="padding:3mm 10px;border-bottom:1px solid #ececec;vertical-align:top;padding-left:0;font-weight:500">Lagoa Mirim e reconstrução do RS</td><td style="padding:3mm 10px;border-bottom:1px solid #ececec;vertical-align:top">Alta</td><td style="padding:3mm 0;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">OS de dragagem de R$ 57,9 mi (Novo PAC); DNIT participa</td></tr>
+      <tr><td style="padding:3mm 10px;border-bottom:1px solid #ececec;vertical-align:top;padding-left:0;font-weight:500">Papel duradouro da DAQ na malha</td><td style="padding:3mm 10px;border-bottom:1px solid #ececec;vertical-align:top">Alta</td><td style="padding:3mm 0;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">Planejamento, projetos, obras e manutenção das hidrovias federais</td></tr>
+      <tr><td style="padding:3mm 10px;border-bottom:1px solid #ececec;vertical-align:top;padding-left:0;font-weight:500">Amazônia e navegação regional</td><td style="padding:3mm 10px;border-bottom:1px solid #ececec;vertical-align:top">Média</td><td style="padding:3mm 0;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">Abastecimento ribeirinho e terminais sob atenção da estiagem</td></tr>
+      <tr><td style="padding:3mm 10px;border-bottom:1px solid #ececec;vertical-align:top;padding-left:0;font-weight:500">Dimensão socioambiental da dragagem</td><td style="padding:3mm 10px;border-bottom:1px solid #ececec;vertical-align:top">Média</td><td style="padding:3mm 0;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">Nota técnica sobre a dragagem do Rio Madeira; alertas no Pantanal</td></tr>
+      <tr><td style="padding:3mm 10px;border-bottom:1px solid #ececec;vertical-align:top;padding-left:0;font-weight:500">Governança e contratações públicas</td><td style="padding:3mm 10px;border-bottom:1px solid #ececec;vertical-align:top">Média</td><td style="padding:3mm 0;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">TCU recomenda aprimoramentos; ciclo de aperfeiçoamento contínuo</td></tr>
+      <tr><td style="padding:3mm 10px;border-bottom:1px solid #ececec;vertical-align:top;padding-left:0;font-weight:500">Hidrovia Paraná-Tietê e o Centro-Sul</td><td style="padding:3mm 10px;border-bottom:1px solid #ececec;vertical-align:top">Média</td><td style="padding:3mm 0;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">Corredor de 2.400 km ganha protagonismo logístico</td></tr>
+      <tr><td style="padding:3mm 10px;vertical-align:top;padding-left:0;font-weight:500">Segurança da navegação</td><td style="padding:3mm 10px;vertical-align:top">Média</td><td style="padding:3mm 0;vertical-align:top;color:#41474d">Fiscalização reforçada no Festival de Parintins (ANTAQ/Marinha)</td></tr>
+    </tbody>
+  </table>
+
+  <div style="max-width:158mm;margin-top:6mm">
+    <p style="margin:0;text-align:justify">A distribuição mostra um mês de agenda densa e favorável em investimento, mas atravessado por dois vetores de risco de alta relevância — a seca amazônica e a governança das contratações —, ambos incidindo diretamente sobre a função executora da DAQ.</p>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 03 ============ -->
+<div id="s3" data-screen-label="03 Leitura Reputacional" style="margin-top:4mm">
+  <div style="border-top:1.6px solid #17242c;padding-top:3.5mm;display:flex;gap:12px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:#0e5064;font-weight:600">03</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#7c8a90">Diagnóstico</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Leitura Reputacional do Ambiente Externo</h2>
+
+  <h3 style="display:flex;gap:11px;align-items:baseline;font-size:16.5px;font-weight:600;margin:0 0 3.5mm;color:#17242c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0e5064;font-weight:500">3.1</span><span>Narrativa predominante sobre a DAQ</span></h3>
+  <div style="max-width:158mm"><p style="margin:0;text-align:justify">A narrativa predominante do mês foi a de um órgão executor de uma agenda em franca expansão. A DAQ aparece associada a investimento e a obras — dragagem da Lagoa Mirim, manutenção da navegabilidade amazônica, sinalização e eclusas —, na posição de quem entrega os resultados concretos que sustentam a política hidroviária. É uma imagem sólida e com amplo espaço de crescimento: a competência técnica do órgão é reconhecida e há uma oportunidade clara de dar-lhe mais visibilidade própria, ao lado do protagonismo do MPor nos anúncios de política e concessão.</p></div>
+
+  <h3 style="display:flex;gap:11px;align-items:baseline;font-size:16.5px;font-weight:600;margin:5.5mm 0 2.6mm;color:#17242c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0e5064;font-weight:500">3.2</span><span>Risco reputacional dominante</span></h3>
+  <div style="max-width:158mm"><p style="margin:0;text-align:justify">O maior risco do período é o de a DAQ tornar-se a face visível de uma eventual falha de navegabilidade durante a seca. Se os rios amazônicos baixarem mais rápido do que a dragagem avançar, o custo reputacional recairá sobre o executor, ainda que as causas sejam climáticas e o cronograma tenha sido tecnicamente definido. A pressão já explícita dos armadores por prazos antecipados converte esse risco em algo concreto e datado: agosto é o marco que o setor privado fixou publicamente.</p></div>
+
+  <h3 style="display:flex;gap:11px;align-items:baseline;font-size:16.5px;font-weight:600;margin:5.5mm 0 2.6mm;color:#17242c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0e5064;font-weight:500">3.3</span><span>Oportunidade reputacional dominante</span></h3>
+  <div style="max-width:158mm"><p style="margin:0;text-align:justify">A principal oportunidade é converter esse mesmo risco em ativo, posicionando a DAQ como executora preventiva e transparente. O órgão tem os elementos para isso: os levantamentos batimétricos começaram em junho, os contratos de manutenção estão vigentes e a estrutura, segundo a própria autarquia, está mais preparada do que nos anos anteriores. Comunicar o cronograma com clareza, mostrar o andamento e explicar a lógica técnica das datas é o movimento de maior retorno e menor risco do semestre.</p></div>
+
+  <h3 style="display:flex;gap:11px;align-items:baseline;font-size:16.5px;font-weight:600;margin:5.5mm 0 2.6mm;color:#17242c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0e5064;font-weight:500">3.4</span><span>Evolução em relação ao período anterior</span></h3>
+  <div style="max-width:158mm"><p style="margin:0;text-align:justify">Em relação ao período anterior, o eixo se deslocou do planejamento para a iminência da execução sob estresse. Temas que antes tramitavam como agenda de médio prazo — concessões, planejamento da seca, manutenção — passaram a ter marcos concretos e datas próximas: a consulta pública da primeira concessão integrada, o início das batimetrias, a definição dos trechos de dragagem. O acompanhamento reputacional ganha, assim, um fio de continuidade: o que era preparação passou a ser entrega observável, e é sobre a entrega que a imagem da DAQ será medida nos próximos meses.</p></div>
+</div>
+
+<!-- ============ SEÇÃO 04 ============ -->
+<div id="s4" data-screen-label="04 Análise Temática" style="margin-top:4mm">
+  <div style="border-top:1.6px solid #17242c;padding-top:3.5mm;display:flex;gap:12px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:#0e5064;font-weight:600">04</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#7c8a90">Análise</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Análise Temática Aprofundada</h2>
+
+  <!-- DESTAQUE DO MÊS -->
+  <div style="background:#0e5064;color:#fff;border-radius:10px;padding:6mm 7mm;margin:0 0 6mm;max-width:158mm;break-inside:avoid">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:3mm">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;background:#23806e;color:#fff;padding:3px 9px;border-radius:3px">Destaque do mês</span>
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.06em;color:#9fc4c9">CNN Brasil · CNN Infra · 02/07/2026</span>
+    </div>
+    <div style="font-size:18px;font-weight:600;line-height:1.25;margin-bottom:3mm;letter-spacing:-.01em">"O Brasil que corre nos rios molda novos caminhos logísticos"</div>
+    <p style="margin:0 0 3mm;text-align:justify;font-size:14px;color:#e4eef0">O diretor de Infraestrutura Aquaviária do DNIT, <strong style="color:#fff">Edme Tavares de Albuquerque Filho</strong>, assinou artigo na CNN Infra projetando as hidrovias como vantagem logística natural do Brasil — um marco de protagonismo editorial da própria DAQ. O texto valoriza o papel do DNIT na navegabilidade e conecta a agenda a competitividade, integração nacional e sustentabilidade.</p>
+    <div style="display:flex;gap:7mm;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#bcd9dd;border-top:1px solid #1c5f70;padding-top:3mm">
+      <span><span style="color:#7fd0be;font-weight:600">20,1 mil km</span> de hidrovias navegáveis</span>
+      <span><span style="color:#7fd0be;font-weight:600">R$ 1,29 bi</span> investidos 2023–2025</span>
+      <span><span style="color:#7fd0be;font-weight:600">163,3 mi t</span> movimentadas na Amazônia/Tocantins</span>
+    </div>
+    <p style="margin:3mm 0 0;font-size:12.5px;color:#bcd9dd;font-style:italic">Leitura estratégica — a autoria do diretor da DAQ posiciona o órgão como voz técnica de referência do setor; recomenda-se ampliar essa presença editorial, transformando entregas de navegabilidade em pauta pública recorrente.</p>
+  </div>
+
+  <!-- 4.1 -->
+  <h3 style="display:flex;gap:11px;align-items:baseline;font-size:16.5px;font-weight:600;margin:0 0 3.5mm;color:#17242c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0e5064;font-weight:500">4.1</span><span>El Niño, seca e a corrida contra o calendário da dragagem</span></h3>
+  <div style="max-width:158mm">
+    <p style="margin:0 0 2.2mm;text-align:justify">O tema mais sensível do mês combina clima, logística e reputação. Com a oficialização do El Niño e a projeção de intensidade forte a muito forte no segundo semestre, o setor privado antecipou a pressão: a Abac manifestou temor de demora nas dragagens e defendeu que as intervenções estejam concluídas até agosto, antes do pico da vazante, além de pedir a antecipação das batimetrias (Agência iNFRA, 23/06/2026). A entidade foi explícita ao afirmar que a dragagem só cumpre sua função quando feita preventivamente, e não depois do período crítico.</p>
+    <p style="margin:0 0 2.2mm;text-align:justify">O DNIT respondeu no registro técnico correto. Informou que os levantamentos batimétricos da campanha 2026/2027 começaram em 15 de junho, com conclusão prevista para a primeira quinzena de julho, e que as dragagens nos trechos amazônicos — entre eles Benjamin Constant–São Paulo de Olivença, Tabatinga–Benjamin Constant, Coari–Codajás e Manaus–Itacoatiara — têm início em agosto, no âmbito de um plano de manutenção plurianual contratado em 2024. A autarquia sustentou, ainda, que dispõe de contratos permanentes de manutenção hidroviária, o que amplia sua capacidade de agir preventivamente em comparação com anos anteriores.</p>
+    <p style="margin:0;text-align:justify">A distinção decisiva, do ponto de vista reputacional, é que a divergência entre o governo e o setor privado recai sobre o momento das dragagens, não sobre sua necessidade. Isso significa que a DAQ não está em posição de conflito de mérito com os usuários — ambos querem a navegabilidade preservada —, mas em uma disputa de calendário e de percepção de prontidão. O pano de fundo agrava a sensibilidade: a memória das secas de 2023 e 2024, com centenas de municípios em emergência e forte impacto no abastecimento e nos custos logísticos da região, mantém a opinião pública amazônica em estado de alerta.</p>
+  </div>
+  <div style="background:#eef4f2;padding:3.5mm 5mm;margin:3mm 0 0;max-width:158mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#0e5064;margin-bottom:2.5mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:13px;color:#28323a">A DAQ deve assumir a dianteira comunicacional do tema, e não reagir a ele. Recomenda-se divulgar de forma proativa o cronograma de batimetrias e dragagens, explicar tecnicamente por que as datas são as que são e reportar o andamento em marcos visíveis. Antecipar-se à narrativa de atraso — antes que ela se forme — é a diferença entre ser percebida como executora preventiva ou como gargalo. O silêncio, neste tema, é o principal fator de risco.</p>
+  </div>
+
+  <!-- 4.1b Campanhas de dragagem Madeira e Tapajós -->
+  <h3 style="display:flex;gap:11px;align-items:baseline;font-size:16.5px;font-weight:600;margin:5.5mm 0 2.6mm;color:#17242c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0e5064;font-weight:500">4.2</span><span>Campanhas de dragagem no Madeira e no Tapajós: execução preventiva em marcha</span></h3>
+  <div style="max-width:158mm">
+    <p style="margin:0 0 2.2mm;text-align:justify">As duas frentes amazônicas de maior relevância avançaram no período com forte caráter preventivo. No <strong>Rio Madeira</strong>, o Governo Federal assinou contrato de R$ 123,6 milhões para a dragagem de manutenção entre Porto Velho e a foz, no âmbito do PADMA/Novo PAC, com execução técnica do DNIT (Portos e Navios, 01/06/2026). Em reunião de articulação em Rondônia, a DAQ apresentou o planejamento da campanha 2026, com ampliação do trecho contemplado — um sinal claro de antecipação à estiagem, e não de reação a ela (Portal Amazônia, 05/07/2026).</p>
+    <p style="margin:0;text-align:justify">No <strong>Rio Tapajós</strong>, a execução da dragagem de manutenção (PADMA, entre Santarém e Itaituba, com recursos do Novo PAC) segue em curso com uma camada adicional de cuidado: o Governo Federal firmou o compromisso de consulta livre, prévia e informada às comunidades e instituiu grupo de trabalho interministerial para conduzir o diálogo (Gov.br, 06/02/2026). Para a DAQ, é a oportunidade de consolidar um modelo de execução tecnicamente sólido e socioambientalmente dialogado — um diferencial reputacional para as próximas campanhas.</p>
+  </div>
+  <div style="background:#eef4f2;padding:3.5mm 5mm;margin:3mm 0 0;max-width:158mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#0e5064;margin-bottom:2.5mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:13px;color:#28323a">Madeira e Tapajós permitem à DAQ comunicar uma narrativa de prontidão e responsabilidade: dragagem preventiva contratada com antecedência, planejamento de campanha divulgado e diálogo estruturado com comunidades. Recomenda-se dar visibilidade proativa ao cronograma e aos cuidados socioambientais, consolidando a imagem de executora que antecipa a seca e constrói consenso.</p>
+  </div>
+
+  <!-- 4.3 -->
+  <h3 style="display:flex;gap:11px;align-items:baseline;font-size:16.5px;font-weight:600;margin:5.5mm 0 2.6mm;color:#17242c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0e5064;font-weight:500">4.3</span><span>Lagoa Mirim e a reconstrução do RS: execução do DNIT sob liderança do MPor</span></h3>
+  <div style="max-width:158mm">
+    <p style="margin:0 0 2.2mm;text-align:justify">O Rio Grande do Sul concentrou o eixo positivo do mês. Em 23 de junho, em General Câmara, foi assinada a ordem de serviço para a elaboração dos projetos e a execução da dragagem de manutenção da hidrovia da Lagoa Mirim, com investimento de R$ 57,9 milhões oriundos do Novo PAC, previstos para 2026–2028 (Brasil de Fato, 24/06/2026). Na mesma agenda, anunciou-se a abertura da consulta pública para a concessão do Sistema Aquaviário Integrado do Sul e Lagoa Mirim, apresentada como a primeira concessão hidroviária integrada do país. Os anúncios foram enquadrados como parte da reconstrução do estado após as enchentes de 2024.</p>
+    <p style="margin:0 0 2.2mm;text-align:justify">É essencial precisar as competências. A ordem de serviço foi conduzida pelo Ministério de Portos e Aeroportos; o DNIT figura como executor da dragagem e peça técnica do arranjo, não como autor do anúncio. Essa distinção não diminui a relevância da DAQ — ao contrário, é justamente na execução da dragagem que reside sua contribuição concreta e verificável para o projeto. Mas comunicá-la no registro correto protege o órgão de dois riscos simétricos: o de parecer que se apropria de protagonismo alheio e o de desaparecer da narrativa de um investimento que ajuda a viabilizar.</p>
+    <p style="margin:0;text-align:justify">A dimensão simbólica é forte. Associar a infraestrutura aquaviária à reconstrução de um estado que ficou submerso agrega à DAQ uma camada de propósito público que vai além da eficiência logística. A navegabilidade, aqui, conversa com resiliência, integração regional e reconstrução — atributos de alto valor reputacional.</p>
+  </div>
+  <div style="background:#eef4f2;padding:3.5mm 5mm;margin:3mm 0 0;max-width:158mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#0e5064;margin-bottom:2.5mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:13px;color:#28323a">A DAQ deve valorizar sua contribuição técnica ao projeto — a execução da dragagem de manutenção — com precisão de competências, creditando ao MPor a liderança da política e da concessão. O enquadramento mais forte é o de parceria técnica na reconstrução do RS, evitando tanto a sobreexposição quanto a invisibilidade.</p>
+  </div>
+
+  <!-- 4.3 -->
+  <h3 style="display:flex;gap:11px;align-items:baseline;font-size:16.5px;font-weight:600;margin:5.5mm 0 2.6mm;color:#17242c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0e5064;font-weight:500">4.4</span><span>O papel duradouro da DAQ na malha hidroviária</span></h3>
+  <div style="max-width:158mm">
+    <p style="margin:0 0 2.2mm;text-align:justify">O setor hidroviário vive um momento de modernização institucional, com uma agenda ampla de planejamento das hidrovias federais. Nesse contexto, ganha relevância a definição clara e afirmativa do papel duradouro da DAQ, cuja atuação é técnica e permanente.</p>
+    <p style="margin:0 0 2.2mm;text-align:justify">Esse papel é sólido e abrangente: planejamento, fiscalização e execução de projetos e obras de navegabilidade na malha federal (as 26 hidrovias), operação de eclusas e das instalações portuárias de pequeno porte, e a inteligência de dados sobre navegabilidade. É uma função de coordenação técnica e curadoria da malha que só tende a crescer em importância à medida que o setor se moderniza.</p>
+    <p style="margin:0;text-align:justify">Como corpo técnico, a DAQ tem a oportunidade de consolidar sua imagem de neutralidade e competência, mantendo o foco na engenharia, na manutenção e na segurança da navegação — os atributos que sustentam a confiança no órgão.</p>
+  </div>
+  <div style="background:#eef4f2;padding:3.5mm 5mm;margin:3mm 0 0;max-width:158mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#0e5064;margin-bottom:2.5mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:13px;color:#28323a">A DAQ deve construir e comunicar, de forma afirmativa, a narrativa de seu papel duradouro na malha hidroviária — coordenação técnica, execução de projetos e obras, operação de eclusas e IP4, e guarda dos dados de navegabilidade. Afirmar essa função consolida a autoridade técnica do órgão e projeta crescimento.</p>
+  </div>
+
+  <!-- 4.4 -->
+  <h3 style="display:flex;gap:11px;align-items:baseline;font-size:16.5px;font-weight:600;margin:5.5mm 0 2.6mm;color:#17242c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0e5064;font-weight:500">4.5</span><span>Amazônia: navegação como questão de abastecimento e coesão regional</span></h3>
+  <div style="max-width:158mm">
+    <p style="margin:0 0 2.2mm;text-align:justify">Para além da dragagem, a Amazônia foi pauta recorrente na dimensão humana da navegação. Diversos itens do período trataram do transporte fluvial como serviço essencial — terminais hidroviários em Belém e Cotijuba, linhas para comunidades, o abastecimento de municípios sem acesso rodoviário (G1, 03 e 04/07/2026). O pano de fundo é a dependência quase absoluta dos rios: quando o nível cai, a rede de transporte simplesmente deixa de funcionar, afetando mobilidade, saúde e abastecimento de populações isoladas.</p>
+    <p style="margin:0;text-align:justify">Essa dimensão eleva o significado da atuação da DAQ. A navegabilidade amazônica não é apenas uma questão de escoamento de commodities; é uma questão de coesão social e de acesso a direitos básicos. A infraestrutura aquaviária, nesse enquadramento, é infraestrutura humanitária — o que confere à execução técnica da DAQ uma relevância que transcende o custo logístico.</p>
+  </div>
+  <div style="background:#eef4f2;padding:3.5mm 5mm;margin:3mm 0 0;max-width:158mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#0e5064;margin-bottom:2.5mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:13px;color:#28323a">Ao comunicar sua atuação na Amazônia, a DAQ deve incorporar a dimensão humana — abastecimento, mobilidade e acesso das populações ribeirinhas —, e não apenas a métrica de carga. Esse enquadramento amplia a legitimidade social do órgão e conecta a dragagem técnica a um propósito público facilmente compreensível.</p>
+  </div>
+</div>
+
+<!-- 4.5 -->
+<div style="margin-top:4mm">
+  <h3 style="display:flex;gap:11px;align-items:baseline;font-size:16.5px;font-weight:600;margin:0 0 3.5mm;color:#17242c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0e5064;font-weight:500">4.6</span><span>A dimensão socioambiental da dragagem</span></h3>
+  <div style="max-width:158mm">
+    <p style="margin:0 0 2.2mm;text-align:justify">Na contracorrente do eixo de investimento, o mês registrou sinais de tensão socioambiental. Uma nota técnica alertou para riscos socioambientais da ampliação da dragagem na Hidrovia do Rio Madeira (REPAM, 23/06/2026), e a discussão sobre a Hidrovia do Rio Paraguai trouxe alertas quanto a impactos no Pantanal (Campo Grande News, 22/06/2026). Em paralelo, o próprio poder público sinalizou a importância do diálogo com comunidades indígenas no desenvolvimento hidroviário (gov.br, 22/06/2026).</p>
+    <p style="margin:0;text-align:justify">Para a DAQ, executora das dragagens, esse é um vetor de risco crescente e estruturante. Obras de dragagem e de aprofundamento de canais mobilizam licenciamento ambiental, consulta a comunidades e escrutínio de organizações da sociedade civil. A depender da condução, podem se converter em focos de contestação, judicialização e paralisação — com custo reputacional direto para o órgão que executa.</p>
+  </div>
+  <div style="background:#eef4f2;padding:3.5mm 5mm;margin:3mm 0 0;max-width:158mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#0e5064;margin-bottom:2.5mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:13px;color:#28323a">A DAQ deve tratar a variável socioambiental como parte integrante do projeto, e não como obstáculo externo. Recomenda-se comunicar de forma transparente os estudos, os cuidados ambientais e os canais de diálogo com comunidades, posicionando o órgão como executor responsável — o que reduz o espaço para narrativas de negligência e antecipa a mitigação de conflitos.</p>
+  </div>
+</div>
+
+<!-- 4.6 -->
+<div style="margin-top:4mm">
+  <h3 style="display:flex;gap:11px;align-items:baseline;font-size:16.5px;font-weight:600;margin:0 0 3.5mm;color:#17242c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0e5064;font-weight:500">4.7</span><span>Governança e aprimoramento das contratações</span></h3>
+  <div style="max-width:158mm">
+    <p style="margin:0 0 2.2mm;text-align:justify">A agenda de governança das contratações públicas esteve em evidência no período. O Tribunal de Contas da União, no exercício regular do controle, recomendou o aperfeiçoamento de um processo licitatório da autarquia, tendo o certame seguido seu curso (Agência iNFRA, 24/06/2026). Trata-se de um ciclo saudável de aprimoramento contínuo, comum às grandes contratações de infraestrutura, que fortalece a robustez e a previsibilidade dos ritos.</p>
+    <p style="margin:0;text-align:justify">Para a DAQ, o tema é sobretudo uma oportunidade. Num momento em que a área executa contratos relevantes de dragagem e manutenção, evidenciar a qualidade técnica e a transparência de seus próprios processos reforça a confiança no órgão e projeta uma imagem de gestão rigorosa e moderna.</p>
+  </div>
+  <div style="background:#eef4f2;padding:3.5mm 5mm;margin:3mm 0 0;max-width:158mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#0e5064;margin-bottom:2.5mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:13px;color:#28323a">A oportunidade está na diferenciação positiva: a DAQ ganha ao evidenciar a solidez técnica e a transparência de suas contratações — critérios objetivos, ampla concorrência, motivação técnica —, reforçando a percepção de rigor. Dar visibilidade às boas práticas de licitação na área aquaviária é a forma mais eficaz de projetar uma imagem de gestão exemplar.</p>
+  </div>
+</div>
+
+<!-- 4.7 -->
+<div style="margin-top:4mm">
+  <h3 style="display:flex;gap:11px;align-items:baseline;font-size:16.5px;font-weight:600;margin:0 0 3.5mm;color:#17242c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0e5064;font-weight:500">4.8</span><span>Hidrovia Paraná-Tietê e a malha do Centro-Sul</span></h3>
+  <div style="max-width:158mm">
+    <p style="margin:0 0 2.2mm;text-align:justify">No Centro-Sul, a Hidrovia Paraná-Tietê ganhou destaque como corredor logístico estratégico, descrita como um eixo de cerca de 2.400 km que conecta regiões e ganha protagonismo na matriz de transporte (Portogente, 25/06/2026; gov.br, 24/06/2026). O enquadramento é francamente positivo: a hidrovia aparece como alternativa eficiente e sustentável ao modal rodoviário, com potencial de redução de custos e de emissões.</p>
+    <p style="margin:0;text-align:justify">Para a DAQ, a Paraná-Tietê é uma vitrine da tese central do transporte hidroviário — mais carga, menor custo, menor impacto — e um ativo de comunicação de baixo risco. É também um lembrete de que a malha interior estruturante depende de manutenção contínua, eclusas operantes e sinalização confiável, todos atributos da execução do órgão.</p>
+  </div>
+  <div style="background:#eef4f2;padding:3.5mm 5mm;margin:3mm 0 0;max-width:158mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#0e5064;margin-bottom:2.5mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:13px;color:#28323a">A DAQ pode usar corredores consolidados como a Paraná-Tietê como prova de conceito da eficiência hidroviária, associando o bom funcionamento do corredor à manutenção técnica que o sustenta. É uma oportunidade de comunicar valor sem exposição a controvérsia.</p>
+  </div>
+</div>
+
+<!-- 4.8 -->
+<div style="margin-top:4mm">
+  <h3 style="display:flex;gap:11px;align-items:baseline;font-size:16.5px;font-weight:600;margin:0 0 3.5mm;color:#17242c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#0e5064;font-weight:500">4.9</span><span>Segurança da navegação e a interface institucional</span></h3>
+  <div style="max-width:158mm">
+    <p style="margin:0;text-align:justify">A segurança da navegação apareceu com força no contexto do Festival de Parintins, com reforço de fiscalização do transporte hidroviário (gov.br, 22/06/2026). Trata-se de tema em que a competência é primordialmente da Marinha e da ANTAQ, com a DAQ contribuindo pela via da sinalização e da manutenção da navegabilidade — mais uma vez, o papel de executor da infraestrutura que viabiliza a operação segura.</p>
+  </div>
+  <div style="background:#eef4f2;padding:3.5mm 5mm;margin:3mm 0 0;max-width:158mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#0e5064;margin-bottom:2.5mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:13px;color:#28323a">Em temas de segurança da navegação, a DAQ deve comunicar sua contribuição específica — sinalização, balizamento, navegabilidade — sem invadir a competência da Marinha e da ANTAQ. O enquadramento correto reforça a imagem de um sistema institucional coordenado, no qual o órgão cumpre com precisão a sua parte.</p>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 05 ============ -->
+<div id="s5" data-screen-label="05 Riscos" style="margin-top:4mm">
+  <div style="border-top:1.6px solid #17242c;padding-top:3.5mm;display:flex;gap:12px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:#0e5064;font-weight:600">05</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#7c8a90">Riscos</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Riscos Reputacionais Prioritários</h2>
+
+  <!-- MATRIZ DE RISCO -->
+  <div style="break-inside:avoid;margin-bottom:2mm">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#7c8a90;margin-bottom:5mm">Matriz de risco · probabilidade × impacto</div>
+    <div style="display:flex;gap:9px;max-width:150mm">
+      <div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#7c8a90;display:flex;align-items:center;justify-content:center;padding-bottom:18px">Impacto</div>
+      <div style="flex:1">
+        <div style="display:grid;grid-template-columns:22mm 1fr 1fr 1fr;grid-auto-rows:58px;gap:4px">
+          <div style="display:flex;align-items:center;justify-content:flex-end;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b6069;padding-right:6px">Muito alto</div>
+          <div style="background:#fbeede"></div>
+          <div style="background:#f7ddcf"></div>
+          <div style="background:#f2cfc9;display:flex;align-items:center;justify-content:center"><span style="width:30px;height:30px;border-radius:50%;background:#8f2723;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center">1</span></div>
+
+          <div style="display:flex;align-items:center;justify-content:flex-end;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b6069;padding-right:6px">Alto</div>
+          <div style="background:#f4f5f3;display:flex;align-items:center;justify-content:center"><span style="width:30px;height:30px;border-radius:50%;background:#c1732a;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center">3</span></div>
+          <div style="background:#fbeede;display:flex;align-items:center;justify-content:center"><span style="width:30px;height:30px;border-radius:50%;background:#a5322d;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center">2</span></div>
+          <div style="background:#f6dcd7"></div>
+
+          <div style="display:flex;align-items:center;justify-content:flex-end;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b6069;padding-right:6px">Médio</div>
+          <div style="background:#f7f8f6;display:flex;align-items:center;justify-content:center;gap:6px"><span style="width:30px;height:30px;border-radius:50%;background:#6b7075;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center">4</span><span style="width:30px;height:30px;border-radius:50%;background:#6b7075;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center">5</span></div>
+          <div style="background:#f4f5f3"></div>
+          <div style="background:#fbeede"></div>
+        </div>
+        <div style="display:grid;grid-template-columns:22mm 1fr 1fr 1fr;gap:4px;margin-top:6px">
+          <div></div>
+          <div style="text-align:center;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b6069">Média</div>
+          <div style="text-align:center;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b6069">Média-alta</div>
+          <div style="text-align:center;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b6069">Alta</div>
+        </div>
+        <div style="text-align:center;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#7c8a90;margin-top:7px;padding-left:22mm">Probabilidade</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LISTA DE RISCOS -->
+  <div style="margin-top:4mm">
+    <div style="display:grid;grid-template-columns:32px 1fr;gap:14px;margin-top:6mm;break-inside:avoid;max-width:158mm">
+      <div style="width:30px;height:30px;border-radius:50%;background:#8f2723;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center">1</div>
+      <div>
+        <div style="font-weight:600;font-size:15.5px;margin-bottom:2.5mm;line-height:1.3">DAQ como face de uma eventual falha de navegabilidade na seca</div>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:10.5px;margin-bottom:2.5mm"><span><span style="color:#7c8a90">Probabilidade</span> <span style="color:#17242c;font-weight:500">Alta</span></span><span><span style="color:#7c8a90">Impacto</span> <span style="color:#b23b36;font-weight:500;white-space:nowrap">Muito alto</span></span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#5b6069;margin-bottom:2.5mm">Sinal do mês — armadores fixam agosto como prazo; batimetrias iniciadas em 15/06.</div>
+        <p style="margin:0;text-align:justify">Se a vazante avançar mais rápido do que a dragagem, o custo reputacional recairá sobre o executor, ainda que as causas sejam climáticas. A pressão pública por prazos antecipados torna o risco concreto e datado.</p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:32px 1fr;gap:14px;margin-top:6mm;break-inside:avoid;max-width:158mm">
+      <div style="width:30px;height:30px;border-radius:50%;background:#c1732a;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center">2</div>
+      <div>
+        <div style="font-weight:600;font-size:15.5px;margin-bottom:2.5mm;line-height:1.3">Aprimoramento contínuo da governança das contratações</div>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:10.5px;margin-bottom:2.5mm"><span><span style="color:#7c8a90">Probabilidade</span> <span style="color:#17242c;font-weight:500">Média</span></span><span><span style="color:#7c8a90">Impacto</span> <span style="color:#c1732a;font-weight:500">Médio</span></span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#5b6069;margin-bottom:2.5mm">Sinal do mês — TCU recomenda aprimoramentos em processo licitatório; ajustes acolhidos.</div>
+        <p style="margin:0;text-align:justify">O aperfeiçoamento contínuo dos ritos de contratação é parte natural da gestão de infraestrutura. Para a DAQ, é uma oportunidade de reforçar a transparência e o rigor técnico de seus próprios processos aquaviários.</p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:32px 1fr;gap:14px;margin-top:6mm;break-inside:avoid;max-width:158mm">
+      <div style="width:30px;height:30px;border-radius:50%;background:#c1732a;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center">3</div>
+      <div>
+        <div style="font-weight:600;font-size:15.5px;margin-bottom:2.5mm;line-height:1.3">Contestação socioambiental das dragagens</div>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:10.5px;margin-bottom:2.5mm"><span><span style="color:#7c8a90">Probabilidade</span> <span style="color:#17242c;font-weight:500">Média</span></span><span><span style="color:#7c8a90">Impacto</span> <span style="color:#b23b36;font-weight:500">Alto</span></span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#5b6069;margin-bottom:2.5mm">Sinal do mês — nota técnica sobre a dragagem do Rio Madeira; alertas no Pantanal.</div>
+        <p style="margin:0;text-align:justify">Licenciamento, consulta a comunidades e atuação de organizações civis podem converter obras em focos de contestação e judicialização, com custo direto para o executor.</p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:32px 1fr;gap:14px;margin-top:6mm;break-inside:avoid;max-width:158mm">
+      <div style="width:30px;height:30px;border-radius:50%;background:#6b7075;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center">4</div>
+      <div>
+        <div style="font-weight:600;font-size:15.5px;margin-bottom:2.5mm;line-height:1.3">Afirmar o papel duradouro da DAQ na malha</div>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:10.5px;margin-bottom:2.5mm"><span><span style="color:#7c8a90">Probabilidade</span> <span style="color:#17242c;font-weight:500">Média</span></span><span><span style="color:#7c8a90">Impacto</span> <span style="color:#c1732a;font-weight:500">Médio</span></span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#5b6069;margin-bottom:2.5mm">Sinal do mês — modernização institucional do setor hidroviário.</div>
+        <p style="margin:0;text-align:justify">Num setor em modernização, a DAQ tem a oportunidade de comunicar afirmativamente sua função técnica permanente — planejamento, projetos, obras, manutenção e fiscalização —, consolidando a percepção de um órgão essencial e em crescimento.</p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:32px 1fr;gap:14px;margin-top:6mm;break-inside:avoid;max-width:158mm">
+      <div style="width:30px;height:30px;border-radius:50%;background:#6b7075;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center">5</div>
+      <div>
+        <div style="font-weight:600;font-size:15.5px;margin-bottom:2.5mm;line-height:1.3">Espaço a conquistar na narrativa de investimento</div>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:10.5px;margin-bottom:2.5mm"><span><span style="color:#7c8a90">Probabilidade</span> <span style="color:#17242c;font-weight:500">Média</span></span><span><span style="color:#7c8a90">Impacto</span> <span style="color:#c1732a;font-weight:500">Médio</span></span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#5b6069;margin-bottom:2.5mm">Sinal do mês — anúncios de peso conduzidos pelo MPor, com espaço para a DAQ ganhar voz própria.</div>
+        <p style="margin:0;text-align:justify">Ao executar uma agenda cuja narrativa é hoje conduzida sobretudo pelo MPor, a DAQ tem a oportunidade de ampliar o reconhecimento por sua contribuição técnica — dando mais visibilidade própria às entregas que viabilizam os investimentos do setor.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 06 ============ -->
+<div id="s6" data-screen-label="06 Oportunidades" style="margin-top:4mm">
+  <div style="border-top:1.6px solid #17242c;padding-top:3.5mm;display:flex;gap:12px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:#0e5064;font-weight:600">06</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#7c8a90">Oportunidades</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Oportunidades de Posicionamento Institucional</h2>
+  <div style="display:flex;flex-direction:column;gap:6mm">
+    <div style="display:grid;grid-template-columns:32px 1fr;gap:14px;break-inside:avoid;max-width:158mm">
+      <div style="width:30px;height:30px;border-radius:50%;background:#0e5064;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center">1</div>
+      <div><div style="font-weight:600;font-size:15.5px;margin-bottom:2mm">Executora preventiva da navegabilidade</div><p style="margin:0;text-align:justify">Assumir a dianteira comunicacional da dragagem na seca, divulgando cronograma, andamento e lógica técnica das datas, e transformando o principal risco do semestre em prova de competência e prontidão.</p></div>
+    </div>
+    <div style="display:grid;grid-template-columns:32px 1fr;gap:14px;break-inside:avoid;max-width:158mm">
+      <div style="width:30px;height:30px;border-radius:50%;background:#0e5064;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center">2</div>
+      <div><div style="font-weight:600;font-size:15.5px;margin-bottom:2mm">Infraestrutura aquaviária como infraestrutura humanitária</div><p style="margin:0;text-align:justify">Incorporar a dimensão humana da navegação amazônica — abastecimento, mobilidade e acesso das populações ribeirinhas — à comunicação do órgão, ampliando sua legitimidade social para além da métrica de carga.</p></div>
+    </div>
+    <div style="display:grid;grid-template-columns:32px 1fr;gap:14px;break-inside:avoid;max-width:158mm">
+      <div style="width:30px;height:30px;border-radius:50%;background:#0e5064;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center">3</div>
+      <div><div style="font-weight:600;font-size:15.5px;margin-bottom:2mm">Curadora técnica da malha hidroviária</div><p style="margin:0;text-align:justify">Comunicar de forma afirmativa o papel duradouro da DAQ — planejamento, projetos e obras, fiscalização, execução na malha federal, operação de eclusas e IP4, inteligência de dados —, consolidando a autoridade técnica do órgão.</p></div>
+    </div>
+    <div style="display:grid;grid-template-columns:32px 1fr;gap:14px;break-inside:avoid;max-width:158mm">
+      <div style="width:30px;height:30px;border-radius:50%;background:#0e5064;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;display:flex;align-items:center;justify-content:center">4</div>
+      <div><div style="font-weight:600;font-size:15.5px;margin-bottom:2mm">Referência de rigor técnico em contratações e obras</div><p style="margin:0;text-align:justify">Evidenciar boas práticas de licitação e de execução na área aquaviária, diferenciando a DAQ do ruído sobre a governança do DNIT e reforçando a percepção de transparência e competência.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 07 ============ -->
+<div id="s7" data-screen-label="07 Recomendações" style="margin-top:4mm">
+  <div style="border-top:1.6px solid #17242c;padding-top:3.5mm;display:flex;gap:12px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:#0e5064;font-weight:600">07</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#7c8a90">Ação</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Recomendações Executivas</h2>
+
+  <div style="max-width:158mm;break-inside:avoid">
+    <div style="display:flex;align-items:baseline;gap:10px;padding-bottom:3mm;border-bottom:1px solid #e2e4de;margin-bottom:4mm"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#0e5064;font-weight:500">Ações imediatas</span></div>
+    <ul style="list-style:none;margin:0 0 8mm;padding:0;display:flex;flex-direction:column;gap:3mm">
+      <li style="display:grid;grid-template-columns:16px 1fr;gap:11px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0e5064;font-weight:600">→</span><span style="text-align:justify">Estruturar e divulgar, de forma proativa, o cronograma de batimetrias e dragagens da campanha 2026/2027, com marcos de acompanhamento, antecipando-se à narrativa de atraso na seca.</span></li>
+      <li style="display:grid;grid-template-columns:16px 1fr;gap:11px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0e5064;font-weight:600">→</span><span style="text-align:justify">Definir uma linha de mensagem que precise as competências do arranjo institucional (MPor planeja e concede; Marinha e ANTAQ regulam; DAQ executa), para evitar tanto a apropriação de protagonismo alheio quanto a invisibilidade.</span></li>
+      <li style="display:grid;grid-template-columns:16px 1fr;gap:11px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0e5064;font-weight:600">→</span><span style="text-align:justify">Preparar respostas técnicas para os temas socioambientais em curso (Rio Madeira, Pantanal), com transparência sobre estudos e cuidados ambientais.</span></li>
+    </ul>
+  </div>
+
+  <div style="max-width:158mm;break-inside:avoid">
+    <div style="display:flex;align-items:baseline;gap:10px;padding-bottom:3mm;border-bottom:1px solid #e2e4de;margin-bottom:4mm"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#0e5064;font-weight:500">Ações de curto prazo</span></div>
+    <ul style="list-style:none;margin:0 0 8mm;padding:0;display:flex;flex-direction:column;gap:3mm">
+      <li style="display:grid;grid-template-columns:16px 1fr;gap:11px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0e5064;font-weight:600">→</span><span style="text-align:justify">Produzir conteúdo institucional que explique, em linguagem acessível, o ciclo da dragagem — por que a batimetria precede a obra, por que as datas são as que são e o que muda para a navegação —, dissociando cronograma técnico de suposta lentidão.</span></li>
+      <li style="display:grid;grid-template-columns:16px 1fr;gap:11px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0e5064;font-weight:600">→</span><span style="text-align:justify">Comunicar afirmativamente o papel duradouro da DAQ no novo arranjo de concessões, com foco na malha não concedida, na fiscalização e na inteligência de dados de navegabilidade.</span></li>
+      <li style="display:grid;grid-template-columns:16px 1fr;gap:11px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0e5064;font-weight:600">→</span><span style="text-align:justify">Dar visibilidade à contribuição técnica da DAQ nos projetos do RS e da Amazônia, no registro correto de competências.</span></li>
+    </ul>
+  </div>
+
+  <div style="max-width:158mm;break-inside:avoid">
+    <div style="display:flex;align-items:baseline;gap:10px;padding-bottom:3mm;border-bottom:1px solid #e2e4de;margin-bottom:4mm"><span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#0e5064;font-weight:500">Ações de médio prazo</span></div>
+    <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3mm">
+      <li style="display:grid;grid-template-columns:16px 1fr;gap:11px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0e5064;font-weight:600">→</span><span style="text-align:justify">Desenvolver uma narrativa de propósito para a infraestrutura aquaviária — integração regional, abastecimento, sustentabilidade e reconstrução —, sustentada por evidências de execução.</span></li>
+      <li style="display:grid;grid-template-columns:16px 1fr;gap:11px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0e5064;font-weight:600">→</span><span style="text-align:justify">Instituir um acompanhamento reputacional contínuo, com alertas de escalada para seca/navegabilidade, socioambiental e governança de contratações.</span></li>
+      <li style="display:grid;grid-template-columns:16px 1fr;gap:11px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0e5064;font-weight:600">→</span><span style="text-align:justify">Consolidar boas práticas de transparência em licitações e obras aquaviárias como diferencial institucional frente ao ruído sobre o DNIT.</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 08 ============ -->
+<div id="s8" data-screen-label="08 Cenários" style="margin-top:4mm">
+  <div style="border-top:1.6px solid #17242c;padding-top:3.5mm;display:flex;gap:12px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:#0e5064;font-weight:600">08</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#7c8a90">Cenários</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Cenários Prospectivos</h2>
+  <div style="display:flex;flex-direction:column;gap:0">
+    <div style="border-top:1px solid #e2e4de;padding:5mm 0;break-inside:avoid;max-width:158mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#7c8a90;margin-bottom:2.5mm">Cenário 01</div>
+      <div style="font-weight:600;font-size:16px;margin-bottom:2.5mm">Execução preventiva bem-sucedida</div>
+      <p style="margin:0 0 2.2mm;text-align:justify">As dragagens avançam conforme o cronograma, a navegabilidade é preservada nos trechos críticos e a DAQ consolida a imagem de executora competente e preventiva.</p>
+      <div style="font-size:13.5px;color:#28323a"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#0e5064">Resposta recomendada &nbsp;</span>Comunicação ativa do andamento, com marcos visíveis e porta-vozes técnicos, capitalizando cada entrega.</div>
+    </div>
+    <div style="border-top:1px solid #e2e4de;padding:5mm 0;break-inside:avoid;max-width:158mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#7c8a90;margin-bottom:2.5mm">Cenário 02</div>
+      <div style="font-weight:600;font-size:16px;margin-bottom:2.5mm">Seca severa antecipa o gargalo</div>
+      <p style="margin:0 0 2.2mm;text-align:justify">A vazante avança mais rápido do que a dragagem, surgem restrições de calado e o custo logístico sobe, com a DAQ sob pressão como executora.</p>
+      <div style="font-size:13.5px;color:#28323a"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#0e5064">Resposta recomendada &nbsp;</span>Transparência sobre o cronograma técnico e sobre as causas climáticas, coordenação com MPor e demais órgãos, e comunicação factual que separe a decisão técnica do fenômeno natural.</div>
+    </div>
+    <div style="border-top:1px solid #e2e4de;border-bottom:1px solid #e2e4de;padding:5mm 0;break-inside:avoid;max-width:158mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#7c8a90;margin-bottom:2.5mm">Cenário 03</div>
+      <div style="font-weight:600;font-size:16px;margin-bottom:2.5mm">Contestação socioambiental de um projeto de dragagem</div>
+      <p style="margin:0 0 2.2mm;text-align:justify">Um projeto relevante — como a ampliação no Rio Madeira — enfrenta contestação, licenciamento contestado ou judicialização.</p>
+      <div style="font-size:13.5px;color:#28323a"><span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#0e5064">Resposta recomendada &nbsp;</span>Protocolo de diálogo e transparência sobre estudos e mitigação, posicionando a DAQ como executor responsável e aberto ao diálogo.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 09 ============ -->
+<div id="s9" data-screen-label="09 SAUZ" style="margin-top:4mm">
+  <div style="border-top:1.6px solid #17242c;padding-top:3.5mm;display:flex;gap:12px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:#0e5064;font-weight:600">09</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#7c8a90">SAUZ</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Demonstração dos Serviços — SAUZ</h2>
+  <div style="max-width:158mm">
+    <p style="margin:0 0 2.2mm;text-align:justify">No período analisado, a SAUZ atuou como instância de apoio técnico e aconselhamento estratégico à alta administração do DNIT Aquaviária, subsidiando a equipe do órgão com inteligência de mídia, leitura de cenário e recomendações de posicionamento. A atuação teve caráter consultivo e de suporte: contribuiu para a interpretação de temas sensíveis, para a preparação de subsídios e para a análise do ambiente reputacional, preservando na própria equipe do DNIT Aquaviária a coordenação e a condução das ações institucionais.</p>
+    <p style="margin:0 0 2.2mm;text-align:justify">O foco do período recaiu sobre os temas de maior sensibilidade reputacional — a dragagem diante do El Niño, o papel técnico da DAQ na malha, a dimensão socioambiental das obras e a governança das contratações —, para os quais foram elaboradas análises de apoio, leituras de risco e recomendações de mensagem. O trabalho buscou antecipar movimentos de narrativa e oferecer à equipe do órgão elementos qualificados para a tomada de decisão, sempre em posição de assessoria.</p>
+    <p style="margin:0 0 4mm;text-align:justify">A SAUZ manteve, ao longo do mês, o monitoramento contínuo do ambiente de mídia do setor aquaviário, a triagem e a qualificação das evidências relevantes e a produção de recomendações estratégicas, prestando suporte à comunicação institucional do DNIT Aquaviária conforme as demandas e prioridades definidas pela própria alta administração.</p>
+  </div>
+
+  <div style="max-width:158mm">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#0e5064;padding-bottom:3mm;border-bottom:1px solid #e2e4de;margin-bottom:1mm">Resumo das Atividades Realizadas</div>
+    <table style="width:100%;border-collapse:collapse;break-inside:avoid">
+      <thead><tr>
+        <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:#7c8a90;font-weight:500;padding:3mm 10px 3mm 0;border-bottom:1px solid #e2e4de">Indicador</th>
+        <th style="text-align:right;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:#7c8a90;font-weight:500;padding:3mm 0;border-bottom:1px solid #e2e4de;width:34%">Quantidade</th>
+      </tr></thead>
+      <tbody style="font-size:13px">
+        <tr><td style="padding:3mm 10px 3mm 0;border-bottom:1px solid #ececec;vertical-align:middle">Reuniões presenciais</td><td style="padding:3mm 0;border-bottom:1px solid #ececec;text-align:right"><span style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;color:#17242c">4</span></td></tr>
+        <tr><td style="padding:3mm 10px 3mm 0;border-bottom:1px solid #ececec;vertical-align:middle">Reuniões virtuais</td><td style="padding:3mm 0;border-bottom:1px solid #ececec;text-align:right"><span style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;color:#17242c">2</span></td></tr>
+        <tr><td style="padding:3mm 10px 3mm 0;border-bottom:1px solid #ececec;vertical-align:middle">Orientações estratégicas</td><td style="padding:3mm 0;border-bottom:1px solid #ececec;text-align:right"><span style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;color:#17242c">5</span></td></tr>
+        <tr><td style="padding:3mm 10px 3mm 0;vertical-align:middle">Ações de relacionamento com a imprensa</td><td style="padding:3mm 0;text-align:right"><span style="font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:600;color:#17242c">3</span></td></tr>
+      </tbody>
+    </table>
+    <p style="margin:6mm 0 0;text-align:justify;color:#5b6069;font-size:13.5px">Os quantitativos acima serão consolidados junto à SAUZ e incorporados na versão final, preservando a consistência de método e de taxonomia mês a mês.</p>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 10 ============ -->
+<div id="s10" data-screen-label="10 Base de Evidências" style="break-before:page;padding-top:3mm">
+  <div style="border-top:1.6px solid #17242c;padding-top:3.5mm;display:flex;gap:12px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:13.5px;color:#0e5064;font-weight:600">10</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#7c8a90">Evidências</span>
+  </div>
+  <h2 style="font-size:27px;font-weight:600;margin:3.5mm 0 5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Base Qualificada de Evidências Monitoradas</h2>
+  <div style="max-width:158mm">
+    <p style="margin:0 0 3.5mm;text-align:justify">O monitoramento do mês contemplou 234 itens; o quadro a seguir apresenta uma seleção qualificada das evidências efetivamente ligadas à infraestrutura aquaviária (hidrovias, dragagem, eclusas, IP4, navegabilidade e concessões em que o DNIT participa). A base completa dos 234 itens, com a classificação de relevância, tom e cluster, consta do anexo em planilha (base_evidencias_DAQ_junho2026.xlsx).</p>
+  </div>
+
+  <!-- legenda de tom -->
+  <div style="display:flex;gap:18px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b6069;margin-bottom:4mm">
+    <span style="display:inline-flex;align-items:center;gap:7px"><span style="width:12px;height:12px;background:#e7f2ec;border:1px solid #cfe3d5;display:inline-block"></span>Positivo</span>
+    <span style="display:inline-flex;align-items:center;gap:7px"><span style="width:12px;height:12px;background:#ffffff;border:1px solid #d8d8d4;display:inline-block"></span>Neutro</span>
+    <span style="display:inline-flex;align-items:center;gap:7px"><span style="width:12px;height:12px;background:#f9e9e7;border:1px solid #eccbc9;display:inline-block"></span>Negativo</span>
+  </div>
+
+  <table style="width:100%;border-collapse:collapse;break-inside:auto">
+    <thead><tr>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:#7c8a90;font-weight:500;padding:0 6px 2.6mm 8px;border-bottom:1.5px solid #17242c;width:8%">Data</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:#7c8a90;font-weight:500;padding:0 6px 2.6mm 6px;border-bottom:1.5px solid #17242c;width:18%">Veículo</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:#7c8a90;font-weight:500;padding:0 6px 2.6mm 6px;border-bottom:1.5px solid #17242c;width:50%">Título</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:#7c8a90;font-weight:500;padding:0 6px 2.6mm 6px;border-bottom:1.5px solid #17242c;width:11%">Relev.</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:#7c8a90;font-weight:500;padding:0 8px 2.6mm 6px;border-bottom:1.5px solid #17242c;width:13%">Tom</th>
+    </tr></thead>
+    <tbody style="font-size:11.5px;line-height:1.34">
+      <tr><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">04/07</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">G1</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Terminal Hidroviário em Belém e em Cotijuba são opções de transporte em julho</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Média</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr style="background:#e7f2ec"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #f3f0ee;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">25/06</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">www.gov.br</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">DNIT participa da OS para dragagem de manutenção da Hidrovia da Lagoa Mirim (RS)</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">Alta</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr style="background:#e7f2ec"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #f3f0ee;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">23/06</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">www.gov.br</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">Primeira concessão hidroviária integrada do país e dragagem da Lagoa Mirim avançam no RS</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">Alta</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr style="background:#e7f2ec"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #f3f0ee;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">24/06</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">Brasil de Fato</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">Governo Lula anuncia pacote para aeroportos e hidrovias no RS</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">Alta</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr style="background:#e7f2ec"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #f3f0ee;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">22/06</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">GOV.BR</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">No RS, ministro anuncia ações para os setores aéreo e hidroviário</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">Alta</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr style="background:#f9e9e7"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #f3ecec;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">23/06</td><td style="padding:2mm 6px;border-bottom:1px solid #f3ecec;vertical-align:top">Agência iNFRA</td><td style="padding:2mm 6px;border-bottom:1px solid #f3ecec;vertical-align:top">El Niño: armadores temem demora nas dragagens e nova crise na Amazônia</td><td style="padding:2mm 6px;border-bottom:1px solid #f3ecec;vertical-align:top">Alta</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #f3ecec;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr style="background:#f9e9e7"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #f3ecec;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">19/06</td><td style="padding:2mm 6px;border-bottom:1px solid #f3ecec;vertical-align:top">Globo Rural</td><td style="padding:2mm 6px;border-bottom:1px solid #f3ecec;vertical-align:top">El Niño deve afetar escoamento de cargas por hidrovia no Arco Norte</td><td style="padding:2mm 6px;border-bottom:1px solid #f3ecec;vertical-align:top">Alta</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #f3ecec;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">24/06</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Agência Infra</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">TCU recomenda aprimoramentos em processo licitatório do DNIT</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Média</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr style="background:#f9e9e7"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #f3ecec;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">23/06</td><td style="padding:2mm 6px;border-bottom:1px solid #f3ecec;vertical-align:top">Valor Econômico</td><td style="padding:2mm 6px;border-bottom:1px solid #f3ecec;vertical-align:top">Adiamento de concessões de hidrovias frustra agentes econômicos</td><td style="padding:2mm 6px;border-bottom:1px solid #f3ecec;vertical-align:top">Alta</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #f3ecec;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">21/05</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">CNN Brasil</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Governo prevê leilões de seis hidrovias em 2027</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Alta</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr style="background:#e7f2ec"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #f3f0ee;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">21/05</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">www.gov.br</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">MPor faz balanço do primeiro biênio da Secretaria Nacional de Hidrovias e Navegação</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">Média</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr style="background:#e7f2ec"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #f3f0ee;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">25/06</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">Portogente</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">Hidrovia Paraná-Tietê: o corredor de 2.400 km que ganha protagonismo na logística</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">Média</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr style="background:#e7f2ec"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #f3f0ee;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">24/06</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">www.gov.br</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">Paraná-Tietê: a hidrovia que integra três regiões e impulsiona a economia</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">Média</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr style="background:#f9e9e7"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #f3ecec;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">24/06</td><td style="padding:2mm 6px;border-bottom:1px solid #f3ecec;vertical-align:top">Diário MS News</td><td style="padding:2mm 6px;border-bottom:1px solid #f3ecec;vertical-align:top">Senadora solicitará suspensão de licitação da Hidrovia Paraguai-Paraná após audiência em Corumbá</td><td style="padding:2mm 6px;border-bottom:1px solid #f3ecec;vertical-align:top">Alta</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #f3ecec;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr style="background:#f9e9e7"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #f3ecec;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">22/06</td><td style="padding:2mm 6px;border-bottom:1px solid #f3ecec;vertical-align:top">Campo Grande News</td><td style="padding:2mm 6px;border-bottom:1px solid #f3ecec;vertical-align:top">Hidrovia do Rio Paraguai: riscos e impactos no Pantanal</td><td style="padding:2mm 6px;border-bottom:1px solid #f3ecec;vertical-align:top">Média</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #f3ecec;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr style="background:#f9e9e7"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #f3ecec;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">23/06</td><td style="padding:2mm 6px;border-bottom:1px solid #f3ecec;vertical-align:top">REPAM</td><td style="padding:2mm 6px;border-bottom:1px solid #f3ecec;vertical-align:top">Nota técnica alerta para riscos socioambientais da ampliação da dragagem no Rio Madeira</td><td style="padding:2mm 6px;border-bottom:1px solid #f3ecec;vertical-align:top">Média</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #f3ecec;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">23/06</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">www.gov.br</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Fórum internacional reúne países da Bacia do Prata para discutir desenvolvimento hidroviário</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Média</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">22/06</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">www.gov.br</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Desenvolvimento hidroviário e diálogo com comunidades indígenas avançam no MPor</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Média</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr style="background:#e7f2ec"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #f3f0ee;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">25/06</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">www.gov.br</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">DNIT participa da assinatura da OS de dragagem de manutenção da Hidrovia da Lagoa Mirim</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">Alta</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">23/06</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Tribuna do Norte</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Dragagem: 1ª fase atinge 24,6% de execução</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Alta</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr style="background:#e7f2ec"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #f3f0ee;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">22/06</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">Tecnologística</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">Porto de Santos ganha nova obra de dragagem e terá profundidade de 16 metros</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">Média</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">22/06</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">www.gov.br</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Fiscalização da ANTAQ reforça a segurança do transporte hidroviário no Festival de Parintins</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Média</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr style="background:#e7f2ec"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #f3f0ee;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">24/06</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">www.gov.br</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">MPor reforça infraestrutura do transporte hidroviário para o Festival de Parintins</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">Média</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">22/06</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">h2foz.com.br</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Argentina finaliza licitação para exploração da hidrovia do Rio Paraná</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Média</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr style="background:#e7f2ec"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #f3f0ee;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">19/06</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">Prefeitura de Aracaju</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">Prefeita se reúne com Ibama para avançar dragagem e desassoreamento do Rio Poxim</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">Média</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #ececea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">23/06</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Valor Econômico</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Federação articula novo porto fluvial próximo a Belém</td><td style="padding:2mm 6px;border-bottom:1px solid #ececea;vertical-align:top">Média</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #ececea;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr style="background:#e7f2ec"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #f3f0ee;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">23/06</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">Portal do Marcos Santos</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">Segurança no transporte hidroviário é reforçada por esquema operacional na Ilha Tupinambarana</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">Média</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr style="background:#e7f2ec"><td style="padding:2mm 6px 2mm 8px;border-bottom:1px solid #f3f0ee;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">25/06</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">www.gov.br</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">DNIT conclui obras de infraestrutura com impacto sobre a navegabilidade regional</td><td style="padding:2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top">Média</td><td style="padding:2mm 8px 2mm 6px;border-bottom:1px solid #f3f0ee;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr style="background:#e7f2ec"><td style="padding:2mm 6px 2mm 8px;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">21/05</td><td style="padding:2mm 6px;vertical-align:top">www.gov.br</td><td style="padding:2mm 6px;vertical-align:top">Planejamento hidroviário garante segurança e abastecimento para quem depende dos rios</td><td style="padding:2mm 6px;vertical-align:top">Alta</td><td style="padding:2mm 8px 2mm 6px;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+    </tbody>
+  </table>
+
+  <div style="max-width:158mm;margin-top:4mm">
+    <p style="margin:0;font-size:13px;color:#5b6069;text-align:justify"><span style="font-style:italic">Nota metodológica:</span> a seleção acima privilegia as evidências efetivamente ligadas ao DAQ; itens rodoviários do DNIT e de portos marítimos/ANTAQ, tangenciais à infraestrutura aquaviária interior, foram classificados na base completa como de menor relevância. A classificação de tom e relevância é uma leitura de apoio, passível de refinamento. Itens de opinião ou não confirmados individualmente são citados por veículo, título e data, sem atribuição de autoria não verificada.</p>
+  </div>
+</div>
+
+<!-- ENCERRAMENTO -->
+<div data-screen-label="Encerramento" style="margin-top:4mm;border-top:1.6px solid #17242c;padding-top:6mm;break-inside:avoid">
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:#7c8a90;margin-bottom:4mm">Encerramento</div>
+  <p style="margin:0 0 4mm;font-size:13.5px;color:#28323a">Brasília/DF, julho de 2026.</p>
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5b6069;margin-bottom:6px">Suporte estratégico prestado por</div>
+  <img src="sauz-logo-dark.png" alt="SAUZ" style="height:34px;display:block"/>
+</div>
+
+<!--CONTENT_END-->
+</div>
+</x-import>
+</x-dc>
+</body>
+</html>

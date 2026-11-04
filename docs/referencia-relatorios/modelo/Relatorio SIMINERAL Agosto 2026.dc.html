@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+  doc-page:not(:defined){visibility:hidden}
+  *{box-sizing:border-box}
+  .rp p{orphans:3;widows:3}
+  .pgnum::after{content:counter(page)}
+</style>
+</helmet>
+<x-import component-from-global-scope="doc-page" from="./doc-page.js" size="a4" margin="17mm" hint-size="100%,100%">
+<div slot="footer" style="display:flex;justify-content:space-between;align-items:baseline;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.05em;color:#8b8579;border-top:1px solid #e6e2d8;padding-top:2mm">
+  <span>SAUZ · SIMINERAL · Agosto 2026 — Confidencial</span>
+  <span class="pgnum" style="color:#8f4a26;font-weight:500"></span>
+</div>
+
+<div class="rp" style="font-family:'IBM Plex Sans',-apple-system,'Segoe UI',sans-serif;font-size:12.8px;line-height:1.55;color:#1d1a15;-webkit-font-smoothing:antialiased">
+
+<!-- ============ CAPA ============ -->
+<div data-screen-label="Capa" style="position:relative;overflow:hidden;background:#1b1712;margin:-17mm -17mm 0;box-sizing:border-box;display:flex;flex-direction:column;break-after:page">
+  <div style="position:relative;height:208mm;overflow:hidden">
+    <img src="cover_sim_caminhao.jpg" alt="Caminhão fora de estrada de grande porte em mina a céu aberto" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 48%">
+    <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(14,26,18,.80) 0%,rgba(18,34,22,.66) 22%,rgba(22,40,26,.62) 46%,rgba(16,28,19,.74) 70%,rgba(11,20,14,.96) 100%)"></div>
+    <div style="position:absolute;top:22%;height:36%;left:0;right:0;background:linear-gradient(to bottom,rgba(11,20,14,0) 0%,rgba(11,20,14,.52) 26%,rgba(11,20,14,.56) 70%,rgba(11,20,14,0) 100%)"></div>
+
+    <div style="position:absolute;top:15mm;left:19mm;right:19mm;z-index:3;display:flex;justify-content:space-between;align-items:flex-start;gap:10mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:600;letter-spacing:.02em;color:#f2ece1;max-width:105mm;line-height:1.5">SIMINERAL — Sindicato das Indústrias Minerais do Estado do Pará</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#c3b8a4">Inteligência Setorial</div>
+    </div>
+
+    <div style="position:absolute;top:19mm;right:10mm;height:180mm;z-index:3;writing-mode:vertical-rl;font-family:'IBM Plex Sans',sans-serif;font-weight:700;font-size:13.5px;letter-spacing:.11em;color:#fff;text-transform:uppercase;opacity:.95;white-space:nowrap">Minerais Críticos · Terras Raras · Pará · Soberania</div>
+
+    <div style="position:absolute;left:0;right:0;top:30%;z-index:3;display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 19mm">
+      <img src="sauz-logo.png" alt="SAUZ" style="height:72px;display:block">
+      <div style="width:50px;height:2px;background:#c8813f;margin:13px 0 9px"></div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:#efe7da">Comunicação e Estratégia · Inteligência Reputacional</div>
+    </div>
+
+    <div style="position:absolute;left:19mm;right:24mm;bottom:16mm;z-index:3">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:#e0a86a;margin-bottom:6mm">Relatório Mensal · Agosto de 2026</div>
+      <h1 style="font-size:31px;font-weight:600;line-height:1.15;letter-spacing:-.015em;margin:0;color:#fff;max-width:148mm">Relatório Mensal de Comunicação Estratégica e Inteligência Setorial</h1>
+    </div>
+  </div>
+
+  <div style="background:#1b1712;padding:8mm 19mm 7mm;display:flex;justify-content:space-between;align-items:flex-end;gap:10mm">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#95886f">Suporte estratégico prestado por SAUZ</div>
+    <div style="text-align:right;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#c3b8a4;line-height:1.7">
+      <div>Indústria Mineral · Agosto de 2026</div>
+      <div style="color:#8a7d66">Confidencial — uso interno da diretoria</div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);height:6mm">
+    <div style="background:#8f4a26"></div><div style="background:#c8813f"></div><div style="background:#2f6b4a"></div><div style="background:#d8d3c6"></div><div style="background:#4a4034"></div>
+  </div>
+</div>
+
+<!-- ============ NOTA DE MÉTODO + SUMÁRIO ============ -->
+<div data-screen-label="Visão geral e método" style="break-after:page;padding-top:2mm">
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:#8b8579;margin-bottom:3mm">Visão geral e método</div>
+  <div style="border-top:1.6px solid #1d1a15"></div>
+  <div style="background:#f6f2ea;border-left:3px solid #8f4a26;padding:5mm 6mm;margin-top:4.5mm;max-width:162mm">
+    <p style="margin:0 0 2.4mm;text-align:justify;font-size:12.5px;color:#2b261f"><strong>Ler antes.</strong> O monitoramento do período reuniu 722 itens sobre o setor mineral, compondo uma visão geral do ambiente setorial com inserções específicas sobre a SIMINERAL — o V Congresso Técnico, o Workshop de Comunicação, a participação na EXPOSIBRAM e o 13º Prêmio Simineral.</p>
+    <p style="margin:0 0 2.4mm;text-align:justify;font-size:12.5px;color:#2b261f">Este documento é uma <strong>leitura de inteligência setorial a serviço da entidade</strong> — lê o ambiente da mineração nacional e o que ele significa para a indústria mineral paraense e para a agenda do sindicato.</p>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#2b261f">Os temas prioritários do período (PL dos Minerais Críticos, geopolítica das terras raras, mineração/sustentabilidade/Pará) foram enriquecidos com fontes verificadas, indicadas ao longo do texto. Nada foi atribuído à SIMINERAL ou ao Pará sem base factual.</p>
+  </div>
+
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:#8b8579;margin:9mm 0 3mm">Sumário</div>
+  <div style="border-top:1.6px solid #1d1a15"></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;column-gap:14mm">
+    <div>
+      <a href="#s1" style="display:flex;gap:11px;align-items:baseline;padding:2.7mm 0;border-bottom:1px solid #ece8de;text-decoration:none;color:#1d1a15"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#8f4a26;min-width:20px">01</span><span style="font-weight:500">Sumário Executivo</span></a>
+      <a href="#s2" style="display:flex;gap:11px;align-items:baseline;padding:2.7mm 0;border-bottom:1px solid #ece8de;text-decoration:none;color:#1d1a15"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#8f4a26;min-width:20px">02</span><span style="font-weight:500">Temas Estratégicos do Mês</span></a>
+      <a href="#s3" style="display:flex;gap:11px;align-items:baseline;padding:2.7mm 0;border-bottom:1px solid #ece8de;text-decoration:none;color:#1d1a15"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#8f4a26;min-width:20px">03</span><span style="font-weight:500">Leitura Reputacional do Ambiente</span></a>
+      <a href="#s4" style="display:flex;gap:11px;align-items:baseline;padding:2.7mm 0;border-bottom:1px solid #ece8de;text-decoration:none;color:#1d1a15"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#8f4a26;min-width:20px">04</span><span style="font-weight:500">Análise Temática Aprofundada</span></a>
+      <a href="#s5" style="display:flex;gap:11px;align-items:baseline;padding:2.7mm 0;border-bottom:1px solid #ece8de;text-decoration:none;color:#1d1a15"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#8f4a26;min-width:20px">05</span><span style="font-weight:500">Riscos Reputacionais Prioritários</span></a>
+    </div>
+    <div>
+      <a href="#s6" style="display:flex;gap:11px;align-items:baseline;padding:2.7mm 0;border-bottom:1px solid #ece8de;text-decoration:none;color:#1d1a15"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#8f4a26;min-width:20px">06</span><span style="font-weight:500">Oportunidades de Posicionamento</span></a>
+      <a href="#s7" style="display:flex;gap:11px;align-items:baseline;padding:2.7mm 0;border-bottom:1px solid #ece8de;text-decoration:none;color:#1d1a15"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#8f4a26;min-width:20px">07</span><span style="font-weight:500">Recomendações Executivas</span></a>
+      <a href="#s8" style="display:flex;gap:11px;align-items:baseline;padding:2.7mm 0;border-bottom:1px solid #ece8de;text-decoration:none;color:#1d1a15"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#8f4a26;min-width:20px">08</span><span style="font-weight:500">Cenários Prospectivos</span></a>
+      <a href="#s9" style="display:flex;gap:11px;align-items:baseline;padding:2.7mm 0;border-bottom:1px solid #ece8de;text-decoration:none;color:#1d1a15"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#8f4a26;min-width:20px">09</span><span style="font-weight:500">Demonstração dos Serviços — SAUZ</span></a>
+      <a href="#s10" style="display:flex;gap:11px;align-items:baseline;padding:2.7mm 0;border-bottom:1px solid #ece8de;text-decoration:none;color:#1d1a15"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#8f4a26;min-width:20px">10</span><span style="font-weight:500">Base Qualificada de Evidências</span></a>
+    </div>
+  </div>
+
+  <!-- DESTAQUE: O EVENTO PRÓPRIO DA ENTIDADE -->
+  <div style="margin-top:8mm;border-top:1.6px solid #1d1a15;padding-top:4.5mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8f4a26;margin-bottom:3.5mm">Destaque institucional do mês</div>
+    <div style="background:#f6f2ea;border-left:3px solid #8f4a26;padding:6mm 7mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#a3673a;margin-bottom:2.5mm">Canaã dos Carajás · 04–07/08/2026</div>
+      <div style="font-size:21px;font-weight:600;line-height:1.24;letter-spacing:-.01em;margin-bottom:3.5mm;max-width:152mm">V Congresso Técnico do SIMINERAL consolida Canaã como capital do debate mineral</div>
+      <p style="margin:0 0 3.5mm;font-size:13px;color:#2b261f;text-align:justify;max-width:158mm">Mais de 250 participantes, palestra do jornalista Lourival Sant'Anna (Globo), Workshop de Comunicação pioneiro sobre IA e jornalismo na Amazônia e o lançamento do 13º Prêmio Simineral. Num mês em que a mineração nacional entrou na pauta de Estado, a entidade teve palco próprio — e ativos concretos para amplificar.</p>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:3.5mm">
+        <div style="background:#fff;padding:3.5mm 4mm;border-top:2px solid #8f4a26"><div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#8f4a26;margin-bottom:1.4mm">250+</div><div style="font-size:11px;color:#41473e;line-height:1.4">participantes no Congresso</div></div>
+        <div style="background:#fff;padding:3.5mm 4mm;border-top:2px solid #c8813f"><div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#8f4a26;margin-bottom:1.4mm">04/08</div><div style="font-size:11px;color:#41473e;line-height:1.4">Workshop de IA e jornalismo</div></div>
+        <div style="background:#fff;padding:3.5mm 4mm;border-top:2px solid #2f6b4a"><div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#8f4a26;margin-bottom:1.4mm">13º</div><div style="font-size:11px;color:#41473e;line-height:1.4">Prêmio Simineral lançado</div></div>
+        <div style="background:#fff;padding:3.5mm 4mm;border-top:2px solid #a3673a"><div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#8f4a26;margin-bottom:1.4mm">27–28/08</div><div style="font-size:11px;color:#41473e;line-height:1.4">Protagonismo na EXPOSIBRAM</div></div>
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:6mm;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#8b8579;letter-spacing:.02em">SAUZ · SIMINERAL · Agosto de 2026 — Confidencial</div>
+</div>
+
+<!-- ============ SEÇÃO 01 ============ -->
+<div id="s1" data-screen-label="01 Sumário Executivo" style="margin-top:1mm">
+  <div style="border-top:1.6px solid #1d1a15;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#8f4a26;font-weight:600">01</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b8579">Síntese</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Sumário Executivo</h2>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 2.4mm;text-align:justify">Agosto de 2026 foi o mês em que a mineração brasileira — e especialmente a paraense — deixou de ser assunto de setor e virou pauta de Estado. O catalisador foi a convergência de três movimentos simultâneos: a aceleração do marco legal dos minerais críticos no Congresso, a disputa geopolítica aberta pelas terras raras brasileiras entre Estados Unidos e China, e a realização da maior edição da EXPOSIBRAM, que posicionou o Brasil como palco central de uma corrida global por recursos estratégicos. No coração desse ambiente, o SIMINERAL marcou presença com o V Congresso Técnico em Canaã dos Carajás e com participação ativa na EXPOSIBRAM — consolidando, num único mês, sua posição de entidade de referência do setor mineral.</p>
+    <p style="margin:0 0 2.4mm;text-align:justify">O fato político mais relevante foi a tramitação do Projeto de Lei dos Minerais Críticos no Senado. A Câmara aprovou o texto em 5 de agosto, mas o percurso não foi linear: em 14 de agosto, Alcolumbre enviou a matéria às comissões e retirou a urgência, e só a partir de 19 de agosto o Congresso voltou a destravar os incentivos previstos. Na reta final do mês, o senador Eduardo Braga foi indicado relator e Alcolumbre assumiu o compromisso público de pautar a votação. Estudos da Amcham projetam que a cadeia de minerais críticos pode adicionar R$ 192,1 bilhões ao PIB e gerar 750 mil empregos até 2050, e o texto prevê um fundo de R$ 7 bilhões para a política setorial. O BNDES anunciou R$ 50 bilhões em projetos, com demanda estimada em R$ 57 bilhões, e o governo reservou R$ 4 bilhões em crédito para fertilizantes e minerais críticos. O tamanho do número explica por que o PL se tornou, nas palavras do presidente Lula, uma questão de "soberania" (Tribuna do Sertão, 26/08/2026).</p>
+    <p style="margin:0 0 2.4mm;text-align:justify">O episódio mais sensível do período foi a disputa em torno da venda da Serra Verde, a única mineradora de terras raras em operação no Brasil. Com financiamento do Departamento de Defesa dos EUA, a empresa americana USAR avançou para adquirir a companhia, com aporte estimado entre US$ 750 milhões e US$ 1,55 bilhão. O Cade arquivou a ação que poderia barrar a venda, e o governo — inicialmente reticente — anunciou que não interviria (CNN Brasil, 27/08/2026), ainda que fontes governamentais tenham sinalizado a intenção de exigir contrapartidas de industrialização local (ICL Notícias, 28/08/2026), mesmo após Lula ter alertado publicamente que "tem muito estrangeiro comprando" (G1, 26/08/2026). Em paralelo, os Estados Unidos ampliaram restrições à exportação de minerais críticos e anunciaram US$ 3 bilhões em investimento doméstico no setor, enquanto grupos chineses avançavam com propostas próprias no Brasil — evidência de que a disputa por essas reservas é, também, uma disputa entre potências.</p>
+    <p style="margin:0 0 2.4mm;text-align:justify">No plano regional, os números da mineração no Pará foram expressivos: o setor faturou R$ 52,2 bilhões no primeiro semestre de 2026, crescimento de 8,4% (Jornal Folha do Progresso; Pará Web News, 12/08/2026). O complexo de Carajás segue como epicentro — a Vale apresentou o plano Carajás 2035, com projeção de milhões de empregos e R$ 1,3 trilhão em impostos até 2035 (Muita Informação, 19/08/2026) — e a presença do SIMINERAL na EXPOSIBRAM reforçou que o Pará não é apenas produtor de minério: é porta de entrada para um debate global sobre soberania, tecnologia e desenvolvimento.</p>
+    <p style="margin:0;text-align:justify">O mês trouxe também dois temas de atenção institucional. O STF fixou prazo de 24 meses para o Congresso regulamentar a mineração em terras indígenas (G1, 13/08/2026), criando uma fronteira regulatória que o setor precisará navegar. E o presidente do BNDES, Aloizio Mercadante, defendeu a entrada da Petrobras nos minerais críticos e pressionou por um novo decreto de cavidades, sinal de que o governo avalia movimentos adicionais na política de licenciamento mineral (Canal Solar; Eixos, 18/08/2026) — conectando-se diretamente à agenda regulatória que vimos acompanhando nos meses anteriores.</p>
+  </div>
+
+  <div style="margin-top:6mm;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#8f4a26;padding-bottom:2.5mm;border-bottom:1px solid #e6e2d8;margin-bottom:4mm">Top Insights do Mês</div>
+    <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3mm">
+      <li style="display:grid;grid-template-columns:21px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#8f4a26;font-weight:600">01</span><span style="text-align:justify">O <strong>V Congresso Técnico do SIMINERAL</strong> em Canaã consolidou a entidade como polo de debate qualificado — 250+ participantes, palestra nacional e o Workshop de IA e jornalismo na Amazônia.</span></li>
+      <li style="display:grid;grid-template-columns:21px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#8f4a26;font-weight:600">02</span><span style="text-align:justify">O <strong>PL dos Minerais Críticos</strong> chegou ao Senado com relator definido (Eduardo Braga) e votação prometida — é a maior janela legislativa da história recente do setor mineral.</span></li>
+      <li style="display:grid;grid-template-columns:21px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#8f4a26;font-weight:600">03</span><span style="text-align:justify">A <strong>venda da Serra Verde</strong> aos EUA expôs a tensão entre o discurso de soberania e a prática regulatória, transformando terras raras em tema geopolítico de primeira ordem.</span></li>
+      <li style="display:grid;grid-template-columns:21px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#8f4a26;font-weight:600">04</span><span style="text-align:justify">A <strong>mineração no Pará cresce 8,4%</strong> no semestre e lidera a pauta — com Carajás 2035 projetando milhões de empregos e o estado no centro da disputa por minerais críticos.</span></li>
+      <li style="display:grid;grid-template-columns:21px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#8f4a26;font-weight:600">05</span><span style="text-align:justify">O <strong>STF fixou prazo de 24 meses</strong> para o Congresso regulamentar a mineração em terras indígenas — um marco que cria urgência para projetos na região Norte.</span></li>
+      <li style="display:grid;grid-template-columns:21px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#8f4a26;font-weight:600">06</span><span style="text-align:justify"><strong>Mercadante pressiona por novo decreto de cavidades</strong> — sinal de que o governo avalia ampliar as mudanças regulatórias no licenciamento mineral além do decreto de julho.</span></li>
+      <li style="display:grid;grid-template-columns:21px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#8f4a26;font-weight:600">07</span><span style="text-align:justify">A <strong>EXPOSIBRAM 2026</strong> consolidou o Brasil como arena global da disputa por minerais críticos, com China, EUA, França, Alemanha e Austrália negociando posições.</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 02 ============ -->
+<div id="s2" data-screen-label="02 Temas Estratégicos" style="margin-top:8mm">
+  <div style="border-top:1.6px solid #1d1a15;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#8f4a26;font-weight:600">02</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b8579">Mapeamento</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Temas Estratégicos do Mês</h2>
+
+  <div style="border-top:1.6px solid #1d1a15;margin-bottom:5mm;padding-top:4mm;break-inside:avoid;max-width:160mm;display:grid;grid-template-columns:repeat(4,1fr);gap:6mm">
+    <div><div style="font-size:26px;font-weight:600;letter-spacing:-.02em;line-height:1">722</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#5b5548;margin-top:3px">itens monitorados</div></div>
+    <div style="padding-left:6mm;border-left:1px solid #e6e2d8"><div style="font-size:26px;font-weight:600;letter-spacing:-.02em;line-height:1;color:#8f4a26">R$ 192,1 bi</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#5b5548;margin-top:3px">PIB adicional projetado (Amcham, até 2050)</div></div>
+    <div style="padding-left:6mm;border-left:1px solid #e6e2d8"><div style="font-size:26px;font-weight:600;letter-spacing:-.02em;line-height:1;color:#2f6b4a">+8,4%</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#5b5548;margin-top:3px">faturamento mineral do Pará no 1S26</div></div>
+    <div style="padding-left:6mm;border-left:1px solid #e6e2d8"><div style="font-size:26px;font-weight:600;letter-spacing:-.02em;line-height:1">24 meses</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#5b5548;margin-top:3px">prazo do STF para regular mineração em TIs</div></div>
+  </div>
+
+  <div style="max-width:160mm"><p style="margin:0 0 4mm;text-align:justify">A leitura do período identificou dez temas-matriz. O quadro sintetiza cada um, sua relevância para a indústria mineral paraense e o principal sinal do mês.</p></div>
+
+  <table style="width:100%;border-collapse:collapse;break-inside:auto">
+    <thead><tr>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#8b8579;font-weight:500;padding:0 9px 2.4mm 0;border-bottom:1.5px solid #1d1a15;width:34%">Tema estratégico</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#8b8579;font-weight:500;padding:0 9px 2.4mm 0;border-bottom:1.5px solid #1d1a15;width:14%">Relev.</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#8b8579;font-weight:500;padding:0 0 2.4mm 0;border-bottom:1.5px solid #1d1a15;width:52%">Sinal do mês</th>
+    </tr></thead>
+    <tbody style="font-size:11.5px;line-height:1.35">
+      <tr><td style="padding:2.2mm 9px 2.2mm 0;border-bottom:1px solid #ece8de;vertical-align:top;font-weight:500">V Congresso Técnico do SIMINERAL</td><td style="padding:2.2mm 9px;border-bottom:1px solid #ece8de;vertical-align:top">Alta</td><td style="padding:2.2mm 0;border-bottom:1px solid #ece8de;vertical-align:top;color:#4a4034">250+ participantes em Canaã; Workshop de IA; 13º Prêmio Simineral</td></tr>
+      <tr><td style="padding:2.2mm 9px 2.2mm 0;border-bottom:1px solid #ece8de;vertical-align:top;font-weight:500">PL dos Minerais Críticos no Senado</td><td style="padding:2.2mm 9px;border-bottom:1px solid #ece8de;vertical-align:top">Alta</td><td style="padding:2.2mm 0;border-bottom:1px solid #ece8de;vertical-align:top;color:#4a4034">Câmara aprova; Braga relator; votação prometida por Alcolumbre</td></tr>
+      <tr><td style="padding:2.2mm 9px 2.2mm 0;border-bottom:1px solid #ece8de;vertical-align:top;font-weight:500">Geopolítica das terras raras: Serra Verde</td><td style="padding:2.2mm 9px;border-bottom:1px solid #ece8de;vertical-align:top">Alta</td><td style="padding:2.2mm 0;border-bottom:1px solid #ece8de;vertical-align:top;color:#4a4034">Venda à empresa dos EUA avança; Cade libera; governo não intervém</td></tr>
+      <tr><td style="padding:2.2mm 9px 2.2mm 0;border-bottom:1px solid #ece8de;vertical-align:top;font-weight:500">Mineração no Pará: crescimento e Carajás</td><td style="padding:2.2mm 9px;border-bottom:1px solid #ece8de;vertical-align:top">Alta</td><td style="padding:2.2mm 0;border-bottom:1px solid #ece8de;vertical-align:top;color:#4a4034">R$ 52,2 bi no 1S26 (+8,4%); Carajás 2035</td></tr>
+      <tr><td style="padding:2.2mm 9px 2.2mm 0;border-bottom:1px solid #ece8de;vertical-align:top;font-weight:500">STF e mineração em terras indígenas</td><td style="padding:2.2mm 9px;border-bottom:1px solid #ece8de;vertical-align:top">Alta</td><td style="padding:2.2mm 0;border-bottom:1px solid #ece8de;vertical-align:top;color:#4a4034">Prazo de 24 meses para o Congresso regular; impacto nos projetos</td></tr>
+      <tr><td style="padding:2.2mm 9px 2.2mm 0;border-bottom:1px solid #ece8de;vertical-align:top;font-weight:500">Decreto de cavidades: novos movimentos</td><td style="padding:2.2mm 9px;border-bottom:1px solid #ece8de;vertical-align:top">Alta</td><td style="padding:2.2mm 0;border-bottom:1px solid #ece8de;vertical-align:top;color:#4a4034">Mercadante pressiona por novo decreto; Petrobras no setor</td></tr>
+      <tr><td style="padding:2.2mm 9px 2.2mm 0;border-bottom:1px solid #ece8de;vertical-align:top;font-weight:500">EXPOSIBRAM 2026</td><td style="padding:2.2mm 9px;border-bottom:1px solid #ece8de;vertical-align:top">Alta</td><td style="padding:2.2mm 0;border-bottom:1px solid #ece8de;vertical-align:top;color:#4a4034">SIMINERAL leva protagonismo do Pará ao maior evento do setor</td></tr>
+      <tr><td style="padding:2.2mm 9px 2.2mm 0;border-bottom:1px solid #ece8de;vertical-align:top;font-weight:500">IA e tecnologia na mineração</td><td style="padding:2.2mm 9px;border-bottom:1px solid #ece8de;vertical-align:top">Média</td><td style="padding:2.2mm 0;border-bottom:1px solid #ece8de;vertical-align:top;color:#4a4034">Mineração no Pará entra na era da IA e máquinas autônomas</td></tr>
+      <tr><td style="padding:2.2mm 9px 2.2mm 0;border-bottom:1px solid #ece8de;vertical-align:top;font-weight:500">ANM e governança do setor</td><td style="padding:2.2mm 9px;border-bottom:1px solid #ece8de;vertical-align:top">Média</td><td style="padding:2.2mm 0;border-bottom:1px solid #ece8de;vertical-align:top;color:#4a4034">Questionamentos sobre controle do ouro; consulta sobre multas</td></tr>
+      <tr><td style="padding:2.2mm 9px 2.2mm 0;vertical-align:top;font-weight:500">Sustentabilidade e licença social</td><td style="padding:2.2mm 9px;vertical-align:top">Média</td><td style="padding:2.2mm 0;vertical-align:top;color:#4a4034">Cedro: descarbonização como exigência da mineração moderna</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ============ SEÇÃO 03 ============ -->
+<div id="s3" data-screen-label="03 Leitura Reputacional" style="margin-top:8mm">
+  <div style="border-top:1.6px solid #1d1a15;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#8f4a26;font-weight:600">03</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b8579">Diagnóstico</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Leitura Reputacional do Ambiente Externo</h2>
+
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:0 0 2.6mm;color:#1d1a15;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#8f4a26;font-weight:500">3.1</span><span>Narrativa predominante</span></h3>
+  <div style="max-width:160mm"><p style="margin:0 0 4.5mm;text-align:justify">A narrativa do mês foi a de um setor em ascensão geopolítica, com o Brasil — e o Pará em particular — no centro de uma disputa internacional pelos recursos que sustentam a transição energética e a soberania tecnológica. Pela primeira vez em anos, mineração virou assunto de discurso presidencial e de negociação diplomática, o que expande o alcance público do setor muito além das páginas de negócios.</p></div>
+
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:0 0 2.6mm;color:#1d1a15;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#8f4a26;font-weight:500">3.2</span><span>Risco reputacional dominante</span></h3>
+  <div style="max-width:160mm"><p style="margin:0 0 4.5mm;text-align:justify">O maior risco é o de a narrativa de "corrida por minerais críticos" ser lida como exploração sem contrapartida local, especialmente na Amazônia. A venda da Serra Verde a capital americano, combinada com a mineração em terras indígenas e o histórico de passivos socioambientais, oferece a críticos do setor uma sequência de argumentos. Para o SIMINERAL, o risco de contágio é real: mesmo operando na mineração formal e licenciada, a entidade pode ser associada a um ambiente percebido como desordenado.</p></div>
+
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:0 0 2.6mm;color:#1d1a15;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#8f4a26;font-weight:500">3.3</span><span>Oportunidade reputacional dominante</span></h3>
+  <div style="max-width:160mm"><p style="margin:0;text-align:justify">A principal oportunidade é converter o protagonismo político do mês em posicionamento institucional duradouro do setor mineral paraense. O Pará é o estado com mais áreas prioritárias, o maior faturamento do setor e a sede do principal evento técnico da mineração regional. Com um PL em tramitação avançada, há espaço para o SIMINERAL se posicionar como interlocutor técnico e responsável — conectando a riqueza mineral do Pará à agenda de soberania, industrialização e desenvolvimento regional.</p></div>
+</div>
+
+<!-- ============ SEÇÃO 04 ============ -->
+<div id="s4" data-screen-label="04 Análise Temática" style="margin-top:8mm">
+  <div style="border-top:1.6px solid #1d1a15;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#8f4a26;font-weight:600">04</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b8579">Análise</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Análise Temática Aprofundada</h2>
+
+  <!-- 4.1 -->
+  <div style="background:#8f4a26;color:#fff;padding:3mm 5mm;margin-bottom:3.5mm;display:flex;align-items:baseline;gap:11px;break-after:avoid;max-width:160mm">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#f0d5bc;font-weight:500">4.1</span>
+    <span style="font-weight:600;font-size:15px;line-height:1.25">O V Congresso Técnico do SIMINERAL: a entidade como polo de referência</span>
+  </div>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 2.4mm;text-align:justify">A realização do V Congresso Técnico do SIMINERAL em Canaã dos Carajás, entre 4 e 7 de agosto, foi o ativo institucional mais relevante do período para a entidade. Com mais de 250 participantes e palestra do jornalista Lourival Sant'Anna (Globo), o evento consolidou Canaã como referência dos grandes debates da mineração e posicionou a entidade como o fórum técnico central do setor mineral paraense (Bacana News; Fala Sério Carajás; A Província do Pará, 07/08/2026).</p>
+    <p style="margin:0;text-align:justify">O mês trouxe ainda dois desdobramentos institucionais. Em 4 de agosto, o SIMINERAL realizou em Canaã um Workshop de Comunicação que debateu a inteligência artificial e o protagonismo do jornalismo na Amazônia — iniciativa pioneira que conecta a entidade a uma agenda contemporânea de tecnologia e informação. E o lançamento do 13º Prêmio Simineral marcou a continuidade de uma tradição de valorização do setor. Na sequência, a entidade levou o protagonismo do Pará à EXPOSIBRAM 2026, destacando o diálogo entre mineração e poder público (A Província do Pará, 27/08/2026).</p>
+  </div>
+  <div style="background:#f6f2ea;border-left:3px solid #8f4a26;padding:4mm 5mm;margin:3.5mm 0 0;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#8f4a26;margin-bottom:2mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#2b261f">O mês confirma que o SIMINERAL sabe gerar plataformas próprias de visibilidade — atributo raro em entidades de classe. O próximo passo é amplificar o alcance dessas plataformas para além do circuito regional, levando os debates de Canaã e da EXPOSIBRAM para a agenda nacional, num momento em que minerais críticos e Pará estão no topo da pauta.</p>
+  </div>
+
+  <!-- 4.2 -->
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:6mm 0 2.6mm;color:#1d1a15;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#8f4a26;font-weight:500">4.2</span><span>O PL dos Minerais Críticos: a maior janela legislativa da história recente</span></h3>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 2.4mm;text-align:justify">Agosto foi o mês mais movimentado da história legislativa dos minerais críticos no Brasil — mas o percurso não foi linear. Em 5 de agosto, a Câmara aprovou o PL (CNN Brasil, 06/08/2026). Em 14 de agosto, porém, Alcolumbre enviou a matéria às comissões e retirou a urgência, um sinal de que o texto ainda enfrentava resistências; só a partir de 19 de agosto o Congresso voltou a destravar os incentivos previstos. Na reta final, o texto chegou definitivamente encaminhado, com o senador Eduardo Braga indicado relator (CNN Brasil, 27/08/2026) e Alcolumbre prometendo votação "na próxima semana" (CNN Brasil, 26/08/2026). Por trás da urgência política está o peso econômico: a cadeia de minerais críticos pode adicionar R$ 192,1 bilhões ao PIB e gerar 750 mil empregos até 2050 (Amcham; diversas fontes, 04–06/08/2026), com um fundo de R$ 7 bilhões previsto para sustentar a política setorial.</p>
+    <p style="margin:0;text-align:justify">O texto carrega disputas. O Planalto tentou evitar a diluição do projeto no Senado (Brasil 247, 27/08/2026), e o CEO da Vale, Gustavo Pimenta, criticou a taxação prevista e pediu celeridade — classificando os minerais críticos como o "novo petróleo" e alertando que "o Brasil está ficando para trás" (CNN Brasil, 28/08/2026; Folha de S.Paulo; Monitor Mercantil, 28/08/2026). No plano do financiamento, o CMN já reduziu os juros das linhas do Brasil Soberano para a cadeia de minerais críticos (Valor Econômico, 27/08/2026), o governo reservou R$ 4 bilhões em crédito para fertilizantes e minerais críticos, e o BNDES anunciou R$ 50 bilhões em projetos, com demanda total estimada em R$ 57 bilhões (iG Economia; Brasil Mineral, 13/08/2026). O BID, por sua vez, sinalizou 15 projetos no Brasil com potencial de US$ 12 bilhões, com a primeira operação prevista para o próximo ano.</p>
+  </div>
+  <div style="background:#f6f2ea;border-left:3px solid #8f4a26;padding:4mm 5mm;margin:3.5mm 0 0;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#8f4a26;margin-bottom:2mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#2b261f">O PL dos Minerais Críticos é a pauta mais relevante da história recente para os associados do SIMINERAL — potencialmente mais impactante do que o decreto de cavidades, porque define o marco de financiamento, governança e benefícios fiscais para toda a cadeia. Cabe à entidade acompanhar de perto a relatoria de Eduardo Braga, manter posição técnica sobre os pontos de atrito (tributação, governança do fundo) e comunicar aos associados o estado da tramitação em tempo real.</p>
+  </div>
+
+  <!-- 4.3 -->
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:6mm 0 2.6mm;color:#1d1a15;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#8f4a26;font-weight:500">4.3</span><span>A geopolítica das terras raras: soberania em debate</span></h3>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 2.4mm;text-align:justify">O tema que mais mobilizou a opinião pública em agosto foi a disputa pelas terras raras brasileiras — especificamente o avanço da compra da Serra Verde, a única mineradora de terras raras em operação no país. Com financiamento direto do Departamento de Defesa dos EUA, a empresa americana USAR avançou para adquirir a companhia, com aportes estimados entre US$ 750 milhões e US$ 1,55 bilhão (Money Report; Rádio Metrópole; Folha de S.Paulo, 24–26/08/2026). O Cade arquivou a ação que poderia barrar a operação (CNN Brasil, 24/08/2026), e o governo — após declarações de Lula alertando que "tem muito estrangeiro comprando" (G1, 26/08/2026) — anunciou que não interviria (CNN Brasil, 27/08/2026), embora fontes governamentais tenham sinalizado a intenção de exigir industrialização no Brasil como condição (ICL Notícias, 28/08/2026).</p>
+    <p style="margin:0;text-align:justify">Os EUA ampliaram, ainda, restrições à exportação de diversos minerais críticos e anunciaram US$ 3 bilhões em investimento doméstico no setor — sinal de que Washington trata o tema como prioridade estratégica. Do lado chinês, a Gulf Resources anunciou entrada em lítio e terras raras no Brasil (CNN Brasil, 26/08/2026), e um grupo chinês avançou em joint venture com parceiro brasileiro nos mesmos minerais (Agência Brasil China, 31/08/2026). Em paralelo, a Viridis (Austrália) captou até US$ 120 milhões para o projeto Colossus de terras raras em Minas Gerais (Brasil 247; Forbes Brasil, 20/08/2026) — evidência de que o capital internacional, de origens diversas, segue mirando os ativos minerais brasileiros.</p>
+  </div>
+  <div style="background:#f6f2ea;border-left:3px solid #8f4a26;padding:4mm 5mm;margin:3.5mm 0 0;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#8f4a26;margin-bottom:2mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#2b261f">A geopolítica das terras raras é simultaneamente um risco e uma oportunidade para o SIMINERAL. O risco: qualquer associação da mineração paraense à narrativa de exportação de matéria-prima sem valor agregado contamina a reputação de todo o setor. A oportunidade: o debate abre espaço para a entidade defender, com consistência, a agenda de industrialização e agregação de valor no Brasil — que é também a agenda dos seus associados. Recomenda-se posição institucional clara: o setor apoia a atração de investimentos, condicionada à industrialização local e à geração de emprego e renda no Pará.</p>
+  </div>
+</div>
+
+<!-- 4.4 -->
+<div style="margin-top:6mm">
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:0 0 2.6mm;color:#1d1a15;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#8f4a26;font-weight:500">4.4</span><span>Mineração no Pará: crescimento, Carajás e a responsabilidade do protagonismo</span></h3>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 2.4mm;text-align:justify">Os números do semestre validaram o protagonismo do Pará na mineração nacional. O setor faturou R$ 52,2 bilhões no primeiro semestre de 2026, crescimento de 8,4% (Pará Web News; Jornal Folha do Progresso, 12/08/2026). A Vale apresentou o plano Carajás 2035, com projeção de milhões de empregos diretos e indiretos e R$ 1,3 trilhão em arrecadação de impostos até 2035 (Muita Informação, 19/08/2026) — número que recoloca a mineração como um dos maiores motores de desenvolvimento da economia nacional. No mesmo período, o projeto Vale Salobo teve seu cronograma adiantado (InfoMoney, 13/08/2026).</p>
+    <p style="margin:0;text-align:justify">No mesmo mês, um relatório apontou que a mineração no Pará entra na era da inteligência artificial e das máquinas autônomas (Jornal Folha do Progresso, 19/08/2026). O crescimento trouxe também pontos de atenção: a ANM enfrenta questionamentos sobre o controle do ouro na Amazônia e abriu consulta sobre o regime de multas (brasil.mongabay.com, 26/08/2026), e a Justiça estabeleceu medidas para reforçar o controle sobre a mineração na APA do Tapajós (Portal Amazônia, 24/08/2026).</p>
+  </div>
+  <div style="background:#f6f2ea;border-left:3px solid #8f4a26;padding:4mm 5mm;margin:3.5mm 0 0;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#8f4a26;margin-bottom:2mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#2b261f">O crescimento de 8,4% do faturamento mineral paraense é o melhor argumento econômico que o SIMINERAL tem — e precisa ser contado com contexto e contrapartida. Crescimento que gera CFEM, empregos e desenvolvimento local é narrado como benefício público; crescimento sem essa comunicação é lido como extração. A entidade tem o interesse de divulgar o que os associados devolvem ao estado: royalties, empregos, infraestrutura, educação.</p>
+  </div>
+</div>
+
+<!-- 4.5 -->
+<div style="margin-top:6mm">
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:0 0 2.6mm;color:#1d1a15;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#8f4a26;font-weight:500">4.5</span><span>STF e mineração em terras indígenas: o prazo que cria urgência</span></h3>
+  <div style="max-width:160mm">
+    <p style="margin:0;text-align:justify">Em 13 de agosto, o Supremo Tribunal Federal estabeleceu prazo de 24 meses para que o Congresso regulamente a mineração em terras indígenas — determinação com impacto direto sobre projetos na região Norte (G1; Gazeta do Povo, 13/08/2026). A decisão cria uma janela de incerteza: enquanto a regulamentação não vier, projetos que se sobreponham ou se aproximem de terras indígenas ficam em terreno juridicamente instável. Dado o perfil de sobreposição de muitos depósitos minerais com territórios tradicionais na Amazônia, o prazo é relevante para o Pará.</p>
+  </div>
+  <div style="background:#f6f2ea;border-left:3px solid #8f4a26;padding:4mm 5mm;margin:3.5mm 0 0;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#8f4a26;margin-bottom:2mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#2b261f">O SIMINERAL deve monitorar de perto os projetos dos associados que possam ser afetados pela decisão do STF, orientar sobre os riscos jurídicos e participar do debate sobre a regulamentação, defendendo critérios que garantam segurança jurídica sem comprometer os direitos constitucionais das comunidades.</p>
+  </div>
+</div>
+
+<!-- 4.6 -->
+<div style="margin-top:6mm">
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:0 0 2.6mm;color:#1d1a15;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#8f4a26;font-weight:500">4.6</span><span>O decreto de cavidades: novos movimentos</span></h3>
+  <div style="max-width:160mm">
+    <p style="margin:0;text-align:justify">O decreto de cavidades — tema central de julho, com o anúncio do ministro Alexandre Silveira — teve em agosto um desdobramento relevante: o presidente do BNDES, Aloizio Mercadante, defendeu a entrada da Petrobras no setor de minerais críticos e pressionou por um novo decreto de cavidades, sinalizando que o governo avalia ampliar as mudanças no licenciamento mineral (Canal Solar; Eixos, 18/08/2026). A movimentação indica que o processo regulatório não está encerrado com o decreto de julho — e que há espaço para o setor contribuir tecnicamente para seu aperfeiçoamento.</p>
+  </div>
+  <div style="background:#f6f2ea;border-left:3px solid #8f4a26;padding:4mm 5mm;margin:3.5mm 0 0;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#8f4a26;margin-bottom:2mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#2b261f">A pressão por novos ajustes regulatórios é uma oportunidade para o SIMINERAL manter posição técnica ativa. A entidade deve acompanhar de perto o processo e oferecer à sua base orientação clara sobre o que cada novo decreto representa operacionalmente — especialmente para os projetos em Carajás.</p>
+  </div>
+</div>
+
+<!-- 4.7 -->
+<div style="margin-top:6mm">
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:0 0 2.6mm;color:#1d1a15;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#8f4a26;font-weight:500">4.7</span><span>Sustentabilidade, IA e a licença social da mineração</span></h3>
+  <div style="max-width:160mm">
+    <p style="margin:0;text-align:justify">Agosto trouxe também a agenda que define a licença social da mineração para as próximas décadas. O CEO da Cedro Technologies afirmou que "mineração exige associar a extração à descarbonização global" (Estadão, 29/08/2026), e a Embrapii divulgou resultado de chamada para projetos em Minerais Críticos Sustentáveis (31/08/2026). A EXPOSIBRAM 2026 sintetizou esse movimento: o maior evento de mineração do Brasil debateu geopolítica, minerais críticos e competitividade, mas também sustentabilidade e inovação como condição para o protagonismo do setor (Estadão Blue Studio, 21/08/2026).</p>
+  </div>
+  <div style="background:#f6f2ea;border-left:3px solid #8f4a26;padding:4mm 5mm;margin:3.5mm 0 0;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#8f4a26;margin-bottom:2mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#2b261f">O SIMINERAL deve liderar a narrativa de que a mineração paraense formal é parte da solução — para a descarbonização global, para o abastecimento de minerais críticos e para o desenvolvimento local. Evidências concretas dos associados — eficiência, recuperação de áreas, CFEM, empregos, tecnologia — são o material que sustenta essa narrativa.</p>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 05 ============ -->
+<div id="s5" data-screen-label="05 Riscos" style="margin-top:8mm">
+  <div style="border-top:1.6px solid #1d1a15;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#8f4a26;font-weight:600">05</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b8579">Riscos</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Riscos Reputacionais Prioritários</h2>
+
+  <div style="display:flex;flex-direction:column;gap:4.5mm">
+    <div style="display:grid;grid-template-columns:29px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="width:27px;height:27px;border-radius:50%;background:#8f2723;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">1</div>
+      <div>
+        <div style="font-weight:600;font-size:14px;margin-bottom:2mm;line-height:1.3">Narrativa de exportação sem valor agregado contamina o setor</div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:10px;margin-bottom:2mm"><span><span style="color:#8b8579">Probabilidade</span> <span style="color:#1d1a15;font-weight:500">Alta</span></span><span><span style="color:#8b8579">Impacto</span> <span style="color:#b23b36;font-weight:500;white-space:nowrap">Muito alto</span></span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b5548;margin-bottom:2mm">Sinal do mês — venda da Serra Verde aos EUA; capital estrangeiro em projetos de terras raras.</div>
+        <p style="margin:0;text-align:justify">A percepção de que o Brasil exporta minério bruto e vende ativos estratégicos a potências estrangeiras pode contaminar o setor como um todo, inclusive a mineração formal paraense.</p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:29px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="width:27px;height:27px;border-radius:50%;background:#a5322d;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">2</div>
+      <div>
+        <div style="font-weight:600;font-size:14px;margin-bottom:2mm;line-height:1.3">STF e mineração em TIs cria insegurança jurídica de 24 meses</div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:10px;margin-bottom:2mm"><span><span style="color:#8b8579">Probabilidade</span> <span style="color:#1d1a15;font-weight:500">Alta</span></span><span><span style="color:#8b8579">Impacto</span> <span style="color:#b23b36;font-weight:500">Alto</span></span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b5548;margin-bottom:2mm">Sinal do mês — STF fixa prazo para regulamentação.</div>
+        <p style="margin:0;text-align:justify">Projetos com sobreposição ou proximidade de terras indígenas ficam em terreno instável enquanto o Congresso não regulamenta.</p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:29px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="width:27px;height:27px;border-radius:50%;background:#a5322d;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">3</div>
+      <div>
+        <div style="font-weight:600;font-size:14px;margin-bottom:2mm;line-height:1.3">Diluição do PL de Minerais Críticos no Senado</div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:10px;margin-bottom:2mm"><span><span style="color:#8b8579">Probabilidade</span> <span style="color:#1d1a15;font-weight:500">Média-alta</span></span><span><span style="color:#8b8579">Impacto</span> <span style="color:#b23b36;font-weight:500">Alto</span></span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b5548;margin-bottom:2mm">Sinal do mês — Alcolumbre retirou a urgência em 14/08; Planalto teme diluição do texto.</div>
+        <p style="margin:0;text-align:justify">Um PL enfraquecido pode frustrar as expectativas do setor e reduzir os benefícios previstos para a cadeia de minerais críticos.</p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:29px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="width:27px;height:27px;border-radius:50%;background:#c1732a;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">4</div>
+      <div>
+        <div style="font-weight:600;font-size:14px;margin-bottom:2mm;line-height:1.3">Contágio pelos questionamentos à governança da ANM</div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:10px;margin-bottom:2mm"><span><span style="color:#8b8579">Probabilidade</span> <span style="color:#1d1a15;font-weight:500">Média</span></span><span><span style="color:#8b8579">Impacto</span> <span style="color:#b23b36;font-weight:500">Alto</span></span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b5548;margin-bottom:2mm">Sinal do mês — questionamentos sobre controle do ouro; consulta sobre multas.</div>
+        <p style="margin:0;text-align:justify">A fragilidade percebida do regulador expõe a mineração formal ao mesmo escrutínio dirigido à mineração ilegal.</p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:29px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="width:27px;height:27px;border-radius:50%;background:#a5322d;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">5</div>
+      <div>
+        <div style="font-weight:600;font-size:14px;margin-bottom:2mm;line-height:1.3">Licença social sob pressão na Amazônia</div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:10px;margin-bottom:2mm"><span><span style="color:#8b8579">Probabilidade</span> <span style="color:#1d1a15;font-weight:500">Alta</span></span><span><span style="color:#8b8579">Impacto</span> <span style="color:#b23b36;font-weight:500">Alto</span></span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b5548;margin-bottom:2mm">Sinal do mês — Justiça reforça controle na APA do Tapajós.</div>
+        <p style="margin:0;text-align:justify">Tensões com comunidades e órgãos de controle podem paralisar projetos e gerar desgaste de imagem duradouro.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 06 ============ -->
+<div id="s6" data-screen-label="06 Oportunidades" style="margin-top:8mm">
+  <div style="border-top:1.6px solid #1d1a15;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#8f4a26;font-weight:600">06</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b8579">Oportunidades</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Oportunidades de Posicionamento Institucional</h2>
+  <div style="display:flex;flex-direction:column;gap:4.5mm">
+    <div style="display:grid;grid-template-columns:29px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="width:27px;height:27px;border-radius:50%;background:#8f4a26;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">1</div>
+      <div><div style="font-weight:600;font-size:14px;margin-bottom:1.6mm">Interlocutor técnico do PL dos Minerais Críticos</div><p style="margin:0;text-align:justify">Acompanhar a relatoria de Eduardo Braga, oferecer subsídios técnicos e comunicar o estado da tramitação aos associados em tempo real.</p></div>
+    </div>
+    <div style="display:grid;grid-template-columns:29px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="width:27px;height:27px;border-radius:50%;background:#8f4a26;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">2</div>
+      <div><div style="font-weight:600;font-size:14px;margin-bottom:1.6mm">Narrativa de industrialização como condição soberana</div><p style="margin:0;text-align:justify">Defender publicamente que o investimento estrangeiro em minerais críticos é bem-vindo desde que acompanhado de industrialização local e geração de empregos no Pará.</p></div>
+    </div>
+    <div style="display:grid;grid-template-columns:29px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="width:27px;height:27px;border-radius:50%;background:#2f6b4a;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">3</div>
+      <div><div style="font-weight:600;font-size:14px;margin-bottom:1.6mm">Ampliar o alcance do Congresso Técnico</div><p style="margin:0;text-align:justify">Levar os debates de Canaã e da EXPOSIBRAM para a agenda nacional, posicionando o SIMINERAL como polo de inteligência mineral do Norte.</p></div>
+    </div>
+    <div style="display:grid;grid-template-columns:29px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="width:27px;height:27px;border-radius:50%;background:#2f6b4a;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">4</div>
+      <div><div style="font-weight:600;font-size:14px;margin-bottom:1.6mm">Licença social como vantagem competitiva</div><p style="margin:0;text-align:justify">Consolidar a narrativa de que a mineração paraense formal opera com responsabilidade, diferenciando-se da mineração ilegal e do extrativismo sem contrapartida.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 07 ============ -->
+<div id="s7" data-screen-label="07 Recomendações" style="margin-top:8mm">
+  <div style="border-top:1.6px solid #1d1a15;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#8f4a26;font-weight:600">07</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b8579">Ação</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Recomendações Executivas</h2>
+
+  <div style="max-width:160mm;break-inside:avoid">
+    <div style="padding-bottom:2.4mm;border-bottom:1px solid #e6e2d8;margin-bottom:3.2mm"><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#8f4a26;font-weight:500">Ações Imediatas</span></div>
+    <ul style="list-style:none;margin:0 0 6mm;padding:0;display:flex;flex-direction:column;gap:2.6mm">
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#8f4a26;font-weight:600">→</span><span style="text-align:justify">Estruturar posição institucional sobre a venda da Serra Verde e a condição de industrialização local para investimentos estrangeiros em terras raras e minerais críticos.</span></li>
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#8f4a26;font-weight:600">→</span><span style="text-align:justify">Comunicar aos associados o estado da tramitação do PL dos Minerais Críticos no Senado, com leitura dos pontos de atrito e impacto esperado.</span></li>
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#8f4a26;font-weight:600">→</span><span style="text-align:justify">Amplificar os resultados do V Congresso Técnico e do Workshop de IA para públicos nacionais.</span></li>
+    </ul>
+  </div>
+
+  <div style="max-width:160mm;break-inside:avoid">
+    <div style="padding-bottom:2.4mm;border-bottom:1px solid #e6e2d8;margin-bottom:3.2mm"><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#8f4a26;font-weight:500">Ações de Curto Prazo</span></div>
+    <ul style="list-style:none;margin:0 0 6mm;padding:0;display:flex;flex-direction:column;gap:2.6mm">
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#8f4a26;font-weight:600">→</span><span style="text-align:justify">Acompanhar o processo de regulamentação da mineração em terras indígenas, orientando associados com projetos potencialmente afetados.</span></li>
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#8f4a26;font-weight:600">→</span><span style="text-align:justify">Produzir material de comunicação sobre o crescimento de 8,4% da mineração paraense e a contrapartida em CFEM, empregos e desenvolvimento.</span></li>
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#8f4a26;font-weight:600">→</span><span style="text-align:justify">Manter interlocução com o MME sobre os novos movimentos no decreto de cavidades.</span></li>
+    </ul>
+  </div>
+
+  <div style="max-width:160mm;break-inside:avoid">
+    <div style="padding-bottom:2.4mm;border-bottom:1px solid #e6e2d8;margin-bottom:3.2mm"><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#8f4a26;font-weight:500">Ações de Médio Prazo</span></div>
+    <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2.6mm">
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#8f4a26;font-weight:600">→</span><span style="text-align:justify">Consolidar a narrativa de "mineração paraense responsável, inovadora e estratégica".</span></li>
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#8f4a26;font-weight:600">→</span><span style="text-align:justify">Posicionar o SIMINERAL como interlocutor da agenda de industrialização de minerais críticos no Pará.</span></li>
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#8f4a26;font-weight:600">→</span><span style="text-align:justify">Instituir acompanhamento reputacional contínuo com alertas sobre STF, PL, governança da ANM e licença social.</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 08 ============ -->
+<div id="s8" data-screen-label="08 Cenários" style="margin-top:8mm">
+  <div style="border-top:1.6px solid #1d1a15;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#8f4a26;font-weight:600">08</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b8579">Cenários</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Cenários Prospectivos</h2>
+  <div style="display:flex;flex-direction:column;gap:0">
+    <div style="border-top:1px solid #e6e2d8;padding:4mm 0;break-inside:avoid;max-width:160mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#8b8579;margin-bottom:2mm">Cenário 01</div>
+      <div style="font-weight:600;font-size:14.5px;margin-bottom:2mm">PL aprovado com texto robusto</div>
+      <p style="margin:0 0 2.4mm;text-align:justify">O marco legal dos minerais críticos é sancionado com governança, benefícios fiscais e o fundo de R$ 7 bi. O setor entra em ciclo de atração de investimentos.</p>
+      <div style="font-size:12.5px;color:#2b261f"><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:#8f4a26;font-weight:600">Resposta recomendada &nbsp;</span>O SIMINERAL capitaliza o momento, posicionando o Pará como polo prioritário da nova política e orientando os associados sobre oportunidades.</div>
+    </div>
+    <div style="border-top:1px solid #e6e2d8;padding:4mm 0;break-inside:avoid;max-width:160mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#8b8579;margin-bottom:2mm">Cenário 02</div>
+      <div style="font-weight:600;font-size:14.5px;margin-bottom:2mm">PL diluído e tensão regulatória</div>
+      <p style="margin:0 0 2.4mm;text-align:justify">O Senado enfraquece o texto, o setor frustra expectativas e a insegurança jurídica (TIs, cavidades) persiste.</p>
+      <div style="font-size:12.5px;color:#2b261f"><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:#8f4a26;font-weight:600">Resposta recomendada &nbsp;</span>Frente de representação com o IBRAM e entidades parceiras, comunicação técnica e articulação qualificada por revisão.</div>
+    </div>
+    <div style="border-top:1px solid #e6e2d8;border-bottom:1px solid #e6e2d8;padding:4mm 0;break-inside:avoid;max-width:160mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#8b8579;margin-bottom:2mm">Cenário 03</div>
+      <div style="font-weight:600;font-size:14.5px;margin-bottom:2mm">Escalada dos conflitos socioambientais</div>
+      <p style="margin:0 0 2.4mm;text-align:justify">Novos incidentes na Amazônia ampliam o escrutínio sobre a mineração como um todo.</p>
+      <div style="font-size:12.5px;color:#2b261f"><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:#8f4a26;font-weight:600">Resposta recomendada &nbsp;</span>Diferenciação ativa, com evidências concretas de responsabilidade dos associados e posição clara de repúdio à mineração ilegal.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 09 ============ -->
+<div id="s9" data-screen-label="09 SAUZ" style="margin-top:8mm">
+  
+  
+  <div style="max-width:160mm">
+    
+    
+  </div>
+
+  
+</div>
+
+<!-- ============ SEÇÃO 10 ============ -->
+<div id="s10" data-screen-label="10 Base de Evidências" style="break-before:page;padding-top:2mm">
+  <div style="border-top:1.6px solid #1d1a15;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#8f4a26;font-weight:600">09</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b8579">Evidências</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 3.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Base Qualificada de Evidências Monitoradas no Mês</h2>
+  <div style="max-width:160mm"><p style="margin:0 0 3.5mm;text-align:justify">O monitoramento reuniu 722 itens; a tabela apresenta a seleção qualificada que sustenta a análise.</p></div>
+
+  <div style="display:flex;gap:15px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#5b5548;margin-bottom:3mm">
+    <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:11px;height:11px;background:#eaf2e8;border:1px solid #cfe0cb;display:inline-block"></span>Positivo</span>
+    <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:11px;height:11px;background:#ffffff;border:1px solid #d8d3c6;display:inline-block"></span>Neutro</span>
+    <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:11px;height:11px;background:#f9e9e7;border:1px solid #eccbc9;display:inline-block"></span>Negativo</span>
+  </div>
+
+  <table style="width:100%;border-collapse:collapse;break-inside:auto">
+    <thead><tr>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:#8b8579;font-weight:500;padding:0 5px 2.2mm 7px;border-bottom:1.5px solid #1d1a15;width:6%">Data</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:#8b8579;font-weight:500;padding:0 5px 2.2mm 5px;border-bottom:1.5px solid #1d1a15;width:17%">Veículo</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:#8b8579;font-weight:500;padding:0 5px 2.2mm 5px;border-bottom:1.5px solid #1d1a15;width:53%">Título</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:#8b8579;font-weight:500;padding:0 5px 2.2mm 5px;border-bottom:1.5px solid #1d1a15;width:11%">Relev.</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:#8b8579;font-weight:500;padding:0 7px 2.2mm 5px;border-bottom:1.5px solid #1d1a15;width:13%">Tom</th>
+    </tr></thead>
+    <tbody style="font-size:10.5px;line-height:1.32">
+      <tr style="background:#eaf2e8"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #eef0ea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b5548">07/08</td><td style="padding:2mm 5px;border-bottom:1px solid #eef0ea;vertical-align:top">A Província do Pará</td><td style="padding:2mm 5px;border-bottom:1px solid #eef0ea;vertical-align:top">V Congresso Técnico do SIMINERAL: 250+ participantes em Canaã dos Carajás</td><td style="padding:2mm 5px;border-bottom:1px solid #eef0ea;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #eef0ea;vertical-align:top;color:#2f6b4a;font-weight:500">Positivo</td></tr>
+      <tr style="background:#eaf2e8"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #eef0ea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b5548">04/08</td><td style="padding:2mm 5px;border-bottom:1px solid #eef0ea;vertical-align:top">Gazeta Carajás</td><td style="padding:2mm 5px;border-bottom:1px solid #eef0ea;vertical-align:top">Workshop de Comunicação do SIMINERAL debate IA e protagonismo do jornalismo</td><td style="padding:2mm 5px;border-bottom:1px solid #eef0ea;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #eef0ea;vertical-align:top;color:#2f6b4a;font-weight:500">Positivo</td></tr>
+      <tr style="background:#eaf2e8"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #eef0ea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b5548">27/08</td><td style="padding:2mm 5px;border-bottom:1px solid #eef0ea;vertical-align:top">A Província do Pará</td><td style="padding:2mm 5px;border-bottom:1px solid #eef0ea;vertical-align:top">SIMINERAL participa da EXPOSIBRAM 2026 e destaca diálogo entre mineração e poder público</td><td style="padding:2mm 5px;border-bottom:1px solid #eef0ea;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #eef0ea;vertical-align:top;color:#2f6b4a;font-weight:500">Positivo</td></tr>
+      <tr><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #ece8de;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b5548">06/08</td><td style="padding:2mm 5px;border-bottom:1px solid #ece8de;vertical-align:top">CNN Brasil</td><td style="padding:2mm 5px;border-bottom:1px solid #ece8de;vertical-align:top">Câmara aprova PL dos minerais críticos e redefine estratégia</td><td style="padding:2mm 5px;border-bottom:1px solid #ece8de;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #ece8de;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #ece8de;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b5548">27/08</td><td style="padding:2mm 5px;border-bottom:1px solid #ece8de;vertical-align:top">CNN Brasil</td><td style="padding:2mm 5px;border-bottom:1px solid #ece8de;vertical-align:top">Eduardo Braga será relator do PL dos minerais críticos no Senado</td><td style="padding:2mm 5px;border-bottom:1px solid #ece8de;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #ece8de;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr style="background:#eaf2e8"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #eef0ea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b5548">04/08</td><td style="padding:2mm 5px;border-bottom:1px solid #eef0ea;vertical-align:top">Agência iNFRA</td><td style="padding:2mm 5px;border-bottom:1px solid #eef0ea;vertical-align:top">Estudo Amcham: minerais críticos podem adicionar R$ 192 bi ao PIB e 750 mil empregos</td><td style="padding:2mm 5px;border-bottom:1px solid #eef0ea;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #eef0ea;vertical-align:top;color:#2f6b4a;font-weight:500">Positivo</td></tr>
+      <tr style="background:#eaf2e8"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #eef0ea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b5548">13/08</td><td style="padding:2mm 5px;border-bottom:1px solid #eef0ea;vertical-align:top">iG Economia</td><td style="padding:2mm 5px;border-bottom:1px solid #eef0ea;vertical-align:top">BNDES anuncia R$ 50 bilhões em projetos de minerais críticos</td><td style="padding:2mm 5px;border-bottom:1px solid #eef0ea;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #eef0ea;vertical-align:top;color:#2f6b4a;font-weight:500">Positivo</td></tr>
+      <tr style="background:#f9e9e7"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f3eceb;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b5548">24/08</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">CNN Brasil</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Cade arquiva ação e destrava venda da Serra Verde (terras raras) para empresa dos EUA</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr style="background:#f9e9e7"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f3eceb;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b5548">26/08</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">G1</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Lula diz que "tem muito estrangeiro" comprando minerais críticos antes de marco legal</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #ece8de;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b5548">28/08</td><td style="padding:2mm 5px;border-bottom:1px solid #ece8de;vertical-align:top">ICL Notícias</td><td style="padding:2mm 5px;border-bottom:1px solid #ece8de;vertical-align:top">Governo atua para exigir industrialização como condição para venda de terras raras</td><td style="padding:2mm 5px;border-bottom:1px solid #ece8de;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #ece8de;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #ece8de;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b5548">26/08</td><td style="padding:2mm 5px;border-bottom:1px solid #ece8de;vertical-align:top">CNN Brasil</td><td style="padding:2mm 5px;border-bottom:1px solid #ece8de;vertical-align:top">Empresa chinesa (Gulf Resources) anuncia entrada em lítio e terras raras no Brasil</td><td style="padding:2mm 5px;border-bottom:1px solid #ece8de;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #ece8de;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr style="background:#eaf2e8"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #eef0ea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b5548">12/08</td><td style="padding:2mm 5px;border-bottom:1px solid #eef0ea;vertical-align:top">Pará Web News</td><td style="padding:2mm 5px;border-bottom:1px solid #eef0ea;vertical-align:top">Mineração no Pará cresce 8,4% e movimenta R$ 52,2 bilhões no primeiro semestre de 2026</td><td style="padding:2mm 5px;border-bottom:1px solid #eef0ea;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #eef0ea;vertical-align:top;color:#2f6b4a;font-weight:500">Positivo</td></tr>
+      <tr style="background:#eaf2e8"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #eef0ea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b5548">19/08</td><td style="padding:2mm 5px;border-bottom:1px solid #eef0ea;vertical-align:top">Muita Informação</td><td style="padding:2mm 5px;border-bottom:1px solid #eef0ea;vertical-align:top">Plano Vale Carajás 2035 projeta milhões de empregos e R$ 1,3 tri em impostos</td><td style="padding:2mm 5px;border-bottom:1px solid #eef0ea;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #eef0ea;vertical-align:top;color:#2f6b4a;font-weight:500">Positivo</td></tr>
+      <tr style="background:#f9e9e7"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f3eceb;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b5548">13/08</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">G1</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">STF dá prazo de 24 meses para Congresso regulamentar mineração em terras indígenas</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #ece8de;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b5548">18/08</td><td style="padding:2mm 5px;border-bottom:1px solid #ece8de;vertical-align:top">Canal Solar</td><td style="padding:2mm 5px;border-bottom:1px solid #ece8de;vertical-align:top">Mercadante defende Petrobras em terras raras e pressiona por novo decreto de cavidades</td><td style="padding:2mm 5px;border-bottom:1px solid #ece8de;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #ece8de;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr style="background:#f9e9e7"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f3eceb;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b5548">24/08</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Portal Amazônia</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Justiça estabelece medidas para controle da mineração na APA do Tapajós, no Pará</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr style="background:#f9e9e7"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f3eceb;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b5548">26/08</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">brasil.mongabay.com</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">ANM enfrenta questionamentos sobre controle do ouro na Amazônia</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Média</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr style="background:#eaf2e8"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #eef0ea;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b5548">19/08</td><td style="padding:2mm 5px;border-bottom:1px solid #eef0ea;vertical-align:top">Jornal Folha do Progresso</td><td style="padding:2mm 5px;border-bottom:1px solid #eef0ea;vertical-align:top">Mineração no Pará entra na era da IA e máquinas autônomas</td><td style="padding:2mm 5px;border-bottom:1px solid #eef0ea;vertical-align:top">Média</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #eef0ea;vertical-align:top;color:#2f6b4a;font-weight:500">Positivo</td></tr>
+      <tr><td style="padding:2mm 5px 2mm 7px;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b5548">21/08</td><td style="padding:2mm 5px;vertical-align:top">BNamericas</td><td style="padding:2mm 5px;vertical-align:top">Quais serão os principais debates no maior evento de mineração do Brasil? (EXPOSIBRAM)</td><td style="padding:2mm 5px;vertical-align:top">Média</td><td style="padding:2mm 7px 2mm 5px;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+    </tbody>
+  </table>
+
+  <div style="max-width:160mm;margin-top:4mm">
+    <p style="margin:0;font-size:11.5px;color:#5b5548;text-align:justify"><span style="font-style:italic">Nota metodológica:</span> a seleção privilegia as evidências ligadas à indústria mineral e às prioridades da SIMINERAL; o restante do volume monitorado foi tratado como contexto.</p>
+  </div>
+</div>
+
+<!-- ENCERRAMENTO -->
+<div data-screen-label="Encerramento" style="margin-top:9mm;border-top:1.6px solid #1d1a15;padding-top:5mm;break-inside:avoid">
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b8579;margin-bottom:3.5mm">Encerramento</div>
+  <p style="margin:0 0 5mm;font-size:13.5px;color:#2b261f">Belém/PA, setembro de 2026.</p>
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#5b5548;margin-bottom:5px">Suporte estratégico prestado por</div>
+  <img src="sauz-logo-dark.png" alt="SAUZ" style="height:32px;display:block">
+</div>
+
+<!--CONTENT_END-->
+</div>
+</x-import>
+</x-dc>
+</body>
+</html>

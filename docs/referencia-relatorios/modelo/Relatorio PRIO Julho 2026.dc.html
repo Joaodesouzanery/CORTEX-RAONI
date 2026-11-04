@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+  doc-page:not(:defined){visibility:hidden}
+  *{box-sizing:border-box}
+  .rp p{orphans:3;widows:3}
+  .pgnum::after{content:counter(page)}
+</style>
+</helmet>
+<x-import component-from-global-scope="doc-page" from="./doc-page.js" size="a4" margin="17mm" hint-size="100%,100%">
+<div slot="footer" style="display:flex;justify-content:space-between;align-items:baseline;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.05em;color:#8b8f86;border-top:1px solid #e6e6de;padding-top:2mm">
+  <span>SAUZ · PRIO · Julho 2026 — Confidencial</span>
+  <span class="pgnum" style="color:#1d5c4d;font-weight:500"></span>
+</div>
+
+<div class="rp" style="font-family:'IBM Plex Sans',-apple-system,'Segoe UI',sans-serif;font-size:12.8px;line-height:1.55;color:#161d1a;-webkit-font-smoothing:antialiased">
+
+<!-- ============ CAPA ============ -->
+<div data-screen-label="Capa" style="position:relative;overflow:hidden;background:#0a1512;margin:-17mm -17mm 0;box-sizing:border-box;display:flex;flex-direction:column;break-after:page">
+  <div style="position:relative;height:208mm;overflow:hidden">
+    <img src="cover_prio_plataforma.jpg" alt="Plataforma de produção offshore em operação, ao pôr do sol" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 55%">
+    <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(8,20,17,.72) 0%,rgba(11,28,24,.40) 24%,rgba(29,92,77,.30) 50%,rgba(9,22,19,.66) 72%,rgba(6,15,13,.95) 100%)"></div>
+
+    <div style="position:absolute;top:15mm;left:19mm;right:19mm;z-index:3;display:flex;justify-content:space-between;align-items:flex-start;gap:9mm">
+      <div style="max-width:112mm"><div style="font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;letter-spacing:.02em;color:#fff;line-height:1.4">PRIO S.A.</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#9fb5ab;margin-top:4px">Óleo e Gás · Bacia de Campos</div></div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#9fb5ab;white-space:nowrap">Inteligência Reputacional</div>
+    </div>
+
+    <div style="position:absolute;top:20mm;right:10mm;height:178mm;z-index:3;writing-mode:vertical-rl;font-family:'IBM Plex Sans',sans-serif;font-weight:700;font-size:13.5px;letter-spacing:.11em;color:#fff;text-transform:uppercase;opacity:.95;white-space:nowrap">Imposto de Exportação · Margem · Eficiência · Produção</div>
+
+    <div style="position:absolute;left:0;right:0;top:31%;z-index:3;display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 19mm">
+      <img src="sauz-logo.png" alt="SAUZ" style="height:64px;display:block">
+      <div style="width:50px;height:2px;background:#5fc2a4;margin:14px 0 9px"></div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:#e6efea">Comunicação e Estratégia · Inteligência Reputacional</div>
+    </div>
+
+    <div style="position:absolute;left:0;right:0;bottom:0;height:44%;background:linear-gradient(to bottom,rgba(6,15,13,0) 0%,rgba(6,15,13,.62) 46%,rgba(6,15,13,.94) 100%);z-index:2"></div>
+
+    <div style="position:absolute;left:19mm;right:24mm;bottom:16mm;z-index:3;border-left:3px solid #5fc2a4;padding-left:6mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:#5fc2a4;margin-bottom:5mm">Relatório Mensal · Julho de 2026</div>
+      <h1 style="font-size:33px;font-weight:600;line-height:1.15;letter-spacing:-.015em;margin:0;color:#fff;max-width:148mm">Relatório Mensal de Comunicação Estratégica e Gestão de Imagem</h1>
+      
+    </div>
+  </div>
+
+  <div style="background:#0a1512;padding:8mm 19mm 7mm;display:flex;justify-content:space-between;align-items:flex-end;gap:10mm">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#6f8a80">Suporte estratégico prestado por SAUZ</div>
+    <div style="text-align:right;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#9fb5ab;line-height:1.7">
+      <div>Foco: imposto de exportação de óleo</div>
+      <div>1 a 31 de julho de 2026</div>
+      <div style="color:#60807a">Confidencial — uso interno da alta administração</div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);height:6mm">
+    <div style="background:#1d5c4d"></div><div style="background:#2f8f6f"></div><div style="background:#5fc2a4"></div><div style="background:#d6ddd6"></div><div style="background:#3f4a45"></div>
+  </div>
+</div>
+
+<!-- ============ NOTA DE MÉTODO + SUMÁRIO ============ -->
+<div data-screen-label="Nota de método" style="break-after:page;padding-top:2mm">
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:#8b8f86;margin-bottom:3mm">Nota de método</div>
+  <div style="border-top:1.6px solid #161d1a"></div>
+  <div style="background:#eef4f1;border-left:3px solid #1d5c4d;padding:5mm 6mm;margin-top:4.5mm;max-width:162mm">
+    <p style="margin:0 0 2.4mm;text-align:justify;font-size:12.5px;color:#28322e"><strong>Ler antes.</strong> Este relatório foi construído a partir de <strong>informações da companhia e da imprensa nacional e especializada</strong> — comunicados e dados operacionais divulgados pela PRIO, relatórios de casas de análise e cobertura da imprensa econômica e do setor de óleo e gás —, todas apuradas e verificadas e indicadas ao longo do texto.</p>
+    <p style="margin:0 0 2.4mm;text-align:justify;font-size:12.5px;color:#28322e"><strong>Recorte temporal estrito:</strong> este relatório cobre exclusivamente o período de <strong>1 a 31 de julho de 2026</strong>. Fatos ocorridos em agosto — entre eles a divulgação do resultado do 2T26 e dos dados operacionais consolidados de julho (04/08), a sinalização sobre a política de dividendos (05/08) e as revisões de recomendação de casas de análise — <strong>não integram esta edição</strong> e serão tratados no relatório de agosto. Os dados do 2T26 (trimestre encerrado em 30/06) aparecem como contexto já disponível ao mercado, sinalizados como tal.</p>
+    <div style="background:#fff;border-left:3px solid #8f2723;padding:4mm 5mm;margin:0 0 2.4mm"><p style="margin:0;text-align:justify;font-size:12.5px;color:#28322e"><strong>Escopo das fontes, declarado abertamente:</strong> as evidências concentram-se predominantemente no <strong>circuito financeiro</strong> — casas de análise e imprensa econômica. Buscas dirigidas a públicos não financeiros (imprensa geral, comunidades de Macaé e do Norte Fluminense, sindicatos offshore, fornecedores, terceiro setor) retornaram material escasso sobre a companhia. Esse é, em si, um dado reputacional relevante: <strong>a PRIO é intensamente coberta como ativo financeiro e pouco coberta como instituição</strong>. As leituras deste relatório sobre públicos não financeiros são, portanto, <strong>analíticas e não observacionais</strong>, e estão sinalizadas como tal.</p></div>
+    <p style="margin:0 0 2.4mm;text-align:justify;font-size:12.5px;color:#28322e">Recomenda-se <strong>ampliar o escopo do monitoramento</strong> nos próximos ciclos, somando à imprensa econômica e à mídia setorial de óleo e gás a imprensa regional (RJ/Macaé), a agenda regulatória (ANP, IBAMA), a pauta socioambiental e a escuta digital.</p>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#28322e"><strong>Cuidado editorial rigoroso:</strong> episódios do setor envolvendo outras operadoras — em especial a agenda da Margem Equatorial e da Foz do Amazonas, conduzida pela Petrobras — não são atribuídos à PRIO, e aparecem apenas como contexto de risco de contágio setorial.</p>
+  </div>
+
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:#8b8f86;margin:9mm 0 3mm">Sumário</div>
+  <div style="border-top:1.6px solid #161d1a"></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;column-gap:14mm">
+    <div>
+      <a href="#s1" style="display:flex;gap:11px;align-items:baseline;padding:2.7mm 0;border-bottom:1px solid #ecece6;text-decoration:none;color:#161d1a"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#1d5c4d;min-width:20px">01</span><span style="font-weight:500">Sumário Executivo</span></a>
+      <a href="#s2" style="display:flex;gap:11px;align-items:baseline;padding:2.7mm 0;border-bottom:1px solid #ecece6;text-decoration:none;color:#161d1a"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#1d5c4d;min-width:20px">02</span><span style="font-weight:500">Temas Estratégicos do Mês</span></a>
+      <a href="#s3" style="display:flex;gap:11px;align-items:baseline;padding:2.7mm 0;border-bottom:1px solid #ecece6;text-decoration:none;color:#161d1a"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#1d5c4d;min-width:20px">03</span><span style="font-weight:500">Leitura Reputacional do Ambiente</span></a>
+      <a href="#s4" style="display:flex;gap:11px;align-items:baseline;padding:2.7mm 0;border-bottom:1px solid #ecece6;text-decoration:none;color:#161d1a"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#1d5c4d;min-width:20px">04</span><span style="font-weight:500">Análise Temática Aprofundada</span></a>
+      <a href="#s4a" style="display:flex;gap:11px;align-items:baseline;padding:2.7mm 0;border-bottom:1px solid #ecece6;text-decoration:none;color:#161d1a"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#1d5c4d;min-width:20px">4-A</span><span style="font-weight:500">Mapa de Stakeholders e Narrativas</span></a>
+      <a href="#s4b" style="display:flex;gap:11px;align-items:baseline;padding:2.7mm 0;border-bottom:1px solid #ecece6;text-decoration:none;color:#161d1a"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#1d5c4d;min-width:20px">4-B</span><span style="font-weight:500">Tendências e Sinais Emergentes</span></a>
+      <a href="#s5" style="display:flex;gap:11px;align-items:baseline;padding:2.7mm 0;border-bottom:1px solid #ecece6;text-decoration:none;color:#161d1a"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#1d5c4d;min-width:20px">05</span><span style="font-weight:500">Riscos Reputacionais Prioritários</span></a>
+    </div>
+    <div>
+      <a href="#s6" style="display:flex;gap:11px;align-items:baseline;padding:2.7mm 0;border-bottom:1px solid #ecece6;text-decoration:none;color:#161d1a"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#1d5c4d;min-width:20px">06</span><span style="font-weight:500">Oportunidades de Posicionamento</span></a>
+      <a href="#s7" style="display:flex;gap:11px;align-items:baseline;padding:2.7mm 0;border-bottom:1px solid #ecece6;text-decoration:none;color:#161d1a"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#1d5c4d;min-width:20px">07</span><span style="font-weight:500">Recomendações Executivas</span></a>
+      <a href="#s8" style="display:flex;gap:11px;align-items:baseline;padding:2.7mm 0;border-bottom:1px solid #ecece6;text-decoration:none;color:#161d1a"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#1d5c4d;min-width:20px">08</span><span style="font-weight:500">Cenários Prospectivos</span></a>
+      <a href="#s9" style="display:flex;gap:11px;align-items:baseline;padding:2.7mm 0;border-bottom:1px solid #ecece6;text-decoration:none;color:#161d1a"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#1d5c4d;min-width:20px">09</span><span style="font-weight:500">Demonstração dos Serviços — SAUZ</span></a>
+      <a href="#s10" style="display:flex;gap:11px;align-items:baseline;padding:2.7mm 0;border-bottom:1px solid #ecece6;text-decoration:none;color:#161d1a"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#1d5c4d;min-width:20px">10</span><span style="font-weight:500">Base Qualificada de Evidências</span></a>
+    </div>
+  </div>
+
+  <!-- EIXO DO MÊS: IMPOSTO DE EXPORTAÇÃO -->
+  <div style="margin-top:8mm;border-top:1.6px solid #161d1a;padding-top:4.5mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#1d5c4d;margin-bottom:3.5mm">Eixo do mês</div>
+    <div style="background:#eef4f1;border-left:3px solid #1d5c4d;padding:6mm 7mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#5b7a70;margin-bottom:2.5mm">Imposto de exportação de óleo · vigente até dezembro de 2026</div>
+      <div style="font-size:22px;font-weight:600;line-height:1.22;letter-spacing:-.01em;margin-bottom:3.5mm;max-width:152mm">Enquanto o governo taxa a exportação, a companhia responde com eficiência e resultado</div>
+      <p style="margin:0 0 4mm;font-size:13px;color:#28322e;text-align:justify;max-width:158mm">O tributo alcança praticamente toda a receita da PRIO — quase toda a produção é exportada —, e penaliza justamente quem investiu para produzir mais. É uma conta criada de fora, num mês em que a companhia bateu recorde de produção. O BTG Pactual registrou a assimetria em 28 de julho <strong>e ainda assim manteve a companhia como sua principal escolha entre as independentes brasileiras</strong>: quem entrega eficiência sustenta o resultado mesmo sob taxação.</p>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:3.5mm">
+        <div style="background:#fff;padding:3.5mm 4mm;border-top:2px solid #1d5c4d"><div style="font-size:19px;font-weight:600;line-height:1;color:#1d5c4d">US$ 8,9</div><div style="font-size:10.5px;color:#5b6360;line-height:1.4;margin-top:2mm">lifting cost por barril — a eficiência que sustenta a margem sob taxação</div></div>
+        <div style="background:#fff;padding:3.5mm 4mm;border-top:2px solid #2f8f6f"><div style="font-size:19px;font-weight:600;line-height:1;color:#2f8f6f">6,35 mi</div><div style="font-size:10.5px;color:#5b6360;line-height:1.4;margin-top:2mm">barris vendidos em julho — recorde que o tributo alcança</div></div>
+        <div style="background:#fff;padding:3.5mm 4mm;border-top:2px solid #5fc2a4"><div style="font-size:19px;font-weight:600;line-height:1;color:#161d1a">Dez/26</div><div style="font-size:10.5px;color:#5b6360;line-height:1.4;margin-top:2mm">fim da vigência — uma conta com prazo, não um traço do negócio</div></div>
+        <div style="background:#fff;padding:3.5mm 4mm;border-top:2px solid #2f8f6f"><div style="font-size:19px;font-weight:600;line-height:1;color:#1d5c4d">Top pick</div><div style="font-size:10.5px;color:#5b6360;line-height:1.4;margin-top:2mm">posição mantida pelo BTG mesmo com a taxação</div></div>
+      </div>
+    </div>
+
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#1d5c4d;margin:6mm 0 3.5mm">A base operacional que sustenta a margem</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6mm">
+      <div><div style="font-size:24px;font-weight:600;letter-spacing:-.02em;line-height:1">196.260</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#5b6360;margin-top:3px">boepd em julho · recorde</div></div>
+      <div style="padding-left:6mm;border-left:1px solid #e4e6de"><div style="font-size:24px;font-weight:600;letter-spacing:-.02em;line-height:1;color:#2f8f6f">+10,2%</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#5b6360;margin-top:3px">sobre junho · +14% vs. média 2T26</div></div>
+      <div style="padding-left:6mm;border-left:1px solid #e4e6de"><div style="font-size:24px;font-weight:600;letter-spacing:-.02em;line-height:1;color:#1d5c4d">1,5x</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#5b6360;margin-top:3px">alavancagem (de 2,0x)</div></div>
+      <div style="padding-left:6mm;border-left:1px solid #e4e6de"><div style="font-size:24px;font-weight:600;letter-spacing:-.02em;line-height:1">+28%</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#5b6360;margin-top:3px">alta do Brent no trimestre</div></div>
+    </div>
+    <p style="margin:4mm 0 0;font-size:11.5px;color:#5b6360;text-align:justify;max-width:162mm">O recorde de julho foi construído por quatro intervenções simultâneas — último poço de Wahoo (02/07), substituição do gas lift em Frade (19/07), normalização do ABL-68 em Albacora Leste e novo poço em Peregrino, que levou o campo acima de 100 mil bbl/dia. É esse volume, somado ao custo de extração mais baixo do setor, que define a capacidade da companhia de absorver o tributo sem perder rentabilidade.</p>
+  </div>
+
+  <div style="margin-top:6mm;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#8b8f86;letter-spacing:.02em">SAUZ · PRIO · Julho de 2026 — Confidencial</div>
+</div>
+
+<!-- ============ SEÇÃO 01 ============ -->
+<div id="s1" data-screen-label="01 Sumário Executivo" style="margin-top:1mm">
+  <div style="border-top:1.6px solid #161d1a;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#1d5c4d;font-weight:600">01</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b8f86">Síntese</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Sumário Executivo</h2>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 2.4mm;text-align:justify"><strong>O tema central de julho de 2026, para a PRIO, é o imposto de exportação de óleo.</strong> Vigente até dezembro, o tributo incide exatamente sobre o elo em que a companhia é mais forte: praticamente toda a sua produção é destinada ao mercado externo. O efeito é uma assimetria difícil de justificar — a empresa é penalizada precisamente por ter investido para produzir e exportar mais, enquanto pares com mix predominantemente doméstico atravessam o mesmo ciclo sem essa carga. Num mês em que a companhia bateu recorde de produção e o Brent subiu cerca de 28% no trimestre, <strong>é uma decisão de governo, e não o desempenho da empresa, que determina quanto desse esforço se converte em resultado</strong>. É esse desencontro que organiza a leitura reputacional do período.</p>
+    <p style="margin:0 0 2.4mm;text-align:justify">A assimetria foi explicitada pelo próprio mercado. Em relatório de 28 de julho, o BTG Pactual avaliou que as petroleiras privadas entregariam resultados sólidos no 2T26 diante da alta do petróleo, <strong>ressalvando que PRIO e Brava seriam negativamente impactadas pelo imposto de exportação — diferentemente da PetroRecôncavo</strong>. O ponto decisivo, contudo, é o que veio junto com a ressalva: a mesma casa <strong>manteve a PRIO como sua principal escolha entre as independentes brasileiras</strong>. Traduzindo: nem o mercado atribui à companhia o custo que lhe foi imposto. O tributo é lido como uma conta externa, não como fragilidade do negócio — e essa distinção é o núcleo da mensagem que a PRIO precisa sustentar publicamente.</p>
+    <p style="margin:0 0 2.4mm;text-align:justify">E a companhia não está apenas absorvendo essa conta: está respondendo a ela com desempenho. Enquanto o governo taxa a exportação, a PRIO opera com <em>lifting cost</em> de US$ 8,9 por barril — entre os mais baixos do setor — e entrega recorde de produção no mesmo mês. É uma resposta pela via dos resultados: quanto menor o custo de extração e maior o volume, menos o tributo consegue comprometer a rentabilidade. O imposto reduz o ganho marginal de um ciclo de preços altos, mas não altera a competitividade do portfólio — e, tendo prazo definido, seu efeito recai sobre o resultado de um período, não sobre a tese de investimento. É esse enquadramento que separa uma compressão de margem <strong>imposta de fora</strong> de uma perda de eficiência da empresa.</p>
+    <p style="margin:0 0 2.4mm;text-align:justify">Nesse contexto, o desempenho operacional do mês deixa de ser apenas uma boa notícia e passa a ser o argumento central da companhia. Julho consolidou a PRIO no melhor momento operacional de sua história — e é justamente essa base de volume e de custo que define sua capacidade de absorver o tributo sem comprometer a rentabilidade.</p>
+    <p style="margin:0 0 2.4mm;text-align:justify">O dado que sustenta essa capacidade é a produção. Em julho, a companhia registrou 196.260 boepd de óleo e gás exportado, novo recorde histórico — alta de 10,2% sobre junho e 14% acima da média do segundo trimestre —, com vendas de 6.345.393 barris no mês (PRIO, dados operacionais preliminares de julho, divulgados em 04/08/2026). O crescimento foi generalizado: o cluster Valente (Frade e Wahoo) produziu 67.099 barris de óleo e 5.631 boe de gás por dia; Peregrino, com 80% de participação, entregou 81.971 barris diários; Albacora Leste, 27.385 barris de óleo e 309 boe de gás; e o cluster Bravo (Polvo e TBMT), 13.865 barris.</p>
+    <p style="margin:0 0 2.4mm;text-align:justify">O que torna esse número relevante, porém, não é a marca em si, e sim o que aconteceu dentro do mês para produzi-la. Julho foi um mês de trabalho fino de engenharia e manutenção. Em 2 de julho, a companhia abriu o último poço produtor de Wahoo, concluindo a abertura de todas as unidades previstas no desenvolvimento do campo. Em 19 de julho, finalizou a substituição da linha de gas lift em Frade, restabelecendo a produção de três poços que estavam temporariamente fechados. Em Albacora Leste, normalizou o poço ABL-68. Em Peregrino, um novo poço recolocou a produção total do campo acima de 100 mil barris diários. E, no cluster Bravo, interrompeu temporariamente o poço OGX-44HP para reparo da linha de produção — o único recuo pontual do mês, de natureza programada. Ou seja: <strong>o recorde não veio de um evento isolado, e sim da soma de intervenções bem executadas em quatro frentes simultâneas</strong>.</p>
+    <p style="margin:0 0 2.4mm;text-align:justify">No campo financeiro, o segundo trimestre havia pavimentado o terreno. A PRIO reportou lucro líquido de US$ 413,3 milhões, alta de 169% sobre o mesmo período do ano anterior, com EBITDA recorde e receita líquida de US$ 1,2 bilhão. Mais relevante do que o lucro, do ponto de vista da narrativa, foi a combinação de indicadores: o lifting cost recuou para US$ 8,9 por barril, a alavancagem caiu de 2,0x para 1,5x dívida líquida/EBITDA, e a companhia executou recompras de ações — US$ 114 milhões no trimestre, cerca de US$ 180 milhões no acumulado do semestre. É o retrato de uma empresa que cresce e desalavanca ao mesmo tempo, o que é raro no setor.</p>
+    <p style="margin:0 0 2.4mm;text-align:justify">O marco simbólico do período, contudo, é Wahoo. A conclusão do projeto — o primeiro desenvolvimento integralmente executado pela própria companhia — encerra o ciclo que começou com a licença de operação concedida pelo IBAMA em março e valida a tese central da PRIO: a de que sabe extrair valor de ativos que outros consideraram maduros ou marginais. Em paralelo, o gasoduto de importação de gás em Peregrino entrou nos estágios finais de recomissionamento após reparos, movimento que deve substituir a geração a diesel e reduzir estruturalmente o custo do ativo.</p>
+    <p style="margin:0 0 2.4mm;text-align:justify">O tema que domina o horizonte é a política de remuneração ao acionista — e aqui está o principal ponto de atenção do período. A companhia havia sinalizado que divulgaria a política no primeiro semestre de 2026; o prazo passou sem anúncio, e a empresa indicou que aguarda melhora do cenário geopolítico para apresentá-la. Com a alavancagem em 1,5x, Wahoo concluído e Peregrino em otimização, o mercado unificou o diagnóstico de que a distribuição é a próxima etapa natural — expectativa explicitada por XP, Genial e Goldman Sachs. Essa expectativa é, ao mesmo tempo, o maior ativo e o maior passivo reputacional do momento: o adiamento é tecnicamente defensável diante da volatilidade do petróleo, mas cada período sem definição alimenta ansiedade, e qualquer política anunciada abaixo do projetado será lida como frustração.</p>
+    <p style="margin:0 0 2.4mm;text-align:justify">A leitura das casas de análise no mês foi, apesar da carga tributária, de destaque comparativo. Além da posição do BTG, a XP apontava a PRIO como a mais bem posicionada para capturar os ganhos de curto prazo com a alta do petróleo. É uma convergência relevante: mesmo o analista que sinaliza o impacto do imposto mantém a companhia como referência do segmento — sinal de que a eficiência pesa mais, na avaliação do mercado, do que a exposição tributária.</p>
+    <p style="margin:0;text-align:justify">No pano de fundo, o setor vive um ambiente socioambiental tensionado, com a agenda da Margem Equatorial sob forte escrutínio de órgãos de controle, do Ministério Público e de organizações civis. A PRIO não é protagonista dessa disputa — sua operação está concentrada na Bacia de Campos, em ativos já desenvolvidos —, mas opera em uma indústria cuja licença social é questionada em bloco. Preservar a distinção entre a atuação da companhia e as controvérsias de terceiros é, hoje, uma tarefa ativa de comunicação.</p>
+  </div>
+
+  <div style="margin-top:6mm;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#1d5c4d;padding-bottom:2.5mm;border-bottom:1px solid #e4e6de;margin-bottom:4mm">Top Insights do Mês</div>
+    <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3mm">
+      <li style="display:grid;grid-template-columns:21px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#1d5c4d;font-weight:600">01</span><span style="text-align:justify">O <strong>imposto de exportação de óleo</strong> é o tema central do mês: uma decisão de governo que alcança quase toda a receita da PRIO e penaliza justamente quem investiu para produzir e exportar mais — enquanto pares de mix doméstico seguem sem essa carga.</span></li>
+      <li style="display:grid;grid-template-columns:21px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#1d5c4d;font-weight:600">02</span><span style="text-align:justify">O <strong>BTG ressalvou o impacto e manteve a PRIO como top pick</strong> — nem o mercado atribui à companhia o custo que lhe foi imposto. É o enquadramento a sustentar publicamente.</span></li>
+      <li style="display:grid;grid-template-columns:21px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#1d5c4d;font-weight:600">03</span><span style="text-align:justify"><strong>Enquanto o governo taxa, a companhia responde com resultado:</strong> recorde de produção e <em>lifting cost</em> de US$ 8,9/bbl no mesmo mês. A eficiência não é conformismo — é a forma de a empresa sustentar rentabilidade apesar da conta imposta.</span></li>
+      <li style="display:grid;grid-template-columns:21px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#1d5c4d;font-weight:600">04</span><span style="text-align:justify"><strong>Recorde de produção em julho</strong> (196.260 boepd, +10,2% sobre junho) construído por intervenções simultâneas — último poço de Wahoo (02/07), gas lift de Frade (19/07), ABL-68 normalizado e novo poço em Peregrino.</span></li>
+      <li style="display:grid;grid-template-columns:21px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#1d5c4d;font-weight:600">05</span><span style="text-align:justify"><strong>Wahoo concluído</strong> é o marco simbólico do ano — primeiro desenvolvimento integralmente executado pela companhia, validando a tese de competência técnica própria.</span></li>
+      <li style="display:grid;grid-template-columns:21px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#1d5c4d;font-weight:600">06</span><span style="text-align:justify">A <strong>política de dividendos foi adiada</strong>: prometida para o 1º semestre, agora condicionada à melhora do cenário geopolítico. É o principal ponto de atenção reputacional do período.</span></li>
+      <li style="display:grid;grid-template-columns:21px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#1d5c4d;font-weight:600">07</span><span style="text-align:justify">A combinação <strong>crescer + desalavancar (1,5x) + reduzir custo (US$ 8,9/bbl)</strong> é a narrativa mais forte disponível e ainda está subutilizada fora do circuito financeiro.</span></li>
+      <li style="display:grid;grid-template-columns:21px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#1d5c4d;font-weight:600">08</span><span style="text-align:justify"><strong>Peregrino é o próximo capítulo de eficiência:</strong> o gasoduto de gás em recomissionamento deve substituir o diesel e reduzir custo de forma estrutural.</span></li>
+      <li style="display:grid;grid-template-columns:21px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#1d5c4d;font-weight:600">09</span><span style="text-align:justify">A <strong>meta de 200 mil boepd</strong> deve ser atingida antes da conclusão da compra dos 20% remanescentes de Peregrino, com mais dois poços em Peregrino e dois em Frade no 2º semestre.</span></li>
+      <li style="display:grid;grid-template-columns:21px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#1d5c4d;font-weight:600">10</span><span style="text-align:justify"><strong>Julho superou as projeções do próprio mercado</strong> (as casas estimavam ~180 mil bpd após as manutenções de junho) e a companhia foi mantida como <em>top pick</em> do setor pelo BTG — liderança relativa que é, em si, um ativo institucional.</span></li>
+      <li style="display:grid;grid-template-columns:21px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#1d5c4d;font-weight:600">11</span><span style="text-align:justify">O <strong>risco de contágio setorial</strong> (Margem Equatorial, licenciamento, pauta climática) exige diferenciação ativa: a PRIO opera em bacia madura e desenvolvida, não em nova fronteira.</span></li>
+      <li style="display:grid;grid-template-columns:21px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#8f2723;font-weight:600">12</span><span style="text-align:justify"><strong>A companhia é quase invisível fora do circuito financeiro.</strong> A concentração da cobertura em casas de análise e imprensa econômica revela baixa densidade de reputação institucional junto a reguladores, comunidades, trabalhadores e imprensa geral — os públicos que importam em momento de crise.</span></li>
+      <li style="display:grid;grid-template-columns:21px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#8f2723;font-weight:600">13</span><span style="text-align:justify"><strong>A produção é altamente concentrada:</strong> Peregrino responde sozinho por 41,8% e, com o cluster Valente, os dois ativos somam 78,8% do total — com 20% do campo ainda a adquirir.</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 02 ============ -->
+<div id="s2" data-screen-label="02 Temas Estratégicos" style="margin-top:8mm">
+  <div style="border-top:1.6px solid #161d1a;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#1d5c4d;font-weight:600">02</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b8f86">Mapeamento</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Temas Estratégicos do Mês</h2>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 4mm;text-align:justify">A leitura do período identificou dez temas-matriz. O quadro sintetiza cada um, sua relevância reputacional e o principal sinal do mês.</p>
+  </div>
+
+  <table style="width:100%;border-collapse:collapse;break-inside:auto">
+    <thead><tr>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#8b8f86;font-weight:500;padding:0 9px 2.4mm 0;border-bottom:1.5px solid #161d1a;width:36%">Tema estratégico</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#8b8f86;font-weight:500;padding:0 9px 2.4mm 0;border-bottom:1.5px solid #161d1a;width:14%">Relev.</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#8b8f86;font-weight:500;padding:0 0 2.4mm 0;border-bottom:1.5px solid #161d1a;width:50%">Sinal do mês</th>
+    </tr></thead>
+    <tbody style="font-size:11.5px;line-height:1.35">
+      <tr><td style="padding:2.4mm 9px 2.4mm 0;border-bottom:1px solid #ecece6;vertical-align:top;font-weight:500">Imposto de exportação de óleo</td><td style="padding:2.4mm 9px;border-bottom:1px solid #ecece6;vertical-align:top">Alta</td><td style="padding:2.4mm 0;border-bottom:1px solid #ecece6;vertical-align:top;color:#41473f">Vigente até dezembro; BTG ressalva impacto e mantém a PRIO como top pick</td></tr>
+      <tr><td style="padding:2.4mm 9px 2.4mm 0;border-bottom:1px solid #ecece6;vertical-align:top;font-weight:500">Recorde de produção e execução</td><td style="padding:2.4mm 9px;border-bottom:1px solid #ecece6;vertical-align:top">Alta</td><td style="padding:2.4mm 0;border-bottom:1px solid #ecece6;vertical-align:top;color:#41474d">196.260 boepd em julho (+10,2% m/m); vendas de 6,35 mi de barris</td></tr>
+      <tr><td style="padding:2.4mm 9px 2.4mm 0;border-bottom:1px solid #ecece6;vertical-align:top;font-weight:500">Intervenções operacionais de julho</td><td style="padding:2.4mm 9px;border-bottom:1px solid #ecece6;vertical-align:top">Alta</td><td style="padding:2.4mm 0;border-bottom:1px solid #ecece6;vertical-align:top;color:#41474d">Último poço de Wahoo (02/07); gas lift de Frade (19/07); ABL-68</td></tr>
+      <tr><td style="padding:2.4mm 9px 2.4mm 0;border-bottom:1px solid #ecece6;vertical-align:top;font-weight:500">Wahoo: conclusão do projeto</td><td style="padding:2.4mm 9px;border-bottom:1px solid #ecece6;vertical-align:top">Alta</td><td style="padding:2.4mm 0;border-bottom:1px solid #ecece6;vertical-align:top;color:#41474d">1º desenvolvimento integralmente executado pela companhia</td></tr>
+      <tr><td style="padding:2.4mm 9px 2.4mm 0;border-bottom:1px solid #ecece6;vertical-align:top;font-weight:500">Resultado do 2T26 e desalavancagem</td><td style="padding:2.4mm 9px;border-bottom:1px solid #ecece6;vertical-align:top">Alta</td><td style="padding:2.4mm 0;border-bottom:1px solid #ecece6;vertical-align:top;color:#41474d">Lucro de US$ 413,3 mi (+169%); alavancagem de 2,0x para 1,5x</td></tr>
+      <tr><td style="padding:2.4mm 9px 2.4mm 0;border-bottom:1px solid #ecece6;vertical-align:top;font-weight:500">Eficiência e lifting cost</td><td style="padding:2.4mm 9px;border-bottom:1px solid #ecece6;vertical-align:top">Alta</td><td style="padding:2.4mm 0;border-bottom:1px solid #ecece6;vertical-align:top;color:#41474d">Custo de extração em US$ 8,9/bbl, em trajetória de queda</td></tr>
+      <tr><td style="padding:2.4mm 9px 2.4mm 0;border-bottom:1px solid #ecece6;vertical-align:top;font-weight:500">Adiamento da política de dividendos</td><td style="padding:2.4mm 9px;border-bottom:1px solid #ecece6;vertical-align:top">Alta</td><td style="padding:2.4mm 0;border-bottom:1px solid #ecece6;vertical-align:top;color:#41474d">Prometida para o 1S26; agora condicionada ao cenário geopolítico</td></tr>
+      <tr><td style="padding:2.4mm 9px 2.4mm 0;border-bottom:1px solid #ecece6;vertical-align:top;font-weight:500">Peregrino e o gasoduto de gás</td><td style="padding:2.4mm 9px;border-bottom:1px solid #ecece6;vertical-align:top">Média</td><td style="padding:2.4mm 0;border-bottom:1px solid #ecece6;vertical-align:top;color:#41474d">Recomissionamento final; substituição da geração a diesel</td></tr>
+      <tr><td style="padding:2.4mm 9px 2.4mm 0;border-bottom:1px solid #ecece6;vertical-align:top;font-weight:500">Ambiente socioambiental do setor</td><td style="padding:2.4mm 9px;border-bottom:1px solid #ecece6;vertical-align:top">Alta</td><td style="padding:2.4mm 0;border-bottom:1px solid #ecece6;vertical-align:top;color:#41474d">Escrutínio sobre licenciamento e nova fronteira exploratória</td></tr>
+      <tr><td style="padding:2.4mm 9px 2.4mm 0;border-bottom:1px solid #ecece6;vertical-align:top;font-weight:500">Volatilidade do Brent e câmbio fiscal</td><td style="padding:2.4mm 9px;border-bottom:1px solid #ecece6;vertical-align:top">Média</td><td style="padding:2.4mm 0;border-bottom:1px solid #ecece6;vertical-align:top;color:#41474d">Preço do petróleo volátil; imposto de exportação até dez/26</td></tr>
+      <tr><td style="padding:2.4mm 9px 2.4mm 0;vertical-align:top;font-weight:500">Expectativa de mercado durante o mês</td><td style="padding:2.4mm 9px;vertical-align:top">Alta</td><td style="padding:2.4mm 0;vertical-align:top;color:#41474d">Casas projetavam ~180 mil bpd; BTG mantém PRIO como top pick do setor</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ============ SEÇÃO 03 ============ -->
+<div id="s3" data-screen-label="03 Leitura Reputacional" style="margin-top:8mm">
+  <div style="border-top:1.6px solid #161d1a;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#1d5c4d;font-weight:600">03</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b8f86">Diagnóstico</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Leitura Reputacional do Ambiente Externo</h2>
+
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:0 0 2.6mm;color:#161d1a;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#1d5c4d;font-weight:500">3.1</span><span>Narrativa predominante sobre a PRIO</span></h3>
+  <div style="max-width:160mm"><p style="margin:0 0 4.5mm;text-align:justify">A narrativa dominante é a de <strong>executora eficiente</strong>. A companhia é descrita, de forma consistente, como a petroleira independente que compra ativos maduros, reduz custos e amplia a vida útil dos campos — e o mês reforçou essa leitura com números que a sustentam. A conclusão de Wahoo acrescentou uma camada nova e valiosa: a de competência técnica própria, não apenas de gestão de ativos de terceiros. A cobertura é majoritariamente favorável e concentrada na imprensa econômica e em casas de análise.</p></div>
+
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:0 0 2.6mm;color:#161d1a;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#1d5c4d;font-weight:500">3.2</span><span>Risco reputacional dominante</span></h3>
+  <div style="max-width:160mm"><p style="margin:0 0 4.5mm;text-align:justify">O maior risco é o da <strong>expectativa não administrada</strong>. A empresa criou, com sua própria performance, um horizonte de remuneração ao acionista que hoje ocupa o centro das análises. Se a política vier abaixo do que o mercado projeta, ou se demorar mais que o previsto, a leitura pode virar rapidamente de “companhia disciplinada” para “companhia que não entrega o prometido” — mesmo com fundamentos intactos. É um risco de comunicação, não de operação.</p></div>
+
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:0 0 2.6mm;color:#161d1a;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#1d5c4d;font-weight:500">3.3</span><span>Oportunidade reputacional dominante</span></h3>
+  <div style="max-width:160mm"><p style="margin:0;text-align:justify">A principal oportunidade é consolidar a PRIO como <strong>caso brasileiro de eficiência industrial</strong>, e não apenas como tese de investimento. A combinação de crescer, desalavancar e reduzir custo simultaneamente é rara e tem valor narrativo muito além do público investidor — alcança formadores de opinião, poder público e a agenda de competitividade da indústria nacional. Hoje essa história circula quase exclusivamente no circuito financeiro.</p></div>
+</div>
+
+<!-- ============ SEÇÃO 04 ============ -->
+<div id="s4" data-screen-label="04 Análise Temática" style="margin-top:8mm">
+  <div style="border-top:1.6px solid #161d1a;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#1d5c4d;font-weight:600">04</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b8f86">Análise</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Análise Temática Aprofundada</h2>
+
+  <!-- 4.1 -->
+<div style="margin-top:6mm">
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:0 0 2.6mm;color:#161d1a;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#1d5c4d;font-weight:500">4.1</span><span>O imposto de exportação de óleo</span></h3>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 2.4mm;text-align:justify">Entre os fatores que atravessaram o mês, o <strong>imposto de exportação de óleo</strong> é o de efeito mais direto sobre o resultado da companhia — e o único inteiramente fora do seu controle. Vigente até dezembro, o tributo incide justamente sobre o elo em que a PRIO é mais forte: praticamente toda a sua produção é destinada ao mercado externo. Há aqui uma inversão de incentivo que merece registro: <strong>a empresa é onerada na proporção exata do seu êxito exportador</strong>, enquanto pares cujo mix de vendas é predominantemente doméstico atravessam o mesmo ciclo de preços altos sem essa carga.</p>
+    <p style="margin:0 0 2.4mm;text-align:justify">Essa assimetria foi explicitada pelo mercado no próprio mês. Em relatório de 28 de julho, o BTG Pactual avaliou que as petroleiras privadas entregariam resultados sólidos no 2T26 diante da alta de cerca de 28% do Brent no trimestre, <strong>ressalvando que PRIO e Brava seriam negativamente impactadas pelo imposto de exportação — diferentemente da PetroRecôncavo</strong>. Ainda assim, e este é o ponto central, a mesma casa manteve a PRIO como sua principal escolha entre as independentes brasileiras: o custo tributário foi lido como um fator de margem, não como uma fragilidade do negócio.</p>
+    <p style="margin:0;text-align:justify">A resposta da companhia, contudo, não é discursiva — é operacional. Enquanto o governo taxa a exportação, a PRIO reduz custo e amplia volume: <em>lifting cost</em> de US$ 8,9 por barril, entre os mais baixos do setor, e recorde de produção no mesmo mês. Quanto menor o custo de extração e maior a escala, menos o tributo consegue comprometer a margem. É importante nomear o que isso significa: <strong>o resultado que a companhia entrega em 2026 é obtido apesar da taxação, não graças a um ambiente favorável</strong>. O imposto reduz o ganho marginal de um ciclo de preços altos, mas não altera a competitividade do portfólio — e, tendo prazo definido, seu efeito recai sobre o resultado de um período, não sobre a tese de investimento.</p>
+  </div>
+  <div style="background:#eef4f1;border-left:3px solid #1d5c4d;padding:4mm 5mm;margin:3.5mm 0 0;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#1d5c4d;margin-bottom:2mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#28322e">O tema exige comunicação antecipada, didática e assertiva. Recomenda-se que a PRIO explique publicamente o efeito do imposto sobre a margem <strong>antes</strong> de ele aparecer nos números, deixando claro de quem é a decisão e de quem é a entrega: <strong>a taxação é externa e temporária; o recorde de produção e o custo de US$ 8,9/bbl são mérito da companhia</strong>. O par imposto + eficiência deve andar sempre na mesma frase — não para relativizar a carga, mas para impedir que uma compressão de margem imposta de fora seja lida como perda de desempenho da empresa. Vale ainda sustentar, com dados próprios e em tom técnico, o argumento de que onerar a exportação penaliza justamente quem investe para produzir mais, acompanhando de perto o debate sobre a prorrogação da medida e seus efeitos na atratividade do investimento em exploração no país.</p>
+  </div>
+</div>
+
+<!-- 4.2 -->
+  <div style="background:#1d5c4d;color:#fff;padding:3mm 5mm;margin-bottom:3.5mm;display:flex;align-items:baseline;gap:11px;break-after:avoid;max-width:160mm">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#bfe3d8;font-weight:500">4.2</span>
+    <span style="font-weight:600;font-size:15px;line-height:1.25">O recorde de julho: engenharia fina, não sorte de calendário</span>
+  </div>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 2.4mm;text-align:justify">Os dados operacionais de julho registraram produção diária total de 196.260 boepd, alta de 10,2% sobre junho e 14% acima da média do segundo trimestre, com vendas de 6.345.393 barris no mês. Peregrino, com 80% de participação da companhia, respondeu por 81.971 barris diários; o cluster Valente, que reúne Frade e Wahoo, por 67.099 barris de óleo e 5.631 boe de gás; Albacora Leste por 27.385 barris de óleo e 309 boe de gás; e o cluster Bravo, com Polvo e TBMT, por 13.865 barris.</p>
+    <p style="margin:0 0 2.4mm;text-align:justify">O ponto que merece atenção da comunicação é a origem do número. Julho não foi um mês de resultado passivo: foi um mês de intervenção. Em 2 de julho, a companhia abriu o último poço produtor de Wahoo, encerrando a abertura de todas as unidades previstas no desenvolvimento do campo. Em 19 de julho, concluiu a substituição da linha de gas lift em Frade, restabelecendo a produção de três poços que estavam temporariamente fechados — um ativo que vinha em declínio natural e voltou a contribuir com crescimento marginal. Em Albacora Leste, normalizou o poço ABL-68. Em Peregrino, a entrada de um novo poço recolocou a produção total do campo acima de 100 mil barris diários. E, no cluster Bravo, o poço OGX-44HP foi temporariamente interrompido para reparo da linha de produção, respondendo pelo único recuo do mês — de natureza programada e localizada.</p>
+    <p style="margin:0;text-align:justify">Essa leitura importa porque desmonta a interpretação preguiçosa de que o recorde é apenas efeito da entrada de Wahoo. Foram <strong>quatro frentes de intervenção simultâneas</strong>, em ativos de perfis distintos, executadas dentro de um único mês. É exatamente o tipo de competência que diferencia uma <strong>operadora</strong> de uma <strong>gestora de participações</strong>.</p>
+  </div>
+  <div style="background:#eef4f1;border-left:3px solid #1d5c4d;padding:4mm 5mm;margin:3.5mm 0 0;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#1d5c4d;margin-bottom:2mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#28322e">Recomenda-se que a comunicação da produção mensal deixe de ser puramente numérica e passe a narrar o trabalho por trás do número — quais intervenções foram feitas, em quais ativos e com que resultado. Isso transforma um dado obrigatório de mercado em prova recorrente de capacidade operacional, e constrói, mês a mês, o histórico de confiabilidade que sustenta a companhia nos períodos de preço adverso.</p>
+  </div>
+
+  <!-- 4.3 -->
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:6mm 0 2.6mm;color:#161d1a;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#1d5c4d;font-weight:500">4.3</span><span>Wahoo: a virada de chave da competência própria</span></h3>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 2.4mm;text-align:justify">A conclusão de Wahoo é o marco simbólico do período. O projeto — interligação submarina dos poços ao FPSO Frade, na Bacia de Campos — foi o primeiro desenvolvimento integralmente executado pela própria PRIO, e sua finalização encerra um ciclo que teve como último obstáculo regulatório a licença de operação concedida pelo IBAMA em março de 2026. Ao longo do segundo trimestre, a companhia concluiu a abertura de todos os poços produtores.</p>
+    <p style="margin:0;text-align:justify">O ponto reputacional é sutil e importante. Até aqui, a tese da PRIO era a de <strong>revitalizadora</strong>: comprar campos maduros de terceiros, cortar custos e estender vida útil. Wahoo adiciona a dimensão de <strong>desenvolvedora</strong>: a capacidade de conceber e executar um projeto do zero, com engenharia própria. Isso amplia o repertório institucional da empresa e a posiciona de forma diferente diante de reguladores, parceiros e do próprio mercado.</p>
+  </div>
+  <div style="background:#eef4f1;border-left:3px solid #1d5c4d;padding:4mm 5mm;margin:3.5mm 0 0;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#1d5c4d;margin-bottom:2mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#28322e">Wahoo deve ser comunicado não como um evento de produção, mas como prova de capacidade técnica nacional — um projeto submarino complexo, executado por uma empresa brasileira independente, dentro do prazo e do orçamento. É a narrativa que eleva a companhia da categoria de “boa alocadora de capital” para a de “operadora de classe mundial”.</p>
+  </div>
+
+  <!-- 4.4 -->
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:6mm 0 2.6mm;color:#161d1a;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#1d5c4d;font-weight:500">4.4</span><span>Resultado do 2T26: crescer e desalavancar ao mesmo tempo</span></h3>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 2.4mm;text-align:justify">O segundo trimestre entregou a combinação mais favorável possível para a leitura de mercado. O lucro líquido alcançou US$ 413,3 milhões, alta de 169% sobre o mesmo período do ano anterior, com EBITDA recorde e receita líquida de US$ 1,2 bilhão. A produção média do trimestre foi de 172.016 boepd, ante 155.355 boepd no primeiro trimestre. E, no balanço, a dívida líquida recuou para cerca de US$ 4,05 bilhões, com a alavancagem caindo de 2,0x para 1,5x dívida líquida/EBITDA, mesmo com recompras de ações de US$ 114 milhões no período e capex elevado de US$ 285 milhões — este último explicado pelo desenvolvimento de Wahoo, pelos reparos no gasoduto de Peregrino, pelo início do desenvolvimento de Arapuçá e pela perfuração em Frade (XP Investimentos; Genial Investimentos, 08/2026).</p>
+    <p style="margin:0;text-align:justify">Analistas descreveram o trimestre como uma transição de fase: de uma história de crescimento por aquisição para uma história de geração de caixa livre. É uma mudança de identidade corporativa que merece tratamento comunicacional próprio, porque altera o tipo de investidor, de parceiro e de escrutínio que a companhia atrai.</p>
+  </div>
+  <div style="background:#eef4f1;border-left:3px solid #1d5c4d;padding:4mm 5mm;margin:3.5mm 0 0;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#1d5c4d;margin-bottom:2mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#28322e">A mensagem-síntese do trimestre — crescer, desalavancar e reduzir custo simultaneamente — é a mais poderosa que a empresa tem à disposição e deve ser repetida com consistência. Recomenda-se traduzi-la para públicos não financeiros, mostrando o que significa em termos de solidez, previsibilidade e capacidade de investimento de longo prazo.</p>
+  </div>
+
+  <!-- 4.5 -->
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:6mm 0 2.6mm;color:#161d1a;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#1d5c4d;font-weight:500">4.5</span><span>Eficiência: o lifting cost como assinatura da companhia</span></h3>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 2.4mm;text-align:justify">O custo de extração recuou para US$ 8,9 por barril no segundo trimestre, queda de 5% em relação ao trimestre anterior, explicada sobretudo pela otimização de custos em Peregrino e pela diluição de custos fixos com a maior produção de Wahoo. A trajetória de queda deve continuar à medida que a produção cresce e o plano de redução de custos em Peregrino avança.</p>
+    <p style="margin:0;text-align:justify">O lifting cost é, historicamente, a assinatura competitiva da PRIO e o indicador que melhor traduz sua tese ao público leigo: a companhia extrai petróleo mais barato do que a média do setor, o que a torna resiliente a ciclos de preço. Em um ambiente de Brent volátil, essa resiliência é o principal argumento de estabilidade.</p>
+  </div>
+  <div style="background:#eef4f1;border-left:3px solid #1d5c4d;padding:4mm 5mm;margin:3.5mm 0 0;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#1d5c4d;margin-bottom:2mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#28322e">O lifting cost deve ser comunicado como métrica-âncora da identidade da empresa — a prova objetiva da eficiência. Vale construir material didático que explique o indicador para públicos não especializados, transformando um número técnico em símbolo de competência.</p>
+  </div>
+
+  <!-- 4.5 — RISCO PRINCIPAL -->
+  <div style="background:#8f2723;color:#fff;padding:3mm 5mm;margin:6mm 0 3.5mm;display:flex;align-items:baseline;gap:11px;break-after:avoid;max-width:160mm">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#f2d0ce;font-weight:500">4.6</span>
+    <span style="font-weight:600;font-size:15px;line-height:1.25">O adiamento da política de dividendos: o passivo de expectativa</span>
+  </div>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 2.4mm;text-align:justify">Este é o tema de maior sensibilidade reputacional do período, e o único claramente desfavorável. A companhia havia indicado que divulgaria sua política de remuneração ao acionista no primeiro semestre de 2026. O prazo passou sem anúncio e, questionada, a empresa indicou que aguarda melhora do cenário geopolítico para apresentá-la. O mercado, que já tratava a distribuição como consequência natural da desalavancagem, manteve o tema no topo da agenda: XP resumiu o momento como “próxima parada — dividendos”, e o Goldman Sachs registrou explicitamente que aguarda novidades sobre a política que a companhia havia indicado divulgar no primeiro semestre.</p>
+    <p style="margin:0 0 2.4mm;text-align:justify">O racional do adiamento é tecnicamente defensável. O ano concentra fatores atípicos: o pagamento da última parcela de Peregrino, as recompras já executadas (cerca de US$ 180 milhões no semestre), o imposto de exportação vigente até dezembro e a forte volatilidade do Brent, influenciada por tensões geopolíticas. Prudência de caixa, num setor cíclico, é virtude — e o próprio mercado reconhece isso.</p>
+    <p style="margin:0;text-align:justify">O risco, porém, é de percepção. Uma promessa de prazo não cumprida cria um precedente que contamina anúncios futuros: a cada nova sinalização de cronograma, o mercado descontará credibilidade. E há um efeito colateral menos óbvio — <strong>o adiamento por “cenário geopolítico” transfere a explicação para uma variável externa e vaga, o que soa mais frágil do que um critério objetivo de balanço</strong>.</p>
+  </div>
+  <div style="background:#fbeeed;border-left:3px solid #8f2723;padding:4mm 5mm;margin:3.5mm 0 0;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#8f2723;margin-bottom:2mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#28322e">Recomenda-se substituir a justificativa contextual por um critério explícito e verificável — por exemplo, o patamar de alavancagem ou de geração de caixa que destravará a política. <strong>Comunicar o gatilho, e não a data</strong>, elimina o risco de novo descumprimento de prazo e transfere a conversa da expectativa para a governança. Quando o anúncio vier, a arquitetura de comunicação deve apresentar método, critérios e sustentabilidade antes de qualquer número.</p>
+  </div>
+
+  <!-- 4.7 -->
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:6mm 0 2.6mm;color:#161d1a;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#1d5c4d;font-weight:500">4.7</span><span>Peregrino e o próximo ciclo de eficiência</span></h3>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 2.4mm;text-align:justify">Peregrino consolidou-se como o maior ativo individual da companhia, com 81.971 barris diários em julho. O foco agora é a otimização: o gasoduto de importação de gás, após os reparos, encontra-se nos estágios finais de recomissionamento e deve substituir a geração de energia a diesel — movimento com impacto direto e estrutural sobre o custo operacional do ativo.</p>
+    <p style="margin:0;text-align:justify">Há aqui uma dimensão pouco explorada: a substituição de diesel por gás na geração de energia é, além de uma medida de custo, uma medida de redução de intensidade de emissões. Em um setor sob escrutínio climático, iniciativas concretas de eficiência energética têm valor reputacional que ultrapassa o resultado financeiro.</p>
+  </div>
+  <div style="background:#eef4f1;border-left:3px solid #1d5c4d;padding:4mm 5mm;margin:3.5mm 0 0;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#1d5c4d;margin-bottom:2mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#28322e">Comunicar a troca de diesel por gás em Peregrino como iniciativa de eficiência e de redução de emissões — com dados, quando disponíveis — é uma oportunidade de construir credibilidade ambiental baseada em fato operacional, e não em discurso. É o tipo de prova que sustenta posicionamento em ESG sem exposição a acusações de greenwashing.</p>
+  </div>
+
+  <!-- 4.8 -->
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:6mm 0 2.6mm;color:#161d1a;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#1d5c4d;font-weight:500">4.8</span><span>O ambiente socioambiental do setor e o risco de contágio</span></h3>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 2.4mm;text-align:justify">O setor de óleo e gás brasileiro atravessa um período de escrutínio socioambiental intenso, concentrado sobretudo na agenda da Margem Equatorial e da Foz do Amazonas — fronteira exploratória cuja condução envolve outra operadora e que mobiliza órgãos de controle, Ministério Público, organizações ambientais e representações de comunidades tradicionais. Episódios de licenciamento e incidentes operacionais nessa fronteira têm gerado ampla repercussão negativa para a indústria como um todo.</p>
+    <p style="margin:0;text-align:justify">A PRIO não participa dessa disputa: sua operação está concentrada na Bacia de Campos, em campos já desenvolvidos e com licenciamento consolidado, e sua tese é justamente a de extrair mais valor de ativos existentes, e não a de abrir novas fronteiras. Essa distinção, porém, não é evidente para o público não especializado — e o risco de contágio de imagem é real quando “petroleira” vira categoria única no debate público.</p>
+  </div>
+  <div style="background:#eef4f1;border-left:3px solid #1d5c4d;padding:4mm 5mm;margin:3.5mm 0 0;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#1d5c4d;margin-bottom:2mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#28322e">Cabe à companhia diferenciar-se ativamente, comunicando o que a define — revitalização de campos maduros, extensão de vida útil de ativos, eficiência energética — sem se posicionar sobre disputas de terceiros nem sobre a agenda política da nova fronteira. A neutralidade quanto ao debate alheio, somada à afirmação clara do próprio modelo, é a proteção mais eficaz.</p>
+  </div>
+
+  <!-- 4.9 -->
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:6mm 0 2.6mm;color:#161d1a;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#1d5c4d;font-weight:500">4.9</span><span>Volatilidade do Brent e o ambiente fiscal</span></h3>
+  <div style="max-width:160mm">
+    <p style="margin:0;text-align:justify">O ambiente externo permanece o principal fator fora do controle da companhia. A volatilidade do preço do petróleo — influenciada por tensões geopolíticas — torna difícil projetar o preço médio do ano, e o imposto de exportação vigente até dezembro de 2026 adiciona uma variável fiscal relevante ao cálculo de geração de caixa. Casas de análise têm revisado suas premissas de Brent com frequência, o que amplia a dispersão das projeções sobre a companhia.</p>
+  </div>
+  <div style="background:#eef4f1;border-left:3px solid #1d5c4d;padding:4mm 5mm;margin:3.5mm 0 0;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#1d5c4d;margin-bottom:2mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#28322e">Em ambiente de preço volátil, a comunicação deve enfatizar aquilo que a companhia controla — custo, execução e disciplina de capital —, reforçando a resiliência do baixo lifting cost como proteção estrutural. Evitar projeções próprias sobre preço de petróleo é prudente: aproxima a empresa do papel de operadora, e não de casa de análise.</p>
+  </div>
+
+  <!-- 4.9 CONCENTRAÇÃO -->
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:6mm 0 2.6mm;color:#161d1a;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#1d5c4d;font-weight:500">4.10</span><span>Concentração da produção: o risco embutido no sucesso</span></h3>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 2.4mm;text-align:justify">Há um dado que a leitura celebratória do recorde tende a encobrir: a produção da PRIO está fortemente concentrada. Com base nos números de julho, <strong>Peregrino responde sozinho por 41,8%</strong> de toda a produção da companhia (81.971 de 196.260 boepd); somado ao cluster Valente (37,1%), os dois ativos concentram <strong>78,8% do total</strong>. Albacora Leste representa 14,1% e o cluster Bravo, 7,1%.</p>
+    <p style="margin:0 0 2.4mm;text-align:justify">Há duas implicações. A primeira é operacional: qualquer parada não programada em Peregrino — falha de equipamento, exigência regulatória, incidente — tem impacto desproporcional sobre o resultado consolidado e sobre a percepção de previsibilidade que a companhia acabou de construir. A segunda é societária: a PRIO ainda detém 80% do campo, com a aquisição dos 20% remanescentes pendente de conclusão. Até lá, o ativo mais relevante da empresa é compartilhado, o que adiciona uma variável de governança e de comunicação — decisões e comunicados sobre o campo envolvem uma sócia.</p>
+    <p style="margin:0;text-align:justify">Vale registrar o contraponto: a concentração é consequência direta de uma estratégia bem-sucedida de aquisição, e não de fragilidade. O ponto não é evitá-la, e sim <strong>reconhecê-la publicamente antes que um evento a exponha</strong>.</p>
+  </div>
+
+  <div style="border-top:1.6px solid #161d1a;margin-top:4mm;padding-top:4mm;break-inside:avoid;max-width:160mm">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#8b8f86;margin-bottom:3.5mm">Composição da produção · julho de 2026</div>
+    <div style="display:flex;height:24px;width:100%;overflow:hidden;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#fff">
+      <div style="width:41.8%;background:#1d5c4d;display:flex;align-items:center;padding-left:7px">41,8%</div>
+      <div style="width:37.1%;background:#2f8f6f;display:flex;align-items:center;padding-left:7px">37,1%</div>
+      <div style="width:14.1%;background:#5fc2a4;color:#0d2b23;display:flex;align-items:center;padding-left:7px">14,1%</div>
+      <div style="width:7.1%;background:#b9cfc6;color:#0d2b23;display:flex;align-items:center;padding-left:5px">7,1%</div>
+    </div>
+    <div style="display:flex;gap:16px;margin-top:3mm;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b6360;flex-wrap:wrap">
+      <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:9px;height:9px;background:#1d5c4d;display:inline-block"></span>Peregrino</span>
+      <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:9px;height:9px;background:#2f8f6f;display:inline-block"></span>Cluster Valente (Frade + Wahoo)</span>
+      <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:9px;height:9px;background:#5fc2a4;display:inline-block"></span>Albacora Leste</span>
+      <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:9px;height:9px;background:#b9cfc6;display:inline-block"></span>Cluster Bravo</span>
+    </div>
+  </div>
+
+  <div style="background:#eef4f1;border-left:3px solid #1d5c4d;padding:4mm 5mm;margin:4mm 0 0;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#1d5c4d;margin-bottom:2mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#28322e">Recomenda-se que a companhia incorpore ao seu discurso a <strong>leitura de carteira</strong> — mostrando como Albacora Leste, Bravo e os novos poços de Frade diversificam a base ao longo do tempo —, em vez de deixar que a narrativa gire exclusivamente em torno dos dois ativos dominantes. Preparar previamente uma linha de resposta para eventual parada em Peregrino é medida de prudência elementar.</p>
+  </div>
+
+  <!-- 4.10 DESCOMISSIONAMENTO -->
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:6mm 0 2.6mm;color:#161d1a;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#1d5c4d;font-weight:500">4.11</span><span>Descomissionamento: o passivo que o modelo carrega</span></h3>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 2.4mm;text-align:justify">Um tema estruturalmente ligado à tese da PRIO e praticamente ausente do debate público sobre a companhia: o descomissionamento. O modelo de negócio — adquirir campos maduros e estender sua vida útil — significa, por definição, herdar a obrigação de desativar instalações ao fim da produção. A <strong>Resolução ANP nº 817/2020</strong> disciplina o tema e exige que as propostas considerem critérios técnicos, ambientais, sociais e de segurança, incluindo a avaliação de impactos sobre comunidades e sobre os postos de trabalho, além de garantias financeiras cuja execução pode ser acionada em caso de descumprimento.</p>
+    <p style="margin:0;text-align:justify">Do ponto de vista reputacional, isso cria uma <strong>assimetria de horizonte</strong>: a companhia colhe hoje o benefício de estender a vida de ativos que outros abandonariam — o que é positivo, inclusive ambientalmente, por evitar novas fronteiras — mas acumula uma obrigação futura cuja magnitude o público não financeiro desconhece. Empresas que antecipam esse tipo de discussão constroem credibilidade; as que são surpreendidas por ela costumam pagar caro.</p>
+  </div>
+  <div style="background:#eef4f1;border-left:3px solid #1d5c4d;padding:4mm 5mm;margin:3.5mm 0 0;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#1d5c4d;margin-bottom:2mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#28322e">Recomenda-se tratar o descomissionamento de forma proativa na comunicação institucional, apresentando-o como parte <strong>planejada e provisionada</strong> do ciclo de vida dos ativos. Enquadrado assim, o tema deixa de ser passivo oculto e passa a ser evidência de maturidade e de responsabilidade de longo prazo.</p>
+  </div>
+
+  <!-- 4.12 -->
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:6mm 0 2.6mm;color:#161d1a;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#1d5c4d;font-weight:500">4.12</span><span>O mês visto pelo mercado: expectativa, comparação e consolidação</span></h3>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 2.4mm;text-align:justify">Durante julho, a companhia foi lida pelo mercado sobretudo em chave comparativa e prospectiva. Após as manutenções que reduziram a produção de junho a cerca de 171 mil barris diários, as casas projetavam recuperação: o Goldman Sachs estimava que a produção se aproximasse de 180 mil bpd, assumindo um mês completo do quarto poço de Wahoo, e apontava o horizonte de cerca de 200 mil bpd após a conclusão da compra dos 20% remanescentes de Peregrino. A XP registrava os dados de junho como “marginalmente positivos” e projetava avanço sequencial puxado por Frade+Wahoo e Peregrino.</p>
+    <p style="margin:0;text-align:justify">No comparativo setorial, a PRIO manteve posição de destaque. O BTG Pactual, em relatório de 28 de julho, avaliou que as petroleiras privadas entregariam resultados sólidos no 2T26 diante da alta de cerca de 28% do Brent no trimestre, ressalvando que PRIO e Brava seriam negativamente impactadas pelo imposto de exportação — diferentemente da PetroRecôncavo — e <strong>manteve a PRIO como sua principal escolha entre as independentes brasileiras</strong>. A XP também apontava a companhia como a mais bem posicionada para capturar os ganhos de curto prazo com a alta do petróleo.</p>
+  </div>
+  <div style="background:#eef4f1;border-left:3px solid #1d5c4d;padding:4mm 5mm;margin:3.5mm 0 0;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#1d5c4d;margin-bottom:2mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#28322e">O mês consolidou a PRIO como referência do segmento — <em>top pick</em> recorrente e parâmetro de comparação para as demais. Essa liderança relativa é um ativo institucional que a companhia pode explorar, posicionando-se como a <strong>empresa que define o padrão de eficiência das independentes brasileiras</strong>, e não apenas como uma entre elas.</p>
+  </div>
+</div>
+
+<!-- ============ 4-A STAKEHOLDERS ============ -->
+<div id="s4a" data-screen-label="4-A Stakeholders" style="margin-top:8mm">
+  <div style="border-top:1.6px solid #161d1a;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#1d5c4d;font-weight:600">4-A</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b8f86">Atores</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Mapa de Stakeholders e Narrativas</h2>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 4mm;text-align:justify">O ambiente reputacional da PRIO mobiliza públicos com graus muito distintos de atenção — e a <strong>assimetria entre eles</strong> é, hoje, a principal fragilidade estrutural da companhia em comunicação.</p>
+  </div>
+
+  <table style="width:100%;border-collapse:collapse;break-inside:auto;max-width:160mm">
+    <thead><tr>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#8b8f86;font-weight:500;padding:0 9px 2.4mm 0;border-bottom:1.5px solid #161d1a;width:27%">Público</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#8b8f86;font-weight:500;padding:0 9px 2.4mm 0;border-bottom:1.5px solid #161d1a;width:16%">Presença hoje</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#8b8f86;font-weight:500;padding:0 0 2.4mm 0;border-bottom:1.5px solid #161d1a;width:57%">Leitura</th>
+    </tr></thead>
+    <tbody style="font-size:11.5px;line-height:1.4">
+      <tr><td style="padding:2.6mm 9px 2.6mm 0;border-bottom:1px solid #ecece6;vertical-align:top;font-weight:500">Mercado de capitais</td><td style="padding:2.6mm 9px;border-bottom:1px solid #ecece6;vertical-align:top;color:#2f7d4f;font-weight:500">Alta</td><td style="padding:2.6mm 0;border-bottom:1px solid #ecece6;vertical-align:top;color:#41474d">Público mais bem atendido e mais ativo; origem de quase toda a narrativa pública — e da principal cobrança do momento, a política de remuneração.</td></tr>
+      <tr><td style="padding:2.6mm 9px 2.6mm 0;border-bottom:1px solid #ecece6;vertical-align:top;font-weight:500">Reguladores (ANP, IBAMA)</td><td style="padding:2.6mm 9px;border-bottom:1px solid #ecece6;vertical-align:top;color:#6b7075;font-weight:500">Técnica</td><td style="padding:2.6mm 0;border-bottom:1px solid #ecece6;vertical-align:top;color:#41474d">Maior poder sobre a operação. Histórico recente favorável (licença de Wahoo), mas a dependência é permanente: perfuração, instalação e descomissionamento.</td></tr>
+      <tr><td style="padding:2.6mm 9px 2.6mm 0;border-bottom:1px solid #ecece6;vertical-align:top;font-weight:500">Comunidades e poder público regional</td><td style="padding:2.6mm 9px;border-bottom:1px solid #ecece6;vertical-align:top;color:#b23b36;font-weight:500">Baixa</td><td style="padding:2.6mm 0;border-bottom:1px solid #ecece6;vertical-align:top;color:#41474d">Mais relevante para a licença social e o menos presente na cobertura. Região (RJ, Macaé, Norte Fluminense) historicamente dependente da cadeia de petróleo.</td></tr>
+      <tr><td style="padding:2.6mm 9px 2.6mm 0;border-bottom:1px solid #ecece6;vertical-align:top;font-weight:500">Trabalhadores e sindicatos offshore</td><td style="padding:2.6mm 9px;border-bottom:1px solid #ecece6;vertical-align:top;color:#b23b36;font-weight:500">Baixa</td><td style="padding:2.6mm 0;border-bottom:1px solid #ecece6;vertical-align:top;color:#41474d">Peso específico no setor, com capacidade de mobilização e de pauta. Não há registro relevante de atrito no período monitorado.</td></tr>
+      <tr><td style="padding:2.6mm 9px 2.6mm 0;border-bottom:1px solid #ecece6;vertical-align:top;font-weight:500">Sociedade civil e ambientalistas</td><td style="padding:2.6mm 9px;border-bottom:1px solid #ecece6;vertical-align:top;color:#6b7075;font-weight:500">Indireta</td><td style="padding:2.6mm 0;border-bottom:1px solid #ecece6;vertical-align:top;color:#41474d">Concentrados na agenda da nova fronteira exploratória — na qual a PRIO não figura —, mas o setor é tratado em bloco no debate climático.</td></tr>
+      <tr><td style="padding:2.6mm 9px 2.6mm 0;vertical-align:top;font-weight:500">Pares e setor</td><td style="padding:2.6mm 9px;vertical-align:top;color:#6b7075;font-weight:500">Comparativa</td><td style="padding:2.6mm 0;vertical-align:top;color:#41474d">Petrobras como vendedora recorrente de ativos e independentes como Brava e PetroRecôncavo, em ciclo de consolidação, formam o campo em que a performance é lida.</td></tr>
+    </tbody>
+  </table>
+
+  <div style="background:#eef4f1;border-left:3px solid #1d5c4d;padding:4mm 5mm;margin:4mm 0 0;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#1d5c4d;margin-bottom:2mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#28322e">A companhia é excelente na comunicação com um único público — o financeiro — e <strong>quase silenciosa com todos os demais</strong>. Recomenda-se construir uma agenda de relacionamento com reguladores, imprensa regional e comunidades <em>antes de precisar deles</em>. Reputação institucional se constrói no tempo da normalidade e se resgata, com dificuldade, no tempo da crise.</p>
+  </div>
+</div>
+
+<!-- ============ 4-B TENDÊNCIAS ============ -->
+<div id="s4b" data-screen-label="4-B Tendências" style="margin-top:8mm">
+  <div style="border-top:1.6px solid #161d1a;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#1d5c4d;font-weight:600">4-B</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b8f86">Prospecção</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Tendências e Sinais Emergentes</h2>
+  <div style="max-width:160mm"><p style="margin:0 0 4.5mm;text-align:justify">Três movimentos merecem acompanhamento nos próximos ciclos.</p></div>
+  <div style="display:flex;flex-direction:column;gap:4.5mm">
+    <div style="display:grid;grid-template-columns:32px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:26px;font-weight:300;color:#1d5c4d;line-height:.9">01</div>
+      <div><div style="font-weight:600;font-size:14px;margin-bottom:1.6mm">Transição de identidade corporativa</div><p style="margin:0;text-align:justify">De empresa de crescimento por aquisição para empresa de retorno de capital. Isso muda a base acionária, o tipo de cobrança e o perfil de escrutínio — de “quanto você cresce” para “quanto você distribui e com que disciplina”.</p></div>
+    </div>
+    <div style="display:grid;grid-template-columns:32px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:26px;font-weight:300;color:#1d5c4d;line-height:.9">02</div>
+      <div><div style="font-weight:600;font-size:14px;margin-bottom:1.6mm">Consolidação do setor de independentes</div><p style="margin:0;text-align:justify">Movimentos societários relevantes entre pares recolocam periodicamente a PRIO como potencial compradora — e cada especulação nesse sentido tensiona a narrativa de disciplina de capital que a companhia vem construindo.</p></div>
+    </div>
+    <div style="display:grid;grid-template-columns:32px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:26px;font-weight:300;color:#1d5c4d;line-height:.9">03</div>
+      <div><div style="font-weight:600;font-size:14px;margin-bottom:1.6mm">Endurecimento da agenda climática e de licenciamento</div><p style="margin:0;text-align:justify">Tende a se intensificar com a proximidade de compromissos internacionais. A PRIO tem, nesse ambiente, um argumento estruturalmente favorável e <strong>subutilizado</strong>: estender a vida de campos existentes evita a abertura de novas fronteiras — um enquadramento que a diferencia positivamente e que hoje ela não usa.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 05 ============ -->
+<div id="s5" data-screen-label="05 Riscos" style="margin-top:8mm">
+  <div style="border-top:1.6px solid #161d1a;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#1d5c4d;font-weight:600">05</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b8f86">Riscos</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Riscos Reputacionais Prioritários</h2>
+
+  <div style="break-inside:avoid;margin-bottom:5mm">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#8b8f86;margin-bottom:4mm">Matriz de risco · probabilidade × impacto</div>
+    <div style="display:flex;gap:8px;max-width:148mm">
+      <div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#8b8f86;display:flex;align-items:center;justify-content:center;padding-bottom:16px">Impacto</div>
+      <div style="flex:1">
+        <div style="display:grid;grid-template-columns:22mm 1fr 1fr 1fr;grid-auto-rows:48px;gap:4px">
+          <div style="display:flex;align-items:center;justify-content:flex-end;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#5b6360;padding-right:5px">Muito alto</div>
+          <div style="background:#f4f5f2;display:flex;align-items:center;justify-content:center"><span style="width:26px;height:26px;border-radius:50%;background:#8f2723;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">7</span></div>
+          <div style="background:#f7ddcf"></div>
+          <div style="background:#f2cfc9"></div>
+
+          <div style="display:flex;align-items:center;justify-content:flex-end;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#5b6360;padding-right:5px">Alto</div>
+          <div style="background:#f7f8f5"></div>
+          <div style="background:#fbeede;display:flex;align-items:center;justify-content:center;gap:5px"><span style="width:26px;height:26px;border-radius:50%;background:#a5322d;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">2</span><span style="width:26px;height:26px;border-radius:50%;background:#a5322d;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">5</span></div>
+          <div style="background:#f2cfc9;display:flex;align-items:center;justify-content:center"><span style="width:26px;height:26px;border-radius:50%;background:#8f2723;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">3</span></div>
+
+          <div style="display:flex;align-items:center;justify-content:flex-end;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#5b6360;padding-right:5px">Médio</div>
+          <div style="background:#f7f8f5"></div>
+          <div style="background:#f4f5f2;display:flex;align-items:center;justify-content:center"><span style="width:26px;height:26px;border-radius:50%;background:#6b7570;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">4</span><span style="width:27px;height:27px;border-radius:50%;background:#6b7075;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">8</span></div>
+          <div style="background:#fbeede;display:flex;align-items:center;justify-content:center;gap:5px"><span style="width:26px;height:26px;border-radius:50%;background:#c1732a;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">1</span><span style="width:26px;height:26px;border-radius:50%;background:#c1732a;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">6</span></div>
+        </div>
+        <div style="display:grid;grid-template-columns:22mm 1fr 1fr 1fr;gap:4px;margin-top:5px">
+          <div></div>
+          <div style="text-align:center;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#5b6360">Baixa-média</div>
+          <div style="text-align:center;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#5b6360">Média-alta</div>
+          <div style="text-align:center;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#5b6360">Alta</div>
+        </div>
+        <div style="text-align:center;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#8b8f86;margin-top:6px;padding-left:22mm">Probabilidade</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:4.5mm">
+    <div style="display:grid;grid-template-columns:29px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="width:27px;height:27px;border-radius:50%;background:#8f2723;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">1</div>
+      <div>
+        <div style="font-weight:600;font-size:14px;margin-bottom:2mm;line-height:1.3">Compressão de margem pelo imposto de exportação lida como perda de eficiência</div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:10px;margin-bottom:2mm"><span><span style="color:#8b8f86">Probabilidade</span> <span style="color:#161d1a;font-weight:500">Alta</span></span><span><span style="color:#8b8f86">Impacto</span> <span style="color:#c1732a;font-weight:500">Médio-alto</span></span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b6360;margin-bottom:2mm">Sinal do mês — revisões frequentes de premissas de preço; imposto de exportação até dezembro.</div>
+        <p style="margin:0;text-align:justify">Como o tributo incide sobre a receita de exportação — destino de quase toda a produção —, ele reduz a margem sem qualquer relação com o desempenho operacional. Se o efeito não for explicado antes de aparecer nos números, a queda tende a ser atribuída à companhia, e não a quem a determinou. O contra-argumento está pronto e é factual: recorde de produção e <em>lifting cost</em> de US$ 8,9/bbl no mesmo mês — a empresa entregou; a conta veio de fora.</p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:29px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="width:27px;height:27px;border-radius:50%;background:#a5322d;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">2</div>
+      <div>
+        <div style="font-weight:600;font-size:14px;margin-bottom:2mm;line-height:1.3">Contágio pela crise socioambiental do setor</div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:10px;margin-bottom:2mm"><span><span style="color:#8b8f86">Probabilidade</span> <span style="color:#161d1a;font-weight:500">Média-alta</span></span><span><span style="color:#8b8f86">Impacto</span> <span style="color:#b23b36;font-weight:500">Alto</span></span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b6360;margin-bottom:2mm">Sinal do mês — escrutínio intenso sobre licenciamento e nova fronteira exploratória.</div>
+        <p style="margin:0;text-align:justify">No debate público, “petroleira” tende a virar categoria única, e a PRIO pode absorver desgaste de controvérsias das quais não participa.</p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:29px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="width:27px;height:27px;border-radius:50%;background:#c1732a;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">3</div>
+      <div>
+        <div style="font-weight:600;font-size:14px;margin-bottom:2mm;line-height:1.3">Erosão de credibilidade de cronograma na política de dividendos</div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:10px;margin-bottom:2mm"><span><span style="color:#8b8f86">Probabilidade</span> <span style="color:#161d1a;font-weight:500">Alta</span></span><span><span style="color:#8b8f86">Impacto</span> <span style="color:#b23b36;font-weight:500">Alto</span></span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b6360;margin-bottom:2mm">Sinal do mês — política prometida para o 1S26 não foi divulgada; adiamento atribuído ao cenário geopolítico.</div>
+        <p style="margin:0;text-align:justify">Prazo sinalizado e não cumprido cria precedente que desconta credibilidade de anúncios futuros — e a justificativa por variável externa soa mais frágil que um critério objetivo de balanço.</p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:29px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="width:27px;height:27px;border-radius:50%;background:#6b7570;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">4</div>
+      <div>
+        <div style="font-weight:600;font-size:14px;margin-bottom:2mm;line-height:1.3">Elevação da régua de expectativa operacional</div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:10px;margin-bottom:2mm"><span><span style="color:#8b8f86">Probabilidade</span> <span style="color:#161d1a;font-weight:500">Média-alta</span></span><span><span style="color:#8b8f86">Impacto</span> <span style="color:#c1732a;font-weight:500">Médio</span></span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b6360;margin-bottom:2mm">Sinal do mês — recorde de produção estabelece novo patamar de referência.</div>
+        <p style="margin:0;text-align:justify">Depois de recordes sucessivos, qualquer estabilização ou recuo natural de produção tende a ser lido como perda de ritmo.</p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:29px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="width:27px;height:27px;border-radius:50%;background:#a5322d;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">5</div>
+      <div>
+        <div style="font-weight:600;font-size:14px;margin-bottom:2mm;line-height:1.3">Concentração da produção em Peregrino</div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:10px;margin-bottom:2mm"><span><span style="color:#8b8f86">Probabilidade</span> <span style="color:#161d1a;font-weight:500">Média</span></span><span><span style="color:#8b8f86">Impacto</span> <span style="color:#b23b36;font-weight:500">Alto</span></span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b6360;margin-bottom:2mm">Sinal do mês — o campo responde por 41,8% da produção; 20% ainda a adquirir.</div>
+        <p style="margin:0;text-align:justify">Parada não programada no ativo dominante teria impacto desproporcional sobre o resultado e sobre a percepção de previsibilidade recém-construída.</p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:29px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="width:27px;height:27px;border-radius:50%;background:#a5322d;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">6</div>
+      <div>
+        <div style="font-weight:600;font-size:14px;margin-bottom:2mm;line-height:1.3">Baixa densidade de reputação institucional</div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:10px;margin-bottom:2mm"><span><span style="color:#8b8f86">Probabilidade</span> <span style="color:#161d1a;font-weight:500">Alta</span></span><span><span style="color:#8b8f86">Impacto</span> <span style="color:#c1732a;font-weight:500">Médio-alto</span></span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b6360;margin-bottom:2mm">Sinal do mês — cobertura praticamente restrita ao circuito financeiro.</div>
+        <p style="margin:0;text-align:justify">Uma empresa conhecida apenas como ativo tem pouca reserva de credibilidade junto a públicos não financeiros — exatamente os que importam em momento de crise.</p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:29px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="width:27px;height:27px;border-radius:50%;background:#8f2723;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">7</div>
+      <div>
+        <div style="font-weight:600;font-size:14px;margin-bottom:2mm;line-height:1.3">Incidente operacional em ativo offshore</div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:10px;margin-bottom:2mm"><span><span style="color:#8b8f86">Probabilidade</span> <span style="color:#161d1a;font-weight:500">Baixa-média</span></span><span><span style="color:#8b8f86">Impacto</span> <span style="color:#b23b36;font-weight:500;white-space:nowrap">Muito alto</span></span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b6360;margin-bottom:2mm">Sinal do mês — ambiente regulatório e midiático de baixa tolerância a incidentes.</div>
+        <p style="margin:0;text-align:justify">Em um setor sob escrutínio, qualquer ocorrência ambiental teria repercussão desproporcional ao seu porte técnico.</p>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:29px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="width:27px;height:27px;border-radius:50%;background:#6b7075;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">8</div>
+      <div>
+        <div style="font-weight:600;font-size:14px;margin-bottom:2mm;line-height:1.3">Volatilidade do Brent e do ambiente fiscal</div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:10px;margin-bottom:2mm"><span><span style="color:#8b8f86">Probabilidade</span> <span style="color:#161d1a;font-weight:500">Média-alta</span></span><span><span style="color:#8b8f86">Impacto</span> <span style="color:#c1732a;font-weight:500">Médio</span></span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b6360;margin-bottom:2mm">Sinal do mês — revisões frequentes de premissas de preço; Brent +28% no trimestre.</div>
+        <p style="margin:0;text-align:justify">Além do imposto, o preço do petróleo e o câmbio seguem como variáveis fora do controle da companhia: podem comprimir a geração de caixa e afetar a percepção de entrega, independentemente da performance operacional.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 06 ============ -->
+<div id="s6" data-screen-label="06 Oportunidades" style="margin-top:8mm">
+  <div style="border-top:1.6px solid #161d1a;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#1d5c4d;font-weight:600">06</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b8f86">Oportunidades</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Oportunidades de Posicionamento Institucional</h2>
+  <div style="display:flex;flex-direction:column;gap:4.5mm">
+    <div style="display:grid;grid-template-columns:29px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="width:27px;height:27px;border-radius:50%;background:#1d5c4d;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">1</div>
+      <div><div style="font-weight:600;font-size:14px;margin-bottom:1.6mm">A PRIO como caso de eficiência industrial brasileira</div><p style="margin:0;text-align:justify">Levar a narrativa de crescer, desalavancar e reduzir custo para além do circuito financeiro, alcançando formadores de opinião e a agenda de competitividade nacional.</p></div>
+    </div>
+    <div style="display:grid;grid-template-columns:29px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="width:27px;height:27px;border-radius:50%;background:#1d5c4d;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">2</div>
+      <div><div style="font-weight:600;font-size:14px;margin-bottom:1.6mm">Wahoo como prova de capacidade técnica própria</div><p style="margin:0;text-align:justify">Comunicar o primeiro desenvolvimento integralmente executado pela companhia como marco de engenharia nacional.</p></div>
+    </div>
+    <div style="display:grid;grid-template-columns:29px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="width:27px;height:27px;border-radius:50%;background:#2f8f6f;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">3</div>
+      <div><div style="font-weight:600;font-size:14px;margin-bottom:1.6mm">Eficiência energética com prova operacional</div><p style="margin:0;text-align:justify">Usar a substituição de diesel por gás em Peregrino como evidência concreta de redução de emissões, ancorada em fato e não em discurso.</p></div>
+    </div>
+    <div style="display:grid;grid-template-columns:29px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="width:27px;height:27px;border-radius:50%;background:#2f8f6f;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">4</div>
+      <div><div style="font-weight:600;font-size:14px;margin-bottom:1.6mm">Governança como narrativa na política de remuneração</div><p style="margin:0;text-align:justify">Transformar o anúncio da política de dividendos em demonstração de disciplina de capital e maturidade de governança.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 07 ============ -->
+<div id="s7" data-screen-label="07 Recomendações" style="margin-top:8mm">
+  <div style="border-top:1.6px solid #161d1a;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#1d5c4d;font-weight:600">07</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b8f86">Ação</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Recomendações Executivas</h2>
+
+  <div style="max-width:160mm;break-inside:avoid">
+    <div style="padding-bottom:2.4mm;border-bottom:1px solid #e4e6de;margin-bottom:3.2mm"><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#1d5c4d;font-weight:500">Ações Imediatas</span></div>
+    <ul style="list-style:none;margin:0 0 6mm;padding:0;display:flex;flex-direction:column;gap:2.6mm">
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#1d5c4d;font-weight:600">→</span><span style="text-align:justify"><strong>Construir a mensagem-mestra sobre o imposto de exportação</strong> e divulgá-la antes de o efeito aparecer nos números: tributo externo e com prazo definido, absorvido pelo custo de extração mais baixo do setor. Sempre com o par imposto + <em>lifting cost</em> na mesma frase.</span></li>
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#1d5c4d;font-weight:600">→</span><span style="text-align:justify">Substituir a justificativa do adiamento da política de dividendos por um critério objetivo e verificável (patamar de alavancagem ou de geração de caixa), comunicando o gatilho em vez de nova data.</span></li>
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#1d5c4d;font-weight:600">→</span><span style="text-align:justify">Estruturar a arquitetura de comunicação do anúncio da política, priorizando método e critérios antes dos números.</span></li>
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#1d5c4d;font-weight:600">→</span><span style="text-align:justify">Transformar a divulgação mensal de produção em plataforma de reputação, com leitura contextualizada e ênfase na consistência do histórico de entrega.</span></li>
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#1d5c4d;font-weight:600">→</span><span style="text-align:justify">Definir linha de mensagem que diferencie o modelo da PRIO — revitalização de campos maduros na Bacia de Campos — das controvérsias da nova fronteira exploratória, sem se posicionar sobre disputas de terceiros.</span></li>
+    </ul>
+  </div>
+
+  <div style="max-width:160mm;break-inside:avoid">
+    <div style="padding-bottom:2.4mm;border-bottom:1px solid #e4e6de;margin-bottom:3.2mm"><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#1d5c4d;font-weight:500">Ações de Curto Prazo</span></div>
+    <ul style="list-style:none;margin:0 0 6mm;padding:0;display:flex;flex-direction:column;gap:2.6mm">
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#1d5c4d;font-weight:600">→</span><span style="text-align:justify">Produzir material didático sobre lifting cost e eficiência operacional, traduzindo indicadores técnicos para públicos não especializados.</span></li>
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#1d5c4d;font-weight:600">→</span><span style="text-align:justify">Comunicar a substituição de diesel por gás em Peregrino como iniciativa de eficiência e de redução de emissões, com dados verificáveis.</span></li>
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#1d5c4d;font-weight:600">→</span><span style="text-align:justify">Posicionar Wahoo como marco de engenharia nacional junto a públicos institucionais e à imprensa não financeira.</span></li>
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#1d5c4d;font-weight:600">→</span><span style="text-align:justify">Iniciar agenda de relacionamento com reguladores, imprensa regional (RJ/Macaé) e comunidades — construindo reserva de credibilidade antes de precisar dela.</span></li>
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#1d5c4d;font-weight:600">→</span><span style="text-align:justify">Tratar o descomissionamento de forma proativa, apresentando-o como etapa planejada e provisionada do ciclo de vida dos ativos.</span></li>
+    </ul>
+  </div>
+
+  <div style="max-width:160mm;break-inside:avoid">
+    <div style="padding-bottom:2.4mm;border-bottom:1px solid #e4e6de;margin-bottom:3.2mm"><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#1d5c4d;font-weight:500">Ações de Médio Prazo</span></div>
+    <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2.6mm">
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#1d5c4d;font-weight:600">→</span><span style="text-align:justify">Consolidar a narrativa de “operadora de classe mundial”, somando à competência de gestão de ativos a de desenvolvimento próprio.</span></li>
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#1d5c4d;font-weight:600">→</span><span style="text-align:justify">Estruturar monitoramento reputacional contínuo, contemplando imprensa econômica, mídia setorial, <strong>imprensa regional (RJ/Macaé)</strong>, agenda regulatória (ANP, IBAMA), pauta socioambiental e escuta digital.</span></li>
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#1d5c4d;font-weight:600">→</span><span style="text-align:justify">Adotar o enquadramento climático que a companhia tem e não usa: estender a vida de campos existentes evita a abertura de novas fronteiras exploratórias.</span></li>
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#1d5c4d;font-weight:600">→</span><span style="text-align:justify">Desenvolver relacionamento com formadores de opinião fora do circuito financeiro, ampliando a base de reconhecimento institucional da companhia.</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 08 ============ -->
+<div id="s8" data-screen-label="08 Cenários" style="margin-top:8mm">
+  <div style="border-top:1.6px solid #161d1a;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#1d5c4d;font-weight:600">08</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b8f86">Cenários</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Cenários Prospectivos</h2>
+  <div style="display:flex;flex-direction:column;gap:0">
+    <div style="border-top:1px solid #e4e6de;padding:4mm 0;break-inside:avoid;max-width:160mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#8b8f86;margin-bottom:2mm">Cenário 01</div>
+      <div style="font-weight:600;font-size:14.5px;margin-bottom:2mm">Política de remuneração bem recebida</div>
+      <p style="margin:0 0 2.4mm;text-align:justify">A companhia anuncia política consistente com a expectativa, e a narrativa de disciplina de capital se consolida.</p>
+      <div style="font-size:12.5px;color:#28322e"><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:#1d5c4d;font-weight:600">Resposta recomendada &nbsp;</span>Comunicação que enfatize método, critérios e sustentabilidade da política, evitando promessas de valor futuro.</div>
+    </div>
+    <div style="border-top:1px solid #e4e6de;padding:4mm 0;break-inside:avoid;max-width:160mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#8b8f86;margin-bottom:2mm">Cenário 02</div>
+      <div style="font-weight:600;font-size:14.5px;margin-bottom:2mm">Frustração de expectativa</div>
+      <p style="margin:0 0 2.4mm;text-align:justify">A política vem abaixo do projetado ou é adiada, e a leitura de mercado se deteriora apesar dos fundamentos.</p>
+      <div style="font-size:12.5px;color:#28322e"><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:#1d5c4d;font-weight:600">Resposta recomendada &nbsp;</span>Explicação transparente do racional (parcela de Peregrino, ambiente fiscal, volatilidade do Brent), reforçando a lógica de proteção do balanço.</div>
+    </div>
+    <div style="border-top:1px solid #e4e6de;border-bottom:1px solid #e4e6de;padding:4mm 0;break-inside:avoid;max-width:160mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#8b8f86;margin-bottom:2mm">Cenário 03</div>
+      <div style="font-weight:600;font-size:14.5px;margin-bottom:2mm">Choque externo de preço ou incidente operacional</div>
+      <p style="margin:0 0 2.4mm;text-align:justify">Queda relevante do Brent ou ocorrência ambiental altera abruptamente a percepção.</p>
+      <div style="font-size:12.5px;color:#28322e"><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:#1d5c4d;font-weight:600">Resposta recomendada &nbsp;</span>Protocolo de crise pré-estruturado, com porta-vozes técnicos definidos, ênfase em fatos e resposta rápida — especialmente em matéria ambiental, onde a janela de reação é curta.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 09 ============ -->
+<div id="s9" data-screen-label="09 SAUZ" style="margin-top:8mm">
+  <div style="border-top:1.6px solid #161d1a;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#1d5c4d;font-weight:600">09</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b8f86">SAUZ</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Demonstração dos Serviços — SAUZ</h2>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 2.4mm;text-align:justify">No período analisado, a SAUZ atuou como instância de apoio técnico e aconselhamento estratégico à alta administração da PRIO, subsidiando a equipe da companhia com inteligência de mídia, leitura de cenário e recomendações de posicionamento. A atuação teve caráter consultivo e de suporte: contribuiu para a interpretação dos temas de maior sensibilidade do período — o recorde de produção, a conclusão de Wahoo, a expectativa em torno da política de remuneração e o ambiente socioambiental do setor — e para a preparação de subsídios à decisão, preservando na própria administração da PRIO a coordenação e a condução das ações institucionais.</p>
+    <p style="margin:0 0 4.5mm;text-align:justify">O esforço do período concentrou-se em identificar o deslocamento da narrativa da companhia — da promessa para a entrega — e em apontar os riscos comunicacionais que esse novo patamar cria, com destaque para a gestão de expectativa em torno dos dividendos e para a necessidade de diferenciação diante das controvérsias setoriais das quais a companhia não participa. A SAUZ manteve o acompanhamento do ambiente de mídia e de análise, a qualificação das evidências relevantes e a produção de análises de apoio, sempre em posição de assessoria.</p>
+  </div>
+
+  <div style="max-width:160mm;break-inside:avoid">
+    
+    <table style="width:100%;border-collapse:collapse">
+      <thead><tr>
+        
+        
+      </tr></thead>
+      <tbody style="font-size:12.5px">
+        <tr></tr>
+        <tr></tr>
+        <tr></tr>
+        <tr></tr>
+      </tbody>
+    </table>
+    
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 10 ============ -->
+<div id="s10" data-screen-label="10 Base de Evidências" style="break-before:page;padding-top:2mm">
+  <div style="border-top:1.6px solid #161d1a;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#1d5c4d;font-weight:600">10</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b8f86">Evidências</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 3.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Base Qualificada de Evidências</h2>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 3.5mm;text-align:justify">Todas as evidências abaixo foram <strong>apuradas e verificadas</strong> em informações da companhia e na imprensa nacional e especializada. <strong>Constam apenas itens de 1 a 31 de julho de 2026</strong>, além de referências anteriores citadas como contexto (identificadas pela data). Os itens marcados como 08/2026 correspondem ao <strong>reporte do 2T26</strong> (trimestre encerrado em 30/06), incluídos apenas como contexto já disponível ao mercado. Os fatos de agosto — dados operacionais consolidados de julho, sinalização sobre dividendos e revisões de recomendação — foram deliberadamente excluídos e integrarão o relatório do mês seguinte.</p>
+  </div>
+
+  <div style="display:flex;gap:15px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#5b6360;margin-bottom:3mm">
+    <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:11px;height:11px;background:#e8f3ea;border:1px solid #cfe3d5;display:inline-block"></span>Positivo</span>
+    <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:11px;height:11px;background:#ffffff;border:1px solid #d8d8d4;display:inline-block"></span>Neutro</span>
+    <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:11px;height:11px;background:#fae9e8;border:1px solid #eccbc9;display:inline-block"></span>Negativo</span>
+  </div>
+
+  <table style="width:100%;border-collapse:collapse;break-inside:auto">
+    <thead><tr>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:#8b8f86;font-weight:500;padding:0 5px 2.2mm 7px;border-bottom:1.5px solid #161d1a;width:8%">Data</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:#8b8f86;font-weight:500;padding:0 5px 2.2mm 5px;border-bottom:1.5px solid #161d1a;width:22%">Veículo / Fonte</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:#8b8f86;font-weight:500;padding:0 5px 2.2mm 5px;border-bottom:1.5px solid #161d1a;width:47%">Conteúdo</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:#8b8f86;font-weight:500;padding:0 5px 2.2mm 5px;border-bottom:1.5px solid #161d1a;width:10%">Relev.</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:#8b8f86;font-weight:500;padding:0 7px 2.2mm 5px;border-bottom:1.5px solid #161d1a;width:13%">Tom</th>
+    </tr></thead>
+    <tbody style="font-size:10.5px;line-height:1.32">
+      <tr style="background:#e8f3ea"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f0efe9;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6360">02/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Investidor10</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">PRIO abre último poço de Wahoo e conclui todas as unidades produtoras</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f0efe9;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6360">19/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">PRIO / Brazil Energy Insight</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Substituição da linha de gas lift em Frade restabelece três poços</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f0efe9;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6360">07/2026</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Genial Investimentos</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Normalização do poço ABL-68 em Albacora Leste</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Média</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #ecece6;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6360">07/2026</td><td style="padding:2mm 5px;border-bottom:1px solid #ecece6;vertical-align:top">PRIO / Brazil Energy Insight</td><td style="padding:2mm 5px;border-bottom:1px solid #ecece6;vertical-align:top">Cluster Bravo: OGX-44HP interrompido para reparo da linha de produção</td><td style="padding:2mm 5px;border-bottom:1px solid #ecece6;vertical-align:top">Média</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #ecece6;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f0efe9;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6360">07/2026</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Nord Investimentos</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Novo poço recoloca Peregrino acima de 100 mil barris/dia</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f0efe9;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6360">03/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Finance News / XP</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">XP vê dados de produção de junho como marginalmente positivos</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Média</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f0efe9;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6360">03/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">BM&amp;C News</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">PRIO amplia produção; capacidade de ampliar volumes segue central na tese</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Média</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f0efe9;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6360">07/2026</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">InfoMoney / Goldman Sachs</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Goldman projeta ~180 mil bpd em julho e ~200 mil após Peregrino</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f0efe9;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6360">28/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Money Times / BTG Pactual</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">BTG mantém PRIO como top pick entre as independentes brasileiras</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f0efe9;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6360">07/2026</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">InfoMoney / XP</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">PRIO apontada como a mais bem posicionada para capturar a alta do petróleo</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #ececec;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6360">07/2026</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">Visno Invest</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">Novo contrato de venda de petróleo firmado entre Brava e PRIO</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">Média</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #ececec;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #ececec;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6360">07/2026</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">Seu Dinheiro / CVM</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">OPA da Ecopetrol pelo controle da Brava avança; setor em consolidação</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">Média</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #ececec;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f0efe9;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6360">07/2026</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Investidor10</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Produção e vendas sobem no 2T26; média de 172.016 boepd</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f0efe9;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6360">08/2026</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">ADVFN</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">PRIO registra lucro de US$ 413,3 mi no 2T26, com EBITDA recorde</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #ececec;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6360">08/2026</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">XP Investimentos</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">Resultados do 2T26: “próxima parada — dividendos”; alavancagem em 1,5x</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #ececec;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f0efe9;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6360">08/2026</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Genial Investimentos</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">2T26: geração de caixa, lifting cost e recompra; transição para caixa livre</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f0efe9;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6360">08/2026</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">XP Investimentos</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Lifting cost recua a US$ 8,9/bbl; dívida líquida em US$ 4,05 bi</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #ececec;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6360">08/2026</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">XP Investimentos</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">Gasoduto de gás de Peregrino em recomissionamento final</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">Média</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #ececec;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f0efe9;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6360">03/2026</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">ADVFN / Seu Dinheiro</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">IBAMA concede Licença de Operação de Wahoo</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #ecece6;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6360">06/2026</td><td style="padding:2mm 5px;border-bottom:1px solid #ecece6;vertical-align:top">A Revista</td><td style="padding:2mm 5px;border-bottom:1px solid #ecece6;vertical-align:top">PRIO prepara nova fase de dividendos após produção recorde</td><td style="padding:2mm 5px;border-bottom:1px solid #ecece6;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #ecece6;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #ecece6;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6360">05/2026</td><td style="padding:2mm 5px;border-bottom:1px solid #ecece6;vertical-align:top">Genial Investimentos</td><td style="padding:2mm 5px;border-bottom:1px solid #ecece6;vertical-align:top">Cenários de distribuição; 2026 “poluído” por fatores pontuais</td><td style="padding:2mm 5px;border-bottom:1px solid #ecece6;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #ecece6;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f0efe9;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6360">—</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">S&amp;P Global Ratings</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Ratings elevados para ‘brAAA’ após aquisição adicional em Peregrino</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Média</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr style="background:#fae9e8"><td style="padding:2mm 5px 2mm 7px;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6360">02/2026</td><td style="padding:2mm 5px;vertical-align:top">Agência Brasil / CNN</td><td style="padding:2mm 5px;vertical-align:top">IBAMA multa Petrobras por vazamento na Foz do Amazonas <em>(outra operadora)</em></td><td style="padding:2mm 5px;vertical-align:top">Média</td><td style="padding:2mm 7px 2mm 5px;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+    </tbody>
+  </table>
+
+  <div style="max-width:160mm;margin-top:4mm">
+    <p style="margin:0;font-size:11.5px;color:#5b6360;text-align:justify"><span style="font-style:italic">Leitura do “Tom”:</span> a predominância de tons positivos reflete <strong>a origem das fontes</strong> — casas de análise e imprensa econômica, que avaliam a companhia como ativo financeiro — e não deve ser lida como medida da reputação institucional da empresa junto aos demais públicos. Sem cobertura de imprensa geral, regional, sindical ou comunitária, o tom aqui apurado descreve a percepção do investidor, não a da sociedade.<br><br><span style="font-style:italic">Nota metodológica:</span> o último item refere-se a operadora distinta da PRIO e consta exclusivamente como contexto de risco de contágio setorial, jamais como evento da companhia. Estimativas de retorno ao acionista citadas por casas de análise não representam valores aprovados pela PRIO.</p>
+  </div>
+</div>
+
+<!-- ENCERRAMENTO -->
+<div data-screen-label="Encerramento" style="margin-top:9mm;border-top:1.6px solid #161d1a;padding-top:5mm;break-inside:avoid">
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b8f86;margin-bottom:3.5mm">Encerramento</div>
+  <p style="margin:0 0 5mm;font-size:13.5px;color:#28322e">Rio de Janeiro/RJ, julho de 2026.</p>
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#5b6360;margin-bottom:5px">Suporte estratégico prestado por</div>
+  <img src="sauz-logo-dark.png" alt="SAUZ" style="height:32px;display:block">
+</div>
+
+<!--CONTENT_END-->
+</div>
+</x-import>
+</x-dc>
+</body>
+</html>

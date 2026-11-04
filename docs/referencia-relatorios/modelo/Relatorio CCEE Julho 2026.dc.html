@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  doc-page:not(:defined){visibility:hidden}
+  *{box-sizing:border-box}
+  .rp p{orphans:3;widows:3}
+  .pgnum::after{content:counter(page)}
+</style>
+</helmet>
+<x-import component-from-global-scope="doc-page" from="./doc-page.js" size="a4" margin="17mm" hint-size="100%,100%">
+<div slot="footer" style="display:flex;justify-content:space-between;align-items:baseline;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.05em;color:#8b9096;border-top:1px solid #e6e6e0;padding-top:2mm">
+  <span>SAUZ · CCEE · Julho 2026 — Confidencial</span>
+  <span class="pgnum" style="color:#0f5563;font-weight:500"></span>
+</div>
+
+<div class="rp" style="font-family:'IBM Plex Sans',-apple-system,'Segoe UI',sans-serif;font-size:12.8px;line-height:1.55;color:#15171c;-webkit-font-smoothing:antialiased">
+
+<!-- ============ CAPA ============ -->
+<div data-screen-label="Capa" style="position:relative;overflow:hidden;background:#0d1f24;margin:-17mm -17mm 0;box-sizing:border-box;display:flex;flex-direction:column;break-after:page">
+  <div style="position:relative;height:208mm;overflow:hidden">
+    <img src="cover_ccee_jul.jpg" alt="Subestação de transformação de energia ao pôr do sol — infraestrutura do mercado elétrico" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 48%"/>
+    <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(9,28,33,.72) 0%,rgba(12,38,44,.34) 24%,rgba(15,85,99,.26) 50%,rgba(10,30,36,.60) 74%,rgba(8,22,27,.94) 100%)"></div>
+
+    <div style="position:absolute;top:15mm;left:19mm;right:19mm;z-index:3;display:flex;justify-content:space-between;align-items:flex-start;gap:9mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.02em;color:#e8f1f0;text-shadow:0 1px 12px rgba(8,24,28,.85);max-width:112mm;line-height:1.5">CCEE — Câmara de Comercialização de Energia Elétrica</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#9fb6b5;white-space:nowrap">Inteligência Reputacional</div>
+    </div>
+
+    <div style="position:absolute;top:20mm;right:10mm;height:178mm;z-index:3;writing-mode:vertical-rl;font-family:'IBM Plex Sans',sans-serif;font-weight:700;font-size:13.5px;letter-spacing:.11em;color:#fff;text-transform:uppercase;opacity:.95;white-space:nowrap">Mercado Livre · Liquidação · Curtailment · Abertura</div>
+
+    <div style="position:absolute;left:0;right:0;top:31%;z-index:3;display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 19mm">
+      <img src="sauz-logo.png" alt="SAUZ" style="height:72px;display:block;filter:drop-shadow(0 3px 20px rgba(8,24,28,.65))"/>
+      <div style="width:50px;height:2px;background:#63b4bd;margin:13px 0 9px"></div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:#e4efee;text-shadow:0 1px 12px rgba(8,24,28,.9)">Comunicação e Estratégia · Inteligência Reputacional</div>
+    </div>
+
+    <div style="position:absolute;left:19mm;right:24mm;bottom:16mm;z-index:3">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:#7fd0be;margin-bottom:6mm">Relatório Mensal · Julho de 2026</div>
+      <h1 style="font-size:33px;font-weight:600;line-height:1.13;letter-spacing:-.015em;margin:0;color:#fff;max-width:148mm;text-shadow:0 2px 24px rgba(8,24,28,.6)">Relatório Mensal de Comunicação Estratégica e Gestão de Imagem</h1>
+    </div>
+  </div>
+
+  <div style="background:#0d1f24;padding:8mm 19mm 7mm;display:flex;justify-content:space-between;align-items:flex-end;gap:10mm">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#6f8a8c">Suporte estratégico prestado por SAUZ</div>
+    <div style="text-align:right;font-family:'IBM Plex Mono',monospace;font-size:10px;color:#9fb6b5;line-height:1.7">
+      <div>Setor Elétrico · Julho de 2026</div>
+      <div style="color:#607e80">Confidencial — uso interno da alta administração</div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);height:6mm">
+    <div style="background:#0f5563"></div><div style="background:#23806e"></div><div style="background:#63b4bd"></div><div style="background:#d2ddd6"></div><div style="background:#3c4f52"></div>
+  </div>
+</div>
+
+<!-- ============ SUMÁRIO ============ -->
+<div data-screen-label="Sumário" style="break-after:page;padding-top:2mm">
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:#8b9096;margin-bottom:3mm">Sumário</div>
+  <div style="border-top:1.6px solid #15171c"></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;column-gap:14mm">
+    <div>
+      <a href="#s1" style="display:flex;gap:11px;align-items:baseline;padding:2.9mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#15171c"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0f5563;min-width:20px">01</span><span style="font-weight:500">Sumário Executivo</span></a>
+      <a href="#s2" style="display:flex;gap:11px;align-items:baseline;padding:2.9mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#15171c"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0f5563;min-width:20px">02</span><span style="font-weight:500">Temas Estratégicos do Mês</span></a>
+      <a href="#s3" style="display:flex;gap:11px;align-items:baseline;padding:2.9mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#15171c"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0f5563;min-width:20px">03</span><span style="font-weight:500">Leitura Reputacional do Ambiente</span></a>
+      <a href="#s4" style="display:flex;gap:11px;align-items:baseline;padding:2.9mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#15171c"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0f5563;min-width:20px">04</span><span style="font-weight:500">Análise Temática Aprofundada</span></a>
+      <a href="#s5" style="display:flex;gap:11px;align-items:baseline;padding:2.9mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#15171c"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0f5563;min-width:20px">05</span><span style="font-weight:500">Riscos Reputacionais Prioritários</span></a>
+    </div>
+    <div>
+      <a href="#s6" style="display:flex;gap:11px;align-items:baseline;padding:2.9mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#15171c"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0f5563;min-width:20px">06</span><span style="font-weight:500">Oportunidades de Posicionamento</span></a>
+      <a href="#s7" style="display:flex;gap:11px;align-items:baseline;padding:2.9mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#15171c"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0f5563;min-width:20px">07</span><span style="font-weight:500">Recomendações Executivas</span></a>
+      <a href="#s8" style="display:flex;gap:11px;align-items:baseline;padding:2.9mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#15171c"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0f5563;min-width:20px">08</span><span style="font-weight:500">Cenários Prospectivos</span></a>
+      <a href="#s9" style="display:flex;gap:11px;align-items:baseline;padding:2.9mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#15171c"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0f5563;min-width:20px">09</span><span style="font-weight:500">Demonstração dos Serviços — SAUZ</span></a>
+      <a href="#s10" style="display:flex;gap:11px;align-items:baseline;padding:2.9mm 0;border-bottom:1px solid #ecece8;text-decoration:none;color:#15171c"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0f5563;min-width:20px">10</span><span style="font-weight:500">Base Qualificada de Evidências</span></a>
+    </div>
+  </div>
+
+  <!-- DESTAQUE DO MÊS -->
+  <div style="margin-top:9mm;border-top:1.6px solid #15171c;padding-top:5mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#0f5563;margin-bottom:3.5mm">Destaque do mês</div>
+    <div style="background:#f2f6f6;border-left:3px solid #0f5563;padding:6mm 7mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#5b7a80;margin-bottom:2.5mm">ANEEL e Judiciário · 02 e 28/07/2026</div>
+      <div style="font-size:22px;font-weight:600;line-height:1.22;letter-spacing:-.01em;margin-bottom:3.5mm;max-width:152mm">As decisões da CCEE foram referendadas onde mais importava</div>
+      <p style="margin:0 0 3.5mm;font-size:13px;color:#2a2f34;text-align:justify;max-width:158mm">A ANEEL manteve o desligamento da 2W Varejista e o Judiciário freou a tentativa de zerar contratos da Electra — endosso direto à disciplina de crédito da Câmara e precedente estruturante para a previsibilidade da liquidação.</p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:4mm">
+        <div style="background:#fff;padding:3.5mm 4mm;border-top:2px solid #0f5563"><div style="font-weight:600;font-size:12.5px;margin-bottom:1.4mm">ANEEL</div><div style="font-size:11px;color:#4a5054;line-height:1.4">Nega efeito suspensivo e mantém desligamento da 2W</div></div>
+        <div style="background:#fff;padding:3.5mm 4mm;border-top:2px solid #23806e"><div style="font-weight:600;font-size:12.5px;margin-bottom:1.4mm">TJPR e STJ</div><div style="font-size:11px;color:#4a5054;line-height:1.4">Freiam decisão que permitira zerar contratos da Electra</div></div>
+        <div style="background:#fff;padding:3.5mm 4mm;border-top:2px solid #63b4bd"><div style="font-weight:600;font-size:12.5px;margin-bottom:1.4mm">R$ 424 mi</div><div style="font-size:11px;color:#4a5054;line-height:1.4">Estimativa de queda da inadimplência do MCP</div></div>
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:6mm;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#8b9096;letter-spacing:.02em">SAUZ · CCEE · Julho de 2026 — Confidencial</div>
+</div>
+
+<!-- ============ SEÇÃO 01 ============ -->
+<div id="s1" data-screen-label="01 Sumário Executivo" style="margin-top:1mm">
+  <div style="border-top:1.6px solid #15171c;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#0f5563;font-weight:600">01</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b9096">Síntese</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Sumário Executivo</h2>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 2.4mm;text-align:justify">Julho de 2026 foi, para a CCEE, um mês de validação institucional em meio à turbulência do mercado. A Câmara atravessou o período no centro da crise das comercializadoras — o tema que mais mobilizou o setor — e saiu dele com suas decisões referendadas pelo regulador e pelo Judiciário, ao mesmo tempo em que avançou numa agenda própria de capacitação, transparência e integridade que raramente recebeu tanta visibilidade.</p>
+    <p style="margin:0 0 2.4mm;text-align:justify">A validação veio em duas frentes decisivas. No fim do mês, a ANEEL negou efeito suspensivo e manteve o desligamento da 2W Varejista da CCEE, por inadimplência e risco ao mercado (Cenário Energia; MegaWhat, 28/07/2026) — endosso regulatório direto à postura de rigor da Câmara, que havia sido contestada pela empresa. No plano judicial, o TJPR e o STJ frearam decisão que permitira zerar contratos da Electra na CCEE (MegaWhat, 02/07/2026). Somadas, as duas decisões consolidam o entendimento que a Câmara vinha sustentando: recuperação judicial não dissolve automaticamente as obrigações de funcionamento e governança dos mercados regulados.</p>
+    <p style="margin:0 0 2.4mm;text-align:justify">O quadro de fundo, porém, segue exigente. A crise do mercado livre acumula um rombo superior a R$ 6 bilhões, segundo levantamentos do período (Folha de S.Paulo, 13/07/2026; ANACE, 28/07/2026), com 2W, Electra Varejista e Oi concentrando a inadimplência do mercado de curto prazo (MegaWhat, 15/07/2026). Há, contudo, um sinal de melhora que merece destaque na comunicação: a própria CCEE estima que a inadimplência do MCP deve cair para R$ 424 milhões (MegaWhat, 02/07/2026). A percepção de risco também alimentou alertas do setor sobre empresas “aventureiras” no mercado livre (Agência Infra, 20/07/2026), reforçando a tese de que o problema é de disciplina de crédito e gestão de risco, não de desenho do mercado.</p>
+    <p style="margin:0 0 2.4mm;text-align:justify">O tema regulatório de maior impacto do mês foi a compensação do curtailment. O MME regulamentou o ressarcimento e fechou acordo com geradores em torno de R$ 3,3 bilhões, definindo regras, cálculo e prazos de adesão (Agência Infra; Cenário Energia; MegaWhat, 22/07/2026) — processo cuja recontabilização recai sobre a CCEE e o ONS. A reação foi de avanço com ressalvas: a ABEEólica considerou a portaria um sinal positivo, mas insuficiente para resolver o prejuízo, e agentes avaliam que a judicialização pode persistir. Em paralelo, a ANEEL avalia mudanças nas regras de curtailment, com associações pedindo a retirada de dispositivos considerados inadequados, e o ONS propôs ajustes para uma transição regulatória segura.</p>
+    <p style="margin:0 0 2.4mm;text-align:justify">O mês trouxe ainda o vetor mais estruturante do futuro da Câmara: a <strong>abertura do mercado livre para a baixa tensão</strong>. O governo prepara as regras para que todos os consumidores possam escolher seu fornecedor (O Globo; InfoMoney, 08/07/2026), movimento que pode reduzir a conta de luz em até 18% e inaugura uma nova era de escala operacional para a CCEE (Cenário Energia, 08/07/2026). Os números do período sustentam o otimismo estrutural: segundo a CNI, o mercado livre reduziu a conta de luz de 73% das indústrias, e mais de 40% delas migraram nos últimos dois anos (InfoMoney; PlatôBR, 29 e 30/07/2026).</p>
+    <p style="margin:0;text-align:justify">Por fim, a Câmara construiu no mês uma sólida agenda institucional própria — Encontro CCEE, Fórum CCEE no EVEx, novo Portal do Aluno da CCEE Academy, cursos em parceria com a PSR, lançamento da Sala Técnica da Operação com escuta ativa dos agentes, renovação do compromisso com o Pacto Brasil pela Integridade Empresarial da CGU e o selo IIA pelo quarto ano consecutivo. É um conjunto que projeta uma instituição técnica, transparente e voltada ao diálogo — exatamente o contraponto de que a Câmara precisa diante da narrativa de crise.</p>
+  </div>
+
+  <div style="margin-top:6mm;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#0f5563;padding-bottom:2.5mm;border-bottom:1px solid #e4e4e0;margin-bottom:4mm">Top Insights do Mês</div>
+    <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3mm">
+      <li style="display:grid;grid-template-columns:21px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0f5563;font-weight:600">01</span><span style="text-align:justify"><strong>A CCEE foi referendada onde mais importava:</strong> a ANEEL manteve o desligamento da 2W e o Judiciário freou a tentativa de zerar contratos da Electra — endosso à disciplina de crédito da Câmara.</span></li>
+      <li style="display:grid;grid-template-columns:21px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0f5563;font-weight:600">02</span><span style="text-align:justify">A <strong>crise das comercializadoras</strong> (rombo acima de R$ 6 bi) segue como o tema dominante, mas há sinal positivo pouco explorado: a estimativa de queda da inadimplência do MCP para R$ 424 milhões.</span></li>
+      <li style="display:grid;grid-template-columns:21px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0f5563;font-weight:600">03</span><span style="text-align:justify">A <strong>compensação do curtailment</strong> (R$ 3,3 bi) avançou, mas com ressalvas do setor e risco de judicialização persistente — e a recontabilização recai sobre CCEE e ONS.</span></li>
+      <li style="display:grid;grid-template-columns:21px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0f5563;font-weight:600">04</span><span style="text-align:justify">A <strong>abertura da baixa tensão</strong> é o vetor mais estruturante do futuro da Câmara: nova escala operacional, novos agentes e nova exposição pública.</span></li>
+      <li style="display:grid;grid-template-columns:21px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0f5563;font-weight:600">05</span><span style="text-align:justify">Os <strong>dados da CNI</strong> (73% das indústrias com conta menor; 40% migraram em dois anos) são o melhor ativo narrativo disponível para defender o mercado livre.</span></li>
+      <li style="display:grid;grid-template-columns:21px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0f5563;font-weight:600">06</span><span style="text-align:justify">A <strong>agenda institucional</strong> (Encontro CCEE, Academy, Sala Técnica, integridade, selo IIA) construiu no mês um contrapeso consistente à narrativa de crise e merece amplificação.</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 02 ============ -->
+<div id="s2" data-screen-label="02 Temas Estratégicos" style="margin-top:8mm">
+  <div style="border-top:1.6px solid #15171c;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#0f5563;font-weight:600">02</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b9096">Mapeamento</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Temas Estratégicos do Mês</h2>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 4mm;text-align:justify">A leitura do período identificou sete temas-matriz. O quadro sintetiza cada um, sua relevância reputacional e o principal sinal do mês.</p>
+  </div>
+
+  <table style="width:100%;border-collapse:collapse;break-inside:auto">
+    <thead><tr>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#8b9096;font-weight:500;padding:0 9px 2.4mm 0;border-bottom:1.5px solid #15171c;width:36%">Tema estratégico</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#8b9096;font-weight:500;padding:0 9px 2.4mm 0;border-bottom:1.5px solid #15171c;width:14%">Relev.</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#8b9096;font-weight:500;padding:0 0 2.4mm 0;border-bottom:1.5px solid #15171c;width:50%">Sinal do mês</th>
+    </tr></thead>
+    <tbody style="font-size:11.5px;line-height:1.35">
+      <tr><td style="padding:2.4mm 9px 2.4mm 0;border-bottom:1px solid #ececec;vertical-align:top;font-weight:500">Crise das comercializadoras e inadimplência</td><td style="padding:2.4mm 9px;border-bottom:1px solid #ececec;vertical-align:top">Alta</td><td style="padding:2.4mm 0;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">Rombo acima de R$ 6 bi; 2W, Electra e Oi concentram o MCP</td></tr>
+      <tr><td style="padding:2.4mm 9px 2.4mm 0;border-bottom:1px solid #ececec;vertical-align:top;font-weight:500">Validação das decisões da CCEE</td><td style="padding:2.4mm 9px;border-bottom:1px solid #ececec;vertical-align:top">Alta</td><td style="padding:2.4mm 0;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">ANEEL mantém desligamento da 2W; TJPR e STJ freiam Electra</td></tr>
+      <tr><td style="padding:2.4mm 9px 2.4mm 0;border-bottom:1px solid #ececec;vertical-align:top;font-weight:500">Compensação do curtailment</td><td style="padding:2.4mm 9px;border-bottom:1px solid #ececec;vertical-align:top">Alta</td><td style="padding:2.4mm 0;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">MME regulamenta e fecha acordo de R$ 3,3 bi; ressalvas do setor</td></tr>
+      <tr><td style="padding:2.4mm 9px 2.4mm 0;border-bottom:1px solid #ececec;vertical-align:top;font-weight:500">Abertura do mercado livre (baixa tensão)</td><td style="padding:2.4mm 9px;border-bottom:1px solid #ececec;vertical-align:top">Alta</td><td style="padding:2.4mm 0;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">Governo prepara regras; potencial de -18% na conta</td></tr>
+      <tr><td style="padding:2.4mm 9px 2.4mm 0;border-bottom:1px solid #ececec;vertical-align:top;font-weight:500">Evolução de modelos e liquidação</td><td style="padding:2.4mm 9px;border-bottom:1px solid #ececec;vertical-align:top">Média</td><td style="padding:2.4mm 0;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">Consulta ONS-CCEE sobre PMO/PLD; estudo de liquidação semanal</td></tr>
+      <tr><td style="padding:2.4mm 9px 2.4mm 0;border-bottom:1px solid #ececec;vertical-align:top;font-weight:500">Baterias e novos mercados</td><td style="padding:2.4mm 9px;border-bottom:1px solid #ececec;vertical-align:top">Média</td><td style="padding:2.4mm 0;border-bottom:1px solid #ececec;vertical-align:top;color:#41474d">Leilões à consulta pública sem definição do rateio do encargo</td></tr>
+      <tr><td style="padding:2.4mm 9px 2.4mm 0;vertical-align:top;font-weight:500">Agenda institucional e integridade</td><td style="padding:2.4mm 9px;vertical-align:top">Média</td><td style="padding:2.4mm 0;vertical-align:top;color:#41474d">Encontro CCEE, Academy, Sala Técnica, Pacto CGU, selo IIA</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ============ SEÇÃO 03 ============ -->
+<div id="s3" data-screen-label="03 Leitura Reputacional" style="margin-top:8mm">
+  <div style="border-top:1.6px solid #15171c;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#0f5563;font-weight:600">03</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b9096">Diagnóstico</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Leitura Reputacional do Ambiente Externo</h2>
+
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:0 0 2.6mm;color:#15171c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0f5563;font-weight:500">3.1</span><span>Narrativa predominante sobre a CCEE</span></h3>
+  <div style="max-width:160mm"><p style="margin:0 0 4.5mm;text-align:justify">A narrativa dominante é a de uma <strong>instituição firme e tecnicamente respaldada</strong>. Diferentemente de meses anteriores, em que a Câmara aparecia sobretudo reagindo à crise, julho a mostrou tendo suas decisões confirmadas por ANEEL e Judiciário, ao mesmo tempo em que ocupava espaço com agenda própria de capacitação, tecnologia e integridade. A crítica remanescente vem das empresas em recuperação e de parte do mercado que atribui dificuldades a parâmetros de risco e decisões operacionais.</p></div>
+
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:0 0 2.6mm;color:#15171c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0f5563;font-weight:500">3.2</span><span>Risco reputacional dominante</span></h3>
+  <div style="max-width:160mm"><p style="margin:0 0 4.5mm;text-align:justify">O maior risco é a <strong>contaminação da imagem da Câmara pela crise do ambiente que ela administra</strong>. Como a CCEE é a instituição visível do mercado livre, cada quebra tende a ser lida como falha do sistema — e, por extensão, de quem o opera. O risco cresce à medida que a abertura da baixa tensão amplia a base de agentes e a exposição pública.</p></div>
+
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:0 0 2.6mm;color:#15171c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0f5563;font-weight:500">3.3</span><span>Oportunidade reputacional dominante</span></h3>
+  <div style="max-width:160mm"><p style="margin:0;text-align:justify">A principal oportunidade é converter as validações do mês em <strong>narrativa de confiabilidade</strong>: a Câmara aplica regras, e suas decisões se sustentam perante o regulador e a Justiça. Somada aos dados da CNI sobre economia para a indústria e à agenda de abertura, essa narrativa posiciona a CCEE como a instituição que dá segurança a um mercado em expansão.</p></div>
+</div>
+
+<!-- ============ SEÇÃO 04 ============ -->
+<div id="s4" data-screen-label="04 Análise Temática" style="margin-top:8mm">
+  <div style="border-top:1.6px solid #15171c;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#0f5563;font-weight:600">04</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b9096">Análise</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Análise Temática Aprofundada</h2>
+
+  <!-- 4.1 -->
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:0 0 2.6mm;color:#15171c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0f5563;font-weight:500">4.1</span><span>Crise das comercializadoras: o rombo, a disciplina e o sinal de melhora</span></h3>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 2.4mm;text-align:justify">O tema seguiu dominante. Levantamentos do período apontam rombo superior a R$ 6 bilhões no mercado livre (Folha de S.Paulo, 13/07/2026), número reiterado pela ANACE ao fim do mês, com 2W, Electra Varejista e Oi concentrando a inadimplência do mercado de curto prazo (MegaWhat, 15/07/2026). O debate público sobre causas manteve-se dividido entre a leitura de preços e parâmetros de risco desfavoráveis e a de crescimento desordenado de agentes sem estrutura de capital — tese reforçada pelo alerta da Neoenergia sobre empresas “aventureiras” no mercado (Agência Infra, 20/07/2026).</p>
+    <p style="margin:0;text-align:justify">Há, porém, um dado que a comunicação da Câmara pode explorar melhor: a própria CCEE estima que a inadimplência do MCP deve recuar para R$ 424 milhões (MegaWhat, 02/07/2026), sinalizando que os mecanismos de disciplina estão produzindo efeito. Casos como o da Electra, que concluiu negócio de R$ 450 milhões com a Copel enquanto sob restrição na Câmara (VEJA, 16/07/2026), mostram, contudo, que a fronteira entre restrição e operação segue sob escrutínio.</p>
+  </div>
+  <div style="background:#f2f6f6;border-left:3px solid #0f5563;padding:4mm 5mm;margin:3.5mm 0 0;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#0f5563;margin-bottom:2mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#2a2f34">A CCEE deve equilibrar a narrativa, sustentando a pedagogia sobre a liquidação multilateral — a inadimplência de um é rateada entre todos — e, ao mesmo tempo, divulgando indicadores de melhora. Números de recuo da inadimplência são a prova concreta de que o sistema de disciplina funciona.</p>
+  </div>
+
+  <!-- 4.2 -->
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:6mm 0 2.6mm;color:#15171c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0f5563;font-weight:500">4.2</span><span>A validação das decisões: ANEEL e Judiciário referendam a Câmara</span></h3>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 2.4mm;text-align:justify">O fato reputacional mais relevante do mês foi o respaldo institucional às decisões da CCEE. A ANEEL negou efeito suspensivo e manteve o desligamento da 2W Varejista, fundamentando-se na inadimplência e no risco ao mercado (Cenário Energia; MegaWhat, 28/07/2026) — resposta direta ao pedido de intervenção feito pela empresa. No campo judicial, o TJPR e o STJ frearam decisão que havia permitido zerar contratos da Electra na Câmara (MegaWhat, 02/07/2026).</p>
+    <p style="margin:0;text-align:justify">O significado ultrapassa os casos individuais. As decisões consolidam a tese de que os instrumentos de governança do mercado — desligamento, restrição, exigência de garantias — são legítimos e não podem ser neutralizados unilateralmente por decisões de recuperação judicial. Para um mercado que depende da previsibilidade da liquidação, trata-se de um precedente estruturante.</p>
+  </div>
+  <div style="background:#f2f6f6;border-left:3px solid #0f5563;padding:4mm 5mm;margin:3.5mm 0 0;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#0f5563;margin-bottom:2mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#2a2f34">Este é o principal ativo de comunicação do mês e está subutilizado. Recomenda-se construir mensagem institucional que traduza o significado sistêmico das decisões — a proteção dos agentes adimplentes e da liquidez do mercado —, evitando tom de vitória sobre empresas específicas e enquadrando o tema como segurança para todo o ambiente.</p>
+  </div>
+
+  <!-- 4.3 -->
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:6mm 0 2.6mm;color:#15171c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0f5563;font-weight:500">4.3</span><span>Compensação do curtailment: avanço com ressalvas</span></h3>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 2.4mm;text-align:justify">O MME regulamentou a compensação pelos cortes de geração e fechou acordo com geradores em torno de R$ 3,3 bilhões, definindo quem pode aderir, como será o cálculo e quais os prazos (Agência Infra; Cenário Energia; MegaWhat, 22/07/2026). A recontabilização caberá à CCEE e ao ONS, o que coloca a Câmara na engrenagem central da execução.</p>
+    <p style="margin:0;text-align:justify">A recepção foi de avanço parcial. A ABEEólica avaliou a portaria como sinal positivo, mas insuficiente para resolver o prejuízo acumulado, e não espera adesão total ao acordo; agentes avaliaram que a judicialização pode persistir (Agência Infra, 22/07/2026). Em paralelo, a ANEEL avalia mudanças nas regras de curtailment, com associações pedindo a retirada de dispositivos considerados inadequados (Cenário Energia, 21/07/2026), e o ONS propôs ajustes para garantir transição regulatória segura (Cenário Energia, 28/07/2026).</p>
+  </div>
+  <div style="background:#f2f6f6;border-left:3px solid #0f5563;padding:4mm 5mm;margin:3.5mm 0 0;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#0f5563;margin-bottom:2mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#2a2f34">A CCEE deve comunicar com precisão seu papel — recontabilização técnica, com prazos definidos em norma — e gerir expectativas, para que a complexidade do rito não seja lida como morosidade da Câmara. Transparência sobre etapas, critérios e cronograma é a melhor prevenção contra ruído.</p>
+  </div>
+
+  <!-- 4.4 -->
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:6mm 0 2.6mm;color:#15171c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0f5563;font-weight:500">4.4</span><span>A abertura da baixa tensão: a próxima fronteira da Câmara</span></h3>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 2.4mm;text-align:justify">O vetor mais estruturante do período foi a preparação das regras para que todos os consumidores possam escolher seu fornecedor de energia (O Globo; InfoMoney, 08/07/2026). A abertura da baixa tensão é descrita como inauguração de uma nova era do mercado livre, com potencial de redução de até 18% na conta de luz (Cenário Energia, 08/07/2026), e mobiliza desde alertas sobre a capacidade das distribuidoras até a chegada de novos entrantes internacionais ao mercado brasileiro.</p>
+    <p style="margin:0;text-align:justify">Para a CCEE, o movimento significa um salto de escala: mais agentes, mais contratos, mais liquidações e uma exposição pública muito maior — inclusive junto ao consumidor final, público com quem a Câmara historicamente não se comunica. Não por acaso, o debate setorial destacou a tecnologia e a inteligência artificial como condição para viabilizar a operação nessa escala.</p>
+  </div>
+  <div style="background:#f2f6f6;border-left:3px solid #0f5563;padding:4mm 5mm;margin:3.5mm 0 0;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#0f5563;margin-bottom:2mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#2a2f34">A CCEE deve começar desde já a preparar sua comunicação para um público mais amplo, traduzindo em linguagem acessível o que a Câmara faz e por que ela é a garantia de segurança do mercado. Antecipar essa pedagogia é decisivo para que a abertura seja associada a confiança, e não a risco.</p>
+  </div>
+
+  <!-- 4.5 -->
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:6mm 0 2.6mm;color:#15171c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0f5563;font-weight:500">4.5</span><span>Evolução dos modelos, liquidação e novos mercados</span></h3>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 2.4mm;text-align:justify">A agenda técnica avançou em várias frentes. ONS e CCEE abriram consulta sobre a evolução dos modelos do PMO e do PLD (MegaWhat, 07/07/2026), dando continuidade à governança instituída no Comitê Técnico. A Câmara e a ANEEL discutiram a liquidação semanal do MCP com cálculo diário, mudança de grande impacto operacional. E a CCEE propôs a criação de um agente virtual para liquidar a geração do LRCap (MegaWhat, 24/07/2026), endereçando lacuna do desenho de mercado.</p>
+    <p style="margin:0;text-align:justify">No armazenamento, a ANEEL levou os leilões de baterias à consulta pública sem definir o rateio do encargo (MegaWhat, 24/07/2026), deixando em aberto uma questão de custeio que afeta diretamente a contabilização futura.</p>
+  </div>
+  <div style="background:#f2f6f6;border-left:3px solid #0f5563;padding:4mm 5mm;margin:3.5mm 0 0;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#0f5563;margin-bottom:2mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#2a2f34">Essa agenda é a evidência mais concreta da competência técnica da Câmara e deve ganhar espaço proporcional na comunicação. Posicionar a CCEE como a instituição que moderniza modelos, liquidação e desenho de mercado reforça sua autoridade e contrabalança a narrativa de crise.</p>
+  </div>
+
+  <!-- 4.6 -->
+  <h3 style="display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;margin:6mm 0 2.6mm;color:#15171c;break-after:avoid"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#0f5563;font-weight:500">4.6</span><span>O valor do mercado livre e a agenda institucional</span></h3>
+  <div style="max-width:160mm">
+    <p style="margin:0;text-align:justify">Dois conjuntos de fatos reforçaram positivamente a percepção do ambiente. O primeiro é o benefício econômico documentado: segundo a CNI, o mercado livre reduziu a conta de luz de 73% das indústrias e mais de 40% delas migraram nos últimos dois anos (InfoMoney; PlatôBR, 29 e 30/07/2026), com casos concretos de economia relatados pela imprensa regional. O segundo é a agenda própria da Câmara: o Encontro CCEE e o Fórum CCEE no EVEx, o novo Portal do Aluno da CCEE Academy, cursos em parceria com a PSR, o lançamento da Sala Técnica da Operação com escuta ativa dos agentes, a renovação do compromisso com o Pacto Brasil pela Integridade Empresarial da CGU e o selo IIA pelo quarto ano consecutivo.</p>
+  </div>
+  <div style="background:#f2f6f6;border-left:3px solid #0f5563;padding:4mm 5mm;margin:3.5mm 0 0;max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:#0f5563;margin-bottom:2mm">Leitura estratégica</div>
+    <p style="margin:0;text-align:justify;font-size:12.5px;color:#2a2f34">Esse conjunto é o contrapeso natural à narrativa de crise e hoje circula sobretudo em canais próprios e especializados. Levá-lo a públicos mais amplos — com os dados da CNI como âncora — é o caminho mais eficaz para consolidar a imagem de um mercado que funciona e de uma instituição que o sustenta.</p>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 05 ============ -->
+<div id="s5" data-screen-label="05 Riscos" style="margin-top:8mm">
+  <div style="border-top:1.6px solid #15171c;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#0f5563;font-weight:600">05</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b9096">Riscos</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Riscos Reputacionais Prioritários</h2>
+
+  <div style="break-inside:avoid;margin-bottom:5mm">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#8b9096;margin-bottom:4mm">Matriz de risco · probabilidade × impacto</div>
+    <div style="display:flex;gap:8px;max-width:148mm">
+      <div style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#8b9096;display:flex;align-items:center;justify-content:center;padding-bottom:16px">Impacto</div>
+      <div style="flex:1">
+        <div style="display:grid;grid-template-columns:20mm 1fr 1fr 1fr;grid-auto-rows:50px;gap:4px">
+          <div style="display:flex;align-items:center;justify-content:flex-end;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#5b6069;padding-right:5px">Muito alto</div>
+          <div style="background:#f4f5f3"></div>
+          <div style="background:#f7ddcf"></div>
+          <div style="background:#f2cfc9;display:flex;align-items:center;justify-content:center"><span style="width:27px;height:27px;border-radius:50%;background:#8f2723;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">1</span></div>
+
+          <div style="display:flex;align-items:center;justify-content:flex-end;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#5b6069;padding-right:5px">Alto</div>
+          <div style="background:#f7f8f6;display:flex;align-items:center;justify-content:center"><span style="width:27px;height:27px;border-radius:50%;background:#a5322d;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">4</span></div>
+          <div style="background:#fbeede;display:flex;align-items:center;justify-content:center"><span style="width:27px;height:27px;border-radius:50%;background:#a5322d;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">5</span></div>
+          <div style="background:#f6dcd7;display:flex;align-items:center;justify-content:center"><span style="width:27px;height:27px;border-radius:50%;background:#a5322d;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">2</span></div>
+
+          <div style="display:flex;align-items:center;justify-content:flex-end;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#5b6069;padding-right:5px">Médio</div>
+          <div style="background:#f7f8f6"></div>
+          <div style="background:#f4f5f3;display:flex;align-items:center;justify-content:center"><span style="width:27px;height:27px;border-radius:50%;background:#6b7075;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">3</span></div>
+          <div style="background:#fbeede"></div>
+        </div>
+        <div style="display:grid;grid-template-columns:20mm 1fr 1fr 1fr;gap:4px;margin-top:5px">
+          <div></div>
+          <div style="text-align:center;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#5b6069">Média</div>
+          <div style="text-align:center;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#5b6069">Média-alta</div>
+          <div style="text-align:center;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#5b6069">Alta</div>
+        </div>
+        <div style="text-align:center;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:#8b9096;margin-top:6px;padding-left:20mm">Probabilidade</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:4.5mm">
+    <div style="display:grid;grid-template-columns:29px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="width:27px;height:27px;border-radius:50%;background:#8f2723;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">1</div>
+      <div>
+        <div style="font-weight:600;font-size:14px;margin-bottom:2mm;line-height:1.3">Contaminação da imagem da Câmara pela crise do mercado</div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:10px;margin-bottom:2mm"><span><span style="color:#8b9096">Probabilidade</span> <span style="color:#15171c;font-weight:500">Alta</span></span><span><span style="color:#8b9096">Impacto</span> <span style="color:#b23b36;font-weight:500;white-space:nowrap">Muito alto</span></span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b6069;margin-bottom:2mm">Sinal do mês — rombo acima de R$ 6 bi amplamente noticiado.</div>
+        <p style="margin:0;text-align:justify">Como instituição visível do mercado livre, a CCEE tende a absorver a percepção de fragilidade do ambiente que administra.</p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:29px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="width:27px;height:27px;border-radius:50%;background:#a5322d;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">2</div>
+      <div>
+        <div style="font-weight:600;font-size:14px;margin-bottom:2mm;line-height:1.3">Judicialização persistente em curtailment e desligamentos</div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:10px;margin-bottom:2mm"><span><span style="color:#8b9096">Probabilidade</span> <span style="color:#15171c;font-weight:500">Alta</span></span><span><span style="color:#8b9096">Impacto</span> <span style="color:#b23b36;font-weight:500">Alto</span></span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b6069;margin-bottom:2mm">Sinal do mês — agentes avaliam que a portaria pode manter a judicialização.</div>
+        <p style="margin:0;text-align:justify">Disputas prolongadas geram ruído recorrente e desgastam a previsibilidade dos instrumentos de governança.</p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:29px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="width:27px;height:27px;border-radius:50%;background:#6b7075;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">3</div>
+      <div>
+        <div style="font-weight:600;font-size:14px;margin-bottom:2mm;line-height:1.3">Expectativa frustrada na compensação do curtailment</div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:10px;margin-bottom:2mm"><span><span style="color:#8b9096">Probabilidade</span> <span style="color:#15171c;font-weight:500">Média-alta</span></span><span><span style="color:#8b9096">Impacto</span> <span style="color:#c1732a;font-weight:500">Médio</span></span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b6069;margin-bottom:2mm">Sinal do mês — ABEEólica não espera adesão total ao acordo.</div>
+        <p style="margin:0;text-align:justify">A complexidade do cálculo e dos prazos pode ser atribuída à Câmara, responsável pela recontabilização.</p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:29px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="width:27px;height:27px;border-radius:50%;background:#a5322d;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">4</div>
+      <div>
+        <div style="font-weight:600;font-size:14px;margin-bottom:2mm;line-height:1.3">Escala e exposição na abertura da baixa tensão</div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:10px;margin-bottom:2mm"><span><span style="color:#8b9096">Probabilidade</span> <span style="color:#15171c;font-weight:500">Média</span></span><span><span style="color:#8b9096">Impacto</span> <span style="color:#b23b36;font-weight:500">Alto</span></span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b6069;margin-bottom:2mm">Sinal do mês — preparação das regras de abertura.</div>
+        <p style="margin:0;text-align:justify">O aumento do número de agentes e a chegada do consumidor final ampliam a superfície de risco operacional e reputacional.</p>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:29px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="width:27px;height:27px;border-radius:50%;background:#a5322d;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">5</div>
+      <div>
+        <div style="font-weight:600;font-size:14px;margin-bottom:2mm;line-height:1.3">Entrada de agentes sem estrutura (“aventureiros”)</div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:10px;margin-bottom:2mm"><span><span style="color:#8b9096">Probabilidade</span> <span style="color:#15171c;font-weight:500">Média-alta</span></span><span><span style="color:#8b9096">Impacto</span> <span style="color:#b23b36;font-weight:500">Alto</span></span></div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:#5b6069;margin-bottom:2mm">Sinal do mês — alerta público da Neoenergia.</div>
+        <p style="margin:0;text-align:justify">Novos entrantes despreparados podem reproduzir, em escala maior, o ciclo de inadimplência.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 06 ============ -->
+<div id="s6" data-screen-label="06 Oportunidades" style="margin-top:8mm">
+  <div style="border-top:1.6px solid #15171c;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#0f5563;font-weight:600">06</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b9096">Oportunidades</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Oportunidades de Posicionamento Institucional</h2>
+  <div style="display:flex;flex-direction:column;gap:4.5mm">
+    <div style="display:grid;grid-template-columns:29px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="width:27px;height:27px;border-radius:50%;background:#0f5563;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">1</div>
+      <div><div style="font-weight:600;font-size:14px;margin-bottom:1.6mm">Narrativa de confiabilidade validada</div><p style="margin:0;text-align:justify">Traduzir o respaldo da ANEEL e do Judiciário em mensagem sobre segurança do mercado e proteção dos agentes adimplentes.</p></div>
+    </div>
+    <div style="display:grid;grid-template-columns:29px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="width:27px;height:27px;border-radius:50%;background:#0f5563;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">2</div>
+      <div><div style="font-weight:600;font-size:14px;margin-bottom:1.6mm">Pedagogia para o novo consumidor</div><p style="margin:0;text-align:justify">Antecipar a comunicação da abertura da baixa tensão, explicando o papel da Câmara em linguagem acessível.</p></div>
+    </div>
+    <div style="display:grid;grid-template-columns:29px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="width:27px;height:27px;border-radius:50%;background:#23806e;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">3</div>
+      <div><div style="font-weight:600;font-size:14px;margin-bottom:1.6mm">Dados da CNI como âncora de valor</div><p style="margin:0;text-align:justify">Usar a economia comprovada para a indústria como prova concreta dos benefícios do mercado livre.</p></div>
+    </div>
+    <div style="display:grid;grid-template-columns:29px 1fr;gap:12px;break-inside:avoid;max-width:160mm">
+      <div style="width:27px;height:27px;border-radius:50%;background:#23806e;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center">4</div>
+      <div><div style="font-weight:600;font-size:14px;margin-bottom:1.6mm">Amplificação da agenda institucional</div><p style="margin:0;text-align:justify">Levar Academy, Sala Técnica, integridade e certificações a públicos mais amplos, consolidando a imagem de instituição técnica e transparente.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 07 ============ -->
+<div id="s7" data-screen-label="07 Recomendações" style="margin-top:8mm">
+  <div style="border-top:1.6px solid #15171c;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#0f5563;font-weight:600">07</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b9096">Ação</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Recomendações Executivas</h2>
+
+  <div style="max-width:160mm;break-inside:avoid">
+    <div style="padding-bottom:2.4mm;border-bottom:1px solid #e4e4e0;margin-bottom:3.2mm"><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#0f5563;font-weight:500">Ações Imediatas</span></div>
+    <ul style="list-style:none;margin:0 0 6mm;padding:0;display:flex;flex-direction:column;gap:2.6mm">
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0f5563;font-weight:600">→</span><span style="text-align:justify">Construir mensagem institucional sobre o significado sistêmico das decisões referendadas pela ANEEL e pelo Judiciário, sem tom de disputa com empresas.</span></li>
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0f5563;font-weight:600">→</span><span style="text-align:justify">Divulgar indicadores de melhora da inadimplência do MCP como evidência de que a disciplina de mercado funciona.</span></li>
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0f5563;font-weight:600">→</span><span style="text-align:justify">Comunicar com clareza o papel e o cronograma da CCEE na recontabilização da compensação do curtailment.</span></li>
+    </ul>
+  </div>
+
+  <div style="max-width:160mm;break-inside:avoid">
+    <div style="padding-bottom:2.4mm;border-bottom:1px solid #e4e4e0;margin-bottom:3.2mm"><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#0f5563;font-weight:500">Ações de Curto Prazo</span></div>
+    <ul style="list-style:none;margin:0 0 6mm;padding:0;display:flex;flex-direction:column;gap:2.6mm">
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0f5563;font-weight:600">→</span><span style="text-align:justify">Estruturar plano de comunicação para a abertura da baixa tensão, com linguagem voltada ao consumidor final.</span></li>
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0f5563;font-weight:600">→</span><span style="text-align:justify">Dar visibilidade proporcional à agenda técnica (PMO/PLD, liquidação, agente virtual do LRCap) e institucional (Academy, Sala Técnica, integridade).</span></li>
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0f5563;font-weight:600">→</span><span style="text-align:justify">Preparar posicionamento sobre exigências de garantias e qualificação de novos agentes, diante do alerta sobre entrantes despreparados.</span></li>
+    </ul>
+  </div>
+
+  <div style="max-width:160mm;break-inside:avoid">
+    <div style="padding-bottom:2.4mm;border-bottom:1px solid #e4e4e0;margin-bottom:3.2mm"><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#0f5563;font-weight:500">Ações de Médio Prazo</span></div>
+    <ul style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2.6mm">
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0f5563;font-weight:600">→</span><span style="text-align:justify">Consolidar a narrativa da CCEE como garantia de confiabilidade de um mercado em expansão.</span></li>
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0f5563;font-weight:600">→</span><span style="text-align:justify">Desenvolver relacionamento com imprensa econômica e de consumo, públicos que ganharão peso com a abertura.</span></li>
+      <li style="display:grid;grid-template-columns:15px 1fr;gap:10px;align-items:start"><span style="font-family:'IBM Plex Mono',monospace;color:#0f5563;font-weight:600">→</span><span style="text-align:justify">Manter monitoramento reputacional contínuo, com alertas para inadimplência, judicialização, curtailment e abertura.</span></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 08 ============ -->
+<div id="s8" data-screen-label="08 Cenários" style="margin-top:8mm">
+  <div style="border-top:1.6px solid #15171c;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#0f5563;font-weight:600">08</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b9096">Cenários</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Cenários Prospectivos</h2>
+  <div style="display:flex;flex-direction:column;gap:0">
+    <div style="border-top:1px solid #e4e4e0;padding:4mm 0;break-inside:avoid;max-width:160mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#8b9096;margin-bottom:2mm">Cenário 01</div>
+      <div style="font-weight:600;font-size:14.5px;margin-bottom:2mm">Consolidação da confiança</div>
+      <p style="margin:0 0 2.4mm;text-align:justify">A inadimplência recua, as decisões seguem referendadas e a abertura avança com regras claras.</p>
+      <div style="font-size:12.5px;color:#2a2f34"><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:#0f5563;font-weight:600">Resposta recomendada &nbsp;</span>Comunicação ativa de indicadores e pedagogia sobre o papel da Câmara.</div>
+    </div>
+    <div style="border-top:1px solid #e4e4e0;padding:4mm 0;break-inside:avoid;max-width:160mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#8b9096;margin-bottom:2mm">Cenário 02</div>
+      <div style="font-weight:600;font-size:14.5px;margin-bottom:2mm">Nova onda de inadimplência</div>
+      <p style="margin:0 0 2.4mm;text-align:justify">Estiagem, pressão sobre o PLD e novos entrantes despreparados ampliam o rombo.</p>
+      <div style="font-size:12.5px;color:#2a2f34"><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:#0f5563;font-weight:600">Resposta recomendada &nbsp;</span>Reforço do argumento sistêmico, transparência sobre garantias e articulação técnica com ANEEL e MME.</div>
+    </div>
+    <div style="border-top:1px solid #e4e4e0;border-bottom:1px solid #e4e4e0;padding:4mm 0;break-inside:avoid;max-width:160mm">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:#8b9096;margin-bottom:2mm">Cenário 03</div>
+      <div style="font-weight:600;font-size:14.5px;margin-bottom:2mm">Abertura acelerada da baixa tensão</div>
+      <p style="margin:0 0 2.4mm;text-align:justify">A entrada massiva de consumidores exige salto operacional e expõe a Câmara ao grande público.</p>
+      <div style="font-size:12.5px;color:#2a2f34"><span style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:#0f5563;font-weight:600">Resposta recomendada &nbsp;</span>Antecipação da comunicação ao consumidor e preparação de canais de atendimento e informação.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 09 ============ -->
+<div id="s9" data-screen-label="09 SAUZ" style="margin-top:8mm">
+  <div style="border-top:1.6px solid #15171c;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#0f5563;font-weight:600">09</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b9096">SAUZ</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 4.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Demonstração dos Serviços — SAUZ</h2>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 2.4mm;text-align:justify">No período analisado, a SAUZ atuou como instância de apoio técnico e aconselhamento estratégico à alta administração da CCEE, subsidiando a equipe da Câmara com inteligência de mídia, leitura de cenário e recomendações de posicionamento. A atuação teve caráter consultivo e de suporte: contribuiu para a interpretação dos temas de maior sensibilidade do período — a crise das comercializadoras, a validação das decisões pela ANEEL e pelo Judiciário, a compensação do curtailment e a abertura da baixa tensão — e para a preparação de subsídios à decisão, preservando na própria administração da CCEE a coordenação e a condução das ações institucionais.</p>
+    <p style="margin:0 0 4.5mm;text-align:justify">O esforço do período concentrou-se em distinguir, no ambiente público, o que é crise de mercado do que é atuação da Câmara, e em identificar ativos de comunicação subutilizados — como o respaldo regulatório às decisões e os indicadores de recuo da inadimplência. A SAUZ manteve o monitoramento do ambiente de mídia, a qualificação das evidências relevantes e a produção de análises de apoio, sempre em posição de assessoria e conforme as prioridades definidas pela própria alta administração.</p>
+  </div>
+
+  <div style="max-width:160mm;break-inside:avoid">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#0f5563;padding-bottom:2.4mm;border-bottom:1px solid #e4e4e0">Resumo das Atividades Realizadas</div>
+    <table style="width:100%;border-collapse:collapse">
+      <thead><tr>
+        <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#8b9096;font-weight:500;padding:2.6mm 9px 2.6mm 0;border-bottom:1px solid #e4e4e0">Indicador</th>
+        <th style="text-align:right;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#8b9096;font-weight:500;padding:2.6mm 0;border-bottom:1px solid #e4e4e0;width:32%">Quantidade</th>
+      </tr></thead>
+      <tbody style="font-size:12.5px">
+        <tr><td style="padding:3mm 9px 3mm 0;border-bottom:1px solid #ececec;vertical-align:middle">Reuniões presenciais</td><td style="padding:3mm 0;border-bottom:1px solid #ececec;text-align:right"><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#8b9096;background:#f4f5f3;padding:3px 11px;border:1px dashed #c2c8ca;white-space:nowrap">[A PREENCHER]</span></td></tr>
+        <tr><td style="padding:3mm 9px 3mm 0;border-bottom:1px solid #ececec;vertical-align:middle">Reuniões virtuais</td><td style="padding:3mm 0;border-bottom:1px solid #ececec;text-align:right"><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#8b9096;background:#f4f5f3;padding:3px 11px;border:1px dashed #c2c8ca;white-space:nowrap">[A PREENCHER]</span></td></tr>
+        <tr><td style="padding:3mm 9px 3mm 0;border-bottom:1px solid #ececec;vertical-align:middle">Orientações estratégicas</td><td style="padding:3mm 0;border-bottom:1px solid #ececec;text-align:right"><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#8b9096;background:#f4f5f3;padding:3px 11px;border:1px dashed #c2c8ca;white-space:nowrap">[A PREENCHER]</span></td></tr>
+        <tr><td style="padding:3mm 9px 3mm 0;vertical-align:middle">Ações de relacionamento com a imprensa</td><td style="padding:3mm 0;text-align:right"><span style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#8b9096;background:#f4f5f3;padding:3px 11px;border:1px dashed #c2c8ca;white-space:nowrap">[A PREENCHER]</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ============ SEÇÃO 10 ============ -->
+<div id="s10" data-screen-label="10 Base de Evidências" style="break-before:page;padding-top:2mm">
+  <div style="border-top:1.6px solid #15171c;padding-top:4mm;display:flex;gap:11px;align-items:baseline">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;color:#0f5563;font-weight:600">10</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b9096">Evidências</span>
+  </div>
+  <h2 style="font-size:21px;font-weight:600;margin:3mm 0 3.5mm;letter-spacing:-.012em;line-height:1.14;max-width:150mm">Base Qualificada de Evidências Monitoradas no Mês</h2>
+  <div style="max-width:160mm">
+    <p style="margin:0 0 3.5mm;text-align:justify">O monitoramento do período reuniu 326 itens, dos quais 50 com menção direta à CCEE. A tabela apresenta a seleção qualificada que sustenta a análise.</p>
+  </div>
+
+  <div style="display:flex;gap:15px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:#5b6069;margin-bottom:3mm">
+    <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:11px;height:11px;background:#e8f3ea;border:1px solid #cfe3d5;display:inline-block"></span>Positivo</span>
+    <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:11px;height:11px;background:#ffffff;border:1px solid #d8d8d4;display:inline-block"></span>Neutro</span>
+    <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:11px;height:11px;background:#fae9e8;border:1px solid #eccbc9;display:inline-block"></span>Negativo</span>
+  </div>
+
+  <table style="width:100%;border-collapse:collapse;break-inside:auto">
+    <thead><tr>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:#8b9096;font-weight:500;padding:0 5px 2.2mm 7px;border-bottom:1.5px solid #15171c;width:7%">Data</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:#8b9096;font-weight:500;padding:0 5px 2.2mm 5px;border-bottom:1.5px solid #15171c;width:19%">Veículo</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:#8b9096;font-weight:500;padding:0 5px 2.2mm 5px;border-bottom:1.5px solid #15171c;width:50%">Título</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:#8b9096;font-weight:500;padding:0 5px 2.2mm 5px;border-bottom:1.5px solid #15171c;width:11%">Relev.</th>
+      <th style="text-align:left;font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;color:#8b9096;font-weight:500;padding:0 7px 2.2mm 5px;border-bottom:1.5px solid #15171c;width:13%">Tom</th>
+    </tr></thead>
+    <tbody style="font-size:10.5px;line-height:1.32">
+      <tr style="background:#e8f3ea"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f0efe9;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">28/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Cenário Energia</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">ANEEL nega efeito suspensivo e mantém desligamento da 2W da CCEE</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f0efe9;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">28/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">MegaWhat</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Aneel mantém desligamento da 2W Varejista por inadimplência e risco ao mercado</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f0efe9;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">02/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">MegaWhat</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">TJPR e STJ freiam decisão que permitiu zerar contratos da Electra na CCEE</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f0efe9;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">02/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">MegaWhat</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Inadimplência do MCP deve cair para R$ 424 milhões, estima CCEE</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr style="background:#fae9e8"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f3eceb;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">13/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Folha de S.Paulo</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Comercializadoras de energia entram em crise com rombo de mais de R$ 6 bi</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr style="background:#fae9e8"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f3eceb;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">28/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">BPMoney</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Crise no mercado livre de energia supera R$ 6 bilhões, alerta ANACE</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr style="background:#fae9e8"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f3eceb;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">15/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">MegaWhat</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">2W, Electra Varejista e Oi concentram inadimplência do MCP em maio</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr style="background:#fae9e8"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f3eceb;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">16/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">VEJA</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Sob restrição na CCEE, Electra concluiu negócio de R$ 450 mi com a Copel</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Média</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr style="background:#fae9e8"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f3eceb;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">20/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Agência Infra</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Neoenergia alerta para risco de empresas 'aventureiras' no mercado livre</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr style="background:#fae9e8"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f3eceb;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">09/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Agência eixos</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Quais serão as consequências da crise das comercializadoras de energia</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #ececec;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">22/07</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">Agência Infra</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">MME e geradores fecham acordo para ressarcimento de R$ 3,3 bi por curtailment</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #ececec;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #ececec;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">22/07</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">Cenário Energia</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">MME regulamenta compensação por curtailment e define regras de ressarcimento</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #ececec;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #ececec;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">22/07</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">MegaWhat</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">Compensação do curtailment: quem pode aderir, cálculo e prazos</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #ececec;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr style="background:#fae9e8"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f3eceb;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">22/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Agência Infra</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Abeeólica: portaria é sinal positivo, mas não resolve prejuízo do curtailment</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr style="background:#fae9e8"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f3eceb;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">22/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Agência Infra</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Curtailment: agentes dizem que portaria pode manter judicialização</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #ececec;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">21/07</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">Cenário Energia</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">ANEEL avalia mudanças no curtailment; associações pedem retirada de regras</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #ececec;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #ececec;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">28/07</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">Cenário Energia</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">ONS propõe ajustes à ANEEL para transição segura das regras de curtailment</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">Média</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #ececec;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f0efe9;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">08/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">O Globo</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Governo prepara regras para consumidores escolherem fornecedor de energia</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f0efe9;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">08/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Cenário Energia</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Abertura da baixa tensão inaugura nova era e pode reduzir conta em até 18%</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f0efe9;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">29/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">InfoMoney</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Mercado livre reduz conta de luz de 73% das indústrias, aponta CNI</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f0efe9;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">30/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Ag. Notícias da Indústria</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Mais de 40% das indústrias migraram ao mercado livre em 2 anos (CNI)</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f0efe9;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">07/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">MegaWhat</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">ONS e CCEE abrem consulta sobre evolução de modelos do PMO e PLD</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Média</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #ececec;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">07/07</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">MegaWhat</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">CCEE e Aneel discutem liquidação semanal do MCP com cálculo diário</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">Média</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #ececec;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f0efe9;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">24/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">MegaWhat</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">CCEE propõe criar agente virtual para liquidar geração do LRCap</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Alta</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #ececec;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">24/07</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">MegaWhat</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">Aneel leva leilões de baterias à consulta pública sem definir rateio</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">Média</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #ececec;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #ececec;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">23/07</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">Cenário Energia</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">CMSE antecipa 1,8 GW de térmicas e reduz pressão sobre o PLD</td><td style="padding:2mm 5px;border-bottom:1px solid #ececec;vertical-align:top">Média</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #ececec;vertical-align:top;color:#6b7075;font-weight:500">Neutro</td></tr>
+      <tr style="background:#fae9e8"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f3eceb;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">21/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Cenário Energia</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Estiagem eleva pressão sobre o PLD no segundo semestre</td><td style="padding:2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top">Média</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f3eceb;vertical-align:top;color:#b23b36;font-weight:500">Negativo</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f0efe9;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">29/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">CCEE</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">CCEE lança Sala Técnica da Operação e reforça escuta ativa com os agentes</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Média</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f0efe9;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">27/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">CCEE</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">CCEE renova compromisso com o Pacto Brasil pela Integridade Empresarial (CGU)</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Média</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f0efe9;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">24/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">CCEE</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Pelo quarto ano consecutivo, a CCEE recebe o selo IIA</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Média</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f0efe9;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">01/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">CCEE</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">CCEE Academy lança novo Portal do Aluno e fortalece capacitação do setor</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Média</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 5px 2mm 7px;border-bottom:1px solid #f0efe9;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">03/07</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">CCEE</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Fórum CCEE no EVEx 2026 amplia diálogo sobre abertura do mercado</td><td style="padding:2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top">Média</td><td style="padding:2mm 7px 2mm 5px;border-bottom:1px solid #f0efe9;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+      <tr style="background:#e8f3ea"><td style="padding:2mm 5px 2mm 7px;vertical-align:top;font-family:'IBM Plex Mono',monospace;color:#5b6069">06/07</td><td style="padding:2mm 5px;vertical-align:top">Eixos</td><td style="padding:2mm 5px;vertical-align:top">CCEE vê crescimento exponencial na demanda por certificados de energia limpa</td><td style="padding:2mm 5px;vertical-align:top">Média</td><td style="padding:2mm 7px 2mm 5px;vertical-align:top;color:#2f7d4f;font-weight:500">Positivo</td></tr>
+    </tbody>
+  </table>
+
+  <div style="max-width:160mm;margin-top:4mm">
+    <p style="margin:0;font-size:11.5px;color:#5b6069;text-align:justify"><span style="font-style:italic">Nota metodológica:</span> seleção qualificada a partir do monitoramento do período. Os dados refletem o que consta das matérias, sem extrapolação.</p>
+  </div>
+</div>
+
+<!-- ENCERRAMENTO -->
+<div data-screen-label="Encerramento" style="margin-top:9mm;border-top:1.6px solid #15171c;padding-top:5mm;break-inside:avoid">
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#8b9096;margin-bottom:3.5mm">Encerramento</div>
+  <p style="margin:0 0 5mm;font-size:13.5px;color:#2a2f34">São Paulo/SP, agosto de 2026.</p>
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#5b6069;margin-bottom:5px">Suporte estratégico prestado por</div>
+  <img src="sauz-logo-dark.png" alt="SAUZ" style="height:32px;display:block"/>
+</div>
+
+<!--CONTENT_END-->
+</div>
+</x-import>
+</x-dc>
+</body>
+</html>
