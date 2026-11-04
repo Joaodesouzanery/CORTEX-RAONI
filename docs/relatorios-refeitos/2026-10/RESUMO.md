@@ -6,7 +6,8 @@ Cada cliente tem 20 notícias de outubro de 2026 com link exato. Cada link foi a
 |---|---|---|---|---|
 | PRIO | VX | 15 / 5 | 9 de 10 (fora do mês, título que não existe na página, portal que nem cita a PRIO) | O fato do mês faltou: a PRIO arrematou os blocos Magnetita e Hematita no pré-sal em 07/10, com 8 matérias. A CNN de 05/10 ("Prio eleva vendas no 3º tri") é a provável matéria perdida |
 | CCEE | SAUZ | 18 / 2 | 6 de 10 (4 fora de outubro e 2 links `?p=` da Agência iNFRA que abrem outra matéria) | Leilão de gás da União na plataforma da CCEE, com 9 matérias. Porta-vozes: Gerusa Côrtes e Ricardo Simabuku |
-| SINDINFOR | SAUZ | 2 / 18 | 23 de 24 (13 fora do mês, vários 404, links que não abrem) | **Confirmar a entidade:** sindinfor.org.br é de Minas Gerais; a entidade de TI do DF na imprensa é o SINFOR/DF. Nenhuma matéria de outubro cita a entidade |
+| SINDINFOR-MG (Empresa) | SAUZ | 3 / 17 | 23 de 24 (13 fora do mês, vários 404, links que não abrem) | Sindicato de Minas Gerais. Nenhuma matéria do mês cita o Sindinfor pelo nome; o bloco Cliente traz Assespro-MG, o governo de MG e o Fiemg Lab (Diário do Comércio) |
+| SINDINFOR-MG (Associados) | SAUZ | 3 / 17 | (mesma base) | Foco em mercado de trabalho, capacitação, IA e reforma tributária |
 | ONS | CRT | 19 / 1 | — (não há relatório de outubro entregue no zip) | 13 das 20 estavam no clipping do fornecedor. O clipping perdeu 3 da janela dele, incluindo a única crítica ao ONS no mês (Poder360, cortes de geração +52%) |
 | SIMINERAL | SAUZ | 8 / 12 | — (o rascunho do outro chat estava em Minas Gerais e com o mês errado) | Carta Santarém (relatório ESG, 20/10) e Panorama da Mineração do 1º semestre. A Brasil Mineral (página do Pará) é a melhor fonte |
 | DAQ | SAUZ | 11 / 9 | 9 de 9 (fora do mês ou do tema, 8 sem data) | Dragagens no Madeira, Paraguai e Manaus–Careiro. Ponto de atenção: "dragagem sem licença", A Crítica, 31/10 |
