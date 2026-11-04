@@ -1,0 +1,92 @@
+[
+  {
+    "date": "2026-10-22",
+    "outlet": "Cenário Energia",
+    "title": "Vale, CSN e Gerdau compram gás da União em leilão inédito da PPSA",
+    "url": "https://cenarioenergia.com.br/2026/10/22/vale-csn-e-gerdau-compram-gas-da-uniao-em-leilao-inedito-da-ppsa/",
+    "spokesperson": "CCEE / MME",
+    "tone": "Positivo",
+    "origem": "Relatorio CCEE Outubro 2026.dc.html"
+  },
+  {
+    "date": "2026-10-22",
+    "outlet": "Agência Infra",
+    "title": "Leilão de gás natural da União movimenta 1,1 milhão de m³/dia na plataforma CCEE",
+    "url": "https://agenciainfra.com/blog/?p=49187",
+    "spokesperson": "CCEE",
+    "tone": "Positivo",
+    "origem": "Relatorio CCEE Outubro 2026.dc.html"
+  },
+  {
+    "date": "2026-10-22",
+    "outlet": "Movimento Econômico",
+    "title": "Braskem é a única compradora com CNPJ do Nordeste no 1º Leilão de Gás da União",
+    "url": "https://movimentoeconomico.com.br/petroleo-e-gas/2026/10/22/braskem-e-a-unica-compradora-com-cnpj-do-nordeste-no-1o-leilao-de-gas-da-uniao/",
+    "spokesperson": "CCEE",
+    "tone": "Positivo",
+    "origem": "Relatorio CCEE Outubro 2026.dc.html"
+  },
+  {
+    "date": "2026-10-16",
+    "outlet": "Cenário Energia",
+    "title": "ONS, CCEE e EPE lançam modelo COBRE de código aberto no GitHub",
+    "url": "https://cenarioenergia.com.br/2026/10/16/ons-ccee-epe-codigo-aberto-github-novo-modelo-pld-newave-decomp/",
+    "spokesperson": "EPE, ONS, CCEE",
+    "tone": "Positivo",
+    "origem": "Relatorio CCEE Outubro 2026.dc.html"
+  },
+  {
+    "date": null,
+    "outlet": "Eixos",
+    "title": "Portaria traz alívio mas não encerra judicialização sobre cortes de geração",
+    "url": "https://eixos.com.br/energias-renovaveis/portaria-traz-alivio-mas-nao-encerra-judicializacao-sobre-cortes-de-geracao-avaliam-geradores-e-especialistas/",
+    "spokesperson": "Geradores e especialistas",
+    "tone": "Neutro",
+    "origem": "Relatorio CCEE Outubro 2026.dc.html"
+  },
+  {
+    "date": null,
+    "outlet": "Agência Infra",
+    "title": "Aneel propõe atualização de montantes de uso de distribuidoras junto à CCEE e ONS",
+    "url": "https://agenciainfra.com/blog/?p=48871",
+    "spokesperson": "ANEEL",
+    "tone": "Neutro",
+    "origem": "Relatorio CCEE Outubro 2026.dc.html"
+  },
+  {
+    "date": null,
+    "outlet": "Cenário Energia",
+    "title": "Decreto regulamenta expansão do Mercado Livre para baixa tensão via CCEE",
+    "url": "https://cenarioenergia.com.br/2026/08/18/decreto-regulamenta-mercado-livre-baixa-tensao-ccee/",
+    "spokesperson": "CCEE / MME",
+    "tone": "Positivo",
+    "origem": "Relatorio CCEE Outubro 2026.dc.html"
+  },
+  {
+    "date": "2026-10-05",
+    "outlet": "Cenário Energia",
+    "title": "ONS aponta afluência superior à média no Sul e Sudeste em outubro",
+    "url": "https://cenarioenergia.com.br/2026/10/05/ons-aponta-afluencia-superior-media-sul-sudeste-outubro/",
+    "spokesperson": "ONS / CCEE",
+    "tone": "Neutro",
+    "origem": "Relatorio CCEE Outubro 2026.dc.html"
+  },
+  {
+    "date": null,
+    "outlet": "Cenário Energia",
+    "title": "Geração distribuída atinge 50 GW no Brasil e reforça papel estratégico na segurança energética",
+    "url": "https://cenarioenergia.com.br/2026/03/12/geracao-distribuida-atinge-50-gw-no-brasil-e-reforca-papel-estrategico-na-seguranca-energetica/",
+    "spokesperson": "CCEE / ANEEL",
+    "tone": "Neutro",
+    "origem": "Relatorio CCEE Outubro 2026.dc.html"
+  },
+  {
+    "date": null,
+    "outlet": "Brasil Energia",
+    "title": "Os desafios do novo governo no setor de energia",
+    "url": "https://brasilenergia.com.br/energia/os-desafios-do-novo-governo-no-setor-de-energia",
+    "spokesperson": "Analistas setoriais",
+    "tone": "Neutro",
+    "origem": "Relatorio CCEE Outubro 2026.dc.html"
+  }
+]

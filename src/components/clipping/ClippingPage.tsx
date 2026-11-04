@@ -94,7 +94,12 @@ export default function ClippingPage() {
     <>
       <Band tone="brand">
         <h1 className="text-4xl font-light tracking-tight md:text-5xl">Clipping diário</h1>
-        <p className="mt-2 max-w-2xl text-white/80">Tudo o que saiu sobre o cliente e o setor no dia, coletado e classificado automaticamente, com link para a matéria.</p>
+        <p className="mt-2 max-w-2xl text-white/80">Tudo o que saiu sobre o cliente e sobre o setor e os temas dele no dia, coletado e classificado automaticamente, com link para a matéria.</p>
+        {data && (
+          <p className="mt-3 text-sm text-white/90">
+            {data.client.length + data.sector.length} matérias no dia · {data.client.length} citam o cliente · {data.sector.length} do setor e temas
+          </p>
+        )}
         <div className="mt-6 flex flex-wrap gap-3">
           <select aria-label="Cliente" value={clientId} onChange={(event) => setClientId(event.target.value)} className="h-10 rounded border border-white/30 bg-white px-3 text-sm text-black">
             {clients.map((client) => <option key={client.id} value={client.id}>{client.name}</option>)}
@@ -114,7 +119,7 @@ export default function ClippingPage() {
             <Block title={clientName} subtitle="Matérias que citam o cliente, seus porta-vozes ou siglas." items={data.client} empty="Nenhuma matéria citou o cliente neste dia até agora." />
           </Band>
           <Band>
-            <Block title="Setor" subtitle="Matérias do setor qualificadas pelas regras do cliente (termo do setor no título ou no resumo)." items={data.sector} empty="Nenhuma matéria do setor qualificada neste dia." />
+            <Block title="Setor e temas do cliente" subtitle="Não precisa citar o cliente: entra o que é do setor e dos temas que ele acompanha (regras do cliente com o termo no título ou no resumo)." items={data.sector} empty="Nenhuma matéria do setor qualificada neste dia." />
           </Band>
           <Band tone="gray">
             <SectionTitle title="Cobertura do dia" subtitle="Situação da coleta: fonte fora do ar é falha da coleta, não ausência de notícia." />

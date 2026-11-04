@@ -27,6 +27,40 @@ Atualizado em 04/11/2026. A lista viva está na tela Saúde (fontes com erro na
 | Eixos (parte do conteúdo) | Idem | Assinatura Eixos, muito citada nos relatórios de energia e petróleo |
 | MegaWhat (parte do conteúdo) | Idem | Assinatura, citada nos relatórios da CCEE e da ONS |
 
+## Feeds oficiais que funcionam (migration 053, testados em 04/11/2026)
+
+Esses veículos publicam um feed RSS público com título, resumo e link. Isso é
+**automação legítima**: é o que o próprio veículo distribui. Não entrega o texto
+completo das matérias fechadas.
+
+| Veículo | Feed | Itens por leitura |
+|---|---|---|
+| Valor Econômico | valor.globo.com/rss/valor | 100 |
+| Estadão | estadao.com.br/arc/outboundfeeds/rss | 100 |
+| CNN Brasil | cnnbrasil.com.br/feed | 60 |
+| Folha (Mercado e Poder) | feeds.folha.uol.com.br | 100 cada |
+| G1 (Economia e Tecnologia) | g1.globo.com/rss | 100 cada |
+| Poder360, InfoMoney, Metrópoles | /feed | 10 a 20 |
+| Eixos, MegaWhat | /feed (já cadastrados) | 10 a 20 |
+
+Não funcionam: **O Globo** (RSS responde 400; entra pela busca do Google News da
+051) e **Brasil Energia** (403).
+
+## Por que não "raspar" o texto completo
+
+Ler a matéria atrás do paywall exige contornar a barreira (login automatizado,
+cookies de assinante, robô fingindo ser buscador). Isso fere os termos de uso,
+expõe a consultoria a ação por direito autoral e está vetado no repositório. Os
+caminhos legítimos para o texto integral:
+
+1. **Assinatura corporativa com API ou licença de clipping.** Estadão/Broadcast e
+   Valor (Valor PRO) vendem acesso para empresas; peça a licença de uso para
+   monitoramento.
+2. **Clipping licenciado.** Um fornecedor que já paga os direitos e entrega o texto.
+   O Cortex importa o PDF diário (a importação já existe).
+3. **Só título e link** (como hoje). Para clipping e relatório basta: o link é
+   obrigatório e o texto não.
+
 ## Para o sócio decidir
 
 1. **Brasil Energia** é a única lacuna sem nenhuma cobertura. Recomendo uma assinatura com feed ou newsletter.

@@ -1,0 +1,83 @@
+[
+  {
+    "date": null,
+    "outlet": "Agrolink",
+    "title": "Audiência pública reúne contribuições para concessão do SAI Sul-Mirim",
+    "url": "https://www.agrolink.com.br/noticias/audiencia-publica-reune-contribuicoes-para-concessao-do-saip-sul-mirim_517848.html",
+    "spokesperson": "DNIT / Min. Transportes",
+    "tone": "Positivo",
+    "origem": "Relatorio DAQ Outubro 2026.dc.html"
+  },
+  {
+    "date": null,
+    "outlet": "Exame",
+    "title": "Seca no Amazonas: empresas da Zona Franca sofrem impactos na produção",
+    "url": "https://exame.com/negocios/seca-no-amazonas-empresas-da-zona-franca-sofrem-impactos-na-producao-e-avaliam-ferias-coletivas/",
+    "spokesperson": "Empresas / Governo Federal",
+    "tone": "Neutro",
+    "origem": "Relatorio DAQ Outubro 2026.dc.html"
+  },
+  {
+    "date": null,
+    "outlet": "Agência Infra",
+    "title": "Seca se aproxima e falta de dragagem ameaça navegação no Amazonas",
+    "url": "https://agenciainfra.com/blog/seca-se-aproxima-e-falta-de-dragagem-ameaca-navegacao-no-amazonas/",
+    "spokesperson": "DNIT",
+    "tone": "Neutro",
+    "origem": "Relatorio DAQ Outubro 2026.dc.html"
+  },
+  {
+    "date": null,
+    "outlet": "Agência Infra",
+    "title": "DNIT entrega nova estrutura da IP4 de Itacoatiara para modernizar logística e mobilidade regional",
+    "url": "https://agenciainfra.com/blog/dnit-entrega-nova-estrutura-da-ip4-de-itacoatiara-antigo-para-modernizar-logistica-e-mobilidade-regional/",
+    "spokesperson": "DNIT",
+    "tone": "Positivo",
+    "origem": "Relatorio DAQ Outubro 2026.dc.html"
+  },
+  {
+    "date": null,
+    "outlet": "GetTransport",
+    "title": "Shipping out of Brazil 2026: Santos congestion and agri exports",
+    "url": "https://blog.gettransport.com/pt/trends-in-logistic/shipping-out-of-brazil-2026-santos-congestion-agri-export/",
+    "spokesperson": "Autoridades portuárias",
+    "tone": "Neutro",
+    "origem": "Relatorio DAQ Outubro 2026.dc.html"
+  },
+  {
+    "date": null,
+    "outlet": "Agência Infra",
+    "title": "Cabotagem cresce; ABAC e ANTAQ debatem regulação de feeder e contêineres",
+    "url": "https://agenciainfra.com/blog/?p=47598",
+    "spokesperson": "ABAC / ANTAQ",
+    "tone": "Positivo",
+    "origem": "Relatorio DAQ Outubro 2026.dc.html"
+  },
+  {
+    "date": null,
+    "outlet": "Agência Infra",
+    "title": "Ministério dos Portos sinaliza flexibilização de contratos de arrendamento",
+    "url": "https://agenciainfra.com/blog/?p=48566",
+    "spokesperson": "MPor",
+    "tone": "Positivo",
+    "origem": "Relatorio DAQ Outubro 2026.dc.html"
+  },
+  {
+    "date": null,
+    "outlet": "Agência Infra",
+    "title": "ANTAQ abre consulta sobre transbordo de granéis sólidos",
+    "url": "https://agenciainfra.com/blog/?p=47364",
+    "spokesperson": "ANTAQ",
+    "tone": "Neutro",
+    "origem": "Relatorio DAQ Outubro 2026.dc.html"
+  },
+  {
+    "date": "2026-10-30",
+    "outlet": "Movimento Econômico",
+    "title": "Temporada de cruzeiros começa com 24% mais leitos e sete destinos no Nordeste",
+    "url": "https://movimentoeconomico.com.br/turismo-3/2026/10/30/temporada-de-cruzeiros-comeca-com-24-mais-leitos-e-sete-destinos-no-nordeste/",
+    "spokesperson": "Suape / Porto de Aratu",
+    "tone": "Positivo",
+    "origem": "Relatorio DAQ Outubro 2026.dc.html"
+  }
+]

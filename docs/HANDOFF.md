@@ -44,6 +44,12 @@ Fase 16 (04/11):
 - Design: ícones por setor, manchete inteira nos cards, imagem só quando é da matéria, data em pt-BR, faixa cinza de cabeçalho (`.band-bleed`) em todas as telas.
 - `docs/fontes-bloqueadas.md`: lista para o sócio (Brasil Energia sem cobertura; paywalls só título+link).
 
+Fase 17 (04/11):
+- Relatórios de outubro refeitos (20 notícias verificadas por cliente): `docs/relatorios-refeitos/2026-10/` (.md e .docx; RESUMO.md). Conversor: `scripts/md-to-docx.py` (python-docx).
+- 052b em 3 partes (gabarito). 053: feeds oficiais Valor, Estadão, CNN, Folha, G1, Poder360, InfoMoney, Metrópoles (is_general).
+- Pendente de decisão: SINDINFOR é a entidade de MG (sindinfor.org.br) ou o SINFOR/DF?
+- Próximo: recusar item fora da janela/sem data, conferir título da URL final, fontes Brasil Mineral/CanalEnergia/Convergência/TI Inside/Teletime, novos termos por cliente (RESUMO.md).
+
 ## Pendências
 - Regras do playbook da consultoria (README do zip de relatórios): máx. 20 páginas; tom positivo, riscos como pontos de atenção; verbos auxilia/assessora/subsidia/apoia; sem % nos cenários; sem coluna Tom na síntese; link só da matéria exata; capa nova por mês; ONS=CRT, PRIO=VX (PRIO S.A.), CCEE/SIMINERAL/DAQ/SINDINFOR=SAUZ, ANTAQ=CORTEX; SindInfor em formato boletim, Brasília/DF.
 - Gerador de relatório no template HTML A4 da consultoria (`support.js`, `doc-page.js`) + pacote para Claude Design: a fazer.
@@ -66,7 +72,8 @@ Fase 16 (04/11):
 9. Trocar `claude-sonnet-4-6` por `claude-sonnet-5-5` ao conectar a Anthropic.
 
 ## Falta conectar (repetir ao dono em toda resposta)
-- Colar a migration 052 (grande: ~150 KB por causa do gabarito).
+- Conferir `SELECT count(*) FROM delivered_report_items;` (545); se faltar, colar 052b partes 1–3.
+- Colar a migration 053.
 - Rodar `fetch-news` manual com `reclassify_archive` para 2026-10 e 2026-11 (novas regras de setor).
 - Enviar ao GitHub o commit do acervo (o envio automático foi bloqueado) e deixar o repositório privado.
 - `ANTHROPIC_MONTHLY_BUDGET_USD` e `ANTHROPIC_DAILY_CALL_LIMIT` (Vercel), além do limite no console da Anthropic, antes da chave.
