@@ -1,3 +1,4 @@
+import { linkStatus } from '@/lib/report-selection'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type {
   Article,
@@ -53,7 +54,10 @@ function snapshot(row: TaggedArticleRow): ArticleSnapshot {
   return {
     id: article.id,
     title: article.title,
-    url: article.url,
+    // URL real tem prioridade: o CSV de outubro saiu com 70–93% de links do
+    // Google News e o modelo descartou exatamente essas matérias (as que
+    // citavam o cliente). Ver docs/fluxo-relatorio-mensal.md.
+    url: (article as Article & { resolved_url?: string | null }).resolved_url || article.url,
     image_url: article.image_url,
     excerpt: article.excerpt,
     content: article.content || null,
@@ -564,6 +568,8 @@ export function evidenceCsv(items: ReportEvidenceItem[]) {
     'editorial_confidence',
     'geographic_scope',
     'quality_flags',
+    // exato | google_news | id_curto | secao: quem lê o CSV sabe o que não pode virar link.
+    'link_status',
   ]
   const rows = items
     .filter((item) => item.bucket !== 'excluded')
@@ -591,6 +597,7 @@ export function evidenceCsv(items: ReportEvidenceItem[]) {
         classification.editorial_confidence,
         classification.geographic_scope,
         Array.isArray(classification.quality_flags) ? classification.quality_flags.join('|') : '',
+        linkStatus(article.url),
       ]
         .map(csvCell)
         .join(',')

@@ -45,7 +45,8 @@ jobs:
     runs-on: ubuntu-latest
     # O default do GitHub é 360 min. 74 fontes em lotes de 4 levam ~20 lotes;
     # 30 min cobre isso com folga larga e evita runner preso por horas.
-    timeout-minutes: 30
+    # 75: o passo de links pode levar até ~60 min no acúmulo (120 lotes x ~30s).
+    timeout-minutes: 75
     steps:
       - name: Trigger news fetch
         shell: bash
@@ -119,8 +120,9 @@ jobs:
           APP_URL: ${{ secrets.APP_URL }}
           CRON_SECRET: ${{ secrets.CRON_SECRET }}
         run: |
-          # 40 lotes de 30: dá conta do acúmulo aos poucos sem estourar o job.
-          for n in $(seq 1 40); do
+          # 120 lotes de 30 (~3.600 links por coleta): o acervo de outubro tinha
+          # ~1.500 links do Google News por resolver só nos 6 clientes.
+          for n in $(seq 1 120); do
             code=$(curl -sS -o /tmp/links.json -w '%{http_code}' --max-time 120 -X POST \
               -H "Authorization: Bearer ${CRON_SECRET}" "${APP_URL%/}/api/internal/articles/resolve-links" || echo '000')
             cat /tmp/links.json; echo

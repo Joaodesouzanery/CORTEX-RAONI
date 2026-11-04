@@ -1,6 +1,8 @@
 # Handoff do Cortex
 Ponto de partida para qualquer chat ou pessoa. Atualizado em 02/11/2026. Leia também `CLAUDE.md` e `docs/playbook/README.md`.
 
+**Comece por `docs/CONTINUIDADE.md`** (mapa único para retomar em outro chat).
+
 ## Como trabalhar com o dono
 - Responder em português, de forma direta.
 - Tudo vai para o GitHub ao fim de cada etapa.
@@ -49,6 +51,14 @@ Fase 17 (04/11):
 - 052b em 3 partes (gabarito). 053: feeds oficiais Valor, Estadão, CNN, Folha, G1, Poder360, InfoMoney, Metrópoles (is_general).
 - Pendente de decisão: SINDINFOR é a entidade de MG (sindinfor.org.br) ou o SINFOR/DF?
 - Próximo: recusar item fora da janela/sem data, conferir título da URL final, fontes Brasil Mineral/CanalEnergia/Convergência/TI Inside/Teletime, novos termos por cliente (RESUMO.md).
+
+Fase 18 (04/11):
+- Engenharia reversa de outubro: `docs/fluxo-relatorio-mensal.md` (CSV com 65–93% de links do Google News e 0 qualificadas → o modelo escolheu só o que tinha link direto).
+- `src/lib/report-selection.ts`: seleção determinística das 20 (link exato, do mês, cliente primeiro, grandes veículos, sem repetir pauta). Usada no pacote do Claude Design quando a triagem por IA não qualificou nada.
+- Snapshot e CSV com URL resolvida + coluna `link_status`; validador pega `?p=`, mais de 20 itens, fora do mês, marca errada e frases negativas.
+- `fetch-news.yml`: 120 lotes de links e job de 75 min.
+- Acervo: zip completo (178) em `docs/referencia-relatorios/modelo/` e outubro final em `docs/referencia-relatorios/2026-10-final/`.
+- Orçamento: `docs/orcamento.md`. Preços em `src/lib/ai/budget.ts` atualizados (Haiku/Sonnet/Opus 5.5).
 
 ## Pendências
 - Regras do playbook da consultoria (README do zip de relatórios): máx. 20 páginas; tom positivo, riscos como pontos de atenção; verbos auxilia/assessora/subsidia/apoia; sem % nos cenários; sem coluna Tom na síntese; link só da matéria exata; capa nova por mês; ONS=CRT, PRIO=VX (PRIO S.A.), CCEE/SIMINERAL/DAQ/SINDINFOR=SAUZ, ANTAQ=CORTEX; SindInfor em formato boletim, Brasília/DF.

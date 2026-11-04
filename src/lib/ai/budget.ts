@@ -6,17 +6,25 @@ import { createAdminClient } from '@/lib/supabase/server'
 // O teto do console da Anthropic é a última barreira; este é o primeiro e o
 // único que o operador vê na tela (parqueia com motivo, não pula em silêncio).
 
-// Preço por milhão de tokens (USD), tabela pública da Anthropic. Modelo
-// desconhecido cai no mais caro: superestimar é o lado seguro de um teto.
 const PRICE_PER_MTOK: Record<string, { input: number; output: number }> = {
-  haiku: { input: 1, output: 5 },
-  sonnet: { input: 3, output: 15 },
-  opus: { input: 15, output: 75 },
+  // Tabela da Anthropic consultada em 04/11/2026 (USD por milhão de tokens).
+  'claude-haiku-5-5': { input: 0.1, output: 0.5 },
+  'claude-haiku-4-5': { input: 1, output: 5 },
+  'claude-sonnet-5-5': { input: 2, output: 10 },
+  'claude-sonnet-5': { input: 2, output: 10 },
+  'claude-sonnet-4-6': { input: 3, output: 15 },
+  'claude-opus-5-5': { input: 4, output: 20 },
+  'claude-opus-5': { input: 5, output: 25 },
+  'claude-fable-5-1': { input: 10, output: 50 },
 }
+// Modelo desconhecido cai no mais caro: superestimar é o lado seguro de um teto.
+const FALLBACK_PRICE = PRICE_PER_MTOK['claude-fable-5-1']
 
 function priceFor(model: string) {
-  const key = Object.keys(PRICE_PER_MTOK).find((name) => model.includes(name))
-  return PRICE_PER_MTOK[key || 'opus']
+  const key = Object.keys(PRICE_PER_MTOK)
+    .sort((a, b) => b.length - a.length)
+    .find((name) => model.startsWith(name))
+  return key ? PRICE_PER_MTOK[key] : FALLBACK_PRICE
 }
 
 export function estimateCostUsd(model: string, inputTokens: number, outputTokens: number): number {
