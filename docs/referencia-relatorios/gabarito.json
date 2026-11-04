@@ -1,0 +1,5101 @@
+{
+  "generated_from": "docs/referencia-relatorios/modelo",
+  "reports": [
+    {
+      "file": "Boletim SindInfor Associados Outubro 2026.dc.html",
+      "client": "SINDINFOR",
+      "variant": "associados",
+      "period": "2026-10",
+      "items": [
+        {
+          "date": null,
+          "outlet": "ohoje.com",
+          "title": "Uso de Inteligência Artificial nas empresas brasileiras cresce 183% em 2026",
+          "url": "https://ohoje.com/2026/10/08/uso-de-inteligencia-artificial-nas-empresas-brasileiras-cresce-183-em-2026/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "datacenterdynamics.com",
+          "title": "Estudo da ABES mostra que IA impulsiona corrida tecnológica nas empresas brasileiras",
+          "url": "https://www.datacenterdynamics.com/br/notícias/estudo-da-abes-mostra-que-ia-impulsiona-corrida-tecnologica-nas-empresas-brasileiras/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "tiinside.com.br",
+          "title": "Uso de Inteligência Artificial na indústria brasileira mais que dobra em dois anos",
+          "url": "https://tiinside.com.br/06/04/2026/uso-de-inteligencia-artificial-na-industria-brasileira-mais-que-dobra-em-dois-anos/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "em.com.br",
+          "title": "Governança de IA avança com pressão regulatória",
+          "url": "https://www.em.com.br/mundo-corporativo/2026/04/7401911-governanca-de-ia-avanca-com-pressao-regulatoria.html",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "itatiaia.com.br",
+          "title": "Minas Gerais sedia summit sobre IA e inovação com lideranças do setor",
+          "url": "https://www.itatiaia.com.br/minas-gerais",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "startupi.com.br",
+          "title": "Startups de IA em Minas Gerais atraem investimentos e ampliam ecossistema tecnológico",
+          "url": "https://startupi.com.br/regras-inteligencia-artificial-brasil/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "sbtnews.sbt.com.br",
+          "title": "Regulamentação de IA será votada até fim de junho, diz Motta",
+          "url": "https://sbtnews.sbt.com.br/noticia/politica/regulamentacao-de-ia-sera-votada-ate-fim-de-junho-diz-motta",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "tribunadosertao.com.br",
+          "title": "Câmara deve votar regulamentação da IA ainda este ano, afirma Hugo Motta",
+          "url": "https://www.tribunadosertao.com.br/politica/2026/05/28/910103-camara-deve-votar-regulamentacao-da-inteligencia-artificial-ainda-este-ano-afirma-hugo-motta",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "congressoemfoco.com.br",
+          "title": "Regulação da IA avança: Câmara instala comissão",
+          "url": "https://www.congressoemfoco.com.br/noticia/108260/regulacao-da-ia-avanca-camara-instala-comissao-dia-20",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "amdjus.com.br",
+          "title": "ANPD pode passar por transformação em agência especializada em dados e IA",
+          "url": "https://amdjus.com.br/anpd-pode-passar-por-transformacao-em-agencia-especializada-em-dados-e-ia/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "turivius.com",
+          "title": "ANPD 2026: fiscalização da LGPD entra em nova fase",
+          "url": "https://turivius.com/portal/anpd-2026-fiscalizacao-lgpd/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "confidata.com.br",
+          "title": "LGPD 2026: o que a ANPD espera das empresas",
+          "url": "https://confidata.com.br/blog/lgpd-2026-o-que-anpd-espera",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "neofeed.com.br",
+          "title": "Chegou a hora de fiscalizar os seus dados",
+          "url": "https://neofeed.com.br/experts/chegou-a-hora-de-fiscalizar-os-seus-dados/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "abes.org.br",
+          "title": "ABES revela novos dados do mercado brasileiro de software 2026",
+          "url": "https://abes.org.br/evolucao-e-maturidade-abes-revela-novos-dados-do-estudo-mercado-brasileiro-de-software-2026/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "datacenterdynamics.com",
+          "title": "Mercado SaaS deve crescer 20% ao ano com a digitalização de pequenas e médias empresas",
+          "url": "https://www.datacenterdynamics.com/br/notícias/mercado-saas-deve-crescer-20-ao-ano-com-a-digitalizacao-de-pequenas-e-medias-empresas-acreditam-especialistas/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "olhardigital.com.br",
+          "title": "Regulamentação das IAs: avanços em 2025 e desafios em 2026",
+          "url": "https://olhardigital.com.br/2026/01/02/pro/a-regulamentacao-das-ias-avancos-em-2025-e-desafios-em-2026/",
+          "spokesperson": null,
+          "tone": null
+        }
+      ]
+    },
+    {
+      "file": "Boletim SindInfor Associados Setembro 2026.dc.html",
+      "client": "SINDINFOR",
+      "variant": "associados",
+      "period": "2026-09",
+      "items": [
+        {
+          "date": null,
+          "outlet": "noticias.r7.com",
+          "title": "01 R7 Brasília · 15/09 Redata é um avanço para a competitividade do Brasil em IA, diz Sindifor Ler",
+          "url": "https://noticias.r7.com/brasilia/redata-e-um-avanco-para-a-competitividade-do-brasil-em-ia-diz-sindifor-15092026/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "brasil247.com",
+          "title": "02 Brasil 247 Sindinfor projeta Redata como motor de inovação e desenvolvimento para a tecnologia nacional Ler",
+          "url": "https://www.brasil247.com/sudeste/sindinfor-projeta-redata-como-motor-de-inovacao-e-desenvolvimento-para-a-tecnologia-nacional/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "lawinfra.com.br",
+          "title": "03 LawInfra Sindinfor: Redata e desenvolvimento tecnológico Ler",
+          "url": "https://www.lawinfra.com.br/noticias/sindinfor-redata-desenvolvimento-tecnologico-2026",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "cnnbrasil.com.br",
+          "title": "04 CNN Brasil A revolução da IA também será decidida pelos data centers Ler",
+          "url": "https://www.cnnbrasil.com.br/infra/a-revolucao-da-ia-tambem-sera-decidida-pelos-data-centers/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "fiemg.com.br",
+          "title": "Ler",
+          "url": "https://www.fiemg.com.br/noticias/silemg-e-fiemg-lab-lancam-programa-de-inovacao/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "uol.com.br",
+          "title": "Ler",
+          "url": "https://www.uol.com.br/tilt/noticias/redacao/2026/10/02/openai-alerta-mais-de-100-organizacoes-sobre-acao-indevida-de-agentes-de-ia.ghtm",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "economia.uol.com.br",
+          "title": "Ler",
+          "url": "https://economia.uol.com.br/colunas/aline-sordili/2026/10/02/porto-digital-e-hub-goias-aplicam-o-que-faz-um-polo-tecnologico-funcionar.htm",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "economia.uol.com.br",
+          "title": "Ler",
+          "url": "https://economia.uol.com.br/colunas/aline-sordili/2026/10/01/empresas-incentivam-uso-da-ia-sem-fornecer-ferramentas-revela-pesquisa.htm",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "valor.globo.com",
+          "title": "Ler",
+          "url": "https://valor.globo.com/conteudo-de-marca/itau-bba/noticia/2026/10/01/novas-modalidades-de-golpes-ciberneticos-desafiam-gestao-de-riscos-das-medias-empresas.ghtml",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "baguete.com.br",
+          "title": "Matéria relacionada",
+          "url": "https://www.baguete.com.br/noticias/sharpi-capta-us-4-milhoes",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "exame.com",
+          "title": "Ler",
+          "url": "https://exame.com/inteligencia-artificial/por-que-a-ia-no-brasil-pode-dar-certo-mesmo-sem-um-concorrente-do-chatgpt//",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "tiinside.com.br",
+          "title": "Ler",
+          "url": "https://tiinside.com.br/01/10/2026/futurecom-2026-comeca-em-uma-semana-com-novas-experiencias-de-ia-computacao-quantica-e-infraestrutura-digital/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "convergenciadigital.com.br",
+          "title": "Ler",
+          "url": "https://convergenciadigital.com.br/seguranca/cibereducacao-termina-no-domingo-4-10-inscricoes-para-programa-da-cisco-com-5-mil-vagas-gratuitas/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "c-level.folha.uol.com.br",
+          "title": "Ler",
+          "url": "https://c-level.folha.uol.com.br/negocios/2026/09/prazo-de-adesao-ao-simples-nacional-e-escolha-de-regime-na-reforma-e-adiado-para-outubro.shtml",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "fiemg.com.br",
+          "title": "Página do edital",
+          "url": "https://www.fiemg.com.br/editalsesisenai/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "fiemg.com.br",
+          "title": "Regulamento (PDF)",
+          "url": "https://www.fiemg.com.br/wp-content/uploads/2026/03/EDITAL-SESI-SENAI-01-2026-.pdf",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "exame.com",
+          "title": "Ler",
+          "url": "https://exame.com/inteligencia-artificial/google-cloud-quer-dobrar-infraestrutura-no-brasil-ate-2030-para-acelerar-ia-agentica/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "fiemg.com.br",
+          "title": "Ler",
+          "url": "https://www.fiemg.com.br/associativismo/noticias/conselho-de-tecnologia-e-inovacao-debate-avancos-em-pdi-e-futuro-da-industria/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "www1.folha.uol.com.br",
+          "title": "Ler",
+          "url": "https://www1.folha.uol.com.br/mercado/2026/09/redata-aguarda-regras-sobre-energia-e-importacao-apos-sancao-de-lula.shtml",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "gov.br",
+          "title": "Ler",
+          "url": "https://www.gov.br/mdic/pt-br/assuntos/noticias/2026-periodo-eleitoral/setembro/presidente-sanciona-o-redata-que-estimula-datacenters-e-desenvolvimento-tecnologico-no-brasil",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "exame.com",
+          "title": "Ler",
+          "url": "https://exame.com/inteligencia-artificial/brasil-dobra-capacidade-de-data-centers-em-2026-e-vira-alvo-da-corrida-global-por-ia/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "www1.folha.uol.com.br",
+          "title": "Ler",
+          "url": "https://www1.folha.uol.com.br/colunas/painelsa/2026/09/ntt-data-diz-que-investimento-em-seguranca-para-ia-deve-triplicar-ate-2029.shtml",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "tiinside.com.br",
+          "title": "Ler",
+          "url": "https://tiinside.com.br/09/09/2026/informacao-nao-e-contexto-sap-aponta-o-que-falta-para-ia-entrar-no-coracao-das-empresas/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "tiinside.com.br",
+          "title": "Ler",
+          "url": "https://tiinside.com.br/03/09/2026/metade-das-empresas-no-brasil-estao-usando-ia/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "gov.br",
+          "title": "Ler",
+          "url": "https://www.gov.br/receitafederal/pt-br/assuntos/noticias/2026/julho/receita-federal-gera-o-primeiro-cnpj-em-formato-alfanumerico",
+          "spokesperson": null,
+          "tone": null
+        }
+      ]
+    },
+    {
+      "file": "Relatorio ANTAQ Agosto 2026.dc.html",
+      "client": "ANTAQ",
+      "variant": "principal",
+      "period": "2026-08",
+      "items": [
+        {
+          "date": "2026-08-19",
+          "outlet": "gov.br/antaq",
+          "title": "ANTAQ publica Resoluções 136 a 141: nova regulação da navegação interior",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-08-19",
+          "outlet": "Agência iNFRA",
+          "title": "ANTAQ publica resoluções para simplificar regras da navegação interior",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-08-19",
+          "outlet": "Jornal Portuário",
+          "title": "ANTAQ atualiza regras da navegação interior e simplifica procedimentos",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-08-19",
+          "outlet": "Diário do Transporte",
+          "title": "ANTAQ estabelece novas regras para passageiros em transportes por rios e travessias",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-08-19",
+          "outlet": "Mattos Filho",
+          "title": "Resoluções 136–141: reorganização da regulação da navegação interior",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-08-11",
+          "outlet": "Tecnologística",
+          "title": "Primeira concessão de hidrovia terá modelo integrado com exigências ambientais e tecnológicas",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-08-12",
+          "outlet": "Portal BE News / A Hora do Sul",
+          "title": "Concessão da Hidrovia da Lagoa Mirim passará por outra audiência pública",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-08-18",
+          "outlet": "Portal BE News",
+          "title": "Concessão quer mudar modelo de manutenção das hidrovias do RS",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-08-18",
+          "outlet": "gov.br/antaq",
+          "title": "ANTAQ inicia ciclo de reuniões participativas para discutir concessão da Hidrovia Verde",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-08-18",
+          "outlet": "Sincomam",
+          "title": "Hidrovia Verde: ANTAQ realiza primeira reunião participativa (1.602 km; Barra Norte)",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-08-08",
+          "outlet": "Região News",
+          "title": "ANTAQ \"empurra\" leilão da Hidrovia do Paraguai para 2028",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-08-27",
+          "outlet": "capitalnews.com.br",
+          "title": "Hidrovia do Rio Paraguai tem concessão travada por análise do TCU",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-08-27",
+          "outlet": "Folha MS",
+          "title": "TCU inclui riscos ambientais ao Pantanal no processo de concessão do Paraguai",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-08-29",
+          "outlet": "Campo Grande News",
+          "title": "Hidrovia do Paraguai: Fazenda recomenda ajustes no contrato",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-08-21",
+          "outlet": "Diário Corumbaense",
+          "title": "Marinha autoriza comboios de até 290 m na Hidrovia Paraguai-Paraná (experimental)",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-08-05",
+          "outlet": "Estadão / Poder360",
+          "title": "TCU suspende contrato de dragagem do canal do Porto de Santos",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-08-26",
+          "outlet": "Agência Infra",
+          "title": "TCU indica possível anulação de licitação para aprofundar canal de Santos",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-08-14",
+          "outlet": "Agência Infra",
+          "title": "ANTAQ adia aval a leilão de terminal no Pará por defasagem em estudos",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-08-14",
+          "outlet": "Agência Infra",
+          "title": "ANTAQ priorizará pedidos emergenciais para operação em rios na Amazônia",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-08-14",
+          "outlet": "bncamazonas.com.br",
+          "title": "ANTAQ prevê seca menos severa na Amazônia e monitora dragagem dos rios",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-08-28",
+          "outlet": "NeoFeed / CNN Brasil / Poder360",
+          "title": "Falta de dragagem no Tapajós pode gerar prejuízo de R$ 850 milhões",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-08-31",
+          "outlet": "Folha de S.Paulo",
+          "title": "Setores questionam dragagem do Tapajós e ofício da ANTAQ",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-08-31",
+          "outlet": "Poder360",
+          "title": "Governo quer solução rodoviária para impasse da dragagem no Tapajós",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-08-19",
+          "outlet": "Forbes Brasil",
+          "title": "Com El Niño e sem Dragagem, hidrovias da Amazônia enfrentam risco de paralisação total",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-08-21",
+          "outlet": "UOL / Canal Rural",
+          "title": "Não conceder hidrovias do Norte implica 20 mil caminhões extras nas rodovias por ano",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-08-21",
+          "outlet": "G1 / Zé Dudu",
+          "title": "Ribeirinhos declaram \"tombamento popular\" do Pedral do Lourenço",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-08-28",
+          "outlet": "PortalPortuário",
+          "title": "Brasil apresenta hidrovias ao Banco dos BRICS em busca de financiamento",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-08-27",
+          "outlet": "Agência Infra",
+          "title": "Empresas chinesas indicam apetite para leilões portuários, diz ministro",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-08-06",
+          "outlet": "SEGS Portal Nacional",
+          "title": "Uso de seguros em concessões de portos, hidrovias e aeroportos será revisado por grupo do governo",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Neutro"
+        }
+      ]
+    },
+    {
+      "file": "Relatorio CCEE Agosto 2026.dc.html",
+      "client": "CCEE",
+      "variant": "principal",
+      "period": "2026-08",
+      "items": [
+        {
+          "date": "2026-08-12",
+          "outlet": "Cenário Energia",
+          "title": "Decreto de abertura do Mercado Livre define novas atribuições da CCEE",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-08-24",
+          "outlet": "CCEE",
+          "title": "CCEE no JN: Gerusa Côrtes explica abertura do mercado livre",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-08-24",
+          "outlet": "VEJA",
+          "title": "Mercado livre de energia chega à TV para alcançar 90 milhões de brasileiros",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-08-06",
+          "outlet": "MegaWhat",
+          "title": "CCEE mapeia comercializadoras em recuperação judicial e defende reforço",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-08-10",
+          "outlet": "Cenário Energia",
+          "title": "MME: Silveira defende exigências mais rígidas para varejistas antes da abertura",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-08-31",
+          "outlet": "MegaWhat",
+          "title": "TJSP derruba decisão que obrigava CCEE a reintegrar Gold Energia",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-08-18",
+          "outlet": "Agência Infra",
+          "title": "Ministro do TCU bloqueia R$ 5 bi para distribuidoras abaterem tarifas",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-08-19",
+          "outlet": "Agência Infra",
+          "title": "MME tenta reverter decisão do TCU que pode elevar tarifas no Norte/Nordeste",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-08-25",
+          "outlet": "Cenário Energia",
+          "title": "ANEEL reduz tarifa em 5 distribuidoras do Norte e Nordeste com verbas de UBP",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-08-17",
+          "outlet": "CCEE",
+          "title": "CCEE assume Registro Central de Certificados de Hidrogênio de Baixo Carbono",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-08-14",
+          "outlet": "MegaWhat",
+          "title": "Justiça mantém Máxima Energia na CCEE durante recuperação extrajudicial",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-08-27",
+          "outlet": "CCEE",
+          "title": "CCEE lança Cartilha Anticorrupção e Antissuborno",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Positivo"
+        }
+      ]
+    },
+    {
+      "file": "Relatorio CCEE Julho 2026.dc.html",
+      "client": "CCEE",
+      "variant": "principal",
+      "period": "2026-07",
+      "items": [
+        {
+          "date": "2026-07-28",
+          "outlet": "Cenário Energia",
+          "title": "ANEEL nega efeito suspensivo e mantém desligamento da 2W da CCEE",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-07-28",
+          "outlet": "MegaWhat",
+          "title": "Aneel mantém desligamento da 2W Varejista por inadimplência e risco ao mercado",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-07-02",
+          "outlet": "MegaWhat",
+          "title": "TJPR e STJ freiam decisão que permitiu zerar contratos da Electra na CCEE",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-07-02",
+          "outlet": "MegaWhat",
+          "title": "Inadimplência do MCP deve cair para R$ 424 milhões, estima CCEE",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-07-13",
+          "outlet": "Folha de S.Paulo",
+          "title": "Comercializadoras de energia entram em crise com rombo de mais de R$ 6 bi",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-07-28",
+          "outlet": "BPMoney",
+          "title": "Crise no mercado livre de energia supera R$ 6 bilhões, alerta ANACE",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-07-15",
+          "outlet": "MegaWhat",
+          "title": "2W, Electra Varejista e Oi concentram inadimplência do MCP em maio",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-07-16",
+          "outlet": "VEJA",
+          "title": "Sob restrição na CCEE, Electra concluiu negócio de R$ 450 mi com a Copel",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-07-20",
+          "outlet": "Agência Infra",
+          "title": "Neoenergia alerta para risco de empresas 'aventureiras' no mercado livre",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-07-09",
+          "outlet": "Agência eixos",
+          "title": "Quais serão as consequências da crise das comercializadoras de energia",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-07-22",
+          "outlet": "Agência Infra",
+          "title": "MME e geradores fecham acordo para ressarcimento de R$ 3,3 bi por curtailment",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-07-22",
+          "outlet": "Cenário Energia",
+          "title": "MME regulamenta compensação por curtailment e define regras de ressarcimento",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-07-22",
+          "outlet": "MegaWhat",
+          "title": "Compensação do curtailment: quem pode aderir, cálculo e prazos",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-07-22",
+          "outlet": "Agência Infra",
+          "title": "Abeeólica: portaria é sinal positivo, mas não resolve prejuízo do curtailment",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-07-22",
+          "outlet": "Agência Infra",
+          "title": "Curtailment: agentes dizem que portaria pode manter judicialização",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-07-21",
+          "outlet": "Cenário Energia",
+          "title": "ANEEL avalia mudanças no curtailment; associações pedem retirada de regras",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-07-28",
+          "outlet": "Cenário Energia",
+          "title": "ONS propõe ajustes à ANEEL para transição segura das regras de curtailment",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-07-08",
+          "outlet": "O Globo",
+          "title": "Governo prepara regras para consumidores escolherem fornecedor de energia",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-07-08",
+          "outlet": "Cenário Energia",
+          "title": "Abertura da baixa tensão inaugura nova era e pode reduzir conta em até 18%",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-07-29",
+          "outlet": "InfoMoney",
+          "title": "Mercado livre reduz conta de luz de 73% das indústrias, aponta CNI",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-07-30",
+          "outlet": "Ag. Notícias da Indústria",
+          "title": "Mais de 40% das indústrias migraram ao mercado livre em 2 anos (CNI)",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-07-07",
+          "outlet": "MegaWhat",
+          "title": "ONS e CCEE abrem consulta sobre evolução de modelos do PMO e PLD",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-07-07",
+          "outlet": "MegaWhat",
+          "title": "CCEE e Aneel discutem liquidação semanal do MCP com cálculo diário",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-07-24",
+          "outlet": "MegaWhat",
+          "title": "CCEE propõe criar agente virtual para liquidar geração do LRCap",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-07-24",
+          "outlet": "MegaWhat",
+          "title": "Aneel leva leilões de baterias à consulta pública sem definir rateio",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-07-23",
+          "outlet": "Cenário Energia",
+          "title": "CMSE antecipa 1,8 GW de térmicas e reduz pressão sobre o PLD",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-07-21",
+          "outlet": "Cenário Energia",
+          "title": "Estiagem eleva pressão sobre o PLD no segundo semestre",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-07-29",
+          "outlet": "CCEE",
+          "title": "CCEE lança Sala Técnica da Operação e reforça escuta ativa com os agentes",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-07-27",
+          "outlet": "CCEE",
+          "title": "CCEE renova compromisso com o Pacto Brasil pela Integridade Empresarial (CGU)",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-07-24",
+          "outlet": "CCEE",
+          "title": "Pelo quarto ano consecutivo, a CCEE recebe o selo IIA",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-07-01",
+          "outlet": "CCEE",
+          "title": "CCEE Academy lança novo Portal do Aluno e fortalece capacitação do setor",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-07-03",
+          "outlet": "CCEE",
+          "title": "Fórum CCEE no EVEx 2026 amplia diálogo sobre abertura do mercado",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-07-06",
+          "outlet": "Eixos",
+          "title": "CCEE vê crescimento exponencial na demanda por certificados de energia limpa",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Positivo"
+        }
+      ]
+    },
+    {
+      "file": "Relatorio CCEE Outubro 2026.dc.html",
+      "client": "CCEE",
+      "variant": "principal",
+      "period": "2026-10",
+      "items": [
+        {
+          "date": "2026-10-22",
+          "outlet": "Cenário Energia",
+          "title": "Vale, CSN e Gerdau compram gás da União em leilão inédito da PPSA",
+          "url": "https://cenarioenergia.com.br/2026/10/22/vale-csn-e-gerdau-compram-gas-da-uniao-em-leilao-inedito-da-ppsa/",
+          "spokesperson": "CCEE / MME",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-10-22",
+          "outlet": "Agência Infra",
+          "title": "Leilão de gás natural da União movimenta 1,1 milhão de m³/dia na plataforma CCEE",
+          "url": "https://agenciainfra.com/blog/?p=49187",
+          "spokesperson": "CCEE",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-10-22",
+          "outlet": "Movimento Econômico",
+          "title": "Braskem é a única compradora com CNPJ do Nordeste no 1º Leilão de Gás da União",
+          "url": "https://movimentoeconomico.com.br/petroleo-e-gas/2026/10/22/braskem-e-a-unica-compradora-com-cnpj-do-nordeste-no-1o-leilao-de-gas-da-uniao/",
+          "spokesperson": "CCEE",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-10-16",
+          "outlet": "Cenário Energia",
+          "title": "ONS, CCEE e EPE lançam modelo COBRE de código aberto no GitHub",
+          "url": "https://cenarioenergia.com.br/2026/10/16/ons-ccee-epe-codigo-aberto-github-novo-modelo-pld-newave-decomp/",
+          "spokesperson": "EPE, ONS, CCEE",
+          "tone": "Positivo"
+        },
+        {
+          "date": null,
+          "outlet": "Eixos",
+          "title": "Portaria traz alívio mas não encerra judicialização sobre cortes de geração",
+          "url": "https://eixos.com.br/energias-renovaveis/portaria-traz-alivio-mas-nao-encerra-judicializacao-sobre-cortes-de-geracao-avaliam-geradores-e-especialistas/",
+          "spokesperson": "Geradores e especialistas",
+          "tone": "Neutro"
+        },
+        {
+          "date": null,
+          "outlet": "Agência Infra",
+          "title": "Aneel propõe atualização de montantes de uso de distribuidoras junto à CCEE e ONS",
+          "url": "https://agenciainfra.com/blog/?p=48871",
+          "spokesperson": "ANEEL",
+          "tone": "Neutro"
+        },
+        {
+          "date": null,
+          "outlet": "Cenário Energia",
+          "title": "Decreto regulamenta expansão do Mercado Livre para baixa tensão via CCEE",
+          "url": "https://cenarioenergia.com.br/2026/08/18/decreto-regulamenta-mercado-livre-baixa-tensao-ccee/",
+          "spokesperson": "CCEE / MME",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-10-05",
+          "outlet": "Cenário Energia",
+          "title": "ONS aponta afluência superior à média no Sul e Sudeste em outubro",
+          "url": "https://cenarioenergia.com.br/2026/10/05/ons-aponta-afluencia-superior-media-sul-sudeste-outubro/",
+          "spokesperson": "ONS / CCEE",
+          "tone": "Neutro"
+        },
+        {
+          "date": null,
+          "outlet": "Cenário Energia",
+          "title": "Geração distribuída atinge 50 GW no Brasil e reforça papel estratégico na segurança energética",
+          "url": "https://cenarioenergia.com.br/2026/03/12/geracao-distribuida-atinge-50-gw-no-brasil-e-reforca-papel-estrategico-na-seguranca-energetica/",
+          "spokesperson": "CCEE / ANEEL",
+          "tone": "Neutro"
+        },
+        {
+          "date": null,
+          "outlet": "Brasil Energia",
+          "title": "Os desafios do novo governo no setor de energia",
+          "url": "https://brasilenergia.com.br/energia/os-desafios-do-novo-governo-no-setor-de-energia",
+          "spokesperson": "Analistas setoriais",
+          "tone": "Neutro"
+        }
+      ]
+    },
+    {
+      "file": "Relatorio CCEE Setembro 2026.dc.html",
+      "client": "CCEE",
+      "variant": "principal",
+      "period": "2026-09",
+      "items": [
+        {
+          "date": "2026-09-22",
+          "outlet": "Canalenergia",
+          "title": "ANEEL aprova Módulo 16 e define regras para abertura do mercado livre na baixa tensão",
+          "url": "https://www.gov.br/aneel/pt-br/assuntos/noticias/2026-defeso-eleitoral/consulta-publica-propoe-aprimoramento-das-regras-de-comercializacao-2027",
+          "spokesperson": "ANEEL (nota oficial)",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-09-22",
+          "outlet": "Epbr",
+          "title": "Mercado livre avança para baixa tensão: o que muda para o consumidor",
+          "url": "https://movimentoeconomico.com.br/economia/energia/2026/08/30/mercado-livre-tera-novas-regras-antes-de-chegar-a-todos-os-consumidores/",
+          "spokesperson": "Sem porta-voz nomeado",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-09-22",
+          "outlet": "Agência iNFRA",
+          "title": "Módulo 16 aprovado: CCEE será responsável pela liquidação do novo mercado",
+          "url": "https://neofeed.com.br/economia/por-que-a-variacao-no-preco-da-energia-tem-quebrado-o-mercado-livre/",
+          "spokesperson": "Sem porta-voz nomeado",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-09-15",
+          "outlet": "Canalenergia",
+          "title": "Fundo de Liquidez da CCEE é acionado para cobrir posição de comercializadora",
+          "url": "https://megawhat.uol.com.br/mercado-energetico/ccee-avanca-em-proposta-de-fundo-para-cobrir-perdas-em-casos-de-inadimplencia-no-mercado/",
+          "spokesperson": "CCEE (nota técnica)",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-09-16",
+          "outlet": "Agência iNFRA",
+          "title": "Liquidez no mercado livre: o que é o Fundo de Garantia da CCEE e como funciona",
+          "url": "https://www.ccee.org.br/-/co-repasse-do-pagamento-de-dividas-no-ambito-da-ccee-em-30-09-2026",
+          "spokesperson": "Sem porta-voz nomeado",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-09-18",
+          "outlet": "Valor Econômico",
+          "title": "Comercializadoras sob pressão: inadimplência é o próximo risco do mercado livre?",
+          "url": "https://www1.folha.uol.com.br/mercado/2026/07/comercializadoras-de-energia-entram-em-crise-com-rombo-de-mais-de-r-6-bi.shtml",
+          "spokesperson": "Associação de agentes (sem nome confirmado)",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-09-05",
+          "outlet": "Epbr",
+          "title": "Despacho de térmicas a gás aumenta em setembro com reservatórios abaixo da média",
+          "url": "https://valor.globo.com/brasil/noticia/2026/08/04/al-se-e-mg-favorecem-mercado-livre-de-gas.ghtml",
+          "spokesperson": "ONS (nota operacional)",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-09-10",
+          "outlet": "Canalenergia",
+          "title": "MME sinaliza atenção ao nível dos reservatórios e despacho adicional de térmicas",
+          "url": "https://www.cnnbrasil.com.br/infra/quebra-de-comercializadoras-de-energia-acumula-rombo-que-passa-r-10-bi/",
+          "spokesperson": "MME (nota)",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-09-12",
+          "outlet": "Portal Solar",
+          "title": "Curtailment no Nordeste: eólicas e solares sofrem cortes em período de baixo carregamento",
+          "url": "https://newblogs.correiobraziliense.com.br/ecobraziliense/curtailment-cresce-e-amplia-desperdicio-de-energia-renovavel/",
+          "spokesperson": "ONS / dados operacionais",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-09-19",
+          "outlet": "Agência iNFRA",
+          "title": "Curtailment de eólica no Nordeste cresce 23% em setembro vs. agosto",
+          "url": "https://valor.globo.com/publicacoes/especiais/transicao-energetica/noticia/2026/08/27/ons-projeta-cortes-declinantes-na-geracao-de-energia-solar-e-eolica.ghtml",
+          "spokesperson": "ONS / dados operacionais",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-09-08",
+          "outlet": "Epbr",
+          "title": "PLD sobe em setembro com seca e despacho térmico intenso",
+          "url": "https://www.gerawatts.com.br/pld-da-semana-de-05-09-2026-fecha-praticamente-estavel-e-uniforme-em-todos-os-submercados/",
+          "spokesperson": "CCEE (dado público)",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-09-14",
+          "outlet": "Canalenergia",
+          "title": "Modelos computacionais da CCEE: por que o PLD parece uma caixa-preta para o mercado?",
+          "url": "https://www.ccee.org.br/dados-e-analises/dados-pld",
+          "spokesperson": "Analista de mercado (sem nome confirmado)",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-09-24",
+          "outlet": "Valor Econômico",
+          "title": "NEWAVE e DECOMP: entenda por que a transparência dos modelos virou tema prioritário",
+          "url": "https://www.broadcast.com.br/ultimas-noticias/ccee-pld-tem-maxima-de-r-52591-por-mwh-no-sudeste-centro-oeste-e-norte-nesta-segunda-feira/",
+          "spokesperson": "Especialista setorial (sem nome confirmado)",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-09-03",
+          "outlet": "Canalenergia",
+          "title": "Regras de Comercialização 2027: CCEE abre consulta sobre propostas de ajuste",
+          "url": "https://www.canalenergia.com.br/noticias/53355200/regras-de-comercializacao-de-2027-vao-a-consulta-publica",
+          "spokesperson": "CCEE (nota oficial)",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-09-25",
+          "outlet": "Agência iNFRA",
+          "title": "Consulta pública sobre Regras 2027 recebe 47 contribuições de agentes de mercado",
+          "url": "https://www.ccee.org.br/web/guest/-/confira-a-apresentacao-e-o-video-do-encontro-do-pld-realizado-em-26-09",
+          "spokesperson": "CCEE (dado público)",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-09-09",
+          "outlet": "Epbr",
+          "title": "Reserva de capacidade: debate avança sobre papel das térmicas no novo modelo de mercado",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2026/decreto/d13097.htm",
+          "spokesperson": "MME e ANEEL (declarações públicas)",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-09-17",
+          "outlet": "Canalenergia",
+          "title": "Abertura do mercado de gás: como a nova estrutura afeta os custos de geração térmica",
+          "url": "https://valor.globo.com/brasil/noticia/2026/08/04/al-se-e-mg-favorecem-mercado-livre-de-gas.ghtml",
+          "spokesperson": "MME/SNPTC (nota)",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-09-26",
+          "outlet": "Agência iNFRA",
+          "title": "CCEE publica dados de setembro: volume liquidado no ACL cresce 8% vs. setembro 2025",
+          "url": "https://www.ccee.org.br/dados-e-analises/dados-pld",
+          "spokesperson": "CCEE (dado público)",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-09-29",
+          "outlet": "Portal do Governo",
+          "title": "CNPE reafirma diretrizes para ampliação do mercado livre e segurança energética",
+          "url": "https://www.gov.br/aneel/pt-br/assuntos/noticias/2026-defeso-eleitoral/consulta-publica-propoe-aprimoramento-das-regras-de-comercializacao-2027",
+          "spokesperson": "CNPE (resolução)",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-09-30",
+          "outlet": "Canalenergia",
+          "title": "Balanço de setembro: mercado livre fecha o mês com novo recorde de agentes cadastrados",
+          "url": "https://www.canalenergia.com.br/noticias/53355200/regras-de-comercializacao-de-2027-vao-a-consulta-publica",
+          "spokesperson": "CCEE (dado público)",
+          "tone": "Positivo"
+        }
+      ]
+    },
+    {
+      "file": "Relatorio DAQ Agosto 2026.dc.html",
+      "client": "DAQ",
+      "variant": "principal",
+      "period": "2026-08",
+      "items": [
+        {
+          "date": "2026-08-31",
+          "outlet": "G1",
+          "title": "Dragagem nos rios: serviço será realizado em quatro trechos do Amazonas",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-08-31",
+          "outlet": "Revista O Empreiteiro",
+          "title": "DNIT inicia obras de dragagem em quatro trechos hidroviários do Amazonas",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-08-31",
+          "outlet": "O TEMPO",
+          "title": "DNIT amplia contrato com construtora no Pará (+R$ 10,7 mi)",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-08-31",
+          "outlet": "Folha de S.Paulo",
+          "title": "Setores aquaviário e logístico questionam dragagem do Tapajós e oferecem alternativas",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-08-31",
+          "outlet": "Poder360",
+          "title": "Governo quer solução rodoviária para impasse da dragagem no Tapajós",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-08-28",
+          "outlet": "NeoFeed",
+          "title": "Rio Tapajós sem dragagem pode travar Arco Norte e gerar prejuízo de até R$ 850 mi",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-08-28",
+          "outlet": "Agência Infra",
+          "title": "Seca se aproxima e falta de dragagem ameaça navegação no Amazonas",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-08-27",
+          "outlet": "Folha MS",
+          "title": "A pedido de senadora, TCU inclui riscos ambientais ao Pantanal na concessão do Paraguai",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-08-21",
+          "outlet": "InvesTalk",
+          "title": "Não conceder hidrovias do Norte deve adicionar 20 mil caminhões nas rodovias por ano",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-08-21",
+          "outlet": "Zé Dudu",
+          "title": "Ribeirinhos declaram \"tombamento popular\" do Pedral do Lourenço",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-08-21",
+          "outlet": "Jornal Portuário",
+          "title": "ANTAQ atualiza regras da navegação interior e simplifica procedimentos",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-08-19",
+          "outlet": "Forbes Brasil",
+          "title": "Com El Niño e sem dragagem, hidrovias da Amazônia enfrentam risco de paralisação total",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-08-17",
+          "outlet": "Folha de S.Paulo",
+          "title": "FIEPA pede que governo decrete emergência para viabilizar dragagem do Tapajós",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-08-08",
+          "outlet": "Região News",
+          "title": "ANTAQ \"empurra\" leilão da hidrovia do Paraguai para 2028",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-08-06",
+          "outlet": "Folha de S.Paulo",
+          "title": "Ministério e Funai não respondem sobre dragagem no Tapajós apesar de apelos",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-08-04",
+          "outlet": "bncamazonas.com.br",
+          "title": "Recuo na hidrovia do Madeira afeta logística da Zona Franca de Manaus",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        }
+      ]
+    },
+    {
+      "file": "Relatorio DAQ Julho 2026.dc.html",
+      "client": "DAQ",
+      "variant": "principal",
+      "period": "2026-07",
+      "items": [
+        {
+          "date": "2026-07-01",
+          "outlet": "REPAM",
+          "title": "SEMAS autoriza dispensa de licenciamento para dragagem emergencial no Tapajós",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-07-02",
+          "outlet": "Tapajós de Fato",
+          "title": "Semas atropela povos tradicionais e autoriza dispensa de licenciamento",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Crítico"
+        },
+        {
+          "date": "2026-07-03",
+          "outlet": "Agência Infra",
+          "title": "TCU exige consulta prévia para dragagem do rio Tapajós",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-07-06",
+          "outlet": "O Globo",
+          "title": "TCU condiciona retomada do edital a licença ambiental e consulta a indígenas",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-07-06",
+          "outlet": "Folha PE",
+          "title": "TCU condiciona edital da dragagem do Tapajós a licença e consulta indígena",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-07-08",
+          "outlet": "Campo Grande News",
+          "title": "Indígenas pedem ao STF para participar de ação da Hidrovia",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-07-13",
+          "outlet": "Cenário Energia",
+          "title": "DNIT é contestado por tentar dragar Rio Tapajós sem licença ambiental",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Crítico"
+        },
+        {
+          "date": "2026-07-14",
+          "outlet": "MundoLogística",
+          "title": "Dragagem do Tapajós entra em novo impasse após questionamento sobre licenciamento",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-07-15",
+          "outlet": "MPF",
+          "title": "MPF recomenda suspensão de dragagem no Rio Tapajós, sem licenciamento e consulta",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Crítico"
+        },
+        {
+          "date": "2026-07-16",
+          "outlet": "G1",
+          "title": "MPF recomenda suspender dragagem no Tapajós entre Santarém e Itaituba",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Crítico"
+        },
+        {
+          "date": "2026-07-22",
+          "outlet": "Folha de S.Paulo",
+          "title": "Governo prepara dragagem urgente no Tapajós por risco de seca e prejuízo de R$ 850 mi",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-07-23",
+          "outlet": "G1",
+          "title": "Semas não suspende licença; MPF diz que judicialização é inevitável",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-07-24",
+          "outlet": "CNN Brasil",
+          "title": "Sob pressão, Lula desautoriza dragagem emergencial e El Niño ameaça Tapajós",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Crítico"
+        },
+        {
+          "date": "2026-07-24",
+          "outlet": "O Globo",
+          "title": "Indígenas saem de reunião com Lula confiantes em recuo da dragagem no Tapajós",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-07-25",
+          "outlet": "G1",
+          "title": "Dragagem no Rio Tapajós: Lula suspende obra após reunião com indígenas",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Crítico"
+        },
+        {
+          "date": "2026-07-26",
+          "outlet": "Portos e Navios",
+          "title": "Impasse expõe conflito entre corredor de grãos e exigências ambientais",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-07-24",
+          "outlet": "Portal BE News",
+          "title": "Impasse ameaça dragagem do Tapajós e encarece escoamento de grãos",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-07-26",
+          "outlet": "Diário de Cuiabá",
+          "title": "Impasse sobre dragagem do Tapajós preocupa agronegócio de Mato Grosso",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-07-28",
+          "outlet": "Poder360",
+          "title": "Coluna: Lula despreza hidrovia do Tapajós",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Crítico"
+        },
+        {
+          "date": "2026-07-22",
+          "outlet": "Defesa em Foco",
+          "title": "DNIT reforça monitoramento dos rios para garantir segurança da navegação",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-07-29",
+          "outlet": "D24AM",
+          "title": "Hidrovias amazônicas receberão mais de R$ 500 milhões para enfrentar estiagem",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-07-28",
+          "outlet": "Portos e Navios",
+          "title": "Hidrovias amazônicas ganham reforço em 2026, enquanto Tapajós segue no debate",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-07-02",
+          "outlet": "CNT",
+          "title": "CNT apresenta estudo inédito com propostas para destravar as hidrovias",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-07-03",
+          "outlet": "CNN Brasil",
+          "title": "CNT sugere política nacional para destravar uso das hidrovias brasileiras",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-07-03",
+          "outlet": "gov.br",
+          "title": "Estudo propõe transformar as hidrovias em eixo estratégico da logística nacional",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-07-07",
+          "outlet": "Correio do Povo",
+          "title": "Dragagem da Hidrovia da Lagoa Mirim deve começar ainda em 2026",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-07-27",
+          "outlet": "A Hora do Sul",
+          "title": "Audiência pública sobre concessão da hidrovia da Lagoa Mirim em 11 de agosto",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-07-27",
+          "outlet": "Agência Infra",
+          "title": "Governo fará contraproposta ao Paraguai sobre concessão de hidrovia",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-07-29",
+          "outlet": "Portogente",
+          "title": "Dragagem Nacional Estratégica x Concessões dos Acessos Aquaviários",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-07-14",
+          "outlet": "MPF",
+          "title": "MPF cobra suspensão da dragagem da Alcoa no Rio Amazonas em Juruti (obra de terceiro)",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Negativo"
+        }
+      ]
+    },
+    {
+      "file": "Relatorio DAQ Junho 2026.dc.html",
+      "client": "DAQ",
+      "variant": "principal",
+      "period": "2026-06",
+      "items": [
+        {
+          "date": "2026-07-04",
+          "outlet": "G1",
+          "title": "Terminal Hidroviário em Belém e em Cotijuba são opções de transporte em julho",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-06-25",
+          "outlet": "www.gov.br",
+          "title": "DNIT participa da OS para dragagem de manutenção da Hidrovia da Lagoa Mirim (RS)",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-06-23",
+          "outlet": "www.gov.br",
+          "title": "Primeira concessão hidroviária integrada do país e dragagem da Lagoa Mirim avançam no RS",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-06-24",
+          "outlet": "Brasil de Fato",
+          "title": "Governo Lula anuncia pacote para aeroportos e hidrovias no RS",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-06-22",
+          "outlet": "GOV.BR",
+          "title": "No RS, ministro anuncia ações para os setores aéreo e hidroviário",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-06-23",
+          "outlet": "Agência iNFRA",
+          "title": "El Niño: armadores temem demora nas dragagens e nova crise na Amazônia",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-06-19",
+          "outlet": "Globo Rural",
+          "title": "El Niño deve afetar escoamento de cargas por hidrovia no Arco Norte",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-06-24",
+          "outlet": "Agência Infra",
+          "title": "TCU recomenda aprimoramentos em processo licitatório do DNIT",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-06-23",
+          "outlet": "Valor Econômico",
+          "title": "Adiamento de concessões de hidrovias frustra agentes econômicos",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-05-21",
+          "outlet": "CNN Brasil",
+          "title": "Governo prevê leilões de seis hidrovias em 2027",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-05-21",
+          "outlet": "www.gov.br",
+          "title": "MPor faz balanço do primeiro biênio da Secretaria Nacional de Hidrovias e Navegação",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-06-25",
+          "outlet": "Portogente",
+          "title": "Hidrovia Paraná-Tietê: o corredor de 2.400 km que ganha protagonismo na logística",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-06-24",
+          "outlet": "www.gov.br",
+          "title": "Paraná-Tietê: a hidrovia que integra três regiões e impulsiona a economia",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-06-24",
+          "outlet": "Diário MS News",
+          "title": "Senadora solicitará suspensão de licitação da Hidrovia Paraguai-Paraná após audiência em Corumbá",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-06-22",
+          "outlet": "Campo Grande News",
+          "title": "Hidrovia do Rio Paraguai: riscos e impactos no Pantanal",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-06-23",
+          "outlet": "REPAM",
+          "title": "Nota técnica alerta para riscos socioambientais da ampliação da dragagem no Rio Madeira",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-06-23",
+          "outlet": "www.gov.br",
+          "title": "Fórum internacional reúne países da Bacia do Prata para discutir desenvolvimento hidroviário",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-06-22",
+          "outlet": "www.gov.br",
+          "title": "Desenvolvimento hidroviário e diálogo com comunidades indígenas avançam no MPor",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-06-25",
+          "outlet": "www.gov.br",
+          "title": "DNIT participa da assinatura da OS de dragagem de manutenção da Hidrovia da Lagoa Mirim",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-06-23",
+          "outlet": "Tribuna do Norte",
+          "title": "Dragagem: 1ª fase atinge 24,6% de execução",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-06-22",
+          "outlet": "Tecnologística",
+          "title": "Porto de Santos ganha nova obra de dragagem e terá profundidade de 16 metros",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-06-22",
+          "outlet": "www.gov.br",
+          "title": "Fiscalização da ANTAQ reforça a segurança do transporte hidroviário no Festival de Parintins",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-06-24",
+          "outlet": "www.gov.br",
+          "title": "MPor reforça infraestrutura do transporte hidroviário para o Festival de Parintins",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-06-22",
+          "outlet": "h2foz.com.br",
+          "title": "Argentina finaliza licitação para exploração da hidrovia do Rio Paraná",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-06-19",
+          "outlet": "Prefeitura de Aracaju",
+          "title": "Prefeita se reúne com Ibama para avançar dragagem e desassoreamento do Rio Poxim",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-06-23",
+          "outlet": "Valor Econômico",
+          "title": "Federação articula novo porto fluvial próximo a Belém",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-06-23",
+          "outlet": "Portal do Marcos Santos",
+          "title": "Segurança no transporte hidroviário é reforçada por esquema operacional na Ilha Tupinambarana",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-06-25",
+          "outlet": "www.gov.br",
+          "title": "DNIT conclui obras de infraestrutura com impacto sobre a navegabilidade regional",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-05-21",
+          "outlet": "www.gov.br",
+          "title": "Planejamento hidroviário garante segurança e abastecimento para quem depende dos rios",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        }
+      ]
+    },
+    {
+      "file": "Relatorio DAQ Outubro 2026.dc.html",
+      "client": "DAQ",
+      "variant": "principal",
+      "period": "2026-10",
+      "items": [
+        {
+          "date": null,
+          "outlet": "Agrolink",
+          "title": "Audiência pública reúne contribuições para concessão do SAI Sul-Mirim",
+          "url": "https://www.agrolink.com.br/noticias/audiencia-publica-reune-contribuicoes-para-concessao-do-saip-sul-mirim_517848.html",
+          "spokesperson": "DNIT / Min. Transportes",
+          "tone": "Positivo"
+        },
+        {
+          "date": null,
+          "outlet": "Exame",
+          "title": "Seca no Amazonas: empresas da Zona Franca sofrem impactos na produção",
+          "url": "https://exame.com/negocios/seca-no-amazonas-empresas-da-zona-franca-sofrem-impactos-na-producao-e-avaliam-ferias-coletivas/",
+          "spokesperson": "Empresas / Governo Federal",
+          "tone": "Neutro"
+        },
+        {
+          "date": null,
+          "outlet": "Agência Infra",
+          "title": "Seca se aproxima e falta de dragagem ameaça navegação no Amazonas",
+          "url": "https://agenciainfra.com/blog/seca-se-aproxima-e-falta-de-dragagem-ameaca-navegacao-no-amazonas/",
+          "spokesperson": "DNIT",
+          "tone": "Neutro"
+        },
+        {
+          "date": null,
+          "outlet": "Agência Infra",
+          "title": "DNIT entrega nova estrutura da IP4 de Itacoatiara para modernizar logística e mobilidade regional",
+          "url": "https://agenciainfra.com/blog/dnit-entrega-nova-estrutura-da-ip4-de-itacoatiara-antigo-para-modernizar-logistica-e-mobilidade-regional/",
+          "spokesperson": "DNIT",
+          "tone": "Positivo"
+        },
+        {
+          "date": null,
+          "outlet": "GetTransport",
+          "title": "Shipping out of Brazil 2026: Santos congestion and agri exports",
+          "url": "https://blog.gettransport.com/pt/trends-in-logistic/shipping-out-of-brazil-2026-santos-congestion-agri-export/",
+          "spokesperson": "Autoridades portuárias",
+          "tone": "Neutro"
+        },
+        {
+          "date": null,
+          "outlet": "Agência Infra",
+          "title": "Cabotagem cresce; ABAC e ANTAQ debatem regulação de feeder e contêineres",
+          "url": "https://agenciainfra.com/blog/?p=47598",
+          "spokesperson": "ABAC / ANTAQ",
+          "tone": "Positivo"
+        },
+        {
+          "date": null,
+          "outlet": "Agência Infra",
+          "title": "Ministério dos Portos sinaliza flexibilização de contratos de arrendamento",
+          "url": "https://agenciainfra.com/blog/?p=48566",
+          "spokesperson": "MPor",
+          "tone": "Positivo"
+        },
+        {
+          "date": null,
+          "outlet": "Agência Infra",
+          "title": "ANTAQ abre consulta sobre transbordo de granéis sólidos",
+          "url": "https://agenciainfra.com/blog/?p=47364",
+          "spokesperson": "ANTAQ",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-10-30",
+          "outlet": "Movimento Econômico",
+          "title": "Temporada de cruzeiros começa com 24% mais leitos e sete destinos no Nordeste",
+          "url": "https://movimentoeconomico.com.br/turismo-3/2026/10/30/temporada-de-cruzeiros-comeca-com-24-mais-leitos-e-sete-destinos-no-nordeste/",
+          "spokesperson": "Suape / Porto de Aratu",
+          "tone": "Positivo"
+        }
+      ]
+    },
+    {
+      "file": "Relatorio DAQ Setembro 2026.dc.html",
+      "client": "DAQ",
+      "variant": "principal",
+      "period": "2026-09",
+      "items": [
+        {
+          "date": "2026-09-01",
+          "outlet": "Portal Portos e Navios",
+          "title": "Audiência pública debate aprofundamento do Canal de Santos",
+          "url": "https://www.portosenavios.com.br/noticias/portos-e-logistica/audiencia-publica-debate-aprofundamento-do-canal-de-santos",
+          "spokesperson": "Antaq / MPA",
+          "tone": null
+        },
+        {
+          "date": "2026-09-02",
+          "outlet": "Valor Econômico",
+          "title": "TCU questiona cláusula de armadores no contrato do Tecon 10",
+          "url": "https://valor.globo.com/brasil/noticia/2026/09/02/tcu-questiona-clausula-de-armadores-no-contrato-do-tecon-10.ghtml",
+          "spokesperson": "TCU",
+          "tone": null
+        },
+        {
+          "date": "2026-09-03",
+          "outlet": "Estadão",
+          "title": "Canal de Santos: aprofundamento pode dobrar capacidade de navios",
+          "url": "https://economia.estadao.com.br/noticias/geral/canal-de-santos-aprofundamento-pode-dobrar-capacidade-de-navios,70004800001.htm",
+          "spokesperson": "MPA / Fabrizio Pierdomenico",
+          "tone": null
+        },
+        {
+          "date": "2026-09-05",
+          "outlet": "O Globo",
+          "title": "Casa Civil defende legalidade de cláusula contestada pelo TCU no Tecon 10",
+          "url": "https://oglobo.globo.com/economia/noticia/2026/09/casa-civil-defende-legalidade-de-clausula-contestada-pelo-tcu-no-tecon-10.ghtml",
+          "spokesperson": "Casa Civil",
+          "tone": null
+        },
+        {
+          "date": "2026-09-08",
+          "outlet": "Agência Brasil",
+          "title": "Hidrovia Paraguai-Paraná tem licitação adiada por impasse diplomático",
+          "url": "https://agenciabrasil.ebc.com.br/economia/noticia/2026-09/hidrovia-paraguai-parana-tem-licitacao-adiada-por-impasse-diplomatico",
+          "spokesperson": "MPA / Fabrizio Pierdomenico",
+          "tone": null
+        },
+        {
+          "date": "2026-09-09",
+          "outlet": "Portal Portos e Navios",
+          "title": "GT Seguros vai revisar marco regulatório de seguros aquaviários",
+          "url": "https://www.portosenavios.com.br/noticias/portos-e-logistica/gt-seguros-vai-revisar-marco-regulatorio-de-seguros-aquavarios",
+          "spokesperson": "Antaq / MPA",
+          "tone": null
+        },
+        {
+          "date": "2026-09-10",
+          "outlet": "Logweb",
+          "title": "PNL 2050: setor aquaviário ganha destaque no planejamento logístico nacional",
+          "url": "https://www.logweb.com.br/pnl-2050-setor-aquaviario-ganha-destaque-no-planejamento-logistico-nacional/",
+          "spokesperson": "MPA",
+          "tone": null
+        },
+        {
+          "date": "2026-09-11",
+          "outlet": "Folha de S.Paulo",
+          "title": "Tecon 10: início das obras adiado para 2027 após disputa entre TCU e governo",
+          "url": "https://www1.folha.uol.com.br/mercado/2026/09/tecon-10-inicio-das-obras-adiado-para-2027-apos-disputa-entre-tcu-e-governo.shtml",
+          "spokesperson": "TCU / Casa Civil",
+          "tone": null
+        },
+        {
+          "date": "2026-09-12",
+          "outlet": "Canal Rural",
+          "title": "Arco Norte cresce como alternativa logística para exportação de grãos",
+          "url": "https://www.canalrural.com.br/noticias/logistica/arco-norte-cresce-como-alternativa-logistica-para-exportacao-de-graos/",
+          "spokesperson": "MPA",
+          "tone": null
+        },
+        {
+          "date": "2026-09-15",
+          "outlet": "Valor Econômico",
+          "title": "Secretário de Portos defende celeridade no processo de licenciamento do Canal de Santos",
+          "url": "https://valor.globo.com/brasil/noticia/2026/09/15/secretario-de-portos-defende-celeridade-no-processo-de-licenciamento-do-canal-de-santos.ghtml",
+          "spokesperson": "Fabrizio Pierdomenico — Secretário de Portos e Aeroportos",
+          "tone": null
+        },
+        {
+          "date": "2026-09-16",
+          "outlet": "Agência Estado",
+          "title": "Porto de Santos amplia automação em terminais de granéis sólidos",
+          "url": "https://exame.com/invest/porto-de-santos-amplia-automacao-em-terminais-de-graneis-solidos/",
+          "spokesperson": "Autoridade Portuária de Santos",
+          "tone": null
+        },
+        {
+          "date": "2026-09-17",
+          "outlet": "Brasil de Fato",
+          "title": "Dragagem da Hidrovia Madeira enfrenta questionamentos ambientais",
+          "url": "https://www.brasildefato.com.br/2026/09/17/dragagem-da-hidrovia-madeira-enfrenta-questionamentos-ambientais",
+          "spokesperson": "IBAMA",
+          "tone": null
+        },
+        {
+          "date": "2026-09-18",
+          "outlet": "NTC&Logística",
+          "title": "Intermodalidade avança com integração de terminais hidroviários ao sistema ferroviário",
+          "url": "https://www.ntcelogistica.org.br/intermodalidade-avanca-com-integracao-de-terminais-hidroviarios-ao-sistema-ferroviario/",
+          "spokesperson": "MPA / ANTT",
+          "tone": null
+        },
+        {
+          "date": "2026-09-19",
+          "outlet": "Portal Marítimo",
+          "title": "Brasil e Paraguai retomam diálogo sobre modelo de concessão da Hidrovia",
+          "url": "https://www.portalmaritimo.com/noticias/brasil-e-paraguai-retomam-dialogo-sobre-modelo-de-concessao-da-hidrovia",
+          "spokesperson": "Itamaraty / MPA",
+          "tone": null
+        },
+        {
+          "date": "2026-09-22",
+          "outlet": "Correio Braziliense",
+          "title": "Concessões portuárias: setor pede previsibilidade após caso Tecon 10",
+          "url": "https://www.correiobraziliense.com.br/economia/2026/09/6968001-concessoes-portuarias-setor-pede-previsibilidade-apos-caso-tecon-10.html",
+          "spokesperson": "Representantes setoriais",
+          "tone": null
+        },
+        {
+          "date": "2026-09-23",
+          "outlet": "Revista Portuária",
+          "title": "GT Seguros debate cobertura de riscos em navios de cabotagem",
+          "url": "https://www.revistaporturia.com.br/gt-seguros-debate-cobertura-de-riscos-em-navios-de-cabotagem/",
+          "spokesperson": "Antaq",
+          "tone": null
+        },
+        {
+          "date": "2026-09-24",
+          "outlet": "G1",
+          "title": "Canal de Santos: ANTAQ conclui análise de impacto ambiental preliminar",
+          "url": "https://g1.globo.com/sp/santos-regiao/noticia/2026/09/24/canal-de-santos-antaq-conclui-analise-de-impacto-ambiental-preliminar.ghtml",
+          "spokesperson": "Antaq",
+          "tone": null
+        },
+        {
+          "date": "2026-09-25",
+          "outlet": "Agência Brasil",
+          "title": "Fabrizio Pierdomenico anuncia cronograma de licitações portuárias para 2027",
+          "url": "https://agenciabrasil.ebc.com.br/economia/noticia/2026-09/fabrizio-pierdomenico-anuncia-cronograma-de-licitacoes-portuarias-para-2027",
+          "spokesperson": "Fabrizio Pierdomenico — Secretário de Portos",
+          "tone": null
+        },
+        {
+          "date": "2026-09-26",
+          "outlet": "Exame",
+          "title": "Cabotagem cresce 12% no acumulado de 2026 impulsionada por incentivos fiscais",
+          "url": "https://exame.com/invest/cabotagem-cresce-12-pct-no-acumulado-de-2026-impulsionada-por-incentivos-fiscais/",
+          "spokesperson": "Antaq",
+          "tone": null
+        },
+        {
+          "date": "2026-09-30",
+          "outlet": "Portal Portos e Navios",
+          "title": "Setor aquaviário fecha setembro com agenda de investimentos acima de R$ 8 bilhões",
+          "url": "https://www.portosenavios.com.br/noticias/portos-e-logistica/setor-aquaviario-fecha-setembro-com-agenda-de-investimentos-acima-de-r-8-bilhoes",
+          "spokesperson": "MPA / Fabrizio Pierdomenico — Secretário de Portos",
+          "tone": null
+        }
+      ]
+    },
+    {
+      "file": "Relatorio ONS Agosto 2026.dc.html",
+      "client": "ONS",
+      "variant": "principal",
+      "period": "2026-08",
+      "items": [
+        {
+          "date": "2026-08-27",
+          "outlet": "Capital Agora",
+          "title": "Geração solar chega a 113% da demanda do Nordeste, aponta ONS",
+          "url": "https://capitalagora.com.br/noticia/geracao-solar-chega-113-da-demanda-do-nordeste-aponta",
+          "spokesperson": "Sim — ONS",
+          "tone": "Alta"
+        },
+        {
+          "date": "2026-08-25",
+          "outlet": "CNN Brasil",
+          "title": "ONS: não faz mais sentido ampliar geração de energia durante o dia",
+          "url": "https://www.cnnbrasil.com.br/infra/ons-nao-faz-mais-sentido-ampliar-geracao-de-energia-durante-o-dia/",
+          "spokesperson": "Sim — ONS",
+          "tone": "Alta"
+        },
+        {
+          "date": "2026-08-24",
+          "outlet": "Folha de S.Paulo",
+          "title": "ONS determina corte emergencial por excesso de energia pela 2ª vez em 2026",
+          "url": "https://www1.folha.uol.com.br/mercado/2026/08/ons-corta-geracao-distribuida-neste-domingo.shtml",
+          "spokesperson": "Sim — ONS",
+          "tone": "Alta"
+        },
+        {
+          "date": "2026-08-21",
+          "outlet": "MegaWhat",
+          "title": "ONS testará corte automático de até 3 GW de geração solar remota (Erag)",
+          "url": "https://megawhat.uol.com.br/podcasts/minutomega/minutoega-talks/ons-testara-corte-automatico-de-ate-3-gw-de-geracao-solar-remota/",
+          "spokesperson": "Sim — ONS",
+          "tone": "Alta"
+        },
+        {
+          "date": "2026-08-20",
+          "outlet": "MegaWhat",
+          "title": "Data centers de 2 GW podem dar “tranco” no sistema, diz ONS",
+          "url": "https://megawhat.uol.com.br/podcasts/minutomega/minutoega-talks/data-centers-de-2-gw-podem-dar-tranco-no-sistema-e-mudar-regras-de-conexao-diz-ons/",
+          "spokesperson": "Sim — Alexandre Zucarato, diretor de Planejamento",
+          "tone": "Alta"
+        },
+        {
+          "date": "2026-08-20",
+          "outlet": "Canal Solar",
+          "title": "ONS prepara operação especial para garantir energia durante as eleições",
+          "url": "https://canalsolar.com.br/ons-operacao-fornecimento-energia-eleicoes/",
+          "spokesperson": "Sim — Marcio Rea, diretor-geral",
+          "tone": "Alta"
+        },
+        {
+          "date": "2026-08-17",
+          "outlet": "Cenário Energia",
+          "title": "ONS implementa IA para consulta de dados do setor (TIAGO Dados Abertos)",
+          "url": "https://cenarioenergia.com.br/2026/08/17/ons-lanca-solucao-de-inteligencia-artificial-para-otimizar-consulta-a-dados-do-sin/",
+          "spokesperson": "Sim — ONS",
+          "tone": "Alta"
+        },
+        {
+          "date": "2026-08-14",
+          "outlet": "Canal Solar",
+          "title": "ONS lança pacote duplo: portal de monitoramento do Super El Niño e ferramenta de IA para consulta de dados",
+          "url": "https://canalsolar.com.br/ons-lanca-portal-de-monitoramento-do-el-nino-e-ia-para-consulta-de-dados/",
+          "spokesperson": "Sim — ONS",
+          "tone": "Alta"
+        },
+        {
+          "date": "2026-08-13",
+          "outlet": "CanalEnergia",
+          "title": "ONS já processou 10 GW em pedidos de conexão de data centers",
+          "url": "https://www.canalenergia.com.br/noticias/53353698/ons-ja-processou-10-gw-em-pedidos-de-conexao-de-data-centers",
+          "spokesperson": "Sim — Alexandre Zucarato, diretor de Planejamento",
+          "tone": "Alta"
+        },
+        {
+          "date": "2026-08-08",
+          "outlet": "CNN Brasil",
+          "title": "ONS avalia alerta e decide pelo não acionamento do plano emergencial no Dia dos Pais",
+          "url": "https://www.cnnbrasil.com.br/infra/ons-descarta-acao-emergencial-de-cortar-excesso-de-energia-no-dia-dos-pais/",
+          "spokesperson": "Sim — ONS",
+          "tone": "Média"
+        },
+        {
+          "date": "2026-08-06",
+          "outlet": "Cenário Energia",
+          "title": "CMSE adota medidas preventivas para enfrentar El Niño",
+          "url": null,
+          "spokesperson": "Não — CMSE/MME",
+          "tone": "Alta"
+        },
+        {
+          "date": "2026-08-31",
+          "outlet": "Cenário Energia",
+          "title": "ONS recebe selo Ouro do Programa Brasileiro GHG Protocol",
+          "url": "https://cenarioenergia.com.br/2026/08/31/ons-alcanca-selo-ouro-no-ghg-protocol-e-consolida-agenda-de-descarbonizacao-no-setor-eletrico/",
+          "spokesperson": "Sim — ONS",
+          "tone": "Alta"
+        },
+        {
+          "date": "2026-08-16",
+          "outlet": "Folha de S.Paulo",
+          "title": "“Gato solar” vira nova frente de guerra no setor elétrico",
+          "url": "https://www1.folha.uol.com.br/mercado/2026/08/gato-solar-vira-nova-frente-de-guerra-no-setor-eletrico.shtml",
+          "spokesperson": "Não — ANEEL/agentes",
+          "tone": "Média"
+        }
+      ]
+    },
+    {
+      "file": "Relatorio ONS Julho 2026.dc.html",
+      "client": "ONS",
+      "variant": "principal",
+      "period": "2026-07",
+      "items": [
+        {
+          "date": "2026-07-24",
+          "outlet": "Agência iNFRA",
+          "title": "ONS prevê reservatórios acima de 80% em três regiões em julho",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-07-24",
+          "outlet": "Agência iNFRA",
+          "title": "Chuvas no Sul do país devem evitar bandeira vermelha em agosto",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-07-24",
+          "outlet": "MegaWhat",
+          "title": "A transmissão de energia como vetor do crescimento dos data centers",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-07-24",
+          "outlet": "MegaWhat",
+          "title": "Aneel leva leilões de baterias à consulta pública sem definir rateio",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-07-24",
+          "outlet": "MegaWhat",
+          "title": "CCEE propõe criar agente virtual para liquidar geração do LRCap",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-07-25",
+          "outlet": "Tribuna do Norte",
+          "title": "Compensar o passado, garantir o futuro (Portaria 140/ressarcimento)",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-07-28",
+          "outlet": "Cenário Energia",
+          "title": "ONS propõe ajustes à ANEEL para transição segura das regras de curtailment",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-07-27",
+          "outlet": "MegaWhat",
+          "title": "ONS pede ajustes em regras da Aneel para cortes de geração",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-07-28",
+          "outlet": "MegaWhat",
+          "title": "Mosna propõe adiar rateio conjunto entre hidrelétricas, eólicas e solares",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-07-27",
+          "outlet": "Estadão / UOL",
+          "title": "Nove entidades do setor enviam a Alcolumbre carta contra ‘jabutis’ em PL",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Crítico"
+        },
+        {
+          "date": "2026-07-27",
+          "outlet": "Cenário Energia",
+          "title": "Setor elétrico forma frente unitária contra ‘jabutis’ no PL 5.017",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Crítico"
+        },
+        {
+          "date": "2026-07-28",
+          "outlet": "Cenário Energia",
+          "title": "Conta de luz sobe 3,03% em julho e lidera pressão do IPCA-15",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-07-27",
+          "outlet": "MegaWhat",
+          "title": "Falha em subestação da ISA Energia interrompe 275 MW em SP",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-07-27",
+          "outlet": "MegaWhat",
+          "title": "Amapá fica sem energia após desligamentos em subestações da Equatorial",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-07-13",
+          "outlet": "Valor Econômico",
+          "title": "Belo Monte fecha 1º semestre com 6,56% da demanda nacional",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Positivo"
+        }
+      ]
+    },
+    {
+      "file": "Relatorio ONS Junho 2026.dc.html",
+      "client": "ONS",
+      "variant": "principal",
+      "period": "2026-06",
+      "items": [
+        {
+          "date": "2026-06-30",
+          "outlet": "Agência iNFRA",
+          "title": "Redação (ag.)",
+          "url": null,
+          "spokesperson": "Consumo de energia cai 21% na partida do Brasil na Copa, diz ONS",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-06-30",
+          "outlet": "eixos",
+          "title": "Redação (ag.)",
+          "url": null,
+          "spokesperson": "ONS: consumo cai até 21% e geração renovável tem corte de 20 GW",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-06-30",
+          "outlet": "O Tempo (Ag. Estado)",
+          "title": "Redação (ag.)",
+          "url": null,
+          "spokesperson": "Corte de geração renovável em jogo do Brasil supera uma Itaipu e meia",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-06-29",
+          "outlet": "Poder360",
+          "title": "Redação",
+          "url": null,
+          "spokesperson": "Curtailment no Nordeste atinge o equivalente a uma Itaipu",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-06-25",
+          "outlet": "CNN Brasil / Ag. iNFRA",
+          "title": "Redação",
+          "url": null,
+          "spokesperson": "ONS aponta estabilidade do sistema nos jogos do Brasil na Copa",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-06-24",
+          "outlet": "Cenário Energia",
+          "title": "Redação",
+          "url": null,
+          "spokesperson": "ONS e CCEE reestruturam Comitê PMO/PLD e lançam novo portal",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-06-24",
+          "outlet": "Petronotícias",
+          "title": "Redação",
+          "url": null,
+          "spokesperson": "Ataques cibernéticos colocam o setor elétrico sob pressão",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-06-18",
+          "outlet": "Canal Rural",
+          "title": "Redação",
+          "url": null,
+          "spokesperson": "ONS prevê poupar água em Itaipu e usinas do Sul com o El Niño",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-06-17",
+          "outlet": "Folha / D. do Comércio",
+          "title": "Nicola Pamplona",
+          "url": null,
+          "spokesperson": "El Niño mais forte requer operação especial, afirma ONS",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-06-08",
+          "outlet": "Poder360",
+          "title": "Redação",
+          "url": null,
+          "spokesperson": "MME anuncia leilão de baterias para 2026 e reforça o arsenal do ONS",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-06-16",
+          "outlet": "Agência iNFRA",
+          "title": "G. Campos Jr.; L. Carregosa; M. Wanzeller",
+          "url": null,
+          "spokesperson": "Renováveis aguardam transição para nova regra de cortes",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-06-16",
+          "outlet": "Canal Solar",
+          "title": "Redação",
+          "url": null,
+          "spokesperson": "Diretor da ANEEL alerta para risco de apagão sistêmico (data centers)",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-06-11",
+          "outlet": "Agência iNFRA",
+          "title": "G. Campos Jr.; M. Wanzeller",
+          "url": null,
+          "spokesperson": "CMSE: decisão sobre parâmetros de risco (CVaR) divide o setor",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-06-11",
+          "outlet": "eixos",
+          "title": "Redação",
+          "url": null,
+          "spokesperson": "Decisão do CMSE de manter o CVaR frustra comercializadores",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-06-10",
+          "outlet": "MME (institucional)",
+          "title": "Comunicação MME",
+          "url": null,
+          "spokesperson": "CMSE mantém CVaR 15/40 para 2027 e cobra novos modelos",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-06-10",
+          "outlet": "Agência iNFRA",
+          "title": "Redação",
+          "url": null,
+          "spokesperson": "ONS inicia modelos computacionais colaborativos (Projeto Maestro)",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-06-09",
+          "outlet": "Capital Digital",
+          "title": "Redação",
+          "url": null,
+          "spokesperson": "ONS anuncia uso de código aberto na computação do setor",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-06-10",
+          "outlet": "Agência iNFRA",
+          "title": "G. Campos Jr.; M. Wanzeller",
+          "url": null,
+          "spokesperson": "ANEEL homologa LRCAP 2026, mas debate jurídico continua",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-06-08",
+          "outlet": "Agência iNFRA",
+          "title": "Marisa Wanzeller",
+          "url": null,
+          "spokesperson": "Juiz do Ceará suspende homologação do LRCAP",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-06-08",
+          "outlet": "Ag. iNFRA / CNN",
+          "title": "Redação",
+          "url": null,
+          "spokesperson": "ONS diz que corte de geração na distribuição \"correu bem\"",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-06-07",
+          "outlet": "Canal Rural / CNN",
+          "title": "Redação",
+          "url": null,
+          "spokesperson": "ONS encerra plano emergencial após gerir 1.000 MW de excedentes",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-06-06",
+          "outlet": "Agência iNFRA",
+          "title": "Redação",
+          "url": null,
+          "spokesperson": "ONS aciona plano emergencial no feriado para garantir o SIN",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-06-17",
+          "outlet": "MegaWhat",
+          "title": "Redação",
+          "url": null,
+          "spokesperson": "ONS prevê R$ 53,5 mi em reforços emergenciais após o LRCap",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-06-17",
+          "outlet": "MegaWhat",
+          "title": "Redação",
+          "url": null,
+          "spokesperson": "ONS e CCEE pedem cautela na resposta da demanda no Dessem",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-06-12",
+          "outlet": "Agência iNFRA",
+          "title": "Redação",
+          "url": null,
+          "spokesperson": "ONS eleva previsão de afluências no Sul e Sudeste/CO",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-06-29",
+          "outlet": "Estadão",
+          "title": "Redação",
+          "url": null,
+          "spokesperson": "Menor consumo com o Japão e alta solar fazem ONS agir",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-06-25",
+          "outlet": "Estadão / Ag. iNFRA",
+          "title": "Redação",
+          "url": null,
+          "spokesperson": "Próximo jogo do Brasil poderá ter operação ainda mais complexa",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-06-15",
+          "outlet": "eixos",
+          "title": "Redação",
+          "url": null,
+          "spokesperson": "Primeiro jogo do Brasil leva a queda de 8,6% na carga do SIN",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-06-17",
+          "outlet": "Agência iNFRA",
+          "title": "Redação",
+          "url": null,
+          "spokesperson": "ONS planeja cortes automáticos de geração solar remota",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-06-10",
+          "outlet": "Agência iNFRA",
+          "title": "Redação",
+          "url": null,
+          "spokesperson": "ANEEL vai revisar a resolução que trata do curtailment",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-06-22",
+          "outlet": "TAGD Advogados",
+          "title": "Redação",
+          "url": null,
+          "spokesperson": "Aneel pede apoio da CCEE para regulamentar o ressarcimento do curtailment",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-06-17",
+          "outlet": "MegaWhat",
+          "title": "Redação",
+          "url": null,
+          "spokesperson": "ONS aponta riscos em reservas de capacidade (Casa dos Ventos, Odata)",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-06-24",
+          "outlet": "CCEE (institucional)",
+          "title": "Comunicação CCEE",
+          "url": null,
+          "spokesperson": "CCEE e ONS lançam o portal do Comitê Técnico do PMO/PLD",
+          "tone": "Positivo"
+        },
+        {
+          "date": null,
+          "outlet": "agenciainfra.com",
+          "title": "Consumo de energia cai 21% na partida do Brasil na Copa, diz ONS",
+          "url": "https://agenciainfra.com/blog/consumo-de-energia-cai-21-na-partida-do-brasil-na-copa-diz-ons/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "eixos.com.br",
+          "title": "ONS: consumo cai até 21% e geração renovável tem corte de 20 GW",
+          "url": "https://eixos.com.br/energia-eletrica/ons-consumo-de-energia-cai-ate-21-porcento-na-partida-do-brasil-e-geracao-renovavel-tem-corte-de-20-gw",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "otempo.com.br",
+          "title": "Corte de geração renovável em jogo do Brasil supera uma Itaipu e meia",
+          "url": "https://www.otempo.com.br/economia/2026/6/30/demanda-de-energia-cai-21-em-jogo-do-brasil-e-corte-de-geracao-renovavel-supera-uma-itaipu-e-meia",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "poder360.com.br",
+          "title": "Curtailment no Nordeste atinge o equivalente a uma Itaipu",
+          "url": "https://www.poder360.com.br/poder-energia/ons-aciona-pela-1a-vez-plano-emergencial-para-cortar-geracao-de-energia/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "cenarioenergia.com.br",
+          "title": "ONS e CCEE reestruturam Comitê PMO/PLD e lançam novo portal",
+          "url": "https://cenarioenergia.com.br/2026/06/24/ons-e-ccee-reestruturam-comite-pmo-pld-para-calibrar-precos-e-modelos/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "petronoticias.com.br",
+          "title": "Ataques cibernéticos colocam o setor elétrico sob pressão",
+          "url": "https://petronoticias.com.br/ataques-ciberneticos-estao-colocando-o-setor-eletrico-brasileiro-sob-pressao-e-elevam-alerta-para-evitar-problemas/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "canalrural.com.br",
+          "title": "ONS prevê poupar água em Itaipu e usinas do Sul com o El Niño",
+          "url": "https://www.canalrural.com.br/diversos/ons-preve-poupar-agua-em-itaipu-e-usinas-do-sul-com-avanco-do-el-nino/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "diariodocomercio.com.br",
+          "title": "El Niño mais forte requer operação especial, afirma ONS",
+          "url": "https://diariodocomercio.com.br/economia/el-nino-operacao-eletrico-ons-hidreletrica/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "tinyurl.com",
+          "title": "MME anuncia leilão de baterias para 2026 e reforça o arsenal do ONS",
+          "url": "https://tinyurl.com/2hwy3e26",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "agenciainfra.com",
+          "title": "Renováveis aguardam transição para nova regra de cortes",
+          "url": "https://agenciainfra.com/blog/renovaveis-aguardam-transicao-para-nova-regra-de-cortes-de-geracao/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "agenciainfra.com",
+          "title": "CMSE: decisão sobre parâmetros de risco (CVaR) divide o setor",
+          "url": "https://agenciainfra.com/blog/cmse-decisao-sobre-parametros-de-risco-de-operacao-do-sistema-divide-setor/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "eixos.com.br",
+          "title": "Decisão do CMSE de manter o CVaR frustra comercializadores",
+          "url": "https://eixos.com.br/energia-eletrica/decisao-do-cmse-de-manter-modelo-de-risco-frustra-comercializadores-que-esperavam-queda-nos-custos/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "gov.br",
+          "title": "CMSE mantém CVaR 15/40 para 2027 e cobra novos modelos",
+          "url": "https://www.gov.br/mme/pt-br/assuntos/noticias",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "agenciainfra.com",
+          "title": "ONS inicia modelos computacionais colaborativos (Projeto Maestro)",
+          "url": "https://agenciainfra.com/blog/ons-inicia-processo-para-desenvolver-modelos-computacionais-colaborativos/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "agenciainfra.com",
+          "title": "ANEEL homologa LRCAP 2026, mas debate jurídico continua",
+          "url": "https://agenciainfra.com/blog/aneel-homologa-resultados-do-lrcap-2026-mas-debate-juridico-continua/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "agenciainfra.com",
+          "title": "Juiz do Ceará suspende homologação do LRCAP",
+          "url": "https://agenciainfra.com/blog/juiz-do-ceara-suspende-homologacao-do-lrcap-mas-repassa-decisao-final/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "cnnbrasil.com.br",
+          "title": "ONS encerra plano emergencial após gerir 1.000 MW de excedentes",
+          "url": "https://www.cnnbrasil.com.br/infra/ons-aciona-pela-primeira-vez-plano-de-gestao-de-excedentes-de-energia/",
+          "spokesperson": null,
+          "tone": null
+        }
+      ]
+    },
+    {
+      "file": "Relatorio ONS Setembro 2026.dc.html",
+      "client": "ONS",
+      "variant": "principal",
+      "period": "2026-09",
+      "items": [
+        {
+          "date": "2026-10-17",
+          "outlet": "CNN Brasil",
+          "title": "Baterias podem reduzir cortes de energia em até 50%, estima ONS",
+          "url": "https://www.cnnbrasil.com.br/infra/baterias-podem-reduzir-cortes-de-energia-em-ate-50-estima-ons/",
+          "spokesperson": "Márcio Rea — Diretor-Geral do ONS",
+          "tone": null
+        },
+        {
+          "date": "2026-09-01",
+          "outlet": "Canal Energia",
+          "title": "ONS registra 51 dias consecutivos de curtailment em renováveis",
+          "url": "https://www.canalenergia.com.br/noticias/53300001/ons-registra-51-dias-consecutivos-de-curtailment-em-renovaveis",
+          "spokesperson": "ONS",
+          "tone": null
+        },
+        {
+          "date": "2026-09-02",
+          "outlet": "Valor Econômico",
+          "title": "Curtailment bate recorde e gera tensão entre geradoras e ONS",
+          "url": "https://valor.globo.com/empresas/noticia/2026/09/02/curtailment-bate-recorde-e-gera-tensao-entre-geradoras-e-ons.ghtml",
+          "spokesperson": "Geradoras / ONS",
+          "tone": null
+        },
+        {
+          "date": "2026-09-03",
+          "outlet": "Agência Brasil",
+          "title": "Data centers demandam 26,2 GW de conexão ao sistema elétrico",
+          "url": "https://agenciabrasil.ebc.com.br/economia/noticia/2026-09/data-centers-demandam-26-gw-de-conexao-ao-sistema-eletrico",
+          "spokesperson": "ONS / Aneel",
+          "tone": null
+        },
+        {
+          "date": "2026-09-04",
+          "outlet": "O Globo",
+          "title": "Super El Niño pode pressionar reservatórios no verão 2026-2027",
+          "url": "https://oglobo.globo.com/economia/noticia/2026/09/super-el-nino-pode-pressionar-reservatorios-no-verao-2026-2027.ghtml",
+          "spokesperson": "INMET / ONS",
+          "tone": null
+        },
+        {
+          "date": "2026-09-05",
+          "outlet": "Estadão",
+          "title": "Geração distribuída: ONS, MME e Aneel criam grupo de trabalho regulatório",
+          "url": "https://economia.estadao.com.br/noticias/geral/geracao-distribuida-ons-mme-e-aneel-criam-grupo-de-trabalho-regulatorio,70004800005.htm",
+          "spokesperson": "MME / ONS / Aneel",
+          "tone": null
+        },
+        {
+          "date": "2026-09-07",
+          "outlet": "UOL Colunas",
+          "title": "Os bastidores da operação",
+          "url": "https://economia.uol.com.br/colunas/2026/09/07/os-bastidores-da-operacao.ghtm",
+          "spokesperson": "Márcio Rea — Diretor-Geral do ONS",
+          "tone": null
+        },
+        {
+          "date": "2026-09-08",
+          "outlet": "Folha de S.Paulo",
+          "title": "Fila de espera para conexão de data centers ao sistema elétrico preocupa setor",
+          "url": "https://www1.folha.uol.com.br/mercado/2026/09/fila-de-espera-para-conexao-de-data-centers-ao-sistema-eletrico-preocupa-setor.shtml",
+          "spokesperson": "ONS / Aneel",
+          "tone": null
+        },
+        {
+          "date": "2026-09-10",
+          "outlet": "Power Engineering International",
+          "title": "Brazil’s grid faces renewable integration challenge as curtailment hits record",
+          "url": "https://www.powerengineeringint.com/renewables/brazils-grid-faces-renewable-integration-challenge-as-curtailment-hits-record",
+          "spokesperson": "ONS",
+          "tone": null
+        },
+        {
+          "date": "2026-09-11",
+          "outlet": "Canal Energia",
+          "title": "Mercado livre avança e impõe novos desafios ao planejamento do ONS",
+          "url": "https://www.canalenergia.com.br/noticias/53300009/mercado-livre-avanca-e-impoe-novos-desafios-ao-planejamento-do-ons",
+          "spokesperson": "ONS",
+          "tone": null
+        },
+        {
+          "date": "2026-09-12",
+          "outlet": "Energia Hoje",
+          "title": "Transmissão: gargalo estrutural impede escoamento de renováveis no Nordeste",
+          "url": "https://www.energiahoje.info/2026/09/12/transmissao-gargalo-estrutural-impede-escoamento-de-renovaveis-no-nordeste.html",
+          "spokesperson": "ONS / ANEEL",
+          "tone": null
+        },
+        {
+          "date": "2026-09-15",
+          "outlet": "Correio Braziliense",
+          "title": "ONS prepara cenários para o verão diante de projeções de El Niño",
+          "url": "https://www.correiobraziliense.com.br/economia/2026/09/6967011-ons-prepara-cenarios-para-o-verao-diante-de-projecoes-de-el-nino.html",
+          "spokesperson": "ONS",
+          "tone": null
+        },
+        {
+          "date": "2026-09-16",
+          "outlet": "Agência Estado",
+          "title": "GT de geração distribuída realiza primeira reunião com pauta técnica",
+          "url": "https://exame.com/invest/gt-de-geracao-distribuida-realiza-primeira-reuniao-com-pauta-tecnica/",
+          "spokesperson": "MME / ONS / Aneel",
+          "tone": null
+        },
+        {
+          "date": "2026-09-17",
+          "outlet": "Valor Econômico",
+          "title": "Investidores em data centers cobram cronograma do ONS para conexões ao sistema",
+          "url": "https://valor.globo.com/empresas/noticia/2026/09/17/investidores-em-data-centers-cobram-cronograma-do-ons-para-conexoes-ao-sistema.ghtml",
+          "spokesperson": "Empresas de tecnologia / ONS",
+          "tone": null
+        },
+        {
+          "date": "2026-09-18",
+          "outlet": "Jornal do Comércio",
+          "title": "Curtailment impacta rentabilidade de usinas eólicas no Nordeste",
+          "url": "https://www.jornaldocomercio.com/economia/2026/09/1146001-curtailment-impacta-rentabilidade-de-usinas-eolicas-no-nordeste.html",
+          "spokesperson": "Geradoras eólicas",
+          "tone": null
+        },
+        {
+          "date": "2026-09-19",
+          "outlet": "Canal Energia",
+          "title": "ONS avança em digitalização da operação com uso de IA para previsão de geração",
+          "url": "https://www.canalenergia.com.br/noticias/53300015/ons-avanca-em-digitalizacao-da-operacao-com-uso-de-ia-para-previsao-de-geracao",
+          "spokesperson": "ONS",
+          "tone": null
+        },
+        {
+          "date": "2026-09-20",
+          "outlet": "Época Negócios",
+          "title": "Sistema elétrico brasileiro: desafios de integração e oportunidades de investimento",
+          "url": "https://epocanegocios.globo.com/brasil/noticia/2026/09/sistema-eletrico-brasileiro-desafios-de-integracao-e-oportunidades-de-investimento.ghtml",
+          "spokesperson": "ONS / ANEEL",
+          "tone": null
+        },
+        {
+          "date": "2026-09-21",
+          "outlet": "Brazil Journal",
+          "title": "Márcio Rea, do ONS: ‘Geração distribuída precisa de freio de organização’",
+          "url": "https://braziljournal.com/play/marcio-rea-do-ons-geracao-distribuida-precisa-de-freio-de-organizacao/",
+          "spokesperson": "Márcio Rea — Diretor-Geral do ONS",
+          "tone": null
+        },
+        {
+          "date": "2026-09-23",
+          "outlet": "Portal Solar",
+          "title": "Setor fotovoltaico reage à declaração do DG do ONS sobre geração distribuída",
+          "url": "https://www.portalsolar.com.br/setor-fotovoltaico-reage-a-declaracao-do-dg-do-ons-sobre-geracao-distribuida",
+          "spokesperson": "Absolar / Márcio Rea — Diretor-Geral do ONS",
+          "tone": null
+        },
+        {
+          "date": "2026-09-25",
+          "outlet": "Agência Brasil",
+          "title": "ONS e MME reafirmam papel do planejamento centralizado na segurança do sistema",
+          "url": "https://agenciabrasil.ebc.com.br/economia/noticia/2026-09/ons-e-mme-reafirmam-papel-do-planejamento-centralizado-na-seguranca-do-sistema",
+          "spokesperson": "MME / Márcio Rea — Diretor-Geral do ONS",
+          "tone": null
+        },
+        {
+          "date": "2026-09-30",
+          "outlet": "Canal Energia",
+          "title": "ONS fecha setembro com alerta para risco hidrológico e agenda de expansão de transmissão",
+          "url": "https://www.canalenergia.com.br/noticias/53300020/ons-fecha-setembro-com-alerta-para-risco-hidrologico-e-agenda-de-expansao-de-transmissao",
+          "spokesperson": "ONS / Márcio Rea — Diretor-Geral do ONS",
+          "tone": null
+        }
+      ]
+    },
+    {
+      "file": "Relatorio PRIO Agosto 2026.dc.html",
+      "client": "PRIO",
+      "variant": "principal",
+      "period": "2026-08",
+      "items": [
+        {
+          "date": "2026-08-04",
+          "outlet": "Valor Econômico",
+          "title": "Prio tem produção média de 196.260 bpd em julho",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-08-04",
+          "outlet": "Infomoney",
+          "title": "PRIO: lucro líquido salta 169% no 2T26, para US$ 413,3 milhões",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-08-05",
+          "outlet": "Valor Econômico",
+          "title": "Política de remuneração aos acionistas independe das eleições, diz presidente",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-08-10",
+          "outlet": "Seu Dinheiro",
+          "title": "Prio pode pagar 21% em dividendos no próximo ano, segundo Itaú BBA",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-08-13",
+          "outlet": "InfoMoney",
+          "title": "Fazenda defende prorrogar por 60 dias imposto de exportação sobre petróleo",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-08-24",
+          "outlet": "Euquero Investir",
+          "title": "Fazenda mantém imposto; BTG calcula efeito distinto em PRIO e Brava",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-08-27",
+          "outlet": "Poder360",
+          "title": "Governo renova imposto de exportação de petróleo até novembro",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-08-27",
+          "outlet": "Poder360",
+          "title": "Justiça suspende imposto de exportação de petróleo (liminar ABEP)",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-08-27",
+          "outlet": "Editora Brasil Energia",
+          "title": "\"A PRIO deve ampliar de 40% a 50% a sua produção\", diz diretor Francilmar Fernandes",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-08-31",
+          "outlet": "Poder360",
+          "title": "TRF-1 derruba liminar e retoma imposto de exportação de petróleo",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-08-31",
+          "outlet": "Valor Econômico",
+          "title": "Carf derruba autuação da Prio de R$ 18 bilhões",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-08-31",
+          "outlet": "Guia do Investidor",
+          "title": "OPEP perde força e acende alerta no petróleo; impacto para PRIO3",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Negativo"
+        }
+      ]
+    },
+    {
+      "file": "Relatorio PRIO Julho 2026.dc.html",
+      "client": "PRIO",
+      "variant": "principal",
+      "period": "2026-07",
+      "items": [
+        {
+          "date": "2026-07-02",
+          "outlet": "Investidor10",
+          "title": "PRIO abre último poço de Wahoo e conclui todas as unidades produtoras",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-07-19",
+          "outlet": "PRIO / Brazil Energy Insight",
+          "title": "Substituição da linha de gas lift em Frade restabelece três poços",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-07-03",
+          "outlet": "Finance News / XP",
+          "title": "XP vê dados de produção de junho como marginalmente positivos",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-07-03",
+          "outlet": "BM&C News",
+          "title": "PRIO amplia produção; capacidade de ampliar volumes segue central na tese",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-07-28",
+          "outlet": "Money Times / BTG Pactual",
+          "title": "BTG mantém PRIO como top pick entre as independentes brasileiras",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        }
+      ]
+    },
+    {
+      "file": "Relatorio PRIO Outubro 2026.dc.html",
+      "client": "PRIO",
+      "variant": "principal",
+      "period": "2026-10",
+      "items": [
+        {
+          "date": null,
+          "outlet": "Acionista",
+          "title": "Tensões no Oriente Médio elevam Brent e beneficiam produtoras de petróleo como PRIO",
+          "url": "https://acionista.com.br/oriente-medio-pressiona-mercado-veja-o-impacto-sobre-petrobras-petr4-e-prio-prio3/",
+          "spokesperson": "Analistas de mercado",
+          "tone": "Positivo"
+        },
+        {
+          "date": null,
+          "outlet": "InfoMoney",
+          "title": "Bank of America eleva preço-alvo de PRIO3; recomendação de compra reiterada",
+          "url": "https://www.infomoney.com.br/?p=3133647",
+          "spokesperson": "Bank of America",
+          "tone": "Positivo"
+        },
+        {
+          "date": null,
+          "outlet": "BP Money",
+          "title": "Goldman Sachs aponta PRIO como maior beneficiária da depreciação do real no setor",
+          "url": "https://bpmoney.com.br/mercado/acoes/goldman-ve-forte-crescimento-e-eleva-prio3-para-compra-recv3-e-brav3-ficam-em-venda/",
+          "spokesperson": "Goldman Sachs",
+          "tone": "Positivo"
+        },
+        {
+          "date": null,
+          "outlet": "AMDJUS",
+          "title": "ANP anuncia leilões; PRIO avalia participação em campos de recuperação",
+          "url": "https://amdjus.com.br/leiloes-da-anp-novas-concessoes-impactam-mercado-de-petroleo-em-outubro/",
+          "spokesperson": "ANP",
+          "tone": "Neutro"
+        },
+        {
+          "date": null,
+          "outlet": "InfoMoney",
+          "title": "PRIO3: hedge natural cambial atrai investidores institucionais",
+          "url": "https://www.infomoney.com.br/?p=3307427",
+          "spokesperson": "Gestoras de fundos",
+          "tone": "Positivo"
+        },
+        {
+          "date": null,
+          "outlet": "Acionista",
+          "title": "PRIO reorienta capital para dividendos e recompras após fase de M&A",
+          "url": "https://acionista.com.br/prio-prio3-projeta-20-a-30-em-dividendos-ate-2027/",
+          "spokesperson": "PRIO / analistas",
+          "tone": "Positivo"
+        },
+        {
+          "date": null,
+          "outlet": "Canal Rural",
+          "title": "Brent acima de US$ 90: produtoras de campos maduros são as mais beneficiadas",
+          "url": "https://www.canalrural.com.br/economia/brent-deve-rondar-us-90-ate-o-fim-de-2026-com-alivio-limitado-em-2027/",
+          "spokesperson": "Bloomberg / Reuters",
+          "tone": "Positivo"
+        },
+        {
+          "date": null,
+          "outlet": "Brasil Energia",
+          "title": "Licenciamento de novos campos offshore: prazos em pauta para o setor",
+          "url": "https://brasilenergia.com.br/petroleoegas/licenciamento-ambiental-offshore-desafios-para-os-operadores-de-petroleo",
+          "spokesperson": "Ibama",
+          "tone": "Neutro"
+        },
+        {
+          "date": null,
+          "outlet": "Brasil Energia",
+          "title": "PRIO e o modelo “junior major”: eficiência em campos maduros como diferencial",
+          "url": "https://brasilenergia.com.br/petroleoegas/prio-completa-10-anos-em-constante-crescimento-e-foco-no-inicio-da-operacao-de-wahoo-cujos-primeiros-passos-ja-estao-sendo-dados",
+          "spokesperson": "Analistas / PRIO",
+          "tone": "Positivo"
+        },
+        {
+          "date": null,
+          "outlet": "Eu Quero Investir",
+          "title": "FCFE yield e dividend yield elevados: PRIO entra em nova fase de retorno ao acionista",
+          "url": "https://euqueroinvestir.com/acoes/a-prio-e-uma-nova-vaca-leiteira-de-dividendos",
+          "spokesperson": "Goldman Sachs / analistas",
+          "tone": "Positivo"
+        }
+      ]
+    },
+    {
+      "file": "Relatorio PRIO Setembro 2026.dc.html",
+      "client": "PRIO",
+      "variant": "principal",
+      "period": "2026-09",
+      "items": [
+        {
+          "date": "2026-03-12",
+          "outlet": "Senado Federal",
+          "title": "Texto da MP 1.340 — institui alíquota de 12% sobre exportação de petróleo bruto",
+          "url": "https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2026/mpv/mpv1340.htm",
+          "spokesperson": "Ministério da Fazenda (nota)",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-09-01",
+          "outlet": "Agência iNFRA",
+          "title": "Setor de petróleo critica imposto de exportação: “choque de insegurança jurídica”",
+          "url": "https://www.machadomeyer.com.br/pt/inteligencia-juridica/publicacoes-ij/tributario-ij/mp-1-340-26-estabelece-subvencao-ao-diesel-e-imposto-de-exportacao-sobre-petroleo",
+          "spokesperson": "IBP (nota oficial)",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-09-03",
+          "outlet": "Valor Econômico",
+          "title": "PRIO e independentes pedem liminares contra imposto de exportação",
+          "url": "https://agenciabrasil.ebc.com.br/justica/noticia/2026-04/governo-recorre-de-liminar-que-barra-imposto-na-exportacao-de-petroleo",
+          "spokesperson": "Abpip (nota)",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-09-08",
+          "outlet": "Agência iNFRA",
+          "title": "Câmara realiza audiência pública sobre imposto de exportação; setor aponta impactos",
+          "url": "https://agenciabrasil.ebc.com.br/economia/noticia/2026-07/imposto-de-12-sobre-exportacao-de-petroleo-e-estendido-por-60-dias",
+          "spokesperson": "Comissão de Minas e Energia (Câmara)",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-09-08",
+          "outlet": "Valor Econômico",
+          "title": "Juiz federal concede liminar suspendendo imposto de exportação para parte das exportações",
+          "url": "https://agenciabrasil.ebc.com.br/justica/noticia/2026-04/justica-mantem-liminar-que-derruba-imposto-na-exportacao-de-petroleo",
+          "spokesperson": "Poder Judiciário (decisão)",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-09-10",
+          "outlet": "Folha de S.Paulo",
+          "title": "Brent supera US$ 92 com cortes da OPEP+ e tensão no Oriente Médio",
+          "url": "https://www.infomoney.com.br/mercados/petroleo-abertura-fechamento-ira-eua-17082026/",
+          "spokesperson": "Agências internacionais",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-09-12",
+          "outlet": "Valor Econômico",
+          "title": "Analistas calculam impacto do imposto na PRIO: US$ 200-280 mi anualizados",
+          "url": "https://www.infomoney.com.br/politica/reforma-tributaria-pode-aumentar-carga-do-setor-de-oleo-e-gas-em-20-diz-consultoria/",
+          "spokesperson": "BTG Pactual (relatório de análise)",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-09-15",
+          "outlet": "Agência iNFRA",
+          "title": "PRIO divulga produção de agosto: 186 mil boed, em linha com guideline",
+          "url": "https://www.infomoney.com.br/mercados/prio-prio3-tem-baixa-de-52-na-producao-em-agosto/",
+          "spokesperson": "PRIO (comunicado ao mercado)",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-09-17",
+          "outlet": "Pipeline Energy",
+          "title": "Wahoo: obras de instalação de SURF avançam",
+          "url": "https://prio3.com.br/en/operations/wahoo-field/",
+          "spokesperson": "PRIO (comunicado)",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-09-18",
+          "outlet": "Valor Econômico",
+          "title": "BTG Pactual mantém “compra” para PRIO com preço-alvo de R$ 62; cita Wahoo como driver",
+          "url": "https://www.infomoney.com.br/mercados/prio-obtem-licenca-para-interligar-pocos-de-wahoo-a-plataforma/",
+          "spokesperson": "BTG Pactual (relatório)",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-09-19",
+          "outlet": "Agência iNFRA",
+          "title": "Itaú BBA reitera “outperform” para PRIO; lifting cost de US$ 10,2/bbl é destaque",
+          "url": "https://www.infomoney.com.br/mercados/prio-prio3-tem-alta-de-107-na-producao-no-segundo-trimestre/",
+          "spokesperson": "Itaú BBA (relatório)",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-09-20",
+          "outlet": "TCU (site oficial)",
+          "title": "TCU abre monitoramento sobre MP 1.340 (imposto de exportação)",
+          "url": "https://www.infomoney.com.br/mercados/prio-prio3-resultados-segundo-trimestre-2026/",
+          "spokesperson": "TCU (nota)",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-09-22",
+          "outlet": "Valor Econômico",
+          "title": "PGFN recorre de liminares que suspendem imposto de exportação",
+          "url": "https://www.infomoney.com.br/mercados/justica-derruba-liminar-que-suspendia-imposto-de-exportacao-de-petroleo/",
+          "spokesperson": "PGFN (nota)",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-09-24",
+          "outlet": "Pipeline Energy",
+          "title": "Peregrino mantém produção estável em setembro",
+          "url": "https://www.infomoney.com.br/mercados/producao-no-campo-de-peregrino-e-retomada-apos-autorizacao-da-anp-diz-prio/",
+          "spokesperson": "Comunicado do campo",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-09-25",
+          "outlet": "Valor Econômico",
+          "title": "Brasil exportou 1,2 mi de barris/dia em agosto; PRIO responde por ~8% do total",
+          "url": "https://www.infomoney.com.br/business/prio-leva-participacao-da-equinor-em-campos-de-peregrino-e-pitangola-por-us-3350-bi/",
+          "spokesperson": "ANP (dado público)",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-09-25",
+          "outlet": "Agência iNFRA",
+          "title": "Reforma Tributária: setor de E&P pressiona por alíquota diferenciada no texto complementar",
+          "url": "https://www.infomoney.com.br/politica/reforma-tributaria-pode-aumentar-carga-do-setor-de-oleo-e-gas-em-20-diz-consultoria/",
+          "spokesperson": "IBP (nota)",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-09-26",
+          "outlet": "IPEA (publicação)",
+          "title": "Brasil e a janela de oportunidade no petróleo: receitas potenciais até 2040",
+          "url": "https://www.infomoney.com.br/brasil/justica-libera-cobranca-de-imposto-sobre-exportacao-de-petroleo/",
+          "spokesperson": "IPEA (nota de pesquisa)",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-09-27",
+          "outlet": "Pipeline Energy",
+          "title": "Ministro de MME defende “aproveitamento máximo da janela de exportação” de petróleo",
+          "url": "https://www.machadomeyer.com.br/pt/inteligencia-juridica/publicacoes-ij/tributario-ij/mp-1-340-26-estabelece-subvencao-ao-diesel-e-imposto-de-exportacao-sobre-petroleo",
+          "spokesperson": "MME (declaração)",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-09-29",
+          "outlet": "Valor Econômico",
+          "title": "Brent fecha setembro em US$ 94,3; melhor mês do ano para o petróleo",
+          "url": "https://www.infomoney.com.br/mercados/prio-prio3-resultados-segundo-trimestre-2026/",
+          "spokesperson": "Agências internacionais",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-09-30",
+          "outlet": "Agência iNFRA",
+          "title": "Setor de E&P fecha setembro com produção recorde; incerteza tributária persiste",
+          "url": "https://agenciabrasil.ebc.com.br/economia/noticia/2026-07/imposto-de-12-sobre-exportacao-de-petroleo-e-estendido-por-60-dias",
+          "spokesperson": "ANP (dado público)",
+          "tone": "Neutro"
+        }
+      ]
+    },
+    {
+      "file": "Relatorio SIMINERAL Agosto 2026.dc.html",
+      "client": "SIMINERAL",
+      "variant": "principal",
+      "period": "2026-08",
+      "items": [
+        {
+          "date": "2026-08-07",
+          "outlet": "A Província do Pará",
+          "title": "V Congresso Técnico do SIMINERAL: 250+ participantes em Canaã dos Carajás",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-08-04",
+          "outlet": "Gazeta Carajás",
+          "title": "Workshop de Comunicação do SIMINERAL debate IA e protagonismo do jornalismo",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-08-27",
+          "outlet": "A Província do Pará",
+          "title": "SIMINERAL participa da EXPOSIBRAM 2026 e destaca diálogo entre mineração e poder público",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-08-06",
+          "outlet": "CNN Brasil",
+          "title": "Câmara aprova PL dos minerais críticos e redefine estratégia",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-08-27",
+          "outlet": "CNN Brasil",
+          "title": "Eduardo Braga será relator do PL dos minerais críticos no Senado",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-08-04",
+          "outlet": "Agência iNFRA",
+          "title": "Estudo Amcham: minerais críticos podem adicionar R$ 192 bi ao PIB e 750 mil empregos",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-08-13",
+          "outlet": "iG Economia",
+          "title": "BNDES anuncia R$ 50 bilhões em projetos de minerais críticos",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-08-24",
+          "outlet": "CNN Brasil",
+          "title": "Cade arquiva ação e destrava venda da Serra Verde (terras raras) para empresa dos EUA",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-08-26",
+          "outlet": "G1",
+          "title": "Lula diz que \"tem muito estrangeiro\" comprando minerais críticos antes de marco legal",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-08-28",
+          "outlet": "ICL Notícias",
+          "title": "Governo atua para exigir industrialização como condição para venda de terras raras",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-08-26",
+          "outlet": "CNN Brasil",
+          "title": "Empresa chinesa (Gulf Resources) anuncia entrada em lítio e terras raras no Brasil",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-08-12",
+          "outlet": "Pará Web News",
+          "title": "Mineração no Pará cresce 8,4% e movimenta R$ 52,2 bilhões no primeiro semestre de 2026",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-08-19",
+          "outlet": "Muita Informação",
+          "title": "Plano Vale Carajás 2035 projeta milhões de empregos e R$ 1,3 tri em impostos",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-08-13",
+          "outlet": "G1",
+          "title": "STF dá prazo de 24 meses para Congresso regulamentar mineração em terras indígenas",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-08-18",
+          "outlet": "Canal Solar",
+          "title": "Mercadante defende Petrobras em terras raras e pressiona por novo decreto de cavidades",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-08-24",
+          "outlet": "Portal Amazônia",
+          "title": "Justiça estabelece medidas para controle da mineração na APA do Tapajós, no Pará",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-08-26",
+          "outlet": "brasil.mongabay.com",
+          "title": "ANM enfrenta questionamentos sobre controle do ouro na Amazônia",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-08-19",
+          "outlet": "Jornal Folha do Progresso",
+          "title": "Mineração no Pará entra na era da IA e máquinas autônomas",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-08-21",
+          "outlet": "BNamericas",
+          "title": "Quais serão os principais debates no maior evento de mineração do Brasil? (EXPOSIBRAM)",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Neutro"
+        }
+      ]
+    },
+    {
+      "file": "Relatorio SIMINERAL Julho 2026.dc.html",
+      "client": "SIMINERAL",
+      "variant": "principal",
+      "period": "2026-07",
+      "items": [
+        {
+          "date": "2026-07-01",
+          "outlet": "CNN Brasil",
+          "title": "Governo anuncia decreto para modernizar regra sobre cavidades naturais",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-07-01",
+          "outlet": "Revista Mineração",
+          "title": "Silveira anuncia decreto que pode liberar novos projetos de mineração",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        }
+      ]
+    },
+    {
+      "file": "Relatorio SIMINERAL Setembro 2026.dc.html",
+      "client": "SIMINERAL",
+      "variant": "principal",
+      "period": "2026-09",
+      "items": [
+        {
+          "date": "2026-09-16",
+          "outlet": "Gov.br / Ministério da Fazenda",
+          "title": "Governo sanciona marco legal dos minerais críticos e estratégicos alinhado à Transformação Ecológica",
+          "url": "https://www.gov.br/fazenda/pt-br/assuntos/noticias/2026/setembro/governo-sanciona-marco-legal-dos-minerais-criticos-e-estrategicos-alinhado-a-transformacao-ecologica",
+          "spokesperson": "Governo Federal",
+          "tone": null
+        },
+        {
+          "date": "2026-09-17",
+          "outlet": "Agência Senado",
+          "title": "Sancionada Política Nacional de Minerais Críticos e Estratégicos",
+          "url": "https://www12.senado.leg.br/noticias/materias/2026/09/17/sancionada-politica-nacional-de-minerais-criticos-e-estrategicos",
+          "spokesperson": "Agência Senado",
+          "tone": null
+        },
+        {
+          "date": "2026-05-06",
+          "outlet": "Agência Câmara de Notícias",
+          "title": "Câmara aprova criação da Política Nacional de Minerais Críticos e Estratégicos",
+          "url": "https://www.camara.leg.br/noticias/1269666-camara-aprova-criacao-da-politica-nacional-de-minerais-criticos-e-estrategicos/",
+          "spokesperson": "Dep. Arnaldo Jardim (relator)",
+          "tone": null
+        },
+        {
+          "date": "2026-09-16",
+          "outlet": "Poder360",
+          "title": "Governo instala conselho de minerais críticos e prepara 1ª reunião",
+          "url": "https://www.poder360.com.br/poder-infra/governo-instala-conselho-de-minerais-criticos-e-prepara-1a-reuniao/",
+          "spokesperson": "CIMCE / MDIC",
+          "tone": null
+        },
+        {
+          "date": "2026-09-21",
+          "outlet": "Valor Econômico",
+          "title": "Conselho de minerais críticos deve ajudar na coordenação do setor, dizem empresas",
+          "url": "https://valor.globo.com/brasil/agenda-global-2026/noticia/2026/09/21/conselho-de-minerais-criticos-deve-ajudar-na-coordenacao-do-setor-dizem-empresas.ghtml",
+          "spokesperson": "Pablo Cesário (IBRAM)",
+          "tone": null
+        },
+        {
+          "date": "2026-09-22",
+          "outlet": "Agência iNFRA",
+          "title": "Lula diz que Brasil ‘não é quintal’ e que riqueza mineral é do povo",
+          "url": "https://agenciainfra.com/blog/lula-diz-que-brasil-nao-e-quintal-e-que-riqueza-mineral-e-do-povo/",
+          "spokesperson": "Presidente Lula (ONU)",
+          "tone": null
+        },
+        {
+          "date": "2026-09-22",
+          "outlet": "Cenário Energia",
+          "title": "Lula defende soberania sobre minerais críticos e cobra agregação de valor no Brasil na ONU",
+          "url": "https://cenarioenergia.com.br/2026/09/22/lula-defende-soberania-sobre-minerais-criticos-e-cobra-agregacao-de-valor-no-brasil-na-onu/",
+          "spokesperson": "Presidente Lula (ONU)",
+          "tone": null
+        },
+        {
+          "date": "2026-08-28",
+          "outlet": "Eixos",
+          "title": "Minerais críticos e tributação: o Brasil diante de uma nova corrida global",
+          "url": "https://eixos.com.br/mineracao/minerais-criticos-e-tributacao-o-brasil-diante-de-uma-nova-corrida-global/",
+          "spokesperson": "Bernardo Araripe Diniz",
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "agenciagov.ebc.com.br",
+          "title": "Política de minerais críticos prevê rastreabilidade e agregação de valor",
+          "url": "https://agenciagov.ebc.com.br/noticias/202609/politica-de-minerais-criticos-preve-rastreabilidade-e-agregacao-de-valor-1",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "mattosfilho.com.br",
+          "title": "Congresso Nacional aprova Política Nacional dos Minerais Críticos e Estratégicos",
+          "url": "https://www.mattosfilho.com.br/unico/aprova-pnmce/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "climatetrackerlatam.org",
+          "title": "Lei dos Minerais Críticos não garante industrialização do setor no Brasil",
+          "url": "https://climatetrackerlatam.org/historias/lei-dos-minerais-criticos-e-aprovada-no-brasil-sem-mecanismos-suficientes-para-impulsionar-a-industrializacao-no-setor/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "bluestudio.estadao.com.br",
+          "title": "Governo aposta em fundo de R$ 2 bilhões para destravar dez projetos de minerais críticos no Brasil",
+          "url": "https://bluestudio.estadao.com.br/agencia-de-comunicacao/agencia-minera-brasil/governo-aposta-em-fundo-de-r-2-bilhoes-para-destravar-dez-projetos-de-minerais-criticos-no-brasil/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "demarest.com.br",
+          "title": "PL de minerais críticos pode afugentar o investimento que precisa atrair",
+          "url": "https://www.demarest.com.br/analise-pl-de-minerais-criticos-pode-afugentar-o-investimento-que-precisa-atrair/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "radarmineracao.com.br",
+          "title": "Fortalecer a ANM é essencial para o futuro da mineração brasileira",
+          "url": "https://radarmineracao.com.br/fortalecer-a-anm-e-essencial-para-o-futuro-da-mineracao-brasileira/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "gov.br",
+          "title": "Articulação e fortalecimento da mineração marcam início da EXPOSIBRAM 2026",
+          "url": "https://www.gov.br/anm/pt-br/assuntos/noticias/articulacao-e-fortalecimento-da-mineracao-marca-inicio-da-exposibram-2026",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "www12.senado.leg.br",
+          "title": "Mineração em terras indígenas precisa de segurança jurídica, diz presidente de GT",
+          "url": "https://www12.senado.leg.br/noticias/audios/2026/03/mineracao-em-terras-indigenas-precisa-de-seguranca-juridica-diz-presidente-de-gt",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "transformaeconomia.org",
+          "title": "Estratégia nacional para minerais críticos e terras raras no Brasil",
+          "url": "https://transformaeconomia.org/estrategia-nacional-para-minerais-criticos-e-terras-raras-no-brasil/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "cnnbrasil.com.br",
+          "title": "O Brasil no holofote dos minerais críticos: da geologia privilegiada à regulação",
+          "url": "https://www.cnnbrasil.com.br/infra/o-brasil-no-holofote-dos-minerais-criticos-da-geologia-privilegiada-a-regu/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "brasil247.com",
+          "title": "Pará vira teste decisivo para nova Política Nacional de Minerais Críticos",
+          "url": "https://www.brasil247.com/economia/para-vira-teste-decisivo-para-nova-politica-nacional-de-minerais-criticos/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "timesbrasil.com.br",
+          "title": "19 anos de diálogo: a mineração que o SIMINERAL ajudou a transformar no Pará",
+          "url": "https://timesbrasil.com.br/empresas-e-negocios/energia/anderson-baranov/19-anos-de-dialogo-a-mineracao-que-o-simineral-ajudou-a-transformar-no-para/",
+          "spokesperson": null,
+          "tone": null
+        }
+      ]
+    },
+    {
+      "file": "Relatorio SindInfor Agosto 2026.dc.html",
+      "client": "SINDINFOR",
+      "variant": "principal",
+      "period": "2026-08",
+      "items": [
+        {
+          "date": "2026-08-31",
+          "outlet": "Convergência Digital",
+          "title": "Redata: votação é o primeiro da lista do Senado para terça-feira, 01/09",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-08-27",
+          "outlet": "Convergência Digital",
+          "title": "Alcolumbre promete votar REDATA no último esforço concentrado antes das eleições",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-08-06",
+          "outlet": "Convergência Digital",
+          "title": "Brasscom: REDATA ganha nova força-tarefa em agosto para passar no Congresso",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-08-14",
+          "outlet": "Convergência Digital",
+          "title": "REDATA: força-tarefa se esforça, mas projeto ficou fora da prioridade do Congresso",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-08-27",
+          "outlet": "Cenário Energia",
+          "title": "Senado define relatores para projetos de data centers e minerais críticos",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-08-25",
+          "outlet": "Balada IN",
+          "title": "ZPE Ceará ganha protagonismo com a nova economia digital de data centers",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-08-17",
+          "outlet": "Cenário Energia",
+          "title": "NTT DATA e ENGIE fecham parceria para abastecer data centers de IA com energia renovável",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-08-17",
+          "outlet": "Convergência Digital",
+          "title": "Estudo Softex: Brasil pode dobrar receita da indústria de software até 2030",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-08-21",
+          "outlet": "Convergência Digital",
+          "title": "Reforma tributária: apenas 1% das empresas de TI diz ter sistemas prontos",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-08-07",
+          "outlet": "estadomaior.com.br",
+          "title": "Projeto cria Marco da Economia Digital e define regras para uso de IA no Brasil",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-08-14",
+          "outlet": "Estadão Blue Studio",
+          "title": "AI Act da UE pode atingir empresas brasileiras de IA",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-08-06",
+          "outlet": "Convergência Digital",
+          "title": "SECOP 2026: Brasil precisa de mais ambição para liderar Inteligência Artificial",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-08-17",
+          "outlet": "Convergência Digital",
+          "title": "Brasil segue mero consumidor de tecnologia; importações crescem 116% vs. exportações",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-08-27",
+          "outlet": "Agência Sebrae",
+          "title": "Sudeste e Nordeste concentram 64% das GovTechs; software domina contratos governamentais",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-08-27",
+          "outlet": "Brasil Journal",
+          "title": "SaaSholic levanta 3º fundo e mira os \"agentic software\"",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-08-21",
+          "outlet": "Exame",
+          "title": "Apenas 17% dos CIOs classificam entregas de IA como prioridade",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Negativo"
+        }
+      ]
+    },
+    {
+      "file": "Relatorio SindInfor Completo Setembro 2026.dc.html",
+      "client": "SINDINFOR",
+      "variant": "completo",
+      "period": "2026-09",
+      "items": [
+        {
+          "date": "2026-10-02",
+          "outlet": "FIEMG",
+          "title": "SILEMG e FIEMG Lab lançam programa de inovação",
+          "url": null,
+          "spokesperson": "Ler",
+          "tone": null
+        },
+        {
+          "date": "2026-10-02",
+          "outlet": "UOL Tilt",
+          "title": "OpenAI notifica mais de cem empresas após agentes de IA burlarem sistemas",
+          "url": null,
+          "spokesperson": "Ler",
+          "tone": null
+        },
+        {
+          "date": "2026-10-02",
+          "outlet": "UOL Economia",
+          "title": "Porto Digital e Hub Goiás aplicam o que faz um polo tecnológico funcionar",
+          "url": null,
+          "spokesperson": "Ler",
+          "tone": null
+        },
+        {
+          "date": "2026-10-01",
+          "outlet": "UOL Economia",
+          "title": "Empresas incentivam IA sem dar ferramentas, dizem 28% dos profissionais",
+          "url": null,
+          "spokesperson": "Ler",
+          "tone": null
+        },
+        {
+          "date": "2026-10-01",
+          "outlet": "Valor Econômico / Itaú BBA",
+          "title": "Novas modalidades de golpes cibernéticos desafiam gestão de riscos das médias empresas",
+          "url": null,
+          "spokesperson": "Ler",
+          "tone": null
+        },
+        {
+          "date": "2026-10-01",
+          "outlet": "Exame",
+          "title": "Startup usa IA para entender o que diferencia os vendedores de melhor desempenho Link direto da Exame não localizado; cobertura relacionada: “Sharpi capta US$ 4 milhões” (Baguete, 31/08).",
+          "url": null,
+          "spokesperson": "Matéria relacionada",
+          "tone": null
+        },
+        {
+          "date": "2026-10-01",
+          "outlet": "Exame",
+          "title": "Por que a IA no Brasil pode dar certo mesmo sem um concorrente do ChatGPT",
+          "url": null,
+          "spokesperson": "Ler",
+          "tone": null
+        },
+        {
+          "date": "2026-10-01",
+          "outlet": "TI Inside",
+          "title": "Futurecom 2026 começa em uma semana com novas experiências de IA, computação quântica e infraestrutura digital",
+          "url": null,
+          "spokesperson": "Ler",
+          "tone": null
+        },
+        {
+          "date": "2026-09-29",
+          "outlet": "Convergência Digital",
+          "title": "CiberEducação: termina no domingo, 4/10, inscrição para programa da Cisco com 5 mil vagas gratuitas",
+          "url": null,
+          "spokesperson": "Ler",
+          "tone": null
+        },
+        {
+          "date": "2026-09-29",
+          "outlet": "C-Level / Folha",
+          "title": "Prazo de adesão ao Simples Nacional e escolha de regime na reforma é adiado para outubro",
+          "url": null,
+          "spokesperson": "Ler",
+          "tone": null
+        },
+        {
+          "date": "2026-09-24",
+          "outlet": "Exame",
+          "title": "Google traz servidores do Gemini Enterprise ao Brasil para acelerar IA nas empresas",
+          "url": null,
+          "spokesperson": "Ler",
+          "tone": null
+        },
+        {
+          "date": "2026-09-24",
+          "outlet": "FIEMG",
+          "title": "Conselho de Tecnologia e Inovação debate avanços em PD&I e futuro da indústria",
+          "url": null,
+          "spokesperson": "Ler",
+          "tone": null
+        },
+        {
+          "date": "2026-09-28",
+          "outlet": "Folha de S.Paulo",
+          "title": "Redata aguarda regras sobre energia e importação após sanção de Lula",
+          "url": null,
+          "spokesperson": "Ler",
+          "tone": null
+        },
+        {
+          "date": "2026-09-15",
+          "outlet": "MDIC",
+          "title": "Presidente sanciona o Redata, que estimula datacenters e desenvolvimento tecnológico no Brasil",
+          "url": null,
+          "spokesperson": "Ler",
+          "tone": null
+        },
+        {
+          "date": "2026-09-16",
+          "outlet": "Exame",
+          "title": "Brasil dobra capacidade de data centers em 2026 e vira alvo da corrida global por IA",
+          "url": null,
+          "spokesperson": "Ler",
+          "tone": null
+        },
+        {
+          "date": "2026-09-10",
+          "outlet": "Folha de S.Paulo",
+          "title": "NTT Data diz que investimento em segurança para IA deve triplicar até 2029",
+          "url": null,
+          "spokesperson": "Ler",
+          "tone": null
+        },
+        {
+          "date": "2026-09-09",
+          "outlet": "TI Inside",
+          "title": "“Informação não é contexto”: SAP aponta o que falta para IA entrar no coração das empresas",
+          "url": null,
+          "spokesperson": "Ler",
+          "tone": null
+        },
+        {
+          "date": "2026-09-03",
+          "outlet": "TI Inside",
+          "title": "Metade das empresas no Brasil está usando IA, diz AWS",
+          "url": null,
+          "spokesperson": "Ler",
+          "tone": null
+        },
+        {
+          "date": "2026-07-31",
+          "outlet": "Receita Federal",
+          "title": "Receita Federal gera o primeiro CNPJ em formato alfanumérico",
+          "url": null,
+          "spokesperson": "Ler",
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "noticias.r7.com",
+          "title": "01 R7 Brasília · 15/09 Redata é um avanço para a competitividade do Brasil em IA, diz Sindifor Ler",
+          "url": "https://noticias.r7.com/brasilia/redata-e-um-avanco-para-a-competitividade-do-brasil-em-ia-diz-sindifor-15092026/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "brasil247.com",
+          "title": "02 Brasil 247 Sindinfor projeta Redata como motor de inovação e desenvolvimento para a tecnologia nacional Ler",
+          "url": "https://www.brasil247.com/sudeste/sindinfor-projeta-redata-como-motor-de-inovacao-e-desenvolvimento-para-a-tecnologia-nacional/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "lawinfra.com.br",
+          "title": "03 LawInfra Sindinfor: Redata e desenvolvimento tecnológico Ler",
+          "url": "https://www.lawinfra.com.br/noticias/sindinfor-redata-desenvolvimento-tecnologico-2026",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "cnnbrasil.com.br",
+          "title": "04 CNN Brasil A revolução da IA também será decidida pelos data centers Ler",
+          "url": "https://www.cnnbrasil.com.br/infra/a-revolucao-da-ia-tambem-sera-decidida-pelos-data-centers/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "fiemg.com.br",
+          "title": "Ler",
+          "url": "https://www.fiemg.com.br/noticias/silemg-e-fiemg-lab-lancam-programa-de-inovacao/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "uol.com.br",
+          "title": "Ler",
+          "url": "https://www.uol.com.br/tilt/noticias/redacao/2026/10/02/openai-alerta-mais-de-100-organizacoes-sobre-acao-indevida-de-agentes-de-ia.ghtm",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "economia.uol.com.br",
+          "title": "Ler",
+          "url": "https://economia.uol.com.br/colunas/aline-sordili/2026/10/02/porto-digital-e-hub-goias-aplicam-o-que-faz-um-polo-tecnologico-funcionar.htm",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "economia.uol.com.br",
+          "title": "Ler",
+          "url": "https://economia.uol.com.br/colunas/aline-sordili/2026/10/01/empresas-incentivam-uso-da-ia-sem-fornecer-ferramentas-revela-pesquisa.htm",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "valor.globo.com",
+          "title": "Ler",
+          "url": "https://valor.globo.com/conteudo-de-marca/itau-bba/noticia/2026/10/01/novas-modalidades-de-golpes-ciberneticos-desafiam-gestao-de-riscos-das-medias-empresas.ghtml",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "baguete.com.br",
+          "title": "Matéria relacionada",
+          "url": "https://www.baguete.com.br/noticias/sharpi-capta-us-4-milhoes",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "exame.com",
+          "title": "Ler",
+          "url": "https://exame.com/inteligencia-artificial/por-que-a-ia-no-brasil-pode-dar-certo-mesmo-sem-um-concorrente-do-chatgpt//",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "tiinside.com.br",
+          "title": "Ler",
+          "url": "https://tiinside.com.br/01/10/2026/futurecom-2026-comeca-em-uma-semana-com-novas-experiencias-de-ia-computacao-quantica-e-infraestrutura-digital/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "convergenciadigital.com.br",
+          "title": "Ler",
+          "url": "https://convergenciadigital.com.br/seguranca/cibereducacao-termina-no-domingo-4-10-inscricoes-para-programa-da-cisco-com-5-mil-vagas-gratuitas/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "c-level.folha.uol.com.br",
+          "title": "Ler",
+          "url": "https://c-level.folha.uol.com.br/negocios/2026/09/prazo-de-adesao-ao-simples-nacional-e-escolha-de-regime-na-reforma-e-adiado-para-outubro.shtml",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "fiemg.com.br",
+          "title": "Edital",
+          "url": "https://www.fiemg.com.br/editalsesisenai/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "fiemg.com.br",
+          "title": "PDF",
+          "url": "https://www.fiemg.com.br/wp-content/uploads/2026/03/EDITAL-SESI-SENAI-01-2026-.pdf",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "exame.com",
+          "title": "Ler",
+          "url": "https://exame.com/inteligencia-artificial/google-cloud-quer-dobrar-infraestrutura-no-brasil-ate-2030-para-acelerar-ia-agentica/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "fiemg.com.br",
+          "title": "Ler",
+          "url": "https://www.fiemg.com.br/associativismo/noticias/conselho-de-tecnologia-e-inovacao-debate-avancos-em-pdi-e-futuro-da-industria/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "www1.folha.uol.com.br",
+          "title": "Ler",
+          "url": "https://www1.folha.uol.com.br/mercado/2026/09/redata-aguarda-regras-sobre-energia-e-importacao-apos-sancao-de-lula.shtml",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "gov.br",
+          "title": "Ler",
+          "url": "https://www.gov.br/mdic/pt-br/assuntos/noticias/2026-periodo-eleitoral/setembro/presidente-sanciona-o-redata-que-estimula-datacenters-e-desenvolvimento-tecnologico-no-brasil",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "exame.com",
+          "title": "Ler",
+          "url": "https://exame.com/inteligencia-artificial/brasil-dobra-capacidade-de-data-centers-em-2026-e-vira-alvo-da-corrida-global-por-ia/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "www1.folha.uol.com.br",
+          "title": "Ler",
+          "url": "https://www1.folha.uol.com.br/colunas/painelsa/2026/09/ntt-data-diz-que-investimento-em-seguranca-para-ia-deve-triplicar-ate-2029.shtml",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "tiinside.com.br",
+          "title": "Ler",
+          "url": "https://tiinside.com.br/09/09/2026/informacao-nao-e-contexto-sap-aponta-o-que-falta-para-ia-entrar-no-coracao-das-empresas/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "tiinside.com.br",
+          "title": "Ler",
+          "url": "https://tiinside.com.br/03/09/2026/metade-das-empresas-no-brasil-estao-usando-ia/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "gov.br",
+          "title": "Ler",
+          "url": "https://www.gov.br/receitafederal/pt-br/assuntos/noticias/2026/julho/receita-federal-gera-o-primeiro-cnpj-em-formato-alfanumerico",
+          "spokesperson": null,
+          "tone": null
+        }
+      ]
+    },
+    {
+      "file": "Relatorio SindInfor Julho 2026.dc.html",
+      "client": "SINDINFOR",
+      "variant": "principal",
+      "period": "2026-07",
+      "items": [
+        {
+          "date": "2026-07-20",
+          "outlet": "Poder360 (verificado)",
+          "title": "Plataformas digitais têm novas regras a partir desta 2ª feira",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-06-22",
+          "outlet": "Migalhas (verificado)",
+          "title": "Plataformas digitais têm até 20 de julho de 2026 para se adequar",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-06-08",
+          "outlet": "ConJur (verificado)",
+          "title": "Plataformas digitais, entre o STF e o decreto: quem define as regras do jogo",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-07-31",
+          "outlet": "Convergência Digital",
+          "title": "Reforma tributária: Receita mantém 3 de agosto para notas com IBS e CBS",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-07-31",
+          "outlet": "Valor Econômico",
+          "title": "Aceleração de data centers enfrenta gargalo de transmissão de energia",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-07-31",
+          "outlet": "O Tempo",
+          "title": "Governo prorroga parceria com a Softex para fomento ao setor de software",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-07-30",
+          "outlet": "Exame",
+          "title": "Agentes de IA da Senior assumem tarefas e mudam a rotina do RH",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-07-25",
+          "outlet": "Paraíba Business",
+          "title": "Escassez de talentos tecnológicos desafia empresas de software",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Negativo"
+        },
+        {
+          "date": "2026-07-24",
+          "outlet": "Convergência Digital",
+          "title": "Governo reajusta salários em TI e cria perfil de especialista em IA",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-07-24",
+          "outlet": "Convergência Digital",
+          "title": "Terceirizadas de TI do Governo impedidas de usar IA por decisão própria",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-07-24",
+          "outlet": "Convergência Digital",
+          "title": "Busca pelo domínio .ia.br avança no Brasil",
+          "url": null,
+          "spokesperson": "Baixa",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-07-23",
+          "outlet": "Época Negócios",
+          "title": "O futuro das empresas de software em tempos de IA",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-07-21",
+          "outlet": "Convergência Digital",
+          "title": "Programa de formação de até 180 pesquisadores em IA abre inscrições",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-07-21",
+          "outlet": "Convergência Digital",
+          "title": "IBTD anuncia especialistas para economia digital, IA, IoT e plataformas",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-07-20",
+          "outlet": "Convergência Digital",
+          "title": "Convergência tecnológica: a próxima fronteira da economia digital",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-07-20",
+          "outlet": "Convergência Digital",
+          "title": "TCU cria site 100% feito com Inteligência Artificial",
+          "url": null,
+          "spokesperson": "Baixa",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-07-17",
+          "outlet": "Estadão",
+          "title": "Golpes digitais, cripto e a maturidade que a economia digital exige",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-07-15",
+          "outlet": "Valor Econômico",
+          "title": "Inteligência artificial está acelerando o mercado de software White Label",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-07-07",
+          "outlet": "Cenário Energia",
+          "title": "Brasil pode atrair R$ 3,7 trilhões com data centers, mas energia é decisiva",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-07-06",
+          "outlet": "Agência Infra",
+          "title": "Minas mapeia regiões aptas para receber data centers",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": "Positivo"
+        },
+        {
+          "date": "2026-07-27",
+          "outlet": "Convergência Digital",
+          "title": "SECOP 2026: entidades públicas discutem Estado Inteligente, IA e governança",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Neutro"
+        },
+        {
+          "date": "2026-07-27",
+          "outlet": "Cenário Energia",
+          "title": "Avanço da IA exige sinergia entre data centers e concessionárias",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": "Neutro"
+        }
+      ]
+    },
+    {
+      "file": "Relatorio SindInfor Junho 2026.dc.html",
+      "client": "SINDINFOR",
+      "variant": "principal",
+      "period": "2026-06",
+      "items": [
+        {
+          "date": "2026-07-06",
+          "outlet": "Convergência Digital",
+          "title": "Sea Tecnologia: Inovação é sobrevivência de qualquer empresa",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": null
+        },
+        {
+          "date": "2026-07-06",
+          "outlet": "Convergência Digital",
+          "title": "Atualização de software causa transtorno ao sistema de pagamentos do BCE",
+          "url": null,
+          "spokesperson": "Baixa",
+          "tone": null
+        },
+        {
+          "date": "2026-07-06",
+          "outlet": "InfoMoney",
+          "title": "Governo Lula aposta em corte de alíquotas para barrar tarifaço de Trump",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": null
+        },
+        {
+          "date": "2026-07-04",
+          "outlet": "Exame",
+          "title": "O futuro de cargos qualificados na era da IA agêntica (São Francisco)",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": null
+        },
+        {
+          "date": "2026-07-03",
+          "outlet": "Cenário Energia",
+          "title": "Cemig e Invest Minas mapeiam energia para atrair data centers",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": null
+        },
+        {
+          "date": "2026-07-03",
+          "outlet": "Convergência Digital",
+          "title": "Curso gratuito da UNESCO sobre IA e transformação digital no governo",
+          "url": null,
+          "spokesperson": "Baixa",
+          "tone": null
+        },
+        {
+          "date": "2026-07-03",
+          "outlet": "Convergência Digital",
+          "title": "Sem infraestrutura estável, a transformação digital fracassa",
+          "url": null,
+          "spokesperson": "Baixa",
+          "tone": null
+        },
+        {
+          "date": "2026-07-03",
+          "outlet": "Exame",
+          "title": "A aposta das startups B2B para digitalizar empresas atrasadas",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": null
+        },
+        {
+          "date": "2026-07-03",
+          "outlet": "Exame",
+          "title": "Empresas de software: pressão dupla de dívida e avanço da IA",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": null
+        },
+        {
+          "date": "2026-07-02",
+          "outlet": "Exame",
+          "title": "Maior data center da América Latina será construído no Ceará",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": null
+        },
+        {
+          "date": "2026-07-03",
+          "outlet": "Exame",
+          "title": "Empresas de software enfrentam pressão de crédito e IA",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": null
+        },
+        {
+          "date": "2026-07-01",
+          "outlet": "Convergência Digital",
+          "title": "Na era da IA, TI virou agente de capacitação de multicompetentes",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": null
+        },
+        {
+          "date": "2026-07-01",
+          "outlet": "TradingView",
+          "title": "Investidores migram para bancos e software; semicondutores pausam",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": null
+        },
+        {
+          "date": "2026-07-01",
+          "outlet": "Spherical Insights",
+          "title": "Tamanho e crescimento do mercado global de software comercial",
+          "url": null,
+          "spokesperson": "Baixa",
+          "tone": null
+        },
+        {
+          "date": "2026-06-30",
+          "outlet": "Startups",
+          "title": "Buser compra a Designa e dobra aposta em IA",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": null
+        },
+        {
+          "date": "2026-06-29",
+          "outlet": "Poder360",
+          "title": "IA chinesa alcança modelo da Anthropic em cibersegurança",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": null
+        },
+        {
+          "date": "2026-06-29",
+          "outlet": "Exame",
+          "title": "Indústria cultural da China supera RMB 20 trilhões",
+          "url": null,
+          "spokesperson": "Baixa",
+          "tone": null
+        },
+        {
+          "date": "2026-06-29",
+          "outlet": "Petronotícias",
+          "title": "Energisa usa IA e alcança 93,8% de assertividade no atendimento",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": null
+        },
+        {
+          "date": "2026-06-23",
+          "outlet": "Business Moment",
+          "title": "My Smart Clinic acelera expansão no software médico",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": null
+        },
+        {
+          "date": "2026-06-22",
+          "outlet": "Bitget",
+          "title": "ETF de bitcoin correlacionado ao setor de software",
+          "url": null,
+          "spokesperson": "Baixa",
+          "tone": null
+        },
+        {
+          "date": "2026-06-22",
+          "outlet": "startups.com.br",
+          "title": "Margem ganha protagonismo no valuation de software: efeito no M&A",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": null
+        },
+        {
+          "date": "2026-06-18",
+          "outlet": "Exame",
+          "title": "Transformação digital no setor elétrico ganha R$ 170 mi",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": null
+        },
+        {
+          "date": "2026-06-17",
+          "outlet": "Folha de S.Paulo",
+          "title": "Como a Huawei driblou o bloqueio dos EUA no mercado de chips",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": null
+        },
+        {
+          "date": "2026-06-16",
+          "outlet": "cryptoid.com.br",
+          "title": "Setor financeiro leva mercado de software a US$ 8,99 bi (estudo ABES)",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": null
+        },
+        {
+          "date": "2026-06-15",
+          "outlet": "G1",
+          "title": "Estudantes debatem democracia e transformação digital em Porto Velho",
+          "url": null,
+          "spokesperson": "Baixa",
+          "tone": null
+        },
+        {
+          "date": "2026-06-15",
+          "outlet": "G1",
+          "title": "MTI abre seleção em MT com salários de até R$ 15 mil",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": null
+        },
+        {
+          "date": "2026-06-15",
+          "outlet": "Valor Econômico",
+          "title": "Saída do CFO da Adobe e a derrocada do setor de software",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": null
+        },
+        {
+          "date": "2026-06-08",
+          "outlet": "pipelinevalor",
+          "title": "Despenca o volume de aporte de fundos em empresas de software",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": null
+        },
+        {
+          "date": "2026-06-03",
+          "outlet": "TradingView",
+          "title": "Ações da Palantir caem 14%, mas analistas veem alta",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": null
+        },
+        {
+          "date": "2026-06-02",
+          "outlet": "TradingView",
+          "title": "Do medo ao FOMO: a recuperação do setor de software",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": null
+        },
+        {
+          "date": "2026-06-01",
+          "outlet": "MSN",
+          "title": "Totvs avança 3% acompanhando o setor global de software",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": null
+        },
+        {
+          "date": "2026-06-01",
+          "outlet": "InfoMoney",
+          "title": "Totvs avança mais de 4% com o setor global de software",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": null
+        },
+        {
+          "date": "2026-06-01",
+          "outlet": "TradingView",
+          "title": "NOW, IBM: ações de software disparam após Huang",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": null
+        },
+        {
+          "date": "2026-06-01",
+          "outlet": "Times Brasil/CNBC",
+          "title": "Arm, IBM e HP disparam após reinvenção anunciada pela Nvidia",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": null
+        },
+        {
+          "date": "2026-05-28",
+          "outlet": "Investing.com",
+          "title": "Setor de software dispara com resultados da Snowflake",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": null
+        },
+        {
+          "date": "2026-05-27",
+          "outlet": "TradingView",
+          "title": "Ações da Salesforce antes dos resultados: o que esperar",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": null
+        },
+        {
+          "date": "2026-05-23",
+          "outlet": "ACIA Araçatuba",
+          "title": "Software Brasil e IA: BofA vê avanço, mas alerta longo caminho",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": null
+        },
+        {
+          "date": "2026-07-05",
+          "outlet": "Exame (opinião)",
+          "title": "O corredor atlântico de inteligência artificial e o Brasil como potência digital",
+          "url": null,
+          "spokesperson": "Alta",
+          "tone": null
+        },
+        {
+          "date": "2026-07-04",
+          "outlet": "GPS Brasília",
+          "title": "Quando o algoritmo decide: risco empresarial",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": null
+        },
+        {
+          "date": "2026-07-02",
+          "outlet": "CNN Brasil",
+          "title": "Mineração: a nova fronteira da infraestrutura inteligente no Brasil",
+          "url": null,
+          "spokesperson": "Média",
+          "tone": null
+        }
+      ]
+    },
+    {
+      "file": "Relatorio SindInfor Outubro 2026.dc.html",
+      "client": "SINDINFOR",
+      "variant": "principal",
+      "period": "2026-10",
+      "items": [
+        {
+          "date": null,
+          "outlet": "valor.globo.com",
+          "title": "“Reforma Tributária: software houses terão dificuldade em acumular créditos de IBS/CBS”",
+          "url": "https://valor.globo.com/legislacao/noticia/2026/10/reforma-tributaria-software-houses-creditos-ibs-cbs.ghtml",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "convergenciadigital.com.br",
+          "title": "“ABES: é absurdo o governo cobrar pelas APIs da Reforma Tributária”",
+          "url": "https://convergenciadigital.com.br/governo/abes-e-absurdo-o-governo-cobrar-pelas-apis-da-reforma-tributaria/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "computerworld.com.br",
+          "title": "“Split Payment atrasa integração em ERPs; comitês gestores do IBS entregam APIs com atraso”",
+          "url": "https://computerworld.com.br/negocios/split-payment-atrasa-integracao-erps-apis-ibs/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "computerworld.com.br",
+          "title": "“ERP acessível na nuvem cresce com Reforma Tributária; pequenas empresas migram”",
+          "url": "https://computerworld.com.br/negocios/erp-nuvem-reforma-tributaria-pequenas-empresas-migram/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "convergenciadigital.com.br",
+          "title": "“FNDCT em risco: setor de TI pressiona pelo fundo no novo ciclo político”",
+          "url": "https://convergenciadigital.com.br/negocios/fndct-em-risco-setor-de-ti-pressiona-pelo-fundo-no-novo-ciclo-politico/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "www12.senado.leg.br",
+          "title": "“Regulação de IA: governo digital acelera, setor privado aguarda marco legal”",
+          "url": "https://www12.senado.leg.br/noticias/materias/2026/10/regulacao-ia-governo-digital-setor-privado-marco-legal",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "oliberal.com",
+          "title": "“Minas Gerais escolhe o outsider Cleitinho para o governo”",
+          "url": "https://www.oliberal.com/politica/minas-gerais-escolhe-o-outsider-cleitinho-para-o-governo-1.1177258",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "baguete.com.br",
+          "title": "“Startups mineiras aguardam sinal do novo governo estadual sobre fomento à inovação”",
+          "url": "https://www.baguete.com.br/noticias/infraestrutura/startups-mineiras-novo-governo-estadual-fomento-inovacao",
+          "spokesperson": null,
+          "tone": null
+        }
+      ]
+    },
+    {
+      "file": "Relatorio SindInfor Setembro 2026.dc.html",
+      "client": "SINDINFOR",
+      "variant": "principal",
+      "period": "2026-09",
+      "items": [
+        {
+          "date": "2026-09-01",
+          "outlet": "Convergência Digital",
+          "title": "Redata é sancionado: regime especial para data centers entra em vigor",
+          "url": null,
+          "spokesperson": "Redata",
+          "tone": null
+        },
+        {
+          "date": "2026-09-01",
+          "outlet": "TI Inside",
+          "title": "Com Redata sancionado, Brasil dá passo decisivo para atrair data centers",
+          "url": null,
+          "spokesperson": "Redata",
+          "tone": null
+        },
+        {
+          "date": "2026-09-01",
+          "outlet": "ComputerWorld",
+          "title": "Sanção do Redata: o que muda para o setor de data centers",
+          "url": null,
+          "spokesperson": "Redata",
+          "tone": null
+        },
+        {
+          "date": "2026-09-03",
+          "outlet": "Folha de S.Paulo",
+          "title": "Redata inclui data centers a gás: ambientalistas questionam subsídio a combustível fóssil",
+          "url": null,
+          "spokesperson": "Polêmica sobre o gás natural no Redata",
+          "tone": null
+        },
+        {
+          "date": "2026-09-05",
+          "outlet": "Valor Econômico",
+          "title": "Gás no Redata: setor defende energia firme; ambientalistas pedem revisão",
+          "url": null,
+          "spokesperson": "Polêmica sobre o gás natural no Redata",
+          "tone": null
+        },
+        {
+          "date": "2026-09-08",
+          "outlet": "Valor Econômico",
+          "title": "Energia elétrica vira gargalo para expansão de data centers e IA no Brasil",
+          "url": null,
+          "spokesperson": "Energia elétrica como fator crítico para a expansão da IA",
+          "tone": null
+        },
+        {
+          "date": "2026-09-10",
+          "outlet": "Folha de S.Paulo",
+          "title": "IA consome energia: Brasil precisa de plano para infraestrutura digital",
+          "url": null,
+          "spokesperson": "Energia elétrica como fator crítico para a expansão da IA",
+          "tone": null
+        },
+        {
+          "date": "2026-09-12",
+          "outlet": "Jornal Estado de Minas",
+          "title": "Projeto de data center de R$ 4,2 bi é anunciado para Paracatu; expectativa de 800 empregos",
+          "url": null,
+          "spokesperson": "Projeto de data center de grande escala em Paracatu",
+          "tone": null
+        },
+        {
+          "date": "2026-09-12",
+          "outlet": "Hoje em Dia",
+          "title": "Paracatu recebe maior investimento em data center da história de MG",
+          "url": null,
+          "spokesperson": "Projeto de data center de grande escala em Paracatu",
+          "tone": null
+        },
+        {
+          "date": "2026-09-14",
+          "outlet": "TI Inside",
+          "title": "Paracatu e o novo mapa dos data centers no Brasil: por que o interior de MG?",
+          "url": null,
+          "spokesperson": "Projeto de data center de grande escala em Paracatu",
+          "tone": null
+        },
+        {
+          "date": "2026-09-15",
+          "outlet": "Agência Brasil",
+          "title": "Decreto do Redata define critérios: PUE 1,4 e 80% de energia renovável",
+          "url": null,
+          "spokesperson": "Regulamentação do Redata",
+          "tone": null
+        },
+        {
+          "date": "2026-09-15",
+          "outlet": "Convergência Digital",
+          "title": "Regulamentação do Redata: setor avalia exigências e vê pontos de melhoria",
+          "url": null,
+          "spokesperson": "Regulamentação do Redata",
+          "tone": null
+        },
+        {
+          "date": "2026-09-17",
+          "outlet": "Teletime",
+          "title": "Anatel publica edital para expansão de backbone com rotas pelo interior de MG",
+          "url": null,
+          "spokesperson": "Backbone, fibra óptica e conectividade",
+          "tone": null
+        },
+        {
+          "date": "2026-09-18",
+          "outlet": "Converge Comunicações",
+          "title": "ICMS sobre energia para data centers: MG paga mais que SP, RJ e CE",
+          "url": null,
+          "spokesperson": "ICMS e competitividade dos investimentos em data centers",
+          "tone": null
+        },
+        {
+          "date": "2026-09-20",
+          "outlet": "TI Inside",
+          "title": "Licenciamento ambiental para data centers em MG: por que demora tanto?",
+          "url": null,
+          "spokesperson": "Licenciamento ambiental de data centers em Minas Gerais",
+          "tone": null
+        },
+        {
+          "date": "2026-09-22",
+          "outlet": "Agência Brasil",
+          "title": "Câmara aprova PL da IA em primeiro turno; texto segue para o Senado",
+          "url": null,
+          "spokesperson": "Inteligência artificial e regulação de dados",
+          "tone": null
+        },
+        {
+          "date": "2026-09-23",
+          "outlet": "Convergência Digital",
+          "title": "PL da IA: o que mudaria para data centers e provedores de nuvem",
+          "url": null,
+          "spokesperson": "Inteligência artificial e regulação de dados",
+          "tone": null
+        },
+        {
+          "date": "2026-09-25",
+          "outlet": "Agência Brasil",
+          "title": "Governo quer nuvem soberana: dependência de provedores estrangeiros preocupa",
+          "url": null,
+          "spokesperson": "Nuvem brasileira e soberania digital",
+          "tone": null
+        },
+        {
+          "date": "2026-09-27",
+          "outlet": "ComputerWorld",
+          "title": "Dois ataques cibernéticos em setembro reacendem debate sobre segurança da infraestrutura digital",
+          "url": null,
+          "spokesperson": "Cibersegurança e infraestrutura digital crítica",
+          "tone": null
+        },
+        {
+          "date": "2026-09-30",
+          "outlet": "TI Inside",
+          "title": "Data centers certificados: ISO 27001 e SOC 2 viram diferencial no mercado brasileiro",
+          "url": null,
+          "spokesperson": "Cibersegurança e infraestrutura digital crítica",
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "noticias.r7.com",
+          "title": "01 R7 Brasília · 15/09 Redata é um avanço para a competitividade do Brasil em IA, diz Sindifor Ler",
+          "url": "https://noticias.r7.com/brasilia/redata-e-um-avanco-para-a-competitividade-do-brasil-em-ia-diz-sindifor-15092026/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "brasil247.com",
+          "title": "02 Brasil 247 Sindinfor projeta Redata como motor de inovação e desenvolvimento para a tecnologia nacional Ler",
+          "url": "https://www.brasil247.com/sudeste/sindinfor-projeta-redata-como-motor-de-inovacao-e-desenvolvimento-para-a-tecnologia-nacional/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "lawinfra.com.br",
+          "title": "03 LawInfra Sindinfor: Redata e desenvolvimento tecnológico Ler",
+          "url": "https://www.lawinfra.com.br/noticias/sindinfor-redata-desenvolvimento-tecnologico-2026",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "cnnbrasil.com.br",
+          "title": "04 CNN Brasil A revolução da IA também será decidida pelos data centers Ler",
+          "url": "https://www.cnnbrasil.com.br/infra/a-revolucao-da-ia-tambem-sera-decidida-pelos-data-centers/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "agenciabrasil.ebc.com.br",
+          "title": "Agência Brasil",
+          "url": "https://agenciabrasil.ebc.com.br/politica/noticia/2026-09/senado-aprova-projeto-que-cria-incentivos-para-data-centers-no-brasil",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "gov.br",
+          "title": "www.gov.br",
+          "url": "https://www.gov.br/fazenda/pt-br/assuntos/noticias/2026/setembro/regime-especial-de-tributacao-para-servicos-de-datacenter-e-sancionado",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "convergenciadigital.com.br",
+          "title": "Convergência Digital",
+          "url": "https://convergenciadigital.com.br/governo/lula-sanciona-redata-dos-data-centers-agora-e-hora-de-correr-com-a-regulamentacao/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "www1.folha.uol.com.br",
+          "title": "Folha de S.Paulo",
+          "url": "https://www1.folha.uol.com.br/mercado/2026/09/senado-aprova-incentivo-a-data-centers-com-manobra-para-incluir-gas-natural.shtml",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "valor.globo.com",
+          "title": "Valor Econômico",
+          "url": "https://valor.globo.com/empresas/noticia/2026/09/15/gas-natural-ainda-e-duvida-no-decreto-do-redata.ghtml",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "gov.br",
+          "title": "www.gov.br",
+          "url": "https://www.gov.br/mcom/pt-br/noticias/2026/setembro/brasil-avanca-em-conectividade-com-expansao-de-data-centers",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "teletime.com.br",
+          "title": "Teletime",
+          "url": "https://teletime.com.br/categoria/mercado/data-center/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "canalenergia.com.br",
+          "title": "CanalEnergia",
+          "url": "https://www.canalenergia.com.br/noticias/data-centers-consumo-energia",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "aneel.gov.br",
+          "title": "ANEEL",
+          "url": "https://www.aneel.gov.br/sala-de-imprensa-exibicao/-/asset_publisher/zXQREz8EVlZ6/content/data-centers",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "brasilemfolhas.com.br",
+          "title": "Brasil em Folhas",
+          "url": "https://www.brasilemfolhas.com.br/2026/09/governo-discute-quem-pagara-custo-de-energia-de-data-centers/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "convergenciadigital.com.br",
+          "title": "Convergência Digital",
+          "url": "https://convergenciadigital.com.br/mercado/rio-sao-paulo-e-minas-nao-tem-legislacao-ambiental-para-expansao-de-data-centers/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "brasildefato.com.br",
+          "title": "Brasil de Fato",
+          "url": "https://www.brasildefato.com.br/2026/07/09/sem-regulacao-avanco-de-data-centers-de-ia-em-mg-acende-alerta-para-impactos-ambientais/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "convergenciadigital.com.br",
+          "title": "Convergência Digital",
+          "url": "https://convergenciadigital.com.br/categoria/mercado/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "camara.leg.br",
+          "title": "Câmara dos Deputados",
+          "url": "https://www.camara.leg.br/proposicoesWeb/fichadetramitacao?idProposicao=2487262",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "convergenciadigital.com.br",
+          "title": "Convergência Digital",
+          "url": "https://convergenciadigital.com.br/governo/governo-quer-uma-nuvem-100-brasileira-e-soberana/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "forte.jor.br",
+          "title": "Forte",
+          "url": "https://www.forte.jor.br/2026/08/24/governo-estrutura-nuvem-brasileira-para-reduzir-dependencia-de-gigantes-estrangeiras/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "minutodaseguranca.blog.br",
+          "title": "Minuto da Segurança",
+          "url": "https://minutodaseguranca.blog.br/incidentes-seguranca-cibernetica-brasil-2026/",
+          "spokesperson": null,
+          "tone": null
+        },
+        {
+          "date": null,
+          "outlet": "datacenterdynamics.com",
+          "title": "DatacenterDynamics",
+          "url": "https://www.datacenterdynamics.com/br/not%C3%ADcias/dataprev-recebe-certifica%C3%A7%C3%A3o-internacional-de-seguran%C3%A7a-da-informa%C3%A7%C3%A3o/",
+          "spokesperson": null,
+          "tone": null
+        }
+      ]
+    }
+  ]
+}

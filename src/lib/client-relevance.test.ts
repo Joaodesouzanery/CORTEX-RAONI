@@ -455,3 +455,27 @@ describe('ANTAQ × DAQ', () => {
       .toMatchObject({ monitoring_status: 'revisao', relevancia: 'baixa' })
   })
 })
+
+describe('qualificação do bloco Setor (print de 04/11/2026)', () => {
+  const ons = client('ONS')
+  const setor = rule('ONS', 'setor elétrico', 'setorial', [['setor elétrico', 'transmissão de energia']], 3)
+
+  it('não marca matéria cujo termo de setor só aparece no corpo', () => {
+    const result = evaluateClientArticle(ons, [setor], {
+      title: 'PEC da Segurança: saiba como votou cada senador',
+      excerpt: 'Plenário do Senado aprovou requerimento para retirar a proposta de pauta.',
+      content: 'Entre outros temas da semana, o setor elétrico também foi citado.',
+    })
+    expect(result).toBeNull()
+  })
+
+  it('fonte do cliente sozinha não marca a matéria', () => {
+    const result = evaluateClientArticle(ons, [setor], { title: 'Democrata vence eleição para o Senado dos EUA', excerpt: null, content: null }, true)
+    expect(result).toBeNull()
+  })
+
+  it('termo de setor no título continua valendo, com o bônus da fonte', () => {
+    const result = evaluateClientArticle(ons, [setor], { title: 'Setor elétrico discute nova tarifa', excerpt: null, content: null }, true)
+    expect(result?.match_score).toBe(4)
+  })
+})

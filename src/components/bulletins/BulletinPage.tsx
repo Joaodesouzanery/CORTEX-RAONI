@@ -50,7 +50,7 @@ export default function BulletinPage() {
 
   return (
     <div className="mx-auto max-w-screen-lg px-6 py-8">
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+      <div className="band-bleed -mt-8 mb-6 flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-5xl font-light tracking-tight">Boletim</h1>
         <select aria-label="Cliente" className="rounded border px-2 py-1 text-sm" value={clientId} onChange={(event) => setClientId(event.target.value)}>
           {clients.map((item) => <option key={item.id} value={item.id}>{item.name}</option>)}

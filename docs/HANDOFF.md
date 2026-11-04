@@ -20,7 +20,7 @@ Pronto:
 - Telas `/bulletins` e `/agenda`.
 - Playbook, skills e agents em `.claude/`.
 
-Migrations: até 043 aplicadas pelo dono; 044 entregue; 046 aplicada; 047 entregue; 048 e 050 aplicadas; 049 entregue; **051 pendente**: busca por cliente nos grandes veículos (O Globo, Valor, Estadão, CNN, Eixos, Folha, G1, Poder360, InfoMoney, Metrópoles), `client_report_profiles`, `ai_usage_ledger` (teto da IA) e `monthly_report_drafts.period_cutoff`.
+Migrations: até 043 aplicadas pelo dono; 044 entregue; 046 aplicada; 047 entregue; 048, 050 e 051 aplicadas; 049 entregue; **052 pendente** (`news_hero_counts`, índices, `delivered_report_items` com o gabarito). A 051 trouxe: busca por cliente nos grandes veículos (O Globo, Valor, Estadão, CNN, Eixos, Folha, G1, Poder360, InfoMoney, Metrópoles), `client_report_profiles`, `ai_usage_ledger` (teto da IA) e `monthly_report_drafts.period_cutoff`.
 
 Fase 15 (04/11):
 - Acervo dos relatórios entregues em `docs/referencia-relatorios/modelo/` (não reorganizar; caminhos relativos).
@@ -33,6 +33,16 @@ Fase 15 (04/11):
 - **Próximo passo**: resumo diário com tom, porta-voz, link exato, tema/agenda e "por que importa", depois de ligar a chave; gerador no template `.dc.html`; escolha manual de matérias no gerador.
 
 Agenda: só ANTAQ por decisão do dono. Conector automático em `src/lib/agenda/antaq.ts`: acha o boletim mais recente na página oficial, lê o PDF e grava; roda no `fetch-news.yml`; sem boletim novo é no-op. Painel Aquarela não é usado: bloqueia acesso automatizado.
+
+Fase 16 (04/11):
+- Clipping diário por cliente em `/clipping` (blocos Cliente e Setor, automático, sem 'revisao'; cobertura das fontes do dia).
+- Classificador: regra de setor só vale com termo no título/resumo; fonte temática sozinha não marca mais (tirou PEC da Segurança, eleição nos EUA). "Só o relevante" = confirmado ou candidato. Reclassificar out/nov.
+- Gabarito: `scripts/extract-report-evidence.mjs` → `docs/referencia-relatorios/gabarito.json` (608 itens, 255 links). Auditoria: `scripts/audit-reports.mjs` → `docs/auditoria/` (46 links com veículo ≠ domínio, 27 de outro mês; PRIO set 20/20, CCEE set 18/20).
+- Gerador no template: `/api/report-drafts/[id]/dc-html` (HTML) e `?format=md` (pacote Claude Design), com validador do playbook (`src/lib/report-dc-html.ts`). Scripts do template em `public/report-template/`.
+- Saúde: checa as RPCs `dashboard_client_counts` e `news_hero_counts` e avisa cliente sem menção em 30h (dia útil).
+- Links do Google News resolvidos logo após a coleta (ordem do `fetch-news.yml`).
+- Design: ícones por setor, manchete inteira nos cards, imagem só quando é da matéria, data em pt-BR, faixa cinza de cabeçalho (`.band-bleed`) em todas as telas.
+- `docs/fontes-bloqueadas.md`: lista para o sócio (Brasil Energia sem cobertura; paywalls só título+link).
 
 ## Pendências
 - Regras do playbook da consultoria (README do zip de relatórios): máx. 20 páginas; tom positivo, riscos como pontos de atenção; verbos auxilia/assessora/subsidia/apoia; sem % nos cenários; sem coluna Tom na síntese; link só da matéria exata; capa nova por mês; ONS=CRT, PRIO=VX (PRIO S.A.), CCEE/SIMINERAL/DAQ/SINDINFOR=SAUZ, ANTAQ=CORTEX; SindInfor em formato boletim, Brasília/DF.
@@ -56,7 +66,8 @@ Agenda: só ANTAQ por decisão do dono. Conector automático em `src/lib/agenda/
 9. Trocar `claude-sonnet-4-6` por `claude-sonnet-5-5` ao conectar a Anthropic.
 
 ## Falta conectar (repetir ao dono em toda resposta)
-- Colar a migration 051.
+- Colar a migration 052 (grande: ~150 KB por causa do gabarito).
+- Rodar `fetch-news` manual com `reclassify_archive` para 2026-10 e 2026-11 (novas regras de setor).
 - Enviar ao GitHub o commit do acervo (o envio automático foi bloqueado) e deixar o repositório privado.
 - `ANTHROPIC_MONTHLY_BUDGET_USD` e `ANTHROPIC_DAILY_CALL_LIMIT` (Vercel), além do limite no console da Anthropic, antes da chave.
 - Tornar o repositório privado antes de subir os PDFs de clipping (hoje é público).

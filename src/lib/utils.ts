@@ -10,7 +10,7 @@ export function cn(...inputs: ClassValue[]) {
 export function formatDate(dateString: string | null): string {
   if (!dateString) return ''
   try {
-    return format(parseISO(dateString), 'MMMM d, yyyy', { locale: ptBR }).toUpperCase()
+    return format(parseISO(dateString), "d 'de' MMM yyyy", { locale: ptBR })
   } catch {
     return ''
   }

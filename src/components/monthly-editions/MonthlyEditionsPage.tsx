@@ -104,9 +104,9 @@ export default function MonthlyEditionsPage() {
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-8">
-      <div className="flex items-start justify-between gap-4 flex-wrap mb-8">
+      <div className="band-bleed -mt-8 flex items-start justify-between gap-4 flex-wrap mb-8">
         <div>
-          <h1 className="text-4xl font-light tracking-tight">Fechamentos mensais</h1>
+          <h1 className="text-5xl font-light tracking-tight">Fechamentos mensais</h1>
           <p className="text-sm text-gray-500 mt-1">
             Um PDF completo e permanente por cliente. Regenerações criam novas versões.
           </p>

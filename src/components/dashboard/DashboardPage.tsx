@@ -221,7 +221,7 @@ export default function DashboardPage() {
 
   return (
     <div className="mx-auto max-w-screen-xl px-6 py-10">
-      <div className="mb-8 flex flex-wrap items-start justify-between gap-4">
+      <div className="band-bleed -mt-8 mb-8 flex flex-wrap items-start justify-between gap-4">
         <div>
           <h1 className="text-5xl font-light tracking-tight text-slate-900">Painel</h1>
           <p className="mt-2 max-w-2xl text-sm text-slate-600">As notícias do mês agrupadas por tema, a agenda regulatória e o andamento de cada cliente.</p>

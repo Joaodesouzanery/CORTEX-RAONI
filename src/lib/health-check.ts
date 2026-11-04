@@ -5,7 +5,14 @@ const MAX_HOURS_SINCE_RUN = 10
 /** Telas internas respondem em poucos segundos; 20s já é sintoma do que derrubou o Painel. */
 const PAGE_TIMEOUT_MS = 20_000
 /** Rotas de leitura que sustentam as telas. Falhar aqui é tela em branco para o usuário. */
-const PAGE_ROUTES = ['/api/dashboard?days=30', '/api/articles?paginated=true&limit=5', '/api/agenda', '/api/clients']
+const PAGE_ROUTES = ['/api/dashboard?days=30', '/api/panel/hero-counts', '/api/articles?paginated=true&limit=5', '/api/agenda', '/api/clients']
+/** Funções do banco que sustentam Painel e Notícias. Ausente (PGRST202) ou lenta = tela quebrada. */
+const RPC_CHECKS: Array<{ name: string; args: Record<string, unknown> }> = [
+  { name: 'dashboard_client_counts', args: { p_start: new Date(0).toISOString(), p_previous_start: new Date(0).toISOString() } },
+  { name: 'news_hero_counts', args: { p_start: new Date(0).toISOString() } },
+]
+/** Dia útil sem nenhuma matéria citando o cliente indica coleta furada, não silêncio da imprensa. */
+const CLIENT_SILENCE_HOURS = 30
 
 export type HealthIssue = { kind: string; severity: 'warning' | 'critical'; title: string; details: Record<string, unknown> }
 
@@ -53,8 +60,38 @@ export async function runHealthCheck(supabase: SupabaseClient, appUrl: string) {
   const agendaDays = agenda ? (Date.now() - new Date(agenda.checked_at).getTime()) / 864e5 : Infinity
   if (agendaDays > 45) issues.push({ kind: 'health_agenda', severity: 'warning', title: 'Agenda da ANTAQ sem boletim novo há mais de 45 dias', details: { last_checked: agenda?.checked_at ?? null } })
 
+  for (const check of RPC_CHECKS) {
+    // Janela curta (últimas 24h) para a checagem não custar o mesmo que a tela.
+    const recent = new Date(Date.now() - 86_400_000).toISOString()
+    const args = Object.fromEntries(Object.keys(check.args).map((key) => [key, recent]))
+    const { error } = await supabase.rpc(check.name, args)
+    if (error) {
+      issues.push({ kind: 'health_rpc', severity: 'critical', title: `Função ${check.name} falhou (${error.code}): ${error.code === 'PGRST202' ? 'não existe no banco ou o cache não recarregou' : error.message}`, details: { path: check.name, code: error.code } })
+    }
+  }
+
+  // Cliente sem nenhuma menção direta há mais de 30h (só em dia útil).
+  const weekday = new Date().getUTCDay()
+  if (weekday >= 1 && weekday <= 5) {
+    const since = new Date(Date.now() - CLIENT_SILENCE_HOURS * 36e5).toISOString()
+    const { data: activeClients, error: clientsError } = await supabase.from('clients').select('id, name').eq('active', true)
+    if (clientsError) throw new Error(clientsError.message)
+    for (const client of activeClients || []) {
+      const { count, error } = await supabase
+        .from('article_client_tags')
+        .select('article_id, articles!inner(published_at)', { count: 'exact', head: true })
+        .eq('client_id', client.id)
+        .eq('cita_cliente', true)
+        .gte('articles.published_at', since)
+      if (error) throw new Error(error.message)
+      if (!count) {
+        issues.push({ kind: 'health_client_silence', severity: 'warning', title: `${client.name}: nenhuma matéria citando o cliente nas últimas ${CLIENT_SILENCE_HOURS}h`, details: { path: client.name } })
+      }
+    }
+  }
+
   const now = new Date().toISOString()
-  const kinds = ['health_route', 'health_collection', 'health_sources', 'health_links', 'health_agenda']
+  const kinds = ['health_route', 'health_collection', 'health_sources', 'health_links', 'health_agenda', 'health_rpc', 'health_client_silence']
   // Resolve o que sarou antes de reabrir o que persiste: fingerprint estável por tipo + alvo.
   const { error: resolveError } = await supabase.from('operational_alerts')
     .update({ status: 'resolved', resolved_at: now, updated_at: now }).in('kind', kinds).neq('status', 'resolved')

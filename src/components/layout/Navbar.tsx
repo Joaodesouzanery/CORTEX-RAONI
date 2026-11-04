@@ -20,6 +20,7 @@ export default function Navbar() {
   // Alertas saiu: virou a faixa "Sinais" dentro de Notícias.
   const links = [
     { href: '/news', label: 'Notícias' },
+    { href: '/clipping', label: 'Clipping' },
     { href: '/reports/prepare', label: 'Relatórios' },
     { href: '/bulletins', label: 'Boletins' },
     { href: '/agenda', label: 'Agenda' },

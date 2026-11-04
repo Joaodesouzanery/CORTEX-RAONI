@@ -111,6 +111,24 @@ jobs:
         env:
           APP_URL: ${{ secrets.APP_URL }}
 
+      - name: Resolve Google News links
+        # Logo após a coleta: imagem, texto integral e selo do veículo dependem
+        # da URL real, não do redirecionador do Google News.
+        if: ${{ always() }}
+        env:
+          APP_URL: ${{ secrets.APP_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          # 40 lotes de 30: dá conta do acúmulo aos poucos sem estourar o job.
+          for n in $(seq 1 40); do
+            code=$(curl -sS -o /tmp/links.json -w '%{http_code}' --max-time 120 -X POST \
+              -H "Authorization: Bearer ${CRON_SECRET}" "${APP_URL%/}/api/internal/articles/resolve-links" || echo '000')
+            cat /tmp/links.json; echo
+            test "${code}" = "200"
+            done=$(node -e "process.stdout.write(String(!!require('/tmp/links.json').done))")
+            [ "${done}" = "true" ] && exit 0
+          done
+
       - name: Backfill article images
         # Best-effort: fills missing images (incl. Google News) in batches.
         # `always()`: coleta parcial ainda merece imagem. Sem isto, uma falha no
@@ -154,22 +172,6 @@ jobs:
             -H "Authorization: Bearer ${CRON_SECRET}" "${APP_URL%/}/api/internal/agenda/sync-antaq" || echo '000')
           cat /tmp/agenda.json
           test "${code}" = "200"
-
-      - name: Resolve Google News links
-        if: ${{ always() }}
-        env:
-          APP_URL: ${{ secrets.APP_URL }}
-          CRON_SECRET: ${{ secrets.CRON_SECRET }}
-        run: |
-          # 40 lotes de 30: dá conta do acúmulo aos poucos sem estourar o job.
-          for n in $(seq 1 40); do
-            code=$(curl -sS -o /tmp/links.json -w '%{http_code}' --max-time 120 -X POST \
-              -H "Authorization: Bearer ${CRON_SECRET}" "${APP_URL%/}/api/internal/articles/resolve-links" || echo '000')
-            cat /tmp/links.json; echo
-            test "${code}" = "200"
-            done=$(node -e "process.stdout.write(String(!!require('/tmp/links.json').done))")
-            [ "${done}" = "true" ] && exit 0
-          done
 
       - name: Health check
         # Último passo: o que as etapas acima deixaram é o que o usuário vai ver.

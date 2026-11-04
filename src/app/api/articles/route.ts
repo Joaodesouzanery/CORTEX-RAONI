@@ -64,7 +64,7 @@ export async function GET(req: Request) {
       const provenanceJoin = sourceId
         ? 'article_provenance!inner(source_id, sources(id, name, categoria, is_general))'
         : 'article_provenance(source_id, sources(id, name, categoria, is_general))'
-      const articleColumns = `id, source_id, title, url, image_url, excerpt, ${includeContent ? 'content,' : ''} published_at, fetched_at, publisher, sources(name, categoria, is_general), ${provenanceJoin}`
+      const articleColumns = `id, source_id, title, url, resolved_url, image_url, excerpt, ${includeContent ? 'content,' : ''} published_at, fetched_at, publisher, sources(name, categoria, is_general), ${provenanceJoin}`
       const baseTagColumns =
         'article_id, client_id, tom, relevancia, cita_cliente, tema, classification_source, confidence, impact_summary, monitoring_status, match_score, match_reasons, rule_version, classified_at, updated_at'
       const strategicColumns =
@@ -196,8 +196,8 @@ export async function GET(req: Request) {
       .from('articles')
       .select(
         (relevantOnly
-          ? `id, source_id, title, url, image_url, excerpt, published_at, fetched_at, publisher, sources(name, categoria, is_general), ${provenanceJoin}, article_client_tags!inner(article_id, monitoring_status)`
-          : `id, source_id, title, url, image_url, excerpt, published_at, fetched_at, publisher, sources(name, categoria, is_general), ${provenanceJoin}`) as 'id, source_id, title, url, image_url, excerpt, published_at, fetched_at, publisher, sources(name, categoria, is_general), article_provenance(source_id, sources(id, name, categoria, is_general))',
+          ? `id, source_id, title, url, resolved_url, image_url, excerpt, published_at, fetched_at, publisher, sources(name, categoria, is_general), ${provenanceJoin}, article_client_tags!inner(article_id, monitoring_status)`
+          : `id, source_id, title, url, resolved_url, image_url, excerpt, published_at, fetched_at, publisher, sources(name, categoria, is_general), ${provenanceJoin}`) as 'id, source_id, title, url, resolved_url, image_url, excerpt, published_at, fetched_at, publisher, sources(name, categoria, is_general), article_provenance(source_id, sources(id, name, categoria, is_general))',
         { count: 'estimated' }
       )
       .order('published_at', { ascending: false, nullsFirst: false })
@@ -208,7 +208,9 @@ export async function GET(req: Request) {
       cutoff = new Date(Date.now() - 30 * 86400000).toISOString()
     }
     if (cutoff) query = query.gte('published_at', cutoff)
-    if (relevantOnly) query = query.neq('article_client_tags.monitoring_status', 'excluido')
+    // "Relevante" = confirmado ou candidato. 'revisao' é o limbo de fonte
+    // temática/score baixo e trazia PEC da Segurança e eleição nos EUA.
+    if (relevantOnly) query = query.in('article_client_tags.monitoring_status', ['confirmado', 'candidato'])
     if (publishedBefore) query = query.lte('published_at', publishedBefore)
     if (searchPattern) query = query.ilike('title', searchPattern)
     if (sourceId) query = query.eq('article_provenance.source_id', sourceId)
@@ -248,7 +250,7 @@ export async function GET(req: Request) {
   // bottom instead of burying the most recent news under the row limit.
   let query = supabase
     .from('articles')
-    .select('id, source_id, title, url, image_url, excerpt, published_at, fetched_at, publisher, sources(name, categoria, is_general)')
+    .select('id, source_id, title, url, resolved_url, image_url, excerpt, published_at, fetched_at, publisher, sources(name, categoria, is_general)')
     .order('published_at', { ascending: false, nullsFirst: false })
 
   if (sourceId) query = query.eq('source_id', sourceId)

@@ -37,7 +37,7 @@ export default function AgendaPage() {
 
   return (
     <div className="mx-auto max-w-screen-xl px-6 py-8">
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+      <div className="band-bleed -mt-8 mb-6 flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-5xl font-light tracking-tight">Agenda regulatória</h1>
           <p className="mt-1 text-xs text-gray-500">Prazos só entram quando constam na fonte oficial.</p>

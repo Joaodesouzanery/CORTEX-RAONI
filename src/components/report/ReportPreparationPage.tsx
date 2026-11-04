@@ -880,7 +880,7 @@ export default function ReportPreparationPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-6 py-8">
-      <div className="flex justify-between items-start gap-4 mb-6">
+      <div className="band-bleed -mt-8 flex justify-between items-start gap-4 mb-6">
         <div>
           <h1 className="text-5xl font-light tracking-tight">Gerar relatório</h1>
           <p className="text-sm text-gray-500 mt-1">
@@ -929,6 +929,16 @@ export default function ReportPreparationPage() {
             <Button onClick={() => prepare(false)} disabled={!!busy || !clientId}>Preparar / abrir</Button>
             {draft && <Button variant="outline" onClick={() => prepare(true)} disabled={!!busy}>Nova versão</Button>}
             {draft && <Button variant="outline" onClick={saveInputs} disabled={!!busy}>Salvar dados</Button>}
+            {draft && (
+              <a href={`/api/report-drafts/${draft.id}/dc-html`} target="_blank" rel="noopener noreferrer" className="inline-flex h-10 items-center border border-black px-4 text-sm hover:bg-black hover:text-white">
+                Abrir no template
+              </a>
+            )}
+            {draft && (
+              <a href={`/api/report-drafts/${draft.id}/dc-html?format=md`} className="inline-flex h-10 items-center border border-black px-4 text-sm hover:bg-black hover:text-white">
+                Pacote Claude Design
+              </a>
+            )}
           </div>
         </div>
         <div className="mt-4 grid gap-4 md:grid-cols-[1fr_18rem]">

@@ -2,21 +2,23 @@
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { SECTORS } from '@/lib/sectors'
-import type { DashboardSummary } from '@/types'
+import { SectorIcon } from './SectorIcon'
 
-type Row = DashboardSummary['clients'][number]
+type Row = { id: string; name: string; total: number | null; direct: number | null }
 
 /** Faixa de abertura de Notícias: setores e um painel curto por cliente. */
 export default function NewsHero({ onPickClient }: { onPickClient: (clientId: string) => void }) {
   const [rows, setRows] = useState<Row[] | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [warning, setWarning] = useState<string | null>(null)
 
   useEffect(() => {
-    fetch('/api/dashboard?days=30')
+    fetch('/api/panel/hero-counts')
       .then(async (res) => {
         const body = await res.json().catch(() => null)
-        if (!res.ok) throw new Error(body?.error || `Painel indisponível (HTTP ${res.status}).`)
+        if (!res.ok) throw new Error(body?.error || `Contagens indisponíveis (HTTP ${res.status}).`)
         setRows(body.clients ?? [])
+        setWarning(body.counts_warning ?? null)
       })
       .catch((err: Error) => setError(err.message))
   }, [])
@@ -31,7 +33,7 @@ export default function NewsHero({ onPickClient }: { onPickClient: (clientId: st
         <div className="mx-auto mt-10 grid max-w-4xl grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
           {sectors.map((sector) => (
             <Link key={sector.key} href={`/bulletins?setor=${sector.key}`} className="focus-ring rounded-lg border border-white/15 bg-white/5 px-3 py-4 text-center text-sm transition hover:bg-white/15">
-              <span className="mx-auto mb-2 block h-1.5 w-8 rounded-full" style={{ background: sector.accent }} />
+              <SectorIcon sector={sector.key} className="mx-auto mb-2 h-8 w-8" style={{ color: sector.accent }} />
               {sector.label}
             </Link>
           ))}
@@ -44,13 +46,14 @@ export default function NewsHero({ onPickClient }: { onPickClient: (clientId: st
             <Link href="/dashboard" className="text-sm text-sky-700 hover:underline">Painel completo</Link>
           </div>
           {error && <p className="text-sm text-red-600">{error}</p>}
+          {warning && <p className="mb-2 text-sm text-amber-700">{warning}</p>}
           {!rows && !error && <p className="text-sm text-slate-500">Carregando…</p>}
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-7">
             {rows?.map((row) => (
-              <button key={row.client.id} onClick={() => onPickClient(row.client.id)} className="focus-ring card-hover rounded-lg border border-slate-200 p-3 text-left">
-                <p className="truncate text-sm font-medium">{row.client.name}</p>
-                <p className="mt-1 text-2xl font-light tabular-nums">{row.total}</p>
-                <p className="text-xs text-slate-500">{row.direct_mentions} citam o cliente</p>
+              <button key={row.id} onClick={() => onPickClient(row.id)} className="focus-ring card-hover rounded-lg border border-slate-200 p-3 text-left">
+                <p className="truncate text-sm font-medium">{row.name}</p>
+                <p className="mt-1 text-2xl font-light tabular-nums">{row.total ?? '—'}</p>
+                <p className="text-xs text-slate-500">{row.direct == null ? 'sem contagem' : `${row.direct} citam o cliente`}</p>
               </button>
             ))}
           </div>

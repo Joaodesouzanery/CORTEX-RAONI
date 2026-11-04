@@ -55,6 +55,19 @@
 }
 
 @layer components {
+  /* Faixa de largura total (padrão Maersk) sem reestruturar a página: o fundo
+     cinza vaza até as bordas da janela e o conteúdo fica na coluna central. */
+  .band-bleed {
+    background: #f4f4f4;
+    box-shadow: 0 0 0 100vmax #f4f4f4;
+    clip-path: inset(0 -100vmax);
+    @apply py-8;
+  }
+  .band-bleed-alt {
+    background: #ffffff;
+    box-shadow: 0 0 0 100vmax #ffffff;
+    clip-path: inset(0 -100vmax);
+  }
   .card-hover { @apply transition-shadow duration-200 hover:shadow-md; }
   .focus-ring { @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-600 focus-visible:ring-offset-2; }
 }

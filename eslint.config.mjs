@@ -36,5 +36,5 @@ export default defineConfig([
   },
   // docs/ guarda o template entregue pela consultoria (support.js etc.): é
   // acervo de referência, não código do app.
-  globalIgnores(['.next/**', 'node_modules/**', 'docs/**']),
+  globalIgnores(['.next/**', 'node_modules/**', 'docs/**', 'public/report-template/**']),
 ])

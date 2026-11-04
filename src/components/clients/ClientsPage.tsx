@@ -39,7 +39,7 @@ export default function ClientsPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-8">
-      <div className="flex items-center justify-between mb-8">
+      <div className="band-bleed -mt-8 flex items-center justify-between mb-8">
         <div>
           <h1 className="text-5xl font-light tracking-tight">Clientes</h1>
           <p className="text-sm text-gray-500 mt-1">Cadastre clientes para filtrar notícias e personalizar relatórios</p>

@@ -100,9 +100,16 @@ export function evaluateClientArticle(
   let direct = false
   let ruleVersion = 1
 
+  // Título + resumo: onde a matéria diz do que trata. Regra de setor que só
+  // casa no corpo pegava "PEC da Segurança" e eleição nos EUA por um termo
+  // perdido no meio do texto (print de 04/11/2026).
+  const headRaw = [article.title, article.excerpt].filter(Boolean).join(' ')
+  const headNormalized = normalizeText(headRaw)
+
   for (const rule of rules.filter((item) => item.active !== false)) {
     const terms = ruleMatches(rule, normalized, raw)
     if (!terms) continue
+    if (rule.match_type !== 'direta' && headNormalized && !matchingTerms(terms, headNormalized, headRaw).length) continue
     reasons.push({
       rule_id: rule.id,
       label: rule.label,
@@ -122,16 +129,10 @@ export function evaluateClientArticle(
   // temático. Custo ~zero, porque toda matéria genuína aciona a regra direta.
   // `startsWith` e não `===`: se o curador digitar o nome por extenso na UI,
   // uma comparação exata desligaria a guarda em silêncio.
-  const sourceRequiresContext =
-    client.name.startsWith('DAQ') ||
-    client.name.startsWith('ANTAQ') ||
-    client.name === 'SIMINERAL' ||
-    client.name === 'SINDINFOR'
-  if (
-    thematicSource &&
-    !isDaqRoadFalsePositive(client, normalized) &&
-    (!sourceRequiresContext || reasons.length > 0)
-  ) {
+  // Desde 04/11/2026 vale para todos: fonte do cliente só soma quando alguma
+  // regra já casou. Sozinha ela marcava toda manchete de um feed de grande
+  // veículo (051) para o cliente.
+  if (thematicSource && !isDaqRoadFalsePositive(client, normalized) && reasons.length > 0) {
     reasons.push({
       label: 'fonte temática vinculada',
       match_type: 'fonte',
