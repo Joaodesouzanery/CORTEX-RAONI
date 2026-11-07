@@ -1,6 +1,22 @@
 # Continuidade: como retomar o Cortex em outro chat
 
-Leia este arquivo, depois `docs/HANDOFF.md` (detalhe técnico por fase), `CLAUDE.md` (regras do repositório) e `docs/playbook/README.md`.
+## Primeiro prompt para colar no chat novo (outra conta)
+
+> Estou continuando o projeto CORTEX (repositório Joaodesouzanery/CORTEX-RAONI, branch `claude/news-panel-automation-ee1d09`, base `claude/busy-knuth-aynxlz`). Antes de qualquer coisa, leia `CLAUDE.md`, `docs/CONTINUIDADE.md`, `docs/HANDOFF.md`, `docs/playbook/README.md`, `docs/memoria/` e `docs/skills-e-agents.md`. Responda em português. Entregue migrations completas para eu colar no SQL Editor do Supabase (eu aplico; o SQL Editor mostra 100 linhas, use limit/offset). Envie tudo ao GitHub nas duas branches. Em toda resposta, repita a lista "O que falta conectar". A Anthropic só é ligada por último, com teto. Nunca raspe paywall nem contorne bloqueio.
+
+## Arquivos de passagem
+
+| Arquivo | Conteúdo |
+|---|---|
+| `docs/links/todas-as-noticias.csv` e `README.md` | **Todos os links de notícia** do projeto (3.435 notícias únicas; 1.041 com link exato; 150 verificadas) |
+| `docs/fontes/todas-as-fontes.csv` | Catálogo de feeds das migrations (116 fontes) e SQL para conferir no banco |
+| `docs/variaveis.md` | Todas as variáveis da Vercel e do GitHub (sem valores) e a ordem para ligar a IA |
+| `docs/skills-e-agents.md` | Índice das 16 skills e dos 7 agents, ferramentas externas e scripts |
+| `docs/migrations.md` | O que cada migration faz e quais estão aplicadas |
+| `docs/memoria/` | Memória do Claude do computador anterior (preferências do dono) |
+| `docs/orcamento.md` | Orçamento da Anthropic e do e-mail |
+
+Depois leia `docs/HANDOFF.md` (detalhe técnico por fase), `CLAUDE.md` (regras do repositório) e `docs/playbook/README.md`.
 
 ## O produto
 O Cortex é monitoramento de imprensa por cliente. Ele faz:
@@ -44,7 +60,7 @@ A interface é aberta, sem login. Usa Next.js 15, Supabase e GitHub Actions (col
 - A Anthropic é ligada **por último**, com teto: `ANTHROPIC_MONTHLY_BUDGET_USD`, `ANTHROPIC_DAILY_CALL_LIMIT` e só então `ANTHROPIC_API_KEY`. Orçamento em `docs/orcamento.md`.
 
 ## Migrations
-Aplicadas até a **054**, incluindo as três partes da 052b; o gabarito tem 545 linhas.
+Aplicadas até a **054**, incluindo as três partes da 052b; o gabarito tem 545 linhas. A **055** (notícias verificadas de outubro no gabarito) está pendente e é opcional.
 
 ## Onde está cada coisa
 

@@ -1,0 +1,2 @@
+- [Entrega CORTEX](cortex-entrega-github-migrations.md) — sempre GitHub; migrations como SQL para colar
+- [Direção do produto CORTEX](cortex-direcao-produto.md) — portal Grupo Nery, conteúdo próprio, serviços pagos
