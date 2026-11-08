@@ -11,7 +11,7 @@ export async function loadDailyDigest(supabase: SupabaseClient, clientId: string
   const rows = await fetchAll<Row>((from, to) =>
     supabase
       .from('article_client_tags')
-      .select('article_id, cita_cliente, monitoring_status, articles!inner(title, url, resolved_url, publisher, published_at)')
+      .select('article_id, cita_cliente, monitoring_status, tom, articles!inner(title, url, resolved_url, publisher, published_at)')
       .eq('client_id', clientId)
       .gte('articles.published_at', start)
       .lt('articles.published_at', end)

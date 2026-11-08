@@ -8,4 +8,4 @@ TI e software para PMEs, com cinco questões:
 
 **Pedido para os próximos meses:** perspectivas do governo Cleitinho em Minas para a indústria de software mineira.
 
-Atenção: no relatório o SindInfor é tratado como Minas Gerais. O perfil no banco ainda diz Brasília/DF; confirmar com o dono.
+O SindInfor é de Minas Gerais: o perfil do relatório está em Belo Horizonte/MG desde a 054. O README do modelo ainda diz Brasília/DF, mas está desatualizado.

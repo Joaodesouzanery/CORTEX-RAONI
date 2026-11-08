@@ -41,7 +41,7 @@ export interface SelectionResult {
 }
 
 // Grandes veículos pedidos pelos clientes (reclamação de "portais desconhecidos").
-const MAJOR_OUTLETS = /(valor|estad[ãa]o|folha|o globo|oglobo|g1\b|cnn|eixos|poder360|infomoney|exame|veja|ag[êe]ncia brasil|reuters|bloomberg|megawhat|canal ?energia)/i
+export const MAJOR_OUTLETS = /(valor|estad[ãa]o|folha|o globo|oglobo|g1\b|cnn|eixos|poder360|infomoney|exame|veja|ag[êe]ncia brasil|reuters|bloomberg|megawhat|canal ?energia)/i
 
 export function linkStatus(url: string | null | undefined): LinkStatus {
   if (!url) return 'ausente'
@@ -64,17 +64,17 @@ export function linkStatus(url: string | null | undefined): LinkStatus {
   return looksLikeArticle ? 'exato' : 'secao'
 }
 
-const normalize = (text: string) =>
+export const normalize = (text: string) =>
   text.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim()
 
 const STOPWORDS = new Set(['de', 'da', 'do', 'das', 'dos', 'e', 'em', 'a', 'o', 'as', 'os', 'para', 'por', 'com', 'no', 'na', 'nos', 'nas', 'um', 'uma', 'que', 'se', 'ao'])
 
 /** Assinatura da pauta: palavras significativas do título, para não repetir o mesmo fato. */
-function topicKey(title: string): Set<string> {
+export function topicKey(title: string): Set<string> {
   return new Set(normalize(title).split(' ').filter((word) => word.length > 3 && !STOPWORDS.has(word)))
 }
 
-function overlap(a: Set<string>, b: Set<string>): number {
+export function overlap(a: Set<string>, b: Set<string>): number {
   if (!a.size || !b.size) return 0
   let shared = 0
   for (const word of a) if (b.has(word)) shared++
@@ -82,7 +82,7 @@ function overlap(a: Set<string>, b: Set<string>): number {
 }
 
 /** Acima disso dois títulos contam como a mesma pauta (ex.: mesma nota do ONS em dois veículos). */
-const SAME_TOPIC_OVERLAP = 0.6
+export const SAME_TOPIC_OVERLAP = 0.6
 
 export function selectReportItems(candidates: SelectionCandidate[], options: SelectionOptions): SelectionResult {
   const limit = options.limit ?? REPORT_ITEMS

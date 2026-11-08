@@ -74,6 +74,7 @@ Plano em cinco etapas. A coleta não tinha parado: o setor sumia da tela.
   - **Catálogo de fontes corrigido:** eram 116 fontes, agora são 148. O script lia só parte dos `INSERT` e ignorava as desativações; agora aplica também as desativações e as trocas de URL feitas por migrations posteriores (coluna `ativa_apos_migrations`).
   - **`scripts/diff-outlets.mjs` → `docs/fontes/faltantes.md`:** de 259 veículos citados no que foi entregue, 111 cobertos depois da 057 e 145 sem fonte, quase todos com 1 ou 2 menções.
   - **Migration 057:** buscas por cliente nos veículos entregues, 26 regras aprendidas e 27 temas.
+- **Etapa 4 (feita):** o pacote do mês ganhou seleção principal com termos e exclusões do cliente, destaques do mês (`report-highlights.ts`), clipping das selecionadas (`clipping-text.ts`), prompt de diagramação (`design-prompt.ts`), boletim da SindInfor e o workflow manual `monthly-package.yml`. O resumo diário agora traz o tom no lugar de "Tom: pendente", e a síntese do clipping mensal perdeu o "Não foram identificadas…".
 - **Etapa 3 (feita):** `docs/calibracao/recall-2026-10.sql`, gerado por `scripts/build-calibration-sql.mjs`, mede por cliente o que foi coletado e etiquetado, a concordância de bloco e a de tom. A referência vai embutida no SQL (150 refeitos e 510 manchetes da ONS). Testado num Postgres local com todas as migrations aplicadas; a 056 e a 057 aplicam sem erro e podem ser coladas de novo sem duplicar nada.
 
 ## Pendências

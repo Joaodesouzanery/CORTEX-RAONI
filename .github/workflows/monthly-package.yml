@@ -1,0 +1,90 @@
+name: Monthly Claude Design packages
+
+# Gera, para um mês, o pacote do Claude Design de cada rascunho já preparado
+# (relatórios em /reports/prepare ou pelo report-automation.yml) e guarda os
+# .md como artefato desta execução. Só leitura: chama a rota pública
+# /api/report-drafts/[id]/dc-html?format=md, que não gasta token.
+#
+# Só manual (decisão do dono em 08/11/2026: liga o automático quando quiser).
+# Para automatizar, descomente o schedule.
+on:
+  # schedule:
+  #   - cron: '17 12 2 * *' # dia 2, 09:17 em Brasília, depois do fechamento do mês
+  workflow_dispatch:
+    inputs:
+      period:
+        description: 'Mês YYYY-MM; vazio usa o mês anterior'
+        required: false
+        type: string
+
+concurrency:
+  group: monthly-package
+  cancel-in-progress: false
+
+jobs:
+  packages:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Baixar os pacotes do mês
+        env:
+          APP_URL: ${{ secrets.APP_URL }}
+          INPUT_PERIOD: ${{ inputs.period }}
+        run: |
+          if [ -z "${APP_URL}" ]; then
+            echo "Secret APP_URL ausente (Settings > Secrets and variables > Actions)." >&2
+            exit 1
+          fi
+          period="${INPUT_PERIOD}"
+          if [ -z "${period}" ]; then
+            period=$(node -e "const d=new Date(); d.setUTCMonth(d.getUTCMonth()-1); process.stdout.write(d.toISOString().slice(0,7))")
+          fi
+          if ! echo "${period}" | grep -Eq '^[0-9]{4}-(0[1-9]|1[0-2])$'; then
+            echo "Mês inválido: ${period}" >&2
+            exit 1
+          fi
+          mkdir -p packages
+          code=$(curl -sS -o /tmp/drafts.json -w '%{http_code}' --max-time 60 "${APP_URL%/}/api/report-drafts?period=${period}")
+          if [ "${code}" != "200" ]; then
+            echo "Lista de rascunhos falhou (HTTP ${code})." >&2
+            cat /tmp/drafts.json >&2
+            exit 1
+          fi
+          node -e "
+            const data = JSON.parse(require('fs').readFileSync('/tmp/drafts.json', 'utf8'));
+            const drafts = Array.isArray(data) ? data : data.drafts || data.items || [];
+            // A rota ordena por versão decrescente: fica só a mais nova de cada cliente.
+            const seen = new Set();
+            for (const d of drafts) {
+              if (seen.has(d.client_id)) continue;
+              seen.add(d.client_id);
+              console.log(d.id + ' ' + String(d.clients?.name || d.client_id).replace(/[^A-Za-z0-9-]/g, ''));
+            }
+          " > /tmp/ids.txt
+          if [ ! -s /tmp/ids.txt ]; then
+            echo "Nenhum rascunho preparado para ${period}. Prepare em /reports/prepare." >&2
+            exit 1
+          fi
+          failed=0
+          while read -r id name; do
+            code=$(curl -sS -o "packages/${name}-${period}-claude-design.md" -w '%{http_code}' --max-time 60 \
+              "${APP_URL%/}/api/report-drafts/${id}/dc-html?format=md")
+            if [ "${code}" != "200" ]; then
+              echo "::warning::Pacote de ${name} falhou (HTTP ${code})."
+              failed=$((failed + 1))
+            else
+              echo "Pacote de ${name}: ok"
+            fi
+          done < /tmp/ids.txt
+          echo "period=${period}" >> "$GITHUB_ENV"
+          # Falha honesta: pacote que faltou aparece como erro, não some.
+          if [ "${failed}" -gt 0 ]; then exit 1; fi
+
+      - name: Guardar os pacotes
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pacotes-claude-design-${{ env.period }}
+          path: packages/
+          if-no-files-found: warn
+          retention-days: 30
