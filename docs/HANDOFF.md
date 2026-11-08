@@ -74,6 +74,7 @@ Plano em cinco etapas. A coleta não tinha parado: o setor sumia da tela.
   - **Catálogo de fontes corrigido:** eram 116 fontes, agora são 148. O script lia só parte dos `INSERT` e ignorava as desativações; agora aplica também as desativações e as trocas de URL feitas por migrations posteriores (coluna `ativa_apos_migrations`).
   - **`scripts/diff-outlets.mjs` → `docs/fontes/faltantes.md`:** de 259 veículos citados no que foi entregue, 111 cobertos depois da 057 e 145 sem fonte, quase todos com 1 ou 2 menções.
   - **Migration 057:** buscas por cliente nos veículos entregues, 26 regras aprendidas e 27 temas.
+- **Etapa 3 (feita):** `docs/calibracao/recall-2026-10.sql`, gerado por `scripts/build-calibration-sql.mjs`, mede por cliente o que foi coletado e etiquetado, a concordância de bloco e a de tom. A referência vai embutida no SQL (150 refeitos e 510 manchetes da ONS). Testado num Postgres local com todas as migrations aplicadas; a 056 e a 057 aplicam sem erro e podem ser coladas de novo sem duplicar nada.
 
 ## Pendências
 - Regras do playbook da consultoria (README do zip de relatórios): máx. 20 páginas; tom positivo, riscos como pontos de atenção; verbos auxilia/assessora/subsidia/apoia; sem % nos cenários; sem coluna Tom na síntese; link só da matéria exata; capa nova por mês; ONS=CRT, PRIO=VX (PRIO S.A.), CCEE/SIMINERAL/DAQ/SINDINFOR=SAUZ, ANTAQ=CORTEX; SindInfor em formato boletim, Brasília/DF.
@@ -97,7 +98,7 @@ Plano em cinco etapas. A coleta não tinha parado: o setor sumia da tela.
 9. Trocar `claude-sonnet-4-6` por `claude-sonnet-5-5` ao conectar a Anthropic.
 
 ## Falta conectar (repetir ao dono em toda resposta)
-- Colar as migrations 056 (ruído por seção e duplicatas) e 057 (veículos entregues, termos aprendidos e temas).
+- Colar `docs/calibracao/recall-2026-10.sql` (linha de base), depois as migrations 056 e 057, rodar `fetch-news` com reclassificação de 2026-10 e colar o SQL de novo.
 - Conferir `SELECT count(*) FROM delivered_report_items;` (545); se faltar, colar 052b partes 1–3.
 - Colar a migration 053.
 - Rodar `fetch-news` manual com `reclassify_archive` para 2026-10 e 2026-11 (novas regras de setor).

@@ -135,7 +135,7 @@ ON CONFLICT (client_id, title) DO UPDATE SET inclusion_terms = EXCLUDED.inclusio
 -- Conferência (cada linha deve trazer o número esperado):
 -- SELECT count(*) FROM sources WHERE name LIKE 'Google News — % nos veículos dos relatórios (%';      -- 7
 -- SELECT c.name, count(*) FROM client_relevance_rules r JOIN clients c ON c.id = r.client_id
---   WHERE r.label ~ '^(aprendido|porta-voz|dirigente|diretor|iniciativa):' GROUP BY 1 ORDER BY 1;     -- 26 regras no total
+--   WHERE r.label ~ '^(aprendido|porta-voz|dirigente|diretor|iniciativa):' GROUP BY 1 ORDER BY 1;     -- 27 (26 desta + Márcio Rea, da 040)
 -- SELECT c.name, count(*) FROM client_report_topic_templates t JOIN clients c ON c.id = t.client_id
 --   WHERE t.rationale LIKE 'Eixo dos destaques de outubro%' GROUP BY 1 ORDER BY 1;                  -- 27 temas no total
 
