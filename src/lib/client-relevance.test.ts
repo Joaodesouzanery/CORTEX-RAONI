@@ -526,3 +526,32 @@ describe('setor de volta à tela, com ruído cortado pela seção (08/11/2026)',
     ).toMatchObject({ cita_cliente: true, monitoring_status: 'confirmado' })
   })
 })
+
+describe('termos aprendidos da 057 só casam com contexto', () => {
+  const prio = client('PRIO')
+  const magnetita: ClientRelevanceRule = {
+    ...rule('PRIO', 'aprendido: blocos Magnetita e Hematita', 'setorial', [['Magnetita', 'Hematita'], ['pré-sal', 'partilha', 'ANP', 'Oferta Permanente', 'Bacia de Campos']], 5),
+    excluded_terms: ['PetroRecôncavo', 'RECV3', 'Brava Energia', 'BRAV3'],
+  }
+
+  it('Magnetita como minério de ferro não vira PRIO', () => {
+    expect(
+      evaluateClientArticle(prio, [magnetita], { title: 'Vale amplia produção de magnetita em Carajás', excerpt: null, content: null })
+    ).toBeNull()
+  })
+
+  it('Magnetita no leilão de partilha da ANP vira PRIO confirmado', () => {
+    expect(
+      evaluateClientArticle(prio, [magnetita], { title: 'Leilão da ANP: blocos Magnetita e Hematita vão para o pré-sal', excerpt: null, content: null })
+    ).toMatchObject({ monitoring_status: 'confirmado', cita_cliente: false })
+  })
+
+  it('COBRE como metal não vira o modelo de preços', () => {
+    const ons = client('ONS')
+    const cobre = rule('ONS', 'aprendido: COBRE', 'setorial', [['COBRE'], ['Newave', 'Decomp', 'modelo computacional', 'código aberto', 'formação de preços']], 4)
+    expect(evaluateClientArticle(ons, [cobre], { title: 'Preço do cobre sobe na bolsa de Londres', excerpt: null, content: null })).toBeNull()
+    expect(
+      evaluateClientArticle(ons, [cobre], { title: 'COBRE, modelo de código aberto, vai substituir o Newave', excerpt: null, content: null })
+    ).toMatchObject({ monitoring_status: 'candidato' })
+  })
+})

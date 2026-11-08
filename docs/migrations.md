@@ -2,7 +2,7 @@
 
 Ficam em `supabase/migrations/`. Todas são idempotentes. O dono cola cada uma no SQL Editor do Supabase, porque o conector Supabase do Claude não aponta para o projeto CORTEX. **Nunca edite uma migration já aplicada: crie a próxima.**
 
-**Situação em 07/11/2026:** as migrations **001 a 054 estão aplicadas**, incluindo a 052b nas partes 1 a 3 (`delivered_report_items` com 545 linhas). A **055 está pendente** e é opcional.
+**Situação em 08/11/2026:** as migrations **001 a 054 estão aplicadas**; 056 e 057 pendentes, incluindo a 052b nas partes 1 a 3 (`delivered_report_items` com 545 linhas). A **055 está pendente** e é opcional.
 
 | # | O que faz |
 |---|---|
@@ -25,3 +25,5 @@ Ficam em `supabase/migrations/`. Todas são idempotentes. O dono cola cada uma n
 | 053 | Feeds oficiais de Valor, Estadão, CNN, Folha, G1, Poder360, InfoMoney e Metrópoles |
 | 054 | O Globo; Brasil Mineral; TI Inside, Teletime e Convergência Digital; Diário do Comércio; SindInfor-MG; perfil MG |
 | 055 | **Pendente (opcional).** As 147 notícias verificadas de outubro no gabarito (`variant = 'refeito'`) |
+| 056 | **Pendente.** "novela" sai das exclusões da 050, porque o ruído agora sai pela seção do link (`src/lib/noise.ts`). Desliga as cópias de InfoMoney e MegaWhat |
+| 057 | **Pendente.** 7 buscas por cliente nos veículos que chegaram ao cliente e não tinham fonte (`docs/fontes/faltantes.md`), 26 regras aprendidas (porta-vozes, Magnetita/Hematita com contexto, IP4, Careiro, Carta de Santarém, split payment…), exclusão de PetroRecôncavo e Brava nas regras de setor da PRIO e 27 temas dos destaques de outubro |
