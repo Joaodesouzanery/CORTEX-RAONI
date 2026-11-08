@@ -16,6 +16,7 @@
 // barra vertical para não abrir link nem quebrar tabela.
 
 import { normalize, overlap, topicKey, MAJOR_OUTLETS, SAME_TOPIC_OVERLAP, linkStatus } from '@/lib/report-selection'
+import { safeExternalUrl } from '@/lib/url'
 import type { Tom } from '@/types'
 
 export interface ClippingItem {
@@ -29,6 +30,12 @@ export interface ClippingItem {
   tone?: Tom | null
   /** Resumo próprio (impact_summary humano/IA). Excerpt do veículo NÃO entra aqui. */
   summary?: string | null
+  /**
+   * O tom foi analisado por pessoa ou IA (classification_source humano/ia).
+   * A regra grava 'neutro' por padrão: afirmar "a menção foi técnica" sobre
+   * isso seria declarar uma análise que ninguém fez.
+   */
+  tone_reviewed?: boolean
 }
 
 export interface ClippingParagraph {
@@ -38,6 +45,8 @@ export interface ClippingParagraph {
   url: string | null
   links: Array<{ outlet: string; url: string }>
   tone: Tom | null
+  /** O tom acima veio de análise (pessoa/IA), não do padrão da regra. */
+  tone_reviewed: boolean
   summary: string | null
   text: string
 }
@@ -53,7 +62,14 @@ export interface ClippingDay {
 export interface ClippingTextOptions {
   /** Itens de setor por dia. O fornecedor da ONS manda 2 ou 3. */
   sectorPerDay?: number
+  /**
+   * Tom não revisado: 'mark' escreve "Tom a revisar." (prévia, revisão, pacote);
+   * 'omit' não escreve tom (e-mail que vai ao cliente).
+   */
+  unreviewedTone?: 'mark' | 'omit'
 }
+
+export const UNREVIEWED_TONE = 'Tom a revisar.'
 
 /** Dois a três parágrafos de setor por dia, como no clipping que a ONS recebe. */
 export const SECTOR_PER_DAY = 3
@@ -123,30 +139,46 @@ function groupStories(items: ClippingItem[]): Story[] {
   return stories
 }
 
-function paragraph(story: Story, kind: 'client' | 'sector', opener = ''): ClippingParagraph {
+function paragraph(story: Story, kind: 'client' | 'sector', opener = '', unreviewed: 'mark' | 'omit' = 'mark'): ClippingParagraph {
   const lead = story.items[0]
   const outlets: string[] = []
   for (const item of story.items) {
-    const outlet = item.outlet.trim() || 'Veículo não identificado'
+    const outlet = item.outlet.replace(/\s+/g, ' ').trim() || 'Veículo não identificado'
     if (!outlets.some((existing) => normalize(existing) === normalize(outlet))) outlets.push(outlet)
   }
-  const links = story.items.flatMap((item) => (item.url && linkStatus(item.url) === 'exato' ? [{ outlet: item.outlet, url: item.url }] : []))
+  const links = story.items.flatMap((item) => {
+    const url = item.url && linkStatus(item.url) === 'exato' ? safeExternalUrl(item.url) : null
+    return url ? [{ outlet: item.outlet, url }] : []
+  })
   // Tom do fato = o mais severo entre as versões: um veículo negativo pesa.
-  const tones = story.items.map((item) => item.tone).filter(Boolean) as Tom[]
+  const reviewed = story.items.filter((item) => item.tone_reviewed)
+  const tones = reviewed.map((item) => item.tone).filter(Boolean) as Tom[]
   const tone: Tom | null = tones.includes('critico') || tones.includes('negativo') ? 'negativo' : tones.includes('positivo') ? 'positivo' : tones[0] ?? null
   const summary = story.items.map((item) => ownSummary(item.summary)).find(Boolean) ?? null
   const verb = outlets.length > 1 ? 'publicaram' : 'publicou'
   const sentence = `${opener}${joinOutlets(outlets)} ${verb} ${quoteTitle(lead.title)}.`
+  const toneReviewed = reviewed.length > 0
+  const toneText = toneReviewed ? toneSentence(tone) : unreviewed === 'mark' ? UNREVIEWED_TONE : null
   const text = kind === 'client'
-    ? [sentence, summary, toneSentence(tone)].filter(Boolean).join(' ')
+    ? [sentence, summary, toneText].filter(Boolean).join(' ')
     : [sentence, summary].filter(Boolean).join(' ')
-  return { outlets, title: lead.title, url: links[0]?.url ?? lead.url ?? null, links, tone: kind === 'client' ? tone : null, summary, text }
+  return {
+    outlets,
+    title: lead.title,
+    url: links[0]?.url ?? safeExternalUrl(lead.url) ?? null,
+    links,
+    tone: kind === 'client' && toneReviewed ? tone : null,
+    tone_reviewed: kind === 'client' && toneReviewed,
+    summary,
+    text,
+  }
 }
 
 const SECTOR_OPENERS = ['Em setor, ', '', '']
 
 export function buildClippingDays(items: ClippingItem[], options: ClippingTextOptions = {}): ClippingDay[] {
   const sectorPerDay = options.sectorPerDay ?? SECTOR_PER_DAY
+  const unreviewed = options.unreviewedTone ?? 'mark'
   const byDay = new Map<string, ClippingItem[]>()
   for (const item of items) {
     if (!item.published_at) continue
@@ -166,15 +198,16 @@ export function buildClippingDays(items: ClippingItem[], options: ClippingTextOp
       return {
         day,
         label: dayLabel(day),
-        client: clientStories.map((story) => paragraph(story, 'client')),
-        sector: sectorStories.map((story, index) => paragraph(story, 'sector', SECTOR_OPENERS[index] ?? '')),
+        client: clientStories.map((story) => paragraph(story, 'client', '', unreviewed)),
+        sector: sectorStories.map((story, index) => paragraph(story, 'sector', SECTOR_OPENERS[index] ?? '', unreviewed)),
       }
     })
     .filter((day) => day.client.length || day.sector.length)
 }
 
 function markdownSafe(text: string): string {
-  return text.replace(/\[/g, '(').replace(/\]/g, ')').replace(/\|/g, '/')
+  // Sem quebra de linha: texto de terceiro não pode abrir título no .md.
+  return text.replace(/\s+/g, ' ').trim().replace(/\[/g, '(').replace(/\]/g, ')').replace(/\|/g, '/')
 }
 
 function paragraphMarkdown(item: ClippingParagraph): string {

@@ -24,7 +24,8 @@
 -- (docs/referencia-relatorios/2026-10-destaques/). Os pedidos extras do dono
 -- (novo governo, Cleitinho, marcos legais) já estão na 048.
 --
--- Idempotente: pode colar mais de uma vez.
+-- Idempotente: pode colar mais de uma vez. Colar de novo NÃO religa fonte,
+-- regra ou tema que o dono tenha desligado (o ON CONFLICT não toca em active).
 
 INSERT INTO sources (name, url, type, active, is_general, priority, categoria, access_mode) VALUES
   ('Google News — ONS nos veículos dos relatórios (energia)', 'https://news.google.com/rss/search?q=%28site%3Acanalsolar.com.br%20OR%20site%3Aem.com.br%20OR%20site%3Aplurale.com.br%20OR%20site%3Ajc.uol.com.br%20OR%20site%3Arevistamundoeletrico.com.br%20OR%20site%3Aveja.abril.com.br%29%20%28ONS%20OR%20%22Operador%20Nacional%20do%20Sistema%22%20OR%20%22setor%20el%C3%A9trico%22%20OR%20curtailment%20OR%20%22linhas%20de%20transmiss%C3%A3o%22%29%20when%3A30d&hl=pt-BR&gl=BR&ceid=BR:pt-419', 'rss', true, false, 80, 'imprensa', 'referencia'),
@@ -34,7 +35,7 @@ INSERT INTO sources (name, url, type, active, is_general, priority, categoria, a
   ('Google News — SINDINFOR nos veículos dos relatórios (Minas e TI)', 'https://news.google.com/rss/search?q=%28site%3Acomputerworld.com.br%20OR%20site%3Aotempo.com.br%20OR%20site%3Aitatiaia.com.br%20OR%20site%3Aem.com.br%20OR%20site%3Astartups.com.br%20OR%20site%3Abaguete.com.br%29%20%28Sindinfor%20OR%20software%20OR%20%22empresas%20de%20tecnologia%22%20OR%20%22data%20center%22%20OR%20Assespro%29%20when%3A30d&hl=pt-BR&gl=BR&ceid=BR:pt-419', 'rss', true, false, 80, 'imprensa', 'referencia'),
   ('Google News — DAQ nos veículos dos relatórios (Norte e logística)', 'https://news.google.com/rss/search?q=%28site%3Aacritica.com%20OR%20site%3Ad24am.com%20OR%20site%3Abncamazonas.com.br%20OR%20site%3Aoliberal.com%20OR%20site%3Aportalbenews.com.br%20OR%20site%3Aportogente.com.br%29%20%28DNIT%20OR%20dragagem%20OR%20hidrovia%20OR%20hidrovias%20OR%20%22transporte%20aquavi%C3%A1rio%22%20OR%20IP4%29%20when%3A30d&hl=pt-BR&gl=BR&ceid=BR:pt-419', 'rss', true, false, 80, 'imprensa', 'referencia'),
   ('Google News — ANTAQ nos veículos dos relatórios (logística)', 'https://news.google.com/rss/search?q=%28site%3Aportalbenews.com.br%20OR%20site%3Aportogente.com.br%20OR%20site%3Atecnologistica.com.br%20OR%20site%3Acampograndenews.com.br%20OR%20site%3Aahoradosul.com.br%20OR%20site%3Ajornalportuario.com.br%29%20%28ANTAQ%20OR%20%22setor%20portu%C3%A1rio%22%20OR%20cabotagem%20OR%20%22arrendamento%20portu%C3%A1rio%22%29%20when%3A30d&hl=pt-BR&gl=BR&ceid=BR:pt-419', 'rss', true, false, 80, 'imprensa', 'referencia')
-ON CONFLICT (url) DO UPDATE SET name = EXCLUDED.name, active = TRUE, priority = EXCLUDED.priority;
+ON CONFLICT (url) DO UPDATE SET name = EXCLUDED.name, priority = EXCLUDED.priority;
 
 -- Fonte do cliente: soma +1 como fonte temática quando uma regra dele casa.
 INSERT INTO client_sources (client_id, source_id, priority, is_thematic)
@@ -60,7 +61,7 @@ FROM (VALUES
   ('ONS', 'iniciativa: Prêmio ONS de Qualidade na Operação', 'direta', '[["Prêmio ONS", "Prêmio de Qualidade na Operação"]]', '{}'::TEXT[], 8),
   ('ONS', 'iniciativa: Rede Potências', 'direta', '[["Rede Potências"]]', '{}'::TEXT[], 8),
   ('ONS', 'aprendido: COBRE (novo modelo de preços)', 'setorial', '[["COBRE"], ["Newave", "Decomp", "modelo computacional", "código aberto", "formação de preços"]]', '{}'::TEXT[], 4),
-  ('ONS', 'aprendido: queda de torres e El Niño', 'setorial', '[["torres"], ["El Niño", "linhas de transmissão", "rede de transmissão", "tempestades"]]', '{}'::TEXT[], 3),
+  ('ONS', 'aprendido: queda de torres e El Niño', 'setorial', '[["queda de torres", "torres de transmissão", "torres caíram", "torres derrubadas"], ["El Niño", "linhas de transmissão", "rede de transmissão", "tempestades", "ONS"]]', '{}'::TEXT[], 3),
   ('ONS', 'aprendido: GO15', 'setorial', '[["GO15"]]', '{}'::TEXT[], 4),
   ('CCEE', 'porta-voz: Gerusa Côrtes', 'direta', '[["Gerusa Côrtes", "Gerusa Cortes"]]', '{}'::TEXT[], 8),
   ('CCEE', 'porta-voz: Ricardo Simabuku', 'direta', '[["Ricardo Simabuku", "Simabuku"]]', '{}'::TEXT[], 8),
@@ -85,7 +86,7 @@ FROM (VALUES
 JOIN clients client ON client.name = seed.client_key OR client.name LIKE seed.client_key || ' %'
 ON CONFLICT (client_id, label) DO UPDATE SET
   match_type = EXCLUDED.match_type, required_groups = EXCLUDED.required_groups,
-  excluded_terms = EXCLUDED.excluded_terms, weight = EXCLUDED.weight, active = TRUE, updated_at = NOW();
+  excluded_terms = EXCLUDED.excluded_terms, weight = EXCLUDED.weight, updated_at = NOW();
 
 -- PetroRecôncavo e Brava fora das regras de setor da PRIO que já existiam.
 UPDATE client_relevance_rules rule
@@ -130,7 +131,7 @@ FROM (VALUES
   ('DAQ', 27, 'Temporada de cruzeiros e terminais regionais', '["temporada de cruzeiros", "cruzeiros marítimos"]')
 ) AS seed(client_key, ord, title, terms)
 JOIN clients client ON client.name = seed.client_key OR client.name LIKE seed.client_key || ' %'
-ON CONFLICT (client_id, title) DO UPDATE SET inclusion_terms = EXCLUDED.inclusion_terms, active = TRUE, updated_at = NOW();
+ON CONFLICT (client_id, title) DO UPDATE SET inclusion_terms = EXCLUDED.inclusion_terms, updated_at = NOW();
 
 -- Conferência (cada linha deve trazer o número esperado):
 -- SELECT count(*) FROM sources WHERE name LIKE 'Google News — % nos veículos dos relatórios (%';      -- 7

@@ -9,6 +9,10 @@ import { clippingEmailSendSchema } from '@/lib/validation'
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
 
+// Reserva 'enviando' mais velha que isso = disparo que morreu no meio (a
+// função tem 60s). Pode ser retomada; antes disso, outro disparo está ativo.
+const STALE_SEND_MS = 10 * 60 * 1000
+
 type Outcome = {
   client_id: string
   client: string
@@ -72,7 +76,7 @@ async function sendForClient(
   mode: 'review' | 'send'
 ): Promise<Outcome> {
   const base = { client_id: client.id, client: client.name }
-  const data = await loadClippingDay(supabase, client.id, day)
+  const data = await loadClippingDay(supabase, client.id, day, mode === 'send' ? 'omit' : 'mark')
   if (!data.day) return { ...base, status: 'sem_materia', items: data.total }
 
   let recipients = ownerRecipients()
@@ -87,6 +91,9 @@ async function sendForClient(
     if (!recipients.length) return { ...base, status: 'sem_destinatario', items: data.total }
   }
 
+  // Marca antes da reserva: se a consulta falhar, nada fica preso em 'enviando'.
+  const brand = await clippingBrand(supabase, client.id)
+
   // Reserva o envio ANTES de mandar: dois disparos simultâneos não mandam dois.
   const { data: reserved, error: reserveError } = await supabase
     .from('clipping_email_sends')
@@ -99,19 +106,24 @@ async function sendForClient(
     if (reserveError.code !== '23505') throw new Error(`Registro de envio indisponível (${reserveError.code}). Aplique a migration 058.`)
     const { data: existing, error: existingError } = await supabase
       .from('clipping_email_sends')
-      .select('id, status')
+      .select('id, status, updated_at')
       .eq('client_id', client.id)
       .eq('day', day)
       .eq('mode', mode)
       .single()
     if (existingError) throw new Error(existingError.message)
-    if (existing.status !== 'erro') return { ...base, status: 'ja_enviado', detail: existing.status }
-    // Envio anterior falhou: retoma, mas só se ninguém retomou primeiro.
+    const stale = existing.status === 'enviando' && Date.now() - new Date(existing.updated_at).getTime() > STALE_SEND_MS
+    if (existing.status === 'enviado' || (existing.status === 'enviando' && !stale)) {
+      return { ...base, status: 'ja_enviado', detail: existing.status }
+    }
+    // Envio anterior falhou ou morreu no meio: retoma, mas só se ninguém
+    // retomou primeiro (o filtro por status + updated_at é a trava).
     const { data: retaken, error: retakeError } = await supabase
       .from('clipping_email_sends')
       .update({ status: 'enviando', error: null, recipients_count: recipients.length, items_count: data.total, updated_at: new Date().toISOString() })
       .eq('id', existing.id)
-      .eq('status', 'erro')
+      .eq('status', existing.status)
+      .eq('updated_at', existing.updated_at)
       .select('id')
       .maybeSingle()
     if (retakeError) throw new Error(retakeError.message)
@@ -120,12 +132,17 @@ async function sendForClient(
   }
   if (!sendId) throw new Error('Registro de envio não confirmado.')
 
-  const brand = await clippingBrand(supabase, client.id)
-  const email = buildClippingEmail({ clientDisplayName: brand.displayName, brand: brand.brand, day: data.day, totalItems: data.total, review: mode === 'review' })
-  const result =
-    mode === 'review'
-      ? await sendEmail({ ...email, to: recipients })
-      : await sendEmail({ ...email, to: [senderAddress()], bcc: recipients, replyTo: ownerRecipients()[0] || null })
+  let result: Awaited<ReturnType<typeof sendEmail>>
+  try {
+    const email = buildClippingEmail({ clientDisplayName: brand.displayName, brand: brand.brand, day: data.day, totalItems: data.total, review: mode === 'review' })
+    result =
+      mode === 'review'
+        ? await sendEmail({ ...email, to: recipients })
+        : await sendEmail({ ...email, to: [senderAddress()], bcc: recipients, replyTo: ownerRecipients()[0] || null })
+  } catch (error) {
+    // Nunca deixar a reserva em 'enviando' por exceção: vira erro retomável.
+    result = { sent: false, error: (error as Error).message }
+  }
 
   const { data: updated, error: updateError } = await supabase
     .from('clipping_email_sends')

@@ -11,6 +11,7 @@ type Row = {
   article_id: string
   cita_cliente: boolean | null
   tom: Tom | null
+  classification_source: string | null
   impact_summary: string | null
   articles: {
     title: string
@@ -33,18 +34,26 @@ export interface ClippingDayData {
   total: number
 }
 
-export async function loadClippingDay(supabase: SupabaseClient, clientId: string, day: string): Promise<ClippingDayData> {
+export async function loadClippingDay(
+  supabase: SupabaseClient,
+  clientId: string,
+  day: string,
+  /** 'omit' no e-mail que vai ao cliente: tom não revisado não é afirmado. */
+  unreviewedTone: 'mark' | 'omit' = 'mark'
+): Promise<ClippingDayData> {
   const start = new Date(`${day}T00:00:00-03:00`).toISOString()
   const end = new Date(new Date(start).getTime() + 24 * 60 * 60 * 1000).toISOString()
   const rows = await fetchAll<Row>((from, to) =>
     supabase
       .from('article_client_tags')
-      .select('article_id, cita_cliente, tom, impact_summary, articles!inner(title, url, resolved_url, publisher, published_at, sources(name))')
+      .select('article_id, cita_cliente, tom, classification_source, impact_summary, articles!inner(title, url, resolved_url, publisher, published_at, sources(name))')
       .eq('client_id', clientId)
       .neq('monitoring_status', 'excluido')
       .gte('articles.published_at', start)
       .lt('articles.published_at', end)
-      .order('published_at', { referencedTable: 'articles', ascending: true })
+      // Ordem estável na tabela-pai: order em tabela embutida não ordena as
+      // páginas do range, e acima de 1000 linhas elas poderiam se sobrepor.
+      .order('article_id', { ascending: true })
       .range(from, to) as unknown as PromiseLike<{ data: Row[] | null; error: { message: string } | null }>
   )
   const items: ClippingItem[] = rows.map((row) => {
@@ -58,9 +67,10 @@ export async function loadClippingDay(supabase: SupabaseClient, clientId: string
       cites_client: row.cita_cliente === true,
       tone: row.tom,
       summary: row.impact_summary,
+      tone_reviewed: row.classification_source === 'humano' || row.classification_source === 'ia',
     }
   })
-  const days = buildClippingDays(items)
+  const days = buildClippingDays(items, { unreviewedTone })
   return { day: days.find((candidate) => candidate.day === day) ?? null, total: rows.length }
 }
 

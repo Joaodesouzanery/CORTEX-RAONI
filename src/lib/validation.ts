@@ -320,7 +320,11 @@ export function citaClienteFilter(params: URLSearchParams): boolean | null {
 }
 
 // Clipping por e-mail (src/app/api/internal/clipping-email, /api/clipping-email/preview).
-const isoDay = z.string().regex(/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/, 'Use AAAA-MM-DD.')
+const isoDay = z
+  .string()
+  .regex(/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/, 'Use AAAA-MM-DD.')
+  // 2026-02-31 passa na regex e estoura RangeError mais adiante.
+  .refine((value) => new Date(`${value}T12:00:00Z`).toISOString().slice(0, 10) === value, 'Data inexistente.')
 export const clippingEmailPreviewSchema = z.object({
   client_id: z.string().uuid(),
   date: isoDay.optional(),

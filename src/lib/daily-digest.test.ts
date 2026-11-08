@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { buildDailyDigest, digestText } from './daily-digest'
 
 const row = (id: string, title: string, publisher: string, cita = false, tom: 'positivo' | 'neutro' | 'negativo' = 'neutro') => ({
-  article_id: id, cita_cliente: cita, monitoring_status: 'confirmado', tom,
+  article_id: id, cita_cliente: cita, monitoring_status: 'confirmado', tom, classification_source: tom === 'neutro' ? 'regra' : 'humano',
   articles: { title, url: `https://x.com/${id}`, resolved_url: null, publisher, published_at: '2026-10-22T10:00:00Z' },
 })
 

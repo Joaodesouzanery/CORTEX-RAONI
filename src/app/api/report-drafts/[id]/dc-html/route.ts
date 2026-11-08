@@ -81,16 +81,19 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
   })
   // A seleção determinística é o caminho principal (08/11/2026): só link
   // exato, só o mês, cliente primeiro, grandes veículos, sem repetir pauta.
-  // As citações da IA só ficam quando as seções já foram escritas com elas —
-  // trocar a base ali quebraria os códigos [E###] do texto.
+  // Com seções escritas, a base é a das citações: trocar ali renumeraria os
+  // [E###] do texto e o código passaria a apontar outra matéria. Base curta
+  // vira aviso, nunca troca.
   let selectionNote: string | null = null
-  if (!writtenSections.length || evidence.length < limit) {
+  if (writtenSections.length && evidence.length < limit) {
+    selectionNote = `As seções citam ${evidence.length} matérias; o combinado é ${limit}. Complete pela curadoria e regenere as seções — não troque a base aqui.`
+  }
+  if (!writtenSections.length) {
     const rules = rulesResult.data || []
     const clientTerms = rules.filter((rule) => rule.match_type === 'direta').flatMap((rule) => termsOf(rule.required_groups))
-    const excludeTerms = [
-      ...(FORBIDDEN_NAMES[client.name] || []),
-      ...rules.filter((rule) => rule.match_type !== 'direta').flatMap((rule) => (Array.isArray(rule.excluded_terms) ? rule.excluded_terms : [])),
-    ]
+    const sectorExcludeTerms = rules
+      .filter((rule) => rule.match_type !== 'direta')
+      .flatMap((rule) => (Array.isArray(rule.excluded_terms) ? rule.excluded_terms : []))
     const candidates = items
       .filter((item) => item.bucket !== 'excluded')
       .map((item) => ({
@@ -102,7 +105,13 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
         cites_client: item.classification_snapshot.cita_cliente === true,
         score: Number(item.classification_snapshot.editorial_score) || 0,
       }))
-    const result = selectReportItems(candidates, { period, clientTerms, excludeTerms: Array.from(new Set(excludeTerms)), limit })
+    const result = selectReportItems(candidates, {
+      period,
+      clientTerms,
+      excludeTerms: FORBIDDEN_NAMES[client.name] || [],
+      sectorExcludeTerms: Array.from(new Set(sectorExcludeTerms)),
+      limit,
+    })
     chosen = result.selected.map((item) => item.id)
     evidence = result.selected.map((item, index) => ({
       code: `E${String(index + 1).padStart(3, '0')}`,
@@ -132,7 +141,16 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     inclusion_terms: Array.isArray(theme.inclusion_terms) ? theme.inclusion_terms : [],
     exclusion_terms: Array.isArray(theme.exclusion_terms) ? theme.exclusion_terms : [],
   }))
-  const highlights = highlightsMarkdown(buildHighlights(monthItems.map(toHighlightItem), themes), { total: monthItems.length, periodLabel: periodLabel.toLowerCase() })
+  const sectorExclusions = (rulesResult.data || [])
+    .filter((rule) => rule.match_type !== 'direta')
+    .flatMap((rule) => (Array.isArray(rule.excluded_terms) ? rule.excluded_terms : []))
+  const highlights = highlightsMarkdown(
+    buildHighlights(monthItems.map(toHighlightItem), themes, {
+      forbiddenTerms: FORBIDDEN_NAMES[client.name] || [],
+      sectorExcludeTerms: sectorExclusions,
+    }),
+    { total: monthItems.length, periodLabel: periodLabel.toLowerCase() }
+  )
   const clipping = clippingMarkdown(
     buildClippingDays(
       chosen.flatMap((articleId) => {
@@ -142,6 +160,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
           ...toHighlightItem(item),
           tone: toneOf(articleId),
           summary: (item.classification_snapshot.impact_summary as string | null) ?? null,
+          tone_reviewed: ['humano', 'ia'].includes(String(item.classification_snapshot.classification_source ?? '')),
         }]
       }),
       // No pacote o clipping é das selecionadas: todo item de setor entra.
@@ -164,6 +183,13 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     expectedBrand: profile?.brand || undefined,
     maxItems: limit,
   })
+  // O validador olhava só seções e base; destaques e clipping também vão ao
+  // pacote e carregam título de terceiro.
+  for (const name of FORBIDDEN_NAMES[client.name] || []) {
+    if (`${highlights}\n${clipping}`.toLowerCase().includes(name.toLowerCase())) {
+      issues.push({ rule: 'Nome correto do cliente', detail: `"${name}" aparece nos destaques ou no clipping.` })
+    }
+  }
   if (selectionNote) issues.unshift({ rule: 'Base de evidências', detail: selectionNote })
   const slug = `${client.name}-${period}`.replace(/[^A-Za-z0-9-]/g, '')
   if (format === 'md') {

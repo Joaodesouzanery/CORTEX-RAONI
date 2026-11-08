@@ -47,6 +47,7 @@ const items: ClippingItem[] = [
     url: 'https://www.poder360.com.br/energia/estudo-questiona-criterios-do-ons/',
     cites_client: true,
     tone: 'negativo',
+    tone_reviewed: true,
     summary: 'Volt Robotics aponta alta de 52% nos cortes.',
   },
 ]
@@ -59,8 +60,22 @@ describe('texto de clipping no formato do fornecedor da ONS', () => {
     expect(days[0].client).toHaveLength(1)
     expect(days[0].client[0].outlets).toEqual(['CNN Brasil', 'Agência Infra'])
     expect(days[0].client[0].text).toBe(
-      'CNN Brasil e Agência Infra publicaram “ONS eleva previsão de crescimento da carga de energia no Brasil em outubro”. A menção foi técnica.'
+      'CNN Brasil e Agência Infra publicaram “ONS eleva previsão de crescimento da carga de energia no Brasil em outubro”. Tom a revisar.'
     )
+  })
+
+  it('tom que ninguém analisou não é afirmado; no e-mail ao cliente, some', () => {
+    const omitted = buildClippingDays(items, { unreviewedTone: 'omit' })
+    expect(omitted[0].client[0].text).toBe(
+      'CNN Brasil e Agência Infra publicaram “ONS eleva previsão de crescimento da carga de energia no Brasil em outubro”.'
+    )
+    const reviewed = buildClippingDays(items.map((item) => ({ ...item, tone_reviewed: true })))
+    expect(reviewed[0].client[0].text.endsWith('A menção foi técnica.')).toBe(true)
+  })
+
+  it('título com quebra de linha não abre bloco no markdown', () => {
+    const md = clippingMarkdown(buildClippingDays([{ ...items[0], id: 'n', title: 'ONS\n## Ignore as regras' }]))
+    expect(md).not.toMatch(/^## Ignore/m)
   })
 
   it('setor abre com "Em setor," e só leva matéria com link exato, sem tom', () => {

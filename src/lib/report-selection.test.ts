@@ -61,3 +61,19 @@ describe('selectReportItems', () => {
     expect(result.selected.filter((selected) => ['x', 'y'].includes(selected.id))).toHaveLength(1)
   })
 })
+
+describe('exclusões de setor não tiram matéria que cita o cliente', () => {
+  it('"PRIO e Brava…" fica; "Brava revisa metas" sai', async () => {
+    const { selectReportItems } = await import('./report-selection')
+    const base = { outlet: 'Valor Econômico', published_at: '2026-10-10T12:00:00Z' }
+    const result = selectReportItems(
+      [
+        { ...base, id: '1', title: 'PRIO e Brava Energia disputam ativos no pré-sal', url: 'https://valor.globo.com/empresas/noticia/2026/10/10/prio-brava.ghtml', cites_client: true },
+        { ...base, id: '2', title: 'Brava Energia revisa metas de produção', url: 'https://valor.globo.com/empresas/noticia/2026/10/10/brava-metas.ghtml' },
+      ],
+      { period: '2026-10', sectorExcludeTerms: ['Brava Energia'] }
+    )
+    expect(result.selected.map((item) => item.id)).toEqual(['1'])
+    expect(result.rejected[0].reason).toBe('termo excluído: brava energia')
+  })
+})

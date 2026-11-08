@@ -110,17 +110,20 @@ export function evaluateClientArticle(
   // Caderno de esporte/entretenimento não vira Setor (src/lib/noise.ts).
   const offTopic = isOffTopicSection(article.resolved_url || article.url, article.title)
   const activeRules = rules.filter((item) => item.active !== false)
-  // Termos de setor distintos que casam só no corpo, somando todas as regras.
-  // Dois termos diferentes no corpo já indicam assunto, não citação perdida.
-  const bodyOnlyTerms = new Set<string>()
+  // Setor só no corpo conta quando há assunto, não citação perdida: duas
+  // regras diferentes casando no corpo, ou dois termos do MESMO grupo. Termos
+  // de grupos diferentes da mesma regra não bastam: uma regra de dois grupos
+  // sempre rende dois termos (revisão adversarial de 08/11/2026).
   const bodyOnlyRules: Array<{ rule: ClientRelevanceRule; terms: string[] }> = []
+  let bodyOnlyStrong = false
 
   for (const rule of activeRules) {
     const terms = ruleMatches(rule, normalized, raw)
     if (!terms) continue
     if (rule.match_type !== 'direta' && offTopic) continue
     if (rule.match_type !== 'direta' && headNormalized && !matchingTerms(terms, headNormalized, headRaw).length) {
-      for (const term of terms) bodyOnlyTerms.add(normalizeText(term))
+      const groups = Array.isArray(rule.required_groups) ? rule.required_groups : []
+      if (groups.some((group) => new Set(matchingTerms(group, normalized, raw).map(normalizeText)).size >= 2)) bodyOnlyStrong = true
       bodyOnlyRules.push({ rule, terms })
       continue
     }
@@ -150,10 +153,10 @@ export function evaluateClientArticle(
   // setor sumiu da tela: RSS de Valor/Estadão/Folha costuma trazer resumo
   // curto, e o assunto fica no corpo. Volta a contar com peso 1 — sempre
   // `revisao`, nunca base qualificada — quando a matéria veio de fonte
-  // temática do cliente ou cita dois termos de setor distintos. Um termo
+  // temática do cliente ou tem assunto de setor (regra acima). Um termo
   // perdido em matéria de pauta alheia (PEC da Segurança, print de 04/11)
   // continua fora.
-  if (!reasons.length && bodyOnlyRules.length && (thematicSource || bodyOnlyTerms.size >= 2)) {
+  if (!reasons.length && bodyOnlyRules.length && (thematicSource || bodyOnlyStrong || bodyOnlyRules.length >= 2)) {
     const first = bodyOnlyRules[0]
     reasons.push({
       rule_id: first.rule.id,

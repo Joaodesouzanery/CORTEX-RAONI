@@ -87,6 +87,7 @@ function seed() {
       monitoring_status: 'confirmado',
       cita_cliente: true,
       tom: 'positivo',
+      classification_source: 'humano',
       impact_summary: null,
       articles: {
         title: 'ONS premia empresas com melhor desempenho na operação',
@@ -142,6 +143,14 @@ describe('POST /api/internal/clipping-email', () => {
     expect(sent.reply_to).toBe('dono@exemplo.com')
   })
 
+  it('no envio ao cliente, tom não revisado não é afirmado', async () => {
+    db.article_client_tags[0].classification_source = 'regra'
+    await call({ date: '2026-10-22', mode: 'send' })
+    const sent = JSON.parse(resend.mock.calls[0][1].body)
+    expect(sent.html).not.toContain('A menção foi')
+    expect(sent.html).not.toContain('Tom a revisar')
+  })
+
   it('envio que falhou fica registrado como erro e pode ser refeito', async () => {
     resend.mockResolvedValueOnce(new Response(JSON.stringify({ message: 'domínio não verificado' }), { status: 403 }))
     const failed = await call({ date: '2026-10-22', mode: 'send' })
@@ -150,6 +159,16 @@ describe('POST /api/internal/clipping-email', () => {
     const retry = await call({ date: '2026-10-22', mode: 'send' })
     expect(retry.json.outcomes[0]).toMatchObject({ status: 'enviado' })
     expect(db.clipping_email_sends).toHaveLength(1)
+  })
+
+  it('reserva presa em "enviando" há mais de 10 min é retomada; recente não', async () => {
+    db.clipping_email_sends = [{ id: 99, client_id: CLIENT, day: '2026-10-22', mode: 'review', status: 'enviando', updated_at: new Date().toISOString() }]
+    const fresh = await call({ date: '2026-10-22', mode: 'review' })
+    expect(fresh.json.outcomes[0]).toMatchObject({ status: 'ja_enviado', detail: 'enviando' })
+    db.clipping_email_sends[0].updated_at = new Date(Date.now() - 11 * 60 * 1000).toISOString()
+    const stale = await call({ date: '2026-10-22', mode: 'review' })
+    expect(stale.json.outcomes[0]).toMatchObject({ status: 'enviado' })
+    expect(resend).toHaveBeenCalledTimes(1)
   })
 
   it('dia sem matéria não manda e-mail vazio', async () => {

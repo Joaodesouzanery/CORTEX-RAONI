@@ -44,8 +44,9 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: 'Escopo inválido.' }, { status: 400 })
   }
   const scope: NewsScope = parsedScope?.success ? parsedScope.data : 'tudo'
+  // Mesma regra de citaClienteFilter (Panorama e CSV): `direct` vence.
   const directOnly = searchParams.get('direct') === 'true' || scope === 'cliente'
-  const sectorOnly = scope === 'setor'
+  const sectorOnly = scope === 'setor' && !directOnly
   const relevantOnly = scope !== 'tudo'
   const requestedLimit = parseInt(searchParams.get('limit') || (paginated ? '100' : '500'))
   const limit = paginated ? Math.min(200, Math.max(1, requestedLimit || 100)) : requestedLimit
@@ -98,7 +99,9 @@ export async function GET(req: Request) {
         }
         if (applyManualFilter) query = query.eq('manual_intake', true)
         if (directOnly) query = query.eq('cita_cliente', true)
-        if (sectorOnly) query = query.eq('cita_cliente', false)
+        // cita_cliente é NULLABLE (018): etiqueta manual/antiga sem o campo é
+        // setor, senão Cliente + Setor não fecharia com a soma das abas.
+        if (sectorOnly) query = query.or('cita_cliente.is.null,cita_cliente.eq.false') // safe-filter-ok: constante, sem entrada do usuário
         if (cutoff) query = query.gte('articles.published_at', cutoff)
         if (publishedBefore) query = query.lte('articles.published_at', publishedBefore)
         if (searchPattern) query = query.ilike('articles.title', searchPattern)
@@ -227,7 +230,7 @@ export async function GET(req: Request) {
     // fonte qualquer, e isso o classificador continua recusando.
     if (relevantOnly) query = query.in('article_client_tags.monitoring_status', ['confirmado', 'candidato', 'revisao'])
     if (directOnly) query = query.eq('article_client_tags.cita_cliente', true)
-    if (sectorOnly) query = query.eq('article_client_tags.cita_cliente', false)
+    if (sectorOnly) query = query.or('cita_cliente.is.null,cita_cliente.eq.false', { referencedTable: 'article_client_tags' }) // safe-filter-ok: constante
     if (publishedBefore) query = query.lte('published_at', publishedBefore)
     if (searchPattern) query = query.ilike('title', searchPattern)
     if (sourceId) query = query.eq('article_provenance.source_id', sourceId)

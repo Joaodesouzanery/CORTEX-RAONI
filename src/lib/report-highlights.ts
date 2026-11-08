@@ -9,6 +9,7 @@
 // A IA, quando ligada, só reescreve a linha de cada eixo.
 
 import { linkStatus, normalize, overlap, topicKey, MAJOR_OUTLETS, SAME_TOPIC_OVERLAP } from '@/lib/report-selection'
+import { safeExternalUrl } from '@/lib/url'
 
 export interface HighlightItem {
   id: string
@@ -40,6 +41,10 @@ export interface Highlight {
 export interface HighlightOptions {
   min?: number
   max?: number
+  /** Nome que nunca sai no relatório (PetroRecôncavo na PRIO): tira a matéria. */
+  forbiddenTerms?: string[]
+  /** Exclusões das regras de setor: tiram só a matéria que não cita o cliente. */
+  sectorExcludeTerms?: string[]
 }
 
 /** Os resumos de outubro tinham de 4 (ONS) a 8 (DAQ) eixos. */
@@ -72,9 +77,10 @@ function build(title: string, origin: Highlight['origin'], items: HighlightItem[
   for (const item of ranked) if (!outlets.includes(item.outlet)) outlets.push(item.outlet)
   const seen = new Set<string>()
   const links = ranked.flatMap((item) => {
-    if (!item.url || linkStatus(item.url) !== 'exato' || seen.has(item.url)) return []
-    seen.add(item.url)
-    return [{ outlet: item.outlet, title: item.title, url: item.url, date: item.published_at }]
+    const url = item.url && linkStatus(item.url) === 'exato' ? safeExternalUrl(item.url) : null
+    if (!url || seen.has(url)) return []
+    seen.add(url)
+    return [{ outlet: item.outlet, title: item.title, url, date: item.published_at }]
   })
   return {
     title,
@@ -94,6 +100,15 @@ const score = (highlight: Highlight) => highlight.client_count * 3 + highlight.c
 export function buildHighlights(items: HighlightItem[], themes: HighlightTheme[], options: HighlightOptions = {}): Highlight[] {
   const min = options.min ?? MIN_HIGHLIGHTS
   const max = options.max ?? MAX_HIGHLIGHTS
+  // Mesmos filtros da seleção das 20: título de pauta vira nome de eixo, e um
+  // nome proibido ali iria parar no pacote do cliente.
+  const forbidden = termList(options.forbiddenTerms || [])
+  const sectorExclude = termList(options.sectorExcludeTerms || [])
+  items = items.filter((item) => {
+    const title = ` ${normalize(item.title)} `
+    if (forbidden.some((term) => title.includes(` ${term} `))) return false
+    return item.cites_client || !sectorExclude.some((term) => title.includes(` ${term} `))
+  })
   const used = new Set<string>()
   const byTheme = themes
     .map((theme) => {
@@ -132,7 +147,9 @@ function day(iso: string | null): string {
   return `${dayOfMonth}/${month}`
 }
 
-const safe = (text: string) => text.replace(/\[/g, '(').replace(/\]/g, ')').replace(/\|/g, '/')
+// Texto de terceiro no .md: sem quebra de linha (forjaria título ou bloco de
+// instrução no pacote), sem colchete (abriria link), sem barra (quebra tabela).
+const safe = (text: string) => text.replace(/\s+/g, ' ').trim().replace(/\[/g, '(').replace(/\]/g, ')').replace(/\|/g, '/')
 const safeUrl = (url: string) => url.replace(/\(/g, '%28').replace(/\)/g, '%29')
 
 export function highlightsMarkdown(highlights: Highlight[], context: { total: number; periodLabel: string }): string {

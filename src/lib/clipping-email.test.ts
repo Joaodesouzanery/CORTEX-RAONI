@@ -15,6 +15,7 @@ const day: ClippingDay = {
         { outlet: 'CNN Brasil', url: 'https://www.cnnbrasil.com.br/economia/ons/' },
       ],
       tone: 'neutro',
+      tone_reviewed: true,
       summary: null,
       text: 'Veículo <script> publicou “ONS <img src=x onerror=alert(1)>”. A menção foi técnica.',
     },

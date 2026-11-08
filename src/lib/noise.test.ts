@@ -27,3 +27,10 @@ describe('isOffTopicSection', () => {
     expect(isOffTopicSection('não é url')).toBe(false)
   })
 })
+
+describe('isOffTopicSection com escape Latin-1', () => {
+  it('não lança URIError em /not%EDcias/ (derrubaria a classificação da fonte)', () => {
+    expect(() => isOffTopicSection('https://www.exemplo.com.br/not%EDcias/energia/abc')).not.toThrow()
+    expect(isOffTopicSection('https://www.exemplo.com.br/not%EDcias/energia/abc')).toBe(false)
+  })
+})

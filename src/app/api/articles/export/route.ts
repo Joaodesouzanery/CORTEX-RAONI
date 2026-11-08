@@ -68,7 +68,9 @@ export async function GET(req: Request) {
       query = query.eq('monitoring_status', status)
     }
     if (manualOnly) query = query.eq('manual_intake', true)
-    if (cita !== null) query = query.eq('cita_cliente', cita)
+    if (cita === true) query = query.eq('cita_cliente', true)
+    // Setor inclui cita_cliente NULL (etiqueta antiga/manual), igual à lista.
+    if (cita === false) query = query.or('cita_cliente.is.null,cita_cliente.eq.false') // safe-filter-ok: constante
     if (cutoff) query = query.gte('articles.published_at', cutoff)
     if (publishedBefore) query = query.lte('articles.published_at', publishedBefore)
     if (sourceId) query = query.eq('articles.article_provenance.source_id', sourceId)

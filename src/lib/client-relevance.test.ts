@@ -555,3 +555,13 @@ describe('termos aprendidos da 057 só casam com contexto', () => {
     ).toMatchObject({ monitoring_status: 'candidato' })
   })
 })
+
+describe('revisão adversarial de 08/11: regra de dois grupos não basta sozinha', () => {
+  const ons = client('ONS')
+  const torres = rule('ONS', 'aprendido: queda de torres', 'setorial', [['torres'], ['tempestades', 'El Niño']], 3)
+  it('uma regra de dois grupos casando só no corpo não marca a matéria', () => {
+    expect(
+      evaluateClientArticle(ons, [torres], { title: 'Igreja reforma a catedral', excerpt: null, content: 'As torres sofreram com tempestades.' })
+    ).toBeNull()
+  })
+})

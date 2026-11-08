@@ -30,6 +30,11 @@ export interface SelectionOptions {
   clientTerms?: string[]
   /** Termos que tiram a matéria do relatório deste cliente (ex.: rodovia na DAQ). */
   excludeTerms?: string[]
+  /**
+   * Exclusões das regras de SETOR: só valem para matéria que não cita o cliente
+   * ("PRIO e Brava disputam…" cita a PRIO e fica; a 057 diz o mesmo).
+   */
+  sectorExcludeTerms?: string[]
   limit?: number
 }
 
@@ -89,6 +94,7 @@ export function selectReportItems(candidates: SelectionCandidate[], options: Sel
   const rejected: SelectionResult['rejected'] = []
   const clientTerms = (options.clientTerms || []).map(normalize).filter(Boolean)
   const excludeTerms = (options.excludeTerms || []).map(normalize).filter(Boolean)
+  const sectorExcludeTerms = (options.sectorExcludeTerms || []).map(normalize).filter(Boolean)
   const seenUrls = new Set<string>()
 
   const eligible = candidates.flatMap((item) => {
@@ -115,6 +121,11 @@ export function selectReportItems(candidates: SelectionCandidate[], options: Sel
     }
     seenUrls.add(key)
     const cites = item.cites_client === true || clientTerms.some((term) => ` ${title} `.includes(` ${term} `))
+    const sectorExcluded = cites ? undefined : sectorExcludeTerms.find((term) => ` ${title} `.includes(` ${term} `))
+    if (sectorExcluded) {
+      rejected.push({ item, reason: `termo excluído: ${sectorExcluded}` })
+      return []
+    }
     return [{ ...item, cites_client: cites, link_status: status as LinkStatus, major: MAJOR_OUTLETS.test(item.outlet || '') || MAJOR_OUTLETS.test(item.url || '') }]
   })
 

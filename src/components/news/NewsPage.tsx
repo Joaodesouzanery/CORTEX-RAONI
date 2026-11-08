@@ -61,10 +61,14 @@ const SCOPE_TABS: Array<{ value: NewsScope; label: string; hint: string }> = [
 // em segundos enquanto o outro esperava um lote de 45 s, e o clique terminava
 // em "excedeu o número máximo de lotes" com notícias já gravadas.
 const SOURCES_PER_BATCH = 4
-// 3 voltas por lote cobrem a re-fila de fonte travada (2 tentativas) com folga.
+// Voltas com trabalho: cada lote processa até 4 fontes; 3 por lote cobrem a
+// segunda tentativa de fonte com erro.
 const ROUNDS_PER_BATCH = 3
-// Lote vazio com run aberto = outra chamada ainda está processando; espera.
+// Lote vazio com run aberto = fonte em 'executando' (outra chamada, ou um lote
+// morto por 504). A re-fila é por TEMPO (90 s em process/route.ts), então a
+// espera ociosa também é: 120 s cobrem os 90 s com folga.
 const IDLE_WAIT_MS = 2000
+const MAX_IDLE_MS = 120_000
 // 502/504 da Vercel em um lote não derruba a coleta inteira.
 const TRANSIENT_RETRIES = 3
 
@@ -319,7 +323,9 @@ export default function NewsPage() {
     let latest: FetchRun | null = null
     const maxRounds = Math.max(10, Math.ceil(totalSources / SOURCES_PER_BATCH) * ROUNDS_PER_BATCH)
     let transient = 0
-    for (let round = 0; round < maxRounds; round++) {
+    let workRounds = 0
+    let idleSince: number | null = null
+    while (workRounds < maxRounds) {
       const res = await fetch(`/api/fetch-runs/${runId}/process`, { method: 'POST' })
       const data = await res.json().catch(() => null)
       if (!res.ok) {
@@ -334,7 +340,14 @@ export default function NewsPage() {
       latest = data.run as FetchRun
       setFetchRun(latest)
       if (TERMINAL_RUNS.has(latest.status)) return latest
-      if (!Array.isArray(data.results) || data.results.length === 0) await wait(IDLE_WAIT_MS)
+      if (!Array.isArray(data.results) || data.results.length === 0) {
+        idleSince ??= Date.now()
+        if (Date.now() - idleSince > MAX_IDLE_MS) break
+        await wait(IDLE_WAIT_MS)
+      } else {
+        idleSince = null
+        workRounds++
+      }
     }
     throw new Error('A coleta não terminou no tempo do botão; ela segue na próxima coleta agendada.')
   }

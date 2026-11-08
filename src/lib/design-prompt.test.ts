@@ -7,6 +7,7 @@ describe('prompt de diagramação', () => {
     expect(prompt).toContain('Assinatura: VX')
     expect(prompt).toContain('08 Cenários')
     expect(prompt).toContain('Não troque, não complete e não acrescente')
+    expect(prompt).toContain('não são código citável')
     expect(prompt).toContain('diagrame o texto como está')
   })
 

@@ -67,3 +67,20 @@ describe('destaques do mês', () => {
     expect(md).not.toContain('news.google.com')
   })
 })
+
+describe('destaques com os filtros da seleção', () => {
+  it('nome proibido sai; exclusão de setor só tira quem não cita o cliente', () => {
+    const result = buildHighlights(
+      [
+        item('p1', 'PetroRecôncavo amplia produção em campos maduros', 'Valor'),
+        item('p2', 'PetroRecôncavo amplia produção em campos maduros hoje', 'Folha'),
+        item('b1', 'PRIO e Brava Energia disputam ativos', 'Exame', true),
+        item('b2', 'Brava Energia revisa metas', 'InfoMoney'),
+      ],
+      [{ title: 'Campos maduros', inclusion_terms: ['campos maduros', 'ativos', 'metas'] }],
+      { forbiddenTerms: ['PetroRecôncavo'], sectorExcludeTerms: ['Brava Energia'] }
+    )
+    expect(JSON.stringify(result)).not.toContain('PetroRecôncavo')
+    expect(result[0]).toMatchObject({ count: 1, client_count: 1 })
+  })
+})

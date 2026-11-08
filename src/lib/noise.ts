@@ -96,6 +96,14 @@ export function isOffTopicSection(url: string | null | undefined, title?: string
     .split('/')
     .filter(Boolean)
     .slice(0, 2)
-    .map((segment) => normalize(decodeURIComponent(segment)))
+    .map((segment) => {
+      // Site antigo usa escape Latin-1 (/not%EDcias/), que decodeURIComponent
+      // rejeita com URIError — e derrubaria a classificação da fonte inteira.
+      try {
+        return normalize(decodeURIComponent(segment))
+      } catch {
+        return normalize(segment)
+      }
+    })
   return segments.some((segment) => OFF_TOPIC_SECTIONS.has(segment))
 }
