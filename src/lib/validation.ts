@@ -318,3 +318,16 @@ export function citaClienteFilter(params: URLSearchParams): boolean | null {
   if (parsed.data === 'setor') return false
   return null
 }
+
+// Clipping por e-mail (src/app/api/internal/clipping-email, /api/clipping-email/preview).
+const isoDay = z.string().regex(/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/, 'Use AAAA-MM-DD.')
+export const clippingEmailPreviewSchema = z.object({
+  client_id: z.string().uuid(),
+  date: isoDay.optional(),
+  format: z.enum(['html', 'text']).optional(),
+})
+export const clippingEmailSendSchema = z.object({
+  date: isoDay.optional(),
+  mode: z.enum(['review', 'send']).default('review'),
+  client_ids: z.array(z.string().uuid()).max(50).optional(),
+})

@@ -74,6 +74,12 @@ Plano em cinco etapas. A coleta não tinha parado: o setor sumia da tela.
   - **Catálogo de fontes corrigido:** eram 116 fontes, agora são 148. O script lia só parte dos `INSERT` e ignorava as desativações; agora aplica também as desativações e as trocas de URL feitas por migrations posteriores (coluna `ativa_apos_migrations`).
   - **`scripts/diff-outlets.mjs` → `docs/fontes/faltantes.md`:** de 259 veículos citados no que foi entregue, 111 cobertos depois da 057 e 145 sem fonte, quase todos com 1 ou 2 menções.
   - **Migration 057:** buscas por cliente nos veículos entregues, 26 regras aprendidas e 27 temas.
+- **Etapa 5 (feita):** clipping diário por e-mail (`docs/email.md`).
+  - Usa Resend, que já estava em `src/lib/email.ts`, agora com `to`, `bcc` e `reply_to`.
+  - HTML em `src/lib/clipping-email.ts`. Prévia pública em `/api/clipping-email/preview`, que não envia nada (botão "Ver e-mail do dia" em Clipping).
+  - Envio em `/api/internal/clipping-email`, protegido por `CRON_SECRET`, nos modos revisão (só para o dono) e envio (destinatários do cliente em cópia oculta). É idempotente por cliente, dia e modo.
+  - Migration 058: `client_email_recipients` e `clipping_email_sends`, com RLS e sem policies.
+  - Workflow `daily-clipping-email.yml`, só manual.
 - **Etapa 4 (feita):** o pacote do mês ganhou seleção principal com termos e exclusões do cliente, destaques do mês (`report-highlights.ts`), clipping das selecionadas (`clipping-text.ts`), prompt de diagramação (`design-prompt.ts`), boletim da SindInfor e o workflow manual `monthly-package.yml`. O resumo diário agora traz o tom no lugar de "Tom: pendente", e a síntese do clipping mensal perdeu o "Não foram identificadas…".
 - **Etapa 3 (feita):** `docs/calibracao/recall-2026-10.sql`, gerado por `scripts/build-calibration-sql.mjs`, mede por cliente o que foi coletado e etiquetado, a concordância de bloco e a de tom. A referência vai embutida no SQL (150 refeitos e 510 manchetes da ONS). Testado num Postgres local com todas as migrations aplicadas; a 056 e a 057 aplicam sem erro e podem ser coladas de novo sem duplicar nada.
 
@@ -111,7 +117,7 @@ Plano em cinco etapas. A coleta não tinha parado: o setor sumia da tela.
 - Conferir em Actions se `fetch-news` roda 3x/dia e o passo da agenda.
 - Chaves `PEXELS_API_KEY` e `UNSPLASH_ACCESS_KEY`.
 - Login, antes da `ANTHROPIC_API_KEY`.
-- `RESEND_API_KEY` se quiser alertas e envio por e-mail.
+- E-mail (`docs/email.md`): conta no Resend com domínio verificado; `RESEND_API_KEY`, `ALERTS_EMAIL_FROM` e `ALERTS_EMAIL_TO` na Vercel; colar a 058; cadastrar destinatários; rodar `Daily clipping email` em `review` e depois em `send`. Dizer se prefere envio diário ou semanal.
 
 ## Variáveis
 Nunca coloque valores neste arquivo.

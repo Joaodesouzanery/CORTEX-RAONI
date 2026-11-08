@@ -1,0 +1,57 @@
+name: Daily clipping email
+
+# Clipping diário por e-mail no formato do Cortex (docs/email.md).
+# Começa em modo REVISÃO: o e-mail de cada cliente vai só para o dono
+# (ALERTS_EMAIL_TO). O dono confere e, quando aprovar, roda de novo com
+# mode=send, que manda aos destinatários de client_email_recipients (058).
+# Re-run no mesmo dia e modo é no-op (clipping_email_sends).
+#
+# Só manual até o dono decidir a frequência. Para ligar, descomente o schedule:
+# roda depois da coleta das 10h UTC (7h em Brasília) do fetch-news.yml.
+on:
+  # schedule:
+  #   - cron: '43 10 * * 1-5' # dias úteis, 07:43 em Brasília, modo revisão
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'review = só para o dono; send = para os destinatários do cliente'
+        required: true
+        default: review
+        type: choice
+        options: [review, send]
+      date:
+        description: 'Dia AAAA-MM-DD; vazio = ontem (São Paulo)'
+        required: false
+        type: string
+
+concurrency:
+  group: daily-clipping-email
+  cancel-in-progress: false
+
+jobs:
+  email:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Enviar o clipping do dia
+        env:
+          APP_URL: ${{ secrets.APP_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+          MODE: ${{ inputs.mode || 'review' }}
+          DATE: ${{ inputs.date }}
+        run: |
+          if [ -z "${APP_URL}" ] || [ -z "${CRON_SECRET}" ]; then
+            echo "Secrets APP_URL e CRON_SECRET são obrigatórios." >&2
+            exit 1
+          fi
+          body=$(node -e "process.stdout.write(JSON.stringify({mode:process.env.MODE, ...(process.env.DATE ? {date:process.env.DATE} : {})}))")
+          code=$(curl -sS -o /tmp/email.json -w '%{http_code}' --max-time 90 \
+            -X POST -H "Authorization: Bearer ${CRON_SECRET}" -H "Content-Type: application/json" \
+            -d "${body}" "${APP_URL%/}/api/internal/clipping-email")
+          cat /tmp/email.json
+          echo
+          # 200 = tudo certo; 207 = algum cliente falhou; 503 = e-mail não configurado.
+          if [ "${code}" != "200" ]; then
+            echo "::error::Clipping por e-mail terminou com HTTP ${code} (detalhe acima)."
+            exit 1
+          fi
