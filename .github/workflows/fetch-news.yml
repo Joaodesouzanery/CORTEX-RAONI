@@ -23,9 +23,11 @@ on:
   workflow_dispatch:
     inputs:
       reclassify_archive:
-        description: 'Reclassificar todo o acervo após alterar regras'
+        # Desligado por padrão (08/11/2026): reclassificar apaga etiquetas
+        # automáticas que deixaram de casar. Ligue de propósito, com o mês.
+        description: 'Reclassificar o acervo após alterar regras (use com o mês abaixo)'
         required: false
-        default: true
+        default: false
         type: boolean
       reclassify_period:
         description: 'Limitar a reclassificação a um mês (YYYY-MM). Vazio = acervo inteiro'

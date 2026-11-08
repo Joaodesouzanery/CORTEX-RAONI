@@ -3,6 +3,7 @@ import { createAdminClient as createClient } from '@/lib/supabase/server'
 import { fetchAll } from '@/lib/report-drafts'
 import { csvCell } from '@/lib/csv'
 import { ilikePattern } from '@/lib/ilike'
+import { citaClienteFilter } from '@/lib/validation'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
@@ -25,7 +26,7 @@ export async function GET(req: Request) {
   const status = searchParams.get('status')
   const sourceId = searchParams.get('source_id')
   const manualOnly = searchParams.get('origin') === 'manual'
-  const directOnly = searchParams.get('direct') === 'true'
+  const cita = citaClienteFilter(searchParams)
   const daysParam = searchParams.get('days')
   const publishedAfter = searchParams.get('published_after')
   const publishedBefore = searchParams.get('published_before')
@@ -39,7 +40,12 @@ export async function GET(req: Request) {
     if (Number.isFinite(days) && days > 0) cutoff = new Date(Date.now() - days * 86400000).toISOString()
   }
 
-  const { data: client } = await supabase.from('clients').select('name').eq('id', clientId).maybeSingle()
+  const { data: client, error: clientError } = await supabase
+    .from('clients')
+    .select('name')
+    .eq('id', clientId)
+    .maybeSingle()
+  if (clientError) return NextResponse.json({ error: clientError.message }, { status: 500 })
 
   const provenanceJoin = sourceId
     ? 'article_provenance!inner(source_id)'
@@ -62,7 +68,7 @@ export async function GET(req: Request) {
       query = query.eq('monitoring_status', status)
     }
     if (manualOnly) query = query.eq('manual_intake', true)
-    if (directOnly) query = query.eq('cita_cliente', true)
+    if (cita !== null) query = query.eq('cita_cliente', cita)
     if (cutoff) query = query.gte('articles.published_at', cutoff)
     if (publishedBefore) query = query.lte('articles.published_at', publishedBefore)
     if (sourceId) query = query.eq('articles.article_provenance.source_id', sourceId)

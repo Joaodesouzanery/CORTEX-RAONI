@@ -8,6 +8,7 @@ import type {
   Relevancia,
 } from '@/types'
 import { matchKeyword, normalizeText, parseKeywords } from '@/lib/relevance'
+import { isOffTopicSection } from '@/lib/noise'
 
 export interface RelevanceEvaluation {
   monitoring_status: MonitoringStatus
@@ -89,7 +90,7 @@ function isSimineralHardFalsePositive(client: Client, normalized: string): boole
 export function evaluateClientArticle(
   client: Client,
   rules: ClientRelevanceRule[],
-  article: Pick<Article, 'title' | 'excerpt' | 'content'>,
+  article: Pick<Article, 'title' | 'excerpt' | 'content'> & { url?: string | null; resolved_url?: string | null },
   thematicSource = false
 ): RelevanceEvaluation | null {
   const { raw, normalized } = articleText(article)
@@ -106,10 +107,23 @@ export function evaluateClientArticle(
   const headRaw = [article.title, article.excerpt].filter(Boolean).join(' ')
   const headNormalized = normalizeText(headRaw)
 
-  for (const rule of rules.filter((item) => item.active !== false)) {
+  // Caderno de esporte/entretenimento não vira Setor (src/lib/noise.ts).
+  const offTopic = isOffTopicSection(article.resolved_url || article.url, article.title)
+  const activeRules = rules.filter((item) => item.active !== false)
+  // Termos de setor distintos que casam só no corpo, somando todas as regras.
+  // Dois termos diferentes no corpo já indicam assunto, não citação perdida.
+  const bodyOnlyTerms = new Set<string>()
+  const bodyOnlyRules: Array<{ rule: ClientRelevanceRule; terms: string[] }> = []
+
+  for (const rule of activeRules) {
     const terms = ruleMatches(rule, normalized, raw)
     if (!terms) continue
-    if (rule.match_type !== 'direta' && headNormalized && !matchingTerms(terms, headNormalized, headRaw).length) continue
+    if (rule.match_type !== 'direta' && offTopic) continue
+    if (rule.match_type !== 'direta' && headNormalized && !matchingTerms(terms, headNormalized, headRaw).length) {
+      for (const term of terms) bodyOnlyTerms.add(normalizeText(term))
+      bodyOnlyRules.push({ rule, terms })
+      continue
+    }
     reasons.push({
       rule_id: rule.id,
       label: rule.label,
@@ -132,6 +146,26 @@ export function evaluateClientArticle(
   // Desde 04/11/2026 vale para todos: fonte do cliente só soma quando alguma
   // regra já casou. Sozinha ela marcava toda manchete de um feed de grande
   // veículo (051) para o cliente.
+  // Setor só no corpo (08/11/2026). Desde 04/11 isso era descartado, e o
+  // setor sumiu da tela: RSS de Valor/Estadão/Folha costuma trazer resumo
+  // curto, e o assunto fica no corpo. Volta a contar com peso 1 — sempre
+  // `revisao`, nunca base qualificada — quando a matéria veio de fonte
+  // temática do cliente ou cita dois termos de setor distintos. Um termo
+  // perdido em matéria de pauta alheia (PEC da Segurança, print de 04/11)
+  // continua fora.
+  if (!reasons.length && bodyOnlyRules.length && (thematicSource || bodyOnlyTerms.size >= 2)) {
+    const first = bodyOnlyRules[0]
+    reasons.push({
+      rule_id: first.rule.id,
+      label: first.rule.label,
+      match_type: first.rule.match_type,
+      terms: Array.from(new Set(bodyOnlyRules.flatMap((item) => item.terms))),
+      weight: 1,
+    })
+    score += 1
+    ruleVersion = Math.max(ruleVersion, first.rule.version)
+  }
+
   if (thematicSource && !isDaqRoadFalsePositive(client, normalized) && reasons.length > 0) {
     reasons.push({
       label: 'fonte temática vinculada',

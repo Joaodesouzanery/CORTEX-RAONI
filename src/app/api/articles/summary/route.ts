@@ -4,6 +4,7 @@ import { fetchAll } from '@/lib/report-drafts'
 import { computePanorama, type PanoramaRow } from '@/lib/panorama'
 import type { NewsQualificationSummary, SourceCategoria } from '@/types'
 import { ilikePattern } from '@/lib/ilike'
+import { citaClienteFilter } from '@/lib/validation'
 
 export const dynamic = 'force-dynamic'
 
@@ -43,7 +44,7 @@ export async function GET(req: Request) {
   // que o operador usasse qualquer um dos dois na tela, o Panorama contaria uma
   // população DIFERENTE da lista — número sem denominador coerente.
   const search = ilikePattern(params.get('search'))
-  const directOnly = params.get('direct') === 'true'
+  const cita = citaClienteFilter(params)
   const articleJoin = sourceId
     ? 'articles!inner(published_at, sources(categoria), article_provenance!inner(source_id))'
     : 'articles!inner(published_at, sources(categoria))'
@@ -64,7 +65,7 @@ export async function GET(req: Request) {
         query = query.eq('monitoring_status', status)
       }
       if (manualOnly) query = query.eq('manual_intake', true)
-      if (directOnly) query = query.eq('cita_cliente', true)
+      if (cita !== null) query = query.eq('cita_cliente', cita)
       if (search) query = query.ilike('articles.title', search)
       return query as unknown as PromiseLike<{
         data: SummaryRow[] | null

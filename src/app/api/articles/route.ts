@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createAdminClient as createClient } from '@/lib/supabase/server'
 import { ilikePattern } from '@/lib/ilike'
+import { newsScopeSchema, type NewsScope } from '@/lib/validation'
 
 export const dynamic = 'force-dynamic'
 // Sem isto a rota rodava no default da plataforma (~10s) e o ramo sem
@@ -30,10 +31,22 @@ export async function GET(req: Request) {
   // o acervo inteiro é varredura de tabela por um caractere.
   const searchPattern = ilikePattern(search)
   const includeContent = searchParams.get('include_content') === 'true'
-  const directOnly = searchParams.get('direct') === 'true'
-  // Sem cliente: só matéria marcada para algum cliente. Tira do acervo geral o que
-  // nenhuma regra quer (futebol, celebridades) sem desligar os veículos.
-  const relevantOnly = searchParams.get('relevant') === 'true'
+  // Abas da tela de Notícias (08/11/2026): cliente = cita o cliente;
+  // setor = casou só regra de setor; relevante = os dois, INCLUINDO `revisao`;
+  // tudo = acervo sem exigir etiqueta. Antes o padrão "Só o relevante"
+  // escondia `revisao`, e com o classificador de 04/11 o setor quase inteiro
+  // caía ali — o dono leu isso como "pararam de vir as notícias".
+  // `relevant=true` antigo vira `relevante`; futebol e celebridade saem pela
+  // seção do link na classificação (src/lib/noise.ts), não por esta tela.
+  const scopeParam = searchParams.get('scope') ?? (searchParams.get('relevant') === 'true' ? 'relevante' : null)
+  const parsedScope = scopeParam === null ? null : newsScopeSchema.safeParse(scopeParam)
+  if (parsedScope && !parsedScope.success) {
+    return NextResponse.json({ error: 'Escopo inválido.' }, { status: 400 })
+  }
+  const scope: NewsScope = parsedScope?.success ? parsedScope.data : 'tudo'
+  const directOnly = searchParams.get('direct') === 'true' || scope === 'cliente'
+  const sectorOnly = scope === 'setor'
+  const relevantOnly = scope !== 'tudo'
   const requestedLimit = parseInt(searchParams.get('limit') || (paginated ? '100' : '500'))
   const limit = paginated ? Math.min(200, Math.max(1, requestedLimit || 100)) : requestedLimit
   const offsetParam = searchParams.get('offset')
@@ -85,6 +98,7 @@ export async function GET(req: Request) {
         }
         if (applyManualFilter) query = query.eq('manual_intake', true)
         if (directOnly) query = query.eq('cita_cliente', true)
+        if (sectorOnly) query = query.eq('cita_cliente', false)
         if (cutoff) query = query.gte('articles.published_at', cutoff)
         if (publishedBefore) query = query.lte('articles.published_at', publishedBefore)
         if (searchPattern) query = query.ilike('articles.title', searchPattern)
@@ -196,7 +210,7 @@ export async function GET(req: Request) {
       .from('articles')
       .select(
         (relevantOnly
-          ? `id, source_id, title, url, resolved_url, image_url, excerpt, published_at, fetched_at, publisher, sources(name, categoria, is_general), ${provenanceJoin}, article_client_tags!inner(article_id, monitoring_status)`
+          ? `id, source_id, title, url, resolved_url, image_url, excerpt, published_at, fetched_at, publisher, sources(name, categoria, is_general), ${provenanceJoin}, article_client_tags!inner(article_id, monitoring_status, cita_cliente)`
           : `id, source_id, title, url, resolved_url, image_url, excerpt, published_at, fetched_at, publisher, sources(name, categoria, is_general), ${provenanceJoin}`) as 'id, source_id, title, url, resolved_url, image_url, excerpt, published_at, fetched_at, publisher, sources(name, categoria, is_general), article_provenance(source_id, sources(id, name, categoria, is_general))',
         { count: 'estimated' }
       )
@@ -208,9 +222,12 @@ export async function GET(req: Request) {
       cutoff = new Date(Date.now() - 30 * 86400000).toISOString()
     }
     if (cutoff) query = query.gte('published_at', cutoff)
-    // "Relevante" = confirmado ou candidato. 'revisao' é o limbo de fonte
-    // temática/score baixo e trazia PEC da Segurança e eleição nos EUA.
-    if (relevantOnly) query = query.in('article_client_tags.monitoring_status', ['confirmado', 'candidato'])
+    // `revisao` volta a aparecer: é onde o setor mora (peso baixo). O que
+    // trazia PEC da Segurança e eleição nos EUA era termo perdido no corpo de
+    // fonte qualquer, e isso o classificador continua recusando.
+    if (relevantOnly) query = query.in('article_client_tags.monitoring_status', ['confirmado', 'candidato', 'revisao'])
+    if (directOnly) query = query.eq('article_client_tags.cita_cliente', true)
+    if (sectorOnly) query = query.eq('article_client_tags.cita_cliente', false)
     if (publishedBefore) query = query.lte('published_at', publishedBefore)
     if (searchPattern) query = query.ilike('title', searchPattern)
     if (sourceId) query = query.eq('article_provenance.source_id', sourceId)

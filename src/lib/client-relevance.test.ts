@@ -479,3 +479,50 @@ describe('qualificação do bloco Setor (print de 04/11/2026)', () => {
     expect(result?.match_score).toBe(4)
   })
 })
+
+describe('setor de volta à tela, com ruído cortado pela seção (08/11/2026)', () => {
+  const ons = client('ONS')
+  const setor = rule('ONS', 'setor elétrico', 'setorial', [['setor elétrico', 'transmissão de energia', 'curtailment']], 3)
+  const direta = rule('ONS', 'ONS', 'direta', [['ONS', 'Operador Nacional do Sistema Elétrico']], 5)
+
+  it('setor só no corpo, vindo de fonte temática, entra como revisão', () => {
+    const result = evaluateClientArticle(
+      ons,
+      [setor],
+      { title: 'Governo prepara pacote para a indústria', excerpt: null, content: 'O setor elétrico deve ser afetado.' },
+      true
+    )
+    expect(result).toMatchObject({ monitoring_status: 'revisao', match_score: 2 })
+  })
+
+  it('dois termos de setor distintos no corpo bastam, mesmo sem fonte temática', () => {
+    const result = evaluateClientArticle(ons, [setor], {
+      title: 'Nordeste perde investimentos',
+      excerpt: null,
+      content: 'O curtailment preocupa o setor elétrico e os geradores da região.',
+    })
+    expect(result).toMatchObject({ monitoring_status: 'revisao', match_score: 1 })
+  })
+
+  it('caderno de esporte não vira setor, mesmo com o termo no título', () => {
+    expect(
+      evaluateClientArticle(ons, [setor], {
+        title: 'Clube investe no setor elétrico do estádio',
+        excerpt: null,
+        content: null,
+        url: 'https://ge.globo.com/futebol/times/flamengo/noticia/2026/10/01/estadio.ghtml',
+      })
+    ).toBeNull()
+  })
+
+  it('menção direta ao cliente passa mesmo em pauta esportiva', () => {
+    expect(
+      evaluateClientArticle(ons, [direta], {
+        title: 'ONS corta energia para evitar apagões em jogos do Brasil na Copa',
+        excerpt: null,
+        content: null,
+        url: 'https://www.uol.com.br/esporte/futebol/2026/06/10/ons-jogos.htm',
+      })
+    ).toMatchObject({ cita_cliente: true, monitoring_status: 'confirmado' })
+  })
+})

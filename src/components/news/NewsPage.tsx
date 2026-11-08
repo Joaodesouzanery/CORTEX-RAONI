@@ -30,6 +30,7 @@ import type { PanoramaRow } from '@/lib/panorama'
 import type { TagSuggestion } from '@/lib/ai/classify'
 import { createLatestGuard } from '@/lib/latest-request'
 import { saoPauloPeriodOf } from '@/lib/sao-paulo-period'
+import type { NewsScope } from '@/lib/validation'
 
 const PAGE_SIZE = 100
 
@@ -47,6 +48,30 @@ function monthOptions(): Array<{ value: string; label: string }> {
 }
 const TERMINAL_RUNS = new Set(['concluido', 'parcial', 'erro'])
 
+const SCOPE_TABS: Array<{ value: NewsScope; label: string; hint: string }> = [
+  { value: 'relevante', label: 'Cliente + Setor', hint: 'Tudo o que alguma regra de cliente marcou, inclusive o que está em revisão' },
+  { value: 'cliente', label: 'Cita o cliente', hint: 'Só matérias que citam o cliente diretamente' },
+  { value: 'setor', label: 'Setor', hint: 'Cobertura do setor sem citação direta ao cliente' },
+  { value: 'tudo', label: 'Tudo', hint: 'Tudo o que as fontes trouxeram, inclusive o que nenhum cliente quer' },
+]
+
+// Coleta pelo botão: um laço só, chamando lote a lote (4 fontes por lote, ver
+// claim_fetch_run_sources em process/route.ts). Antes eram dois laços de 40
+// voltas em paralelo: quando um não achava fonte livre, gastava as 40 voltas
+// em segundos enquanto o outro esperava um lote de 45 s, e o clique terminava
+// em "excedeu o número máximo de lotes" com notícias já gravadas.
+const SOURCES_PER_BATCH = 4
+// 3 voltas por lote cobrem a re-fila de fonte travada (2 tentativas) com folga.
+const ROUNDS_PER_BATCH = 3
+// Lote vazio com run aberto = outra chamada ainda está processando; espera.
+const IDLE_WAIT_MS = 2000
+// 502/504 da Vercel em um lote não derruba a coleta inteira.
+const TRANSIENT_RETRIES = 3
+
+function wait(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
 export default function NewsPage() {
   const { mode, toggle } = useViewMode()
   const { selected, toggle: toggleSelect, selectAll, clearAll } = useArticleSelection()
@@ -63,9 +88,9 @@ export default function NewsPage() {
   const [activeSourceId, setActiveSourceId] = useState<string | null>(null)
   const [search, setSearch] = useState('')
   const [debouncedSearch, setDebouncedSearch] = useState('')
-  const [directOnly, setDirectOnly] = useState(false)
-  // Padrão: todas as fontes, mas só o que alguma regra de cliente quis.
-  const [relevantOnly, setRelevantOnly] = useState(true)
+  // Abas (08/11/2026). Padrão: cliente + setor, INCLUINDO o que está em
+  // revisão — é ali que mora o setor. "Tudo" mostra o acervo sem etiqueta.
+  const [scope, setScope] = useState<NewsScope>('relevante')
   const [clientLinks, setClientLinks] = useState<Map<string, { priority: number; is_thematic: boolean }> | null>(null)
   const [activePeriod, setActivePeriod] = useState<number | null>(30)
   const [dateFrom, setDateFrom] = useState('')
@@ -130,9 +155,7 @@ export default function NewsPage() {
     if (dateFrom) query.set('published_after', new Date(`${dateFrom}T00:00:00-03:00`).toISOString())
     if (dateTo) query.set('published_before', new Date(`${dateTo}T23:59:59-03:00`).toISOString())
     if (debouncedSearch.trim().length >= 2) query.set('search', debouncedSearch.trim())
-    // `direct` só existe no ramo com cliente da rota.
-    if (directOnly && activeClient) query.set('direct', 'true')
-    if (relevantOnly && !activeClient) query.set('relevant', 'true')
+    query.set('scope', scope)
     return query
   }
 
@@ -289,25 +312,36 @@ export default function NewsPage() {
     dateFrom,
     dateTo,
     debouncedSearch,
-    directOnly,
-    relevantOnly,
+    scope,
   ])
 
-  async function processRun(runId: string): Promise<FetchRun> {
+  async function processRun(runId: string, totalSources: number): Promise<FetchRun> {
     let latest: FetchRun | null = null
-    for (let index = 0; index < 40; index++) {
+    const maxRounds = Math.max(10, Math.ceil(totalSources / SOURCES_PER_BATCH) * ROUNDS_PER_BATCH)
+    let transient = 0
+    for (let round = 0; round < maxRounds; round++) {
       const res = await fetch(`/api/fetch-runs/${runId}/process`, { method: 'POST' })
       const data = await res.json().catch(() => null)
-      if (!res.ok) throw new Error(data?.error || 'Falha ao processar lote de fontes.')
+      if (!res.ok) {
+        if ([502, 503, 504].includes(res.status) && transient < TRANSIENT_RETRIES) {
+          transient++
+          await wait(IDLE_WAIT_MS)
+          continue
+        }
+        throw new Error(data?.error || `Falha ao processar lote de fontes (HTTP ${res.status}).`)
+      }
+      transient = 0
       latest = data.run as FetchRun
       setFetchRun(latest)
       if (TERMINAL_RUNS.has(latest.status)) return latest
+      if (!Array.isArray(data.results) || data.results.length === 0) await wait(IDLE_WAIT_MS)
     }
-    throw new Error('A coleta excedeu o número máximo de lotes.')
+    throw new Error('A coleta não terminou no tempo do botão; ela segue na próxima coleta agendada.')
   }
 
   async function fetchNews() {
     setFetching(true)
+    let runId: string | null = null
     try {
       const res = await fetch('/api/fetch-runs', {
         method: 'POST',
@@ -321,23 +355,28 @@ export default function NewsPage() {
         toast({ title: 'Fontes já atualizadas', description: 'A última coleta terminou há menos de dez minutos.' })
         return
       }
-      const runId = String(data.run.id)
-      const completed = await Promise.all([processRun(runId), processRun(runId)])
-      const latest = completed.sort((a, b) => b.completed_sources - a.completed_sources)[0]
-      const detail = await fetch(`/api/fetch-runs/${runId}`).then((response) => response.json())
-      setFetchRun(detail as FetchRun)
+      runId = String(data.run.id)
+      const latest = await processRun(runId, Number(data.run.total_sources) || 0)
       toast({
         title: latest.status === 'concluido' ? 'Coleta concluída' : 'Coleta concluída com ressalvas',
         description: `${latest.inserted_count} novas, ${latest.updated_count} enriquecidas e ${latest.error_count} fontes com erro.`,
       })
-      await loadArticles(true)
     } catch (error) {
       toast({
-        title: 'Falha ao buscar notícias',
-        description: error instanceof Error ? error.message : 'Erro desconhecido',
+        title: 'Coleta interrompida',
+        description: `${error instanceof Error ? error.message : 'Erro desconhecido'} O que já foi coletado aparece abaixo.`,
         variant: 'destructive',
       })
     } finally {
+      // Recarrega sempre: lote gravado antes do erro já é notícia na base, e
+      // a lista parada fazia parecer que nada tinha chegado.
+      if (runId) {
+        const detail = await fetch(`/api/fetch-runs/${runId}`)
+          .then((response) => (response.ok ? response.json() : null))
+          .catch(() => null)
+        if (detail) setFetchRun(detail as FetchRun)
+      }
+      await loadArticles(true).catch(() => undefined)
       setFetching(false)
     }
   }
@@ -569,7 +608,6 @@ export default function NewsPage() {
             const client = clients.find((item) => item.id === event.target.value) || null
             setActiveClient(client)
             if (!client) setManualOnly(false)
-                setDirectOnly(false)
           }}
           className="border border-gray-300 bg-white px-2 py-1 text-xs"
         >
@@ -653,27 +691,22 @@ export default function NewsPage() {
             </option>
           ))}
         </select>
-        {activeClient && (
-          <button
-            onClick={() => setDirectOnly((v) => !v)}
-            className={`border px-3 py-1 text-xs uppercase tracking-widest transition-colors ${
-              directOnly ? 'border-black bg-black text-white' : 'border-gray-300 text-gray-600 hover:border-black'
-            }`}
-          >
-            Só cita o cliente
-          </button>
-        )}
-        {!activeClient && (
-          <button
-            onClick={() => setRelevantOnly((v) => !v)}
-            className={`rounded border px-3 py-1 text-xs transition-colors ${
-              relevantOnly ? 'border-sky-700 bg-sky-700 text-white' : 'border-gray-300 text-gray-600 hover:border-black'
-            }`}
-            title="Desligado mostra tudo o que as fontes trouxeram, inclusive o que nenhum cliente quer"
-          >
-            {relevantOnly ? 'Só o relevante para clientes' : 'Mostrando todas as matérias'}
-          </button>
-        )}
+        <div className="flex items-center gap-1" role="tablist" aria-label="Escopo das notícias">
+          {SCOPE_TABS.map((tab) => (
+            <button
+              key={tab.value}
+              role="tab"
+              aria-selected={scope === tab.value}
+              onClick={() => setScope(tab.value)}
+              title={tab.hint}
+              className={`border px-3 py-1 text-xs transition-colors ${
+                scope === tab.value ? 'border-black bg-black text-white' : 'border-gray-300 text-gray-600 hover:border-black'
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
       </div>
 
       {activeClient && (

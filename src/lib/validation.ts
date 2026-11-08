@@ -302,3 +302,19 @@ export function formatZodError(error: z.ZodError): string {
     })
     .join('; ')
 }
+
+// Abas da tela de Notícias (src/app/api/articles/route.ts).
+export const newsScopeSchema = z.enum(['cliente', 'setor', 'relevante', 'tudo'])
+export type NewsScope = z.infer<typeof newsScopeSchema>
+
+// Filtro de citação derivado das abas. A lista, o Panorama e o CSV usam o mesmo,
+// para os três contarem a mesma população (número sem denominador coerente é o
+// que a skill metrica-honesta proíbe). null = sem filtro.
+export function citaClienteFilter(params: URLSearchParams): boolean | null {
+  if (params.get('direct') === 'true') return true
+  const parsed = newsScopeSchema.safeParse(params.get('scope'))
+  if (!parsed.success) return null
+  if (parsed.data === 'cliente') return true
+  if (parsed.data === 'setor') return false
+  return null
+}

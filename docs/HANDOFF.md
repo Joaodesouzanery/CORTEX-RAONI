@@ -1,5 +1,5 @@
 # Handoff do Cortex
-Ponto de partida para qualquer chat ou pessoa. Atualizado em 02/11/2026. Leia também `CLAUDE.md` e `docs/playbook/README.md`.
+Ponto de partida para qualquer chat ou pessoa. Atualizado em 08/11/2026. Leia também `CLAUDE.md` e `docs/playbook/README.md`.
 
 **Comece por `docs/CONTINUIDADE.md`** (mapa único para retomar em outro chat).
 
@@ -14,7 +14,7 @@ Ponto de partida para qualquer chat ou pessoa. Atualizado em 02/11/2026. Leia ta
 Cortex: monitoramento de imprensa. Serviços: notícias, relatórios (terceiros com link), clipping (íntegra de matérias de autoria própria), boletim e agenda regulatória. Relatórios e boletins são pagos, contratados por neryadministrativo@gmail.com. SAUZ, CRT e Grupo Nery são marcas de entregável.
 
 ## Estado
-Branch de trabalho: `claude/news-panel-automation-ee1d09`; base `claude/busy-knuth-aynxlz`.
+Branch de trabalho: `claude/charming-curie-l39oxa` (Fase 20), a partir de `6c4e5ef` em `claude/busy-knuth-aynxlz` e `claude/news-panel-automation-ee1d09`.
 
 Pronto:
 - Temas por cliente no Painel, pacote para Claude, destaques.
@@ -60,6 +60,16 @@ Fase 18 (04/11):
 - Acervo: zip completo (178) em `docs/referencia-relatorios/modelo/` e outubro final em `docs/referencia-relatorios/2026-10-final/`.
 - Orçamento: `docs/orcamento.md`. Preços em `src/lib/ai/budget.ts` atualizados (Haiku/Sonnet/Opus 5.5).
 
+Fase 20 (08/11): as notícias do setor de volta, todas as fontes e o pacote do mês automático.
+Plano em cinco etapas. A coleta não tinha parado: o setor sumia da tela.
+- **Etapa 1 (feita):**
+  - **Abas em Notícias** (`scope`): Cliente + Setor (padrão, com revisão), Cita o cliente, Setor, Tudo. A lista, o Panorama e o CSV usam o mesmo filtro (`citaClienteFilter`).
+  - **Classificador:** setor só no corpo volta como `revisao`, com peso 1, se vier de fonte temática ou citar 2 termos de setor distintos.
+  - **Ruído:** esporte, entretenimento e celebridade saem pela seção do link (`src/lib/noise.ts`), só para regras de setor. A menção direta ao cliente sempre passa.
+  - **Botão Buscar Notícias:** um laço só, com espera em lote vazio, nova tentativa em 502/504 e recarga da lista mesmo com erro.
+  - **Reclassificação:** respeita `period`; no workflow vem desligada por padrão.
+  - **Migration 056:** tira "novela" das exclusões e desliga as cópias de InfoMoney e MegaWhat.
+
 ## Pendências
 - Regras do playbook da consultoria (README do zip de relatórios): máx. 20 páginas; tom positivo, riscos como pontos de atenção; verbos auxilia/assessora/subsidia/apoia; sem % nos cenários; sem coluna Tom na síntese; link só da matéria exata; capa nova por mês; ONS=CRT, PRIO=VX (PRIO S.A.), CCEE/SIMINERAL/DAQ/SINDINFOR=SAUZ, ANTAQ=CORTEX; SindInfor em formato boletim, Brasília/DF.
 - Gerador de relatório no template HTML A4 da consultoria (`support.js`, `doc-page.js`) + pacote para Claude Design: a fazer.
@@ -82,6 +92,7 @@ Fase 18 (04/11):
 9. Trocar `claude-sonnet-4-6` por `claude-sonnet-5-5` ao conectar a Anthropic.
 
 ## Falta conectar (repetir ao dono em toda resposta)
+- Colar a migration 056 (ruído por seção e duplicatas).
 - Conferir `SELECT count(*) FROM delivered_report_items;` (545); se faltar, colar 052b partes 1–3.
 - Colar a migration 053.
 - Rodar `fetch-news` manual com `reclassify_archive` para 2026-10 e 2026-11 (novas regras de setor).
