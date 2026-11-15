@@ -115,6 +115,7 @@ export async function classifyArticleBatch(
         return (
           existing &&
           existing.classification_source !== 'humano' &&
+          existing.classification_source !== 'ia' &&
           existing.editorial_review_state !== 'revisado' &&
           !editorialAssignments.has(key) &&
           !matchedKeys.has(key)
@@ -127,7 +128,7 @@ export async function classifyArticleBatch(
       .delete({ count: 'exact' })
       .eq('client_id', client.id)
       .in('article_id', staleIds)
-      .or('classification_source.neq.humano,classification_source.is.null')
+      .or('classification_source.is.null,classification_source.eq.regra') // safe-filter-ok: constante
     if (error) throw new Error(error.message)
     removed += count || 0
   }

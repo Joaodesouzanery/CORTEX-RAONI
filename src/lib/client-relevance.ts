@@ -204,7 +204,9 @@ export function mergeAutomatedEvaluation(
   evaluation: RelevanceEvaluation,
   now = new Date().toISOString()
 ): ArticleTag {
-  const human = existing?.classification_source === 'humano'
+  // Decisão de pessoa OU da IA (prompt mestre) não é desfeita pela regra na
+  // coleta seguinte; só a curadoria muda. A fonte original é mantida.
+  const human = existing?.classification_source === 'humano' || existing?.classification_source === 'ia'
   return {
     article_id: existing?.article_id || '',
     client_id: existing?.client_id || '',
@@ -212,7 +214,7 @@ export function mergeAutomatedEvaluation(
     relevancia: human ? (existing?.relevancia ?? evaluation.relevancia) : evaluation.relevancia,
     cita_cliente: human ? (existing?.cita_cliente ?? evaluation.cita_cliente) : evaluation.cita_cliente,
     tema: human ? (existing?.tema ?? evaluation.tema) : evaluation.tema,
-    classification_source: human ? 'humano' : 'regra',
+    classification_source: human ? existing!.classification_source! : 'regra',
     confidence: human ? (existing?.confidence ?? evaluation.confidence) : evaluation.confidence,
     impact_summary: existing?.impact_summary ?? null,
     monitoring_status: human
