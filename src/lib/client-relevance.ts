@@ -9,6 +9,7 @@ import type {
 } from '@/types'
 import { matchKeyword, normalizeText, parseKeywords } from '@/lib/relevance'
 import { isOffTopicSection } from '@/lib/noise'
+import { topicMatchesArticle } from '@/lib/monthly-agenda'
 
 export interface RelevanceEvaluation {
   monitoring_status: MonitoringStatus
@@ -225,4 +226,47 @@ export function mergeAutomatedEvaluation(
     manual_received_at: existing?.manual_received_at ?? null,
     updated_at: human ? existing?.updated_at : now,
   }
+}
+
+/**
+ * Classificação por tema do cliente quando nenhuma regra casou (14/11/2026).
+ * Só título + resumo (o corpo traz termo perdido, como na PEC da Segurança),
+ * sempre `revisao`/baixa: entra no Painel e na aba Setor, nunca na base
+ * qualificada sem curadoria. Mesmas guardas de ruído das regras.
+ */
+export function evaluateThemeOnly(
+  client: Client,
+  themes: Array<{ title: string; inclusion_terms: string[]; exclusion_terms: string[] }>,
+  article: Pick<Article, 'title' | 'excerpt' | 'content'> & { url?: string | null; resolved_url?: string | null }
+): RelevanceEvaluation | null {
+  if (!themes.length || isInvalidNewsDocument(article.title)) return null
+  const { normalized } = articleText(article)
+  if (!normalized || isSimineralHardFalsePositive(client, normalized) || isDaqRoadFalsePositive(client, normalized)) return null
+  if (isOffTopicSection(article.resolved_url || article.url, article.title)) return null
+  const head = { title: article.title, excerpt: article.excerpt ?? null, content: null }
+  for (const theme of themes) {
+    const result = topicMatchesArticle(
+      { title: theme.title, inclusion_terms: theme.inclusion_terms || [], exclusion_terms: theme.exclusion_terms || [] },
+      head
+    )
+    if (!result.matched) continue
+    // Tema sozinho só marca com termo específico: frase, sigla ou dois termos
+    // distintos. Os temas trazem palavras soltas boas para AGRUPAR o que já
+    // foi marcado ("dólar", "operação", "porto") mas que, marcando sozinhas,
+    // puxariam metade do caderno de economia de um veículo geral.
+    const parsed = parseKeywords(result.terms)
+    const specific = parsed.some((term) => term.tokens.length >= 2 || term.kind === 'acronym') || new Set(parsed.map((term) => term.normalized)).size >= 2
+    if (!specific) continue
+    return {
+      monitoring_status: 'revisao',
+      match_score: 1,
+      match_reasons: [{ label: `tema: ${theme.title}`, match_type: 'setorial', terms: result.terms, weight: 1 }],
+      rule_version: 1,
+      confidence: 0.5,
+      cita_cliente: false,
+      relevancia: 'baixa',
+      tema: theme.title,
+    }
+  }
+  return null
 }

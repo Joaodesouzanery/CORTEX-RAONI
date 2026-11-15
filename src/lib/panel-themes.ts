@@ -32,6 +32,8 @@ export type PanelThemesResult = {
   /** Marcadas que não casaram nenhum tema: ficam visíveis, não somem. */
   unthemed: number
   themes: PanelTheme[]
+  /** As marcadas sem tema, para o bloco "Outras do cliente" (14/11/2026). */
+  others: PanelThemeArticle[]
 }
 
 type ThemeRow = {
@@ -64,6 +66,21 @@ export function buildPanelThemes(
 ): PanelThemesResult {
   const visible = rows.filter((row) => row.monitoring_status !== 'excluido')
   const themed = new Set<string>()
+  const toArticle = (row: ThemeRow): PanelThemeArticle => ({
+    id: row.article_id,
+    title: row.articles.title,
+    url: safeExternalUrl(row.articles.resolved_url || row.articles.url),
+    publisher: row.articles.publisher ?? null,
+    image: safeExternalUrl(row.articles.image_url),
+    published_at: row.articles.published_at ?? null,
+    cites_client: Boolean(row.cita_cliente),
+    highlighted: row.report_role_source === 'humano',
+    weak: row.articles.content_status !== 'integral',
+  })
+  const byRelevance = (a: PanelThemeArticle, b: PanelThemeArticle) =>
+    Number(b.highlighted) - Number(a.highlighted) ||
+    Number(b.cites_client) - Number(a.cites_client) ||
+    String(b.published_at).localeCompare(String(a.published_at))
   const themes = templates.map((template) => {
     const articles = visible
       .filter((row) =>
@@ -75,27 +92,13 @@ export function buildPanelThemes(
       )
       .map((row) => {
         themed.add(row.article_id)
-        return {
-          id: row.article_id,
-          title: row.articles.title,
-          url: safeExternalUrl(row.articles.resolved_url || row.articles.url),
-          publisher: row.articles.publisher ?? null,
-          image: safeExternalUrl(row.articles.image_url),
-          published_at: row.articles.published_at ?? null,
-          cites_client: Boolean(row.cita_cliente),
-          highlighted: row.report_role_source === 'humano',
-          weak: row.articles.content_status !== 'integral',
-        }
+        return toArticle(row)
       })
-      .sort(
-        (a, b) =>
-          Number(b.highlighted) - Number(a.highlighted) ||
-          Number(b.cites_client) - Number(a.cites_client) ||
-          String(b.published_at).localeCompare(String(a.published_at))
-      )
+      .sort(byRelevance)
     return { title: template.title, articles }
   })
-  return { period, total_tagged: visible.length, unthemed: visible.length - themed.size, themes }
+  const others = visible.filter((row) => !themed.has(row.article_id)).map(toArticle).sort(byRelevance)
+  return { period, total_tagged: visible.length, unthemed: others.length, themes, others }
 }
 
 export async function loadPanelThemes(supabase: SupabaseClient, clientId: string, period: string) {

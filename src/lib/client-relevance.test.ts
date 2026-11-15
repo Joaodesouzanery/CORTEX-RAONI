@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { evaluateClientArticle, mergeAutomatedEvaluation } from './client-relevance'
+import { evaluateClientArticle, evaluateThemeOnly, mergeAutomatedEvaluation } from './client-relevance'
+import { topicMatchesArticle } from './monthly-agenda'
 import type { Client, ClientRelevanceRule } from '@/types'
 
 const client = (name: string): Client => ({
@@ -563,5 +564,41 @@ describe('revisão adversarial de 08/11: regra de dois grupos não basta sozinha
     expect(
       evaluateClientArticle(ons, [torres], { title: 'Igreja reforma a catedral', excerpt: null, content: 'As torres sofreram com tempestades.' })
     ).toBeNull()
+  })
+})
+
+describe('tema do cliente marca quando nenhuma regra casa (14/11)', () => {
+  const ons = client('ONS')
+  const themes = [{ title: 'Baterias e armazenamento de energia', inclusion_terms: ['armazenamento de energia', 'leilão de baterias'], exclusion_terms: [] }]
+
+  it('título com termo do tema vira revisão com o tema', () => {
+    expect(evaluateThemeOnly(ons, themes, { title: 'Governo marca leilão de baterias para 2027', excerpt: null, content: null }))
+      .toMatchObject({ monitoring_status: 'revisao', tema: 'Baterias e armazenamento de energia', cita_cliente: false })
+  })
+
+  it('palavra solta do tema não marca sozinha; frase ou dois termos marcam', () => {
+    const prio = client('PRIO')
+    const cambio = [{ title: 'Câmbio e proteção cambial', inclusion_terms: ['dólar', 'câmbio', 'proteção cambial'], exclusion_terms: [] }]
+    expect(evaluateThemeOnly(prio, cambio, { title: 'Dólar fecha em alta', excerpt: null, content: null })).toBeNull()
+    expect(evaluateThemeOnly(prio, cambio, { title: 'Dólar e câmbio pressionam importadores', excerpt: null, content: null })).not.toBeNull()
+    expect(evaluateThemeOnly(prio, cambio, { title: 'Exportadoras buscam proteção cambial', excerpt: null, content: null })).not.toBeNull()
+  })
+
+  it('termo só no corpo não marca (termo perdido)', () => {
+    expect(evaluateThemeOnly(ons, themes, { title: 'Senado vota PEC', excerpt: null, content: 'Citou o armazenamento de energia.' })).toBeNull()
+  })
+
+  it('caderno de esporte não marca', () => {
+    expect(
+      evaluateThemeOnly(ons, themes, { title: 'Leilão de baterias do clube', excerpt: null, content: null, url: 'https://ge.globo.com/futebol/x.ghtml' })
+    ).toBeNull()
+  })
+})
+
+describe('tema casa por token, não substring', () => {
+  it('"ESG" não casa em "desgaste"; sigla em caixa alta casa', () => {
+    const topic = { title: 'ESG', inclusion_terms: ['ESG'], exclusion_terms: [] }
+    expect(topicMatchesArticle(topic, { title: 'Desgaste da rede elétrica', excerpt: null, content: null }).matched).toBe(false)
+    expect(topicMatchesArticle(topic, { title: 'Mineradora publica relatório ESG', excerpt: null, content: null }).matched).toBe(true)
   })
 })
