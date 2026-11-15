@@ -9,8 +9,11 @@ name: Daily clipping email
 # Só manual até o dono decidir a frequência. Para ligar, descomente o schedule:
 # roda depois da coleta das 10h UTC (7h em Brasília) do fetch-news.yml.
 on:
-  # schedule:
-  #   - cron: '43 10 * * 1-5' # dias úteis, 07:43 em Brasília, modo revisão
+  # Ligado em 15/11/2026 (dono: envio diário, 3 destinatários por cliente).
+  # O agendado roda SEMPRE em revisão (só para o dono); o envio ao cliente é
+  # manual (mode=send) até o dono confiar no resultado.
+  schedule:
+    - cron: '43 10 * * 1-5' # dias úteis, 07:43 em Brasília, depois da coleta das 10h UTC
   workflow_dispatch:
     inputs:
       mode:
@@ -51,6 +54,12 @@ jobs:
           cat /tmp/email.json
           echo
           # 200 = tudo certo; 207 = algum cliente falhou; 503 = e-mail não configurado.
+          # Enquanto o Resend não estiver ligado, o agendado só avisa (sem vermelho
+          # diário que esconderia falhas reais).
+          if [ "${code}" = "503" ] && grep -q nao_configurado /tmp/email.json; then
+            echo "::warning::E-mail ainda não configurado (docs/email.md)."
+            exit 0
+          fi
           if [ "${code}" != "200" ]; then
             echo "::error::Clipping por e-mail terminou com HTTP ${code} (detalhe acima)."
             exit 1
