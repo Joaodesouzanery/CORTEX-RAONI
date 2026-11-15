@@ -8,6 +8,8 @@ import type {
   Relevancia,
 } from '@/types'
 import { matchKeyword, normalizeText, parseKeywords } from '@/lib/relevance'
+import { isOffTopicSection } from '@/lib/noise'
+import { topicMatchesArticle } from '@/lib/monthly-agenda'
 
 export interface RelevanceEvaluation {
   monitoring_status: MonitoringStatus
@@ -89,7 +91,7 @@ function isSimineralHardFalsePositive(client: Client, normalized: string): boole
 export function evaluateClientArticle(
   client: Client,
   rules: ClientRelevanceRule[],
-  article: Pick<Article, 'title' | 'excerpt' | 'content'>,
+  article: Pick<Article, 'title' | 'excerpt' | 'content'> & { url?: string | null; resolved_url?: string | null },
   thematicSource = false
 ): RelevanceEvaluation | null {
   const { raw, normalized } = articleText(article)
@@ -106,10 +108,26 @@ export function evaluateClientArticle(
   const headRaw = [article.title, article.excerpt].filter(Boolean).join(' ')
   const headNormalized = normalizeText(headRaw)
 
-  for (const rule of rules.filter((item) => item.active !== false)) {
+  // Caderno de esporte/entretenimento não vira Setor (src/lib/noise.ts).
+  const offTopic = isOffTopicSection(article.resolved_url || article.url, article.title)
+  const activeRules = rules.filter((item) => item.active !== false)
+  // Setor só no corpo conta quando há assunto, não citação perdida: duas
+  // regras diferentes casando no corpo, ou dois termos do MESMO grupo. Termos
+  // de grupos diferentes da mesma regra não bastam: uma regra de dois grupos
+  // sempre rende dois termos (revisão adversarial de 08/11/2026).
+  const bodyOnlyRules: Array<{ rule: ClientRelevanceRule; terms: string[] }> = []
+  let bodyOnlyStrong = false
+
+  for (const rule of activeRules) {
     const terms = ruleMatches(rule, normalized, raw)
     if (!terms) continue
-    if (rule.match_type !== 'direta' && headNormalized && !matchingTerms(terms, headNormalized, headRaw).length) continue
+    if (rule.match_type !== 'direta' && offTopic) continue
+    if (rule.match_type !== 'direta' && headNormalized && !matchingTerms(terms, headNormalized, headRaw).length) {
+      const groups = Array.isArray(rule.required_groups) ? rule.required_groups : []
+      if (groups.some((group) => new Set(matchingTerms(group, normalized, raw).map(normalizeText)).size >= 2)) bodyOnlyStrong = true
+      bodyOnlyRules.push({ rule, terms })
+      continue
+    }
     reasons.push({
       rule_id: rule.id,
       label: rule.label,
@@ -132,6 +150,26 @@ export function evaluateClientArticle(
   // Desde 04/11/2026 vale para todos: fonte do cliente só soma quando alguma
   // regra já casou. Sozinha ela marcava toda manchete de um feed de grande
   // veículo (051) para o cliente.
+  // Setor só no corpo (08/11/2026). Desde 04/11 isso era descartado, e o
+  // setor sumiu da tela: RSS de Valor/Estadão/Folha costuma trazer resumo
+  // curto, e o assunto fica no corpo. Volta a contar com peso 1 — sempre
+  // `revisao`, nunca base qualificada — quando a matéria veio de fonte
+  // temática do cliente ou tem assunto de setor (regra acima). Um termo
+  // perdido em matéria de pauta alheia (PEC da Segurança, print de 04/11)
+  // continua fora.
+  if (!reasons.length && bodyOnlyRules.length && (thematicSource || bodyOnlyStrong || bodyOnlyRules.length >= 2)) {
+    const first = bodyOnlyRules[0]
+    reasons.push({
+      rule_id: first.rule.id,
+      label: first.rule.label,
+      match_type: first.rule.match_type,
+      terms: Array.from(new Set(bodyOnlyRules.flatMap((item) => item.terms))),
+      weight: 1,
+    })
+    score += 1
+    ruleVersion = Math.max(ruleVersion, first.rule.version)
+  }
+
   if (thematicSource && !isDaqRoadFalsePositive(client, normalized) && reasons.length > 0) {
     reasons.push({
       label: 'fonte temática vinculada',
@@ -166,7 +204,9 @@ export function mergeAutomatedEvaluation(
   evaluation: RelevanceEvaluation,
   now = new Date().toISOString()
 ): ArticleTag {
-  const human = existing?.classification_source === 'humano'
+  // Decisão de pessoa OU da IA (prompt mestre) não é desfeita pela regra na
+  // coleta seguinte; só a curadoria muda. A fonte original é mantida.
+  const human = existing?.classification_source === 'humano' || existing?.classification_source === 'ia'
   return {
     article_id: existing?.article_id || '',
     client_id: existing?.client_id || '',
@@ -174,7 +214,7 @@ export function mergeAutomatedEvaluation(
     relevancia: human ? (existing?.relevancia ?? evaluation.relevancia) : evaluation.relevancia,
     cita_cliente: human ? (existing?.cita_cliente ?? evaluation.cita_cliente) : evaluation.cita_cliente,
     tema: human ? (existing?.tema ?? evaluation.tema) : evaluation.tema,
-    classification_source: human ? 'humano' : 'regra',
+    classification_source: human ? existing!.classification_source! : 'regra',
     confidence: human ? (existing?.confidence ?? evaluation.confidence) : evaluation.confidence,
     impact_summary: existing?.impact_summary ?? null,
     monitoring_status: human
@@ -188,4 +228,47 @@ export function mergeAutomatedEvaluation(
     manual_received_at: existing?.manual_received_at ?? null,
     updated_at: human ? existing?.updated_at : now,
   }
+}
+
+/**
+ * Classificação por tema do cliente quando nenhuma regra casou (14/11/2026).
+ * Só título + resumo (o corpo traz termo perdido, como na PEC da Segurança),
+ * sempre `revisao`/baixa: entra no Painel e na aba Setor, nunca na base
+ * qualificada sem curadoria. Mesmas guardas de ruído das regras.
+ */
+export function evaluateThemeOnly(
+  client: Client,
+  themes: Array<{ title: string; inclusion_terms: string[]; exclusion_terms: string[] }>,
+  article: Pick<Article, 'title' | 'excerpt' | 'content'> & { url?: string | null; resolved_url?: string | null }
+): RelevanceEvaluation | null {
+  if (!themes.length || isInvalidNewsDocument(article.title)) return null
+  const { normalized } = articleText(article)
+  if (!normalized || isSimineralHardFalsePositive(client, normalized) || isDaqRoadFalsePositive(client, normalized)) return null
+  if (isOffTopicSection(article.resolved_url || article.url, article.title)) return null
+  const head = { title: article.title, excerpt: article.excerpt ?? null, content: null }
+  for (const theme of themes) {
+    const result = topicMatchesArticle(
+      { title: theme.title, inclusion_terms: theme.inclusion_terms || [], exclusion_terms: theme.exclusion_terms || [] },
+      head
+    )
+    if (!result.matched) continue
+    // Tema sozinho só marca com termo específico: frase, sigla ou dois termos
+    // distintos. Os temas trazem palavras soltas boas para AGRUPAR o que já
+    // foi marcado ("dólar", "operação", "porto") mas que, marcando sozinhas,
+    // puxariam metade do caderno de economia de um veículo geral.
+    const parsed = parseKeywords(result.terms)
+    const specific = parsed.some((term) => term.tokens.length >= 2 || term.kind === 'acronym') || new Set(parsed.map((term) => term.normalized)).size >= 2
+    if (!specific) continue
+    return {
+      monitoring_status: 'revisao',
+      match_score: 1,
+      match_reasons: [{ label: `tema: ${theme.title}`, match_type: 'setorial', terms: result.terms, weight: 1 }],
+      rule_version: 1,
+      confidence: 0.5,
+      cita_cliente: false,
+      relevancia: 'baixa',
+      tema: theme.title,
+    }
+  }
+  return null
 }

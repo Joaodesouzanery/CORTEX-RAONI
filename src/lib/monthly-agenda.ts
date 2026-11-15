@@ -1,5 +1,5 @@
 import type { ArticleSnapshot, MonthlyReportTopic } from '@/types'
-import { normalizeText } from '@/lib/relevance'
+import { matchingTermsIn, normalizeText } from '@/lib/relevance'
 
 const MINING_CONTEXT =
   /\b(mineracao|mineral|minerais|mineradora|lavra|garimpo|anm|cfem|carajas|mina|minas|bauxita|cobre|niquel|ferro)\b/
@@ -9,15 +9,14 @@ export function topicMatchesArticle(
   topic: Pick<MonthlyReportTopic, 'title' | 'inclusion_terms' | 'exclusion_terms'>,
   article: Pick<ArticleSnapshot, 'title' | 'excerpt' | 'content'>
 ) {
-  const text = normalizeText([article.title, article.excerpt, article.content].filter(Boolean).join(' '))
+  const raw = [article.title, article.excerpt, article.content].filter(Boolean).join(' ')
+  const text = normalizeText(raw)
   if (!text) return { matched: false, terms: [] as string[] }
-  const excluded = topic.exclusion_terms.some((term) => text.includes(normalizeText(term)))
-  if (excluded) return { matched: false, terms: [] as string[] }
-  const terms = topic.inclusion_terms.filter((term) => {
+  // Por token, não substring: "ESG" casava em "desgaste", "seca" em "seção".
+  if (matchingTermsIn(topic.exclusion_terms, text, raw).length) return { matched: false, terms: [] as string[] }
+  const terms = matchingTermsIn(topic.inclusion_terms, text, raw).filter((term) => {
     const normalized = normalizeText(term)
-    if (!normalized || !text.includes(normalized)) return false
-    if (WEAK_CONTEXT_TERMS.has(normalized) && !MINING_CONTEXT.test(text)) return false
-    return true
+    return !(WEAK_CONTEXT_TERMS.has(normalized) && !MINING_CONTEXT.test(text))
   })
   const title = normalizeText(topic.title)
   // Agendas compostas representam uma relação editorial, não um OR de

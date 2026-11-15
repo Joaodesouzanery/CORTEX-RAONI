@@ -14,9 +14,9 @@ Os valores nunca vão para o repositório. Na conta nova, copie-os do painel atu
 | `ANTHROPIC_MONTHLY_BUDGET_USD` | antes da chave | Teto mensal da IA (sugestão: `40`) |
 | `ANTHROPIC_DAILY_CALL_LIMIT` | antes da chave | Teto diário de chamadas (sugestão: `300`) |
 | `ANTHROPIC_API_KEY` | por último | Triagem, verificação e geração. Sem ela, o pipeline para e mostra o aviso |
-| `RESEND_API_KEY` | para e-mail | Envio de alertas e resumos |
-| `ALERTS_EMAIL_FROM` | para e-mail | Remetente de domínio verificado, por exemplo `CORTEX <boletim@dominio>` |
-| `ALERTS_EMAIL_TO` | para e-mail | Destinatários dos alertas, separados por vírgula |
+| `RESEND_API_KEY` | para e-mail | Envio de alertas e do clipping diário (`docs/email.md`) |
+| `ALERTS_EMAIL_FROM` | para e-mail | Remetente de domínio verificado, por exemplo `CORTEX <boletim@dominio>`. Obrigatório para enviar ao cliente (modo `send`) |
+| `ALERTS_EMAIL_TO` | para e-mail | Seu e-mail: recebe os alertas e a revisão do clipping. Destinatários do cliente ficam na tabela da 058, não aqui |
 | `GITHUB_ACTIONS_TOKEN` | opcional | Token restrito ao repositório (Actions: write) para os botões "Fechar mês" e "Regenerar" |
 | `GITHUB_REPOSITORY` | opcional | `Joaodesouzanery/CORTEX-RAONI` |
 | `GITHUB_WORKFLOW_REF` | opcional | Branch dos workflows |

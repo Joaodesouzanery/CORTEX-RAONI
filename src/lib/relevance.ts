@@ -220,3 +220,20 @@ export function dedupeByTitle<T extends { id: string; title: string; image_url?:
   }
   return Array.from(byTitle.values())
 }
+
+/**
+ * Termos (crus) que casam no texto, por token, com a guarda de sigla: sigla só
+ * casa em caixa alta no texto original ("ONS" não casa "ons" de "ONs" na bolsa).
+ * Usado pelos temas (monthly-agenda) e pelo classificador por tema: antes os
+ * temas casavam por substring e "ESG" casava em "desgaste" (revisão de 14/11).
+ */
+export function matchingTermsIn(terms: string[] | null | undefined, normalizedText: string, rawText: string): string[] {
+  const matched: string[] = []
+  for (const term of parseKeywords(terms)) {
+    const acronymOk =
+      term.kind !== 'acronym' ||
+      new RegExp(`(?:^|[^A-Za-z0-9])${term.raw.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?:$|[^A-Za-z0-9])`).test(rawText)
+    if (acronymOk && matchKeyword(term, normalizedText)) matched.push(term.raw)
+  }
+  return matched
+}

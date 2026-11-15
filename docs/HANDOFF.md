@@ -1,5 +1,5 @@
 # Handoff do Cortex
-Ponto de partida para qualquer chat ou pessoa. Atualizado em 02/11/2026. Leia também `CLAUDE.md` e `docs/playbook/README.md`.
+Ponto de partida para qualquer chat ou pessoa. Atualizado em 15/11/2026. Leia também `CLAUDE.md` e `docs/playbook/README.md`.
 
 **Comece por `docs/CONTINUIDADE.md`** (mapa único para retomar em outro chat).
 
@@ -14,7 +14,7 @@ Ponto de partida para qualquer chat ou pessoa. Atualizado em 02/11/2026. Leia ta
 Cortex: monitoramento de imprensa. Serviços: notícias, relatórios (terceiros com link), clipping (íntegra de matérias de autoria própria), boletim e agenda regulatória. Relatórios e boletins são pagos, contratados por neryadministrativo@gmail.com. SAUZ, CRT e Grupo Nery são marcas de entregável.
 
 ## Estado
-Branch de trabalho: `claude/news-panel-automation-ee1d09`; base `claude/busy-knuth-aynxlz`.
+Branch de trabalho: `claude/charming-curie-l39oxa` (Fase 20), a partir de `6c4e5ef` em `claude/busy-knuth-aynxlz` e `claude/news-panel-automation-ee1d09`.
 
 Pronto:
 - Temas por cliente no Painel, pacote para Claude, destaques.
@@ -60,7 +60,53 @@ Fase 18 (04/11):
 - Acervo: zip completo (178) em `docs/referencia-relatorios/modelo/` e outubro final em `docs/referencia-relatorios/2026-10-final/`.
 - Orçamento: `docs/orcamento.md`. Preços em `src/lib/ai/budget.ts` atualizados (Haiku/Sonnet/Opus 5.5).
 
+Fase 20 (08/11): as notícias do setor de volta, todas as fontes e o pacote do mês automático.
+Plano em cinco etapas. A coleta não tinha parado: o setor sumia da tela.
+- **Etapa 1 (feita):**
+  - **Abas em Notícias** (`scope`): Cliente + Setor (padrão, com revisão), Cita o cliente, Setor, Tudo. A lista, o Panorama e o CSV usam o mesmo filtro (`citaClienteFilter`).
+  - **Classificador:** setor só no corpo volta como `revisao`, com peso 1, se vier de fonte temática ou citar 2 termos de setor distintos.
+  - **Ruído:** esporte, entretenimento e celebridade saem pela seção do link (`src/lib/noise.ts`), só para regras de setor. A menção direta ao cliente sempre passa.
+  - **Botão Buscar Notícias:** um laço só, com espera em lote vazio, nova tentativa em 502/504 e recarga da lista mesmo com erro.
+  - **Reclassificação:** respeita `period`; no workflow vem desligada por padrão.
+  - **Migration 056:** tira "novela" das exclusões e desliga as cópias de InfoMoney e MegaWhat.
+- **Etapa 2 (feita):**
+  - **Destaques de outubro** de cada cliente e o formato do clipping diário da ONS em `docs/referencia-relatorios/2026-10-destaques/`. O texto do fornecedor e os PDFs ficam fora do Git.
+  - **Catálogo de fontes corrigido:** eram 116 fontes, agora são 148. O script lia só parte dos `INSERT` e ignorava as desativações; agora aplica também as desativações e as trocas de URL feitas por migrations posteriores (coluna `ativa_apos_migrations`).
+  - **`scripts/diff-outlets.mjs` → `docs/fontes/faltantes.md`:** de 259 veículos citados no que foi entregue, 111 cobertos depois da 057 e 145 sem fonte, quase todos com 1 ou 2 menções.
+  - **Migration 057:** buscas por cliente nos veículos entregues, 26 regras aprendidas e 27 temas.
+- **Etapa 5 (feita):** clipping diário por e-mail (`docs/email.md`).
+  - Usa Resend, que já estava em `src/lib/email.ts`, agora com `to`, `bcc` e `reply_to`.
+  - HTML em `src/lib/clipping-email.ts`. Prévia pública em `/api/clipping-email/preview`, que não envia nada (botão "Ver e-mail do dia" em Clipping).
+  - Envio em `/api/internal/clipping-email`, protegido por `CRON_SECRET`, nos modos revisão (só para o dono) e envio (destinatários do cliente em cópia oculta). É idempotente por cliente, dia e modo.
+  - Migration 058: `client_email_recipients` e `clipping_email_sends`, com RLS e sem policies.
+  - Workflow `daily-clipping-email.yml`, só manual.
+- **Etapa 4 (feita):** o pacote do mês ganhou seleção principal com termos e exclusões do cliente, destaques do mês (`report-highlights.ts`), clipping das selecionadas (`clipping-text.ts`), prompt de diagramação (`design-prompt.ts`), boletim da SindInfor e o workflow manual `monthly-package.yml`. O resumo diário agora traz o tom no lugar de "Tom: pendente", e a síntese do clipping mensal perdeu o "Não foram identificadas…".
+- **Etapa 3 (feita):** `docs/calibracao/recall-2026-10.sql`, gerado por `scripts/build-calibration-sql.mjs`, mede por cliente o que foi coletado e etiquetado, a concordância de bloco e a de tom. A referência vai embutida no SQL (150 refeitos e 510 manchetes da ONS). Testado num Postgres local com todas as migrations aplicadas; a 056 e a 057 aplicam sem erro e podem ser coladas de novo sem duplicar nada.
+
+Fase 21 (15/11): coleta de volta no ar, Painel automático por tema, prompt mestre preparado e um vigia que não depende do app.
+- **Achados:**
+  - O `fetch-news` agendado falhou em todas as execuções de 15/09 a 14/11, porque o `APP_URL` aponta para um deploy apagado (`DEPLOYMENT_NOT_FOUND`).
+  - A produção rodava `busy-knuth` sem a Fase 20.
+  - O Painel só agrupava o que uma regra marcava.
+- **Painel:**
+  - Na coleta, o tema do cliente marca como revisão quando nenhuma regra casa (frase, sigla ou dois termos).
+  - Os temas casam por palavra inteira.
+  - Seletor de mês e bloco "Outras do cliente".
+  - Migration 059 com frases mais largas.
+- **Fontes:**
+  - `last_success_at` só avança quando a fonte traz item.
+  - O passo "resolve links" reclassifica o que resolveu.
+  - `docs/fontes/diagnostico-fontes.sql` dá o veredito por fonte.
+- **Prompt mestre:** `/api/internal/classify-ai` e o passo no `fetch-news`. Ficam desligados sem chave; o passo a passo está em `docs/prompt-mestre.md`. A regra não desfaz a decisão da IA.
+- **Alertas:**
+  - `watchdog.yml` a cada 3 h, independente do app, que abre a Issue `saude`.
+  - `health-check` com limiar de 14 h, status de erro, fontes por nome, teto da IA e o "reconhecido" preservado.
+  - Skills `saude-*` e o agente `diagnosticador-de-saude`.
+- **E-mail diário:** agendado em modo revisão nos dias úteis; só avisa enquanto o Resend não estiver ligado.
+
 ## Pendências
+- **Corte por seção e Google News:** em matéria que chega pelo Google News, o corte por seção do link (`src/lib/noise.ts`) só vale depois que o link é resolvido. Na classificação da coleta só o título é testado, e o passo "Resolve Google News links" não reclassifica. Por isso, depois da coleta, rode o `fetch-news` com reclassificação do mês. Melhor ainda: fazer o resolve reclassificar os artigos que acabou de resolver.
+- **Tom no clipping e no e-mail:** só é afirmado quando foi revisado por pessoa (ou IA). A regra grava `neutro` por padrão, e isso aparece como "Tom a revisar.", ou não aparece no e-mail ao cliente. Para o tom sair no e-mail do cliente, revise o tom na tela ou ligue a IA.
 - Regras do playbook da consultoria (README do zip de relatórios): máx. 20 páginas; tom positivo, riscos como pontos de atenção; verbos auxilia/assessora/subsidia/apoia; sem % nos cenários; sem coluna Tom na síntese; link só da matéria exata; capa nova por mês; ONS=CRT, PRIO=VX (PRIO S.A.), CCEE/SIMINERAL/DAQ/SINDINFOR=SAUZ, ANTAQ=CORTEX; SindInfor em formato boletim, Brasília/DF.
 - Gerador de relatório no template HTML A4 da consultoria (`support.js`, `doc-page.js`) + pacote para Claude Design: a fazer.
 - Menu: Notícias, Relatórios, Boletins, Agenda; Painel, Fontes e clientes, Importações no topo. Preparação automática pelo `report-automation.yml` (religado).
@@ -82,6 +128,10 @@ Fase 18 (04/11):
 9. Trocar `claude-sonnet-4-6` por `claude-sonnet-5-5` ao conectar a Anthropic.
 
 ## Falta conectar (repetir ao dono em toda resposta)
+- **URGENTE:** no GitHub (Settings → Secrets → Actions), `APP_URL` = `https://cortexreputacional.vercel.app`. Sem isso nenhuma coleta agendada roda.
+- Segredos `SUPABASE_URL` e `SUPABASE_SERVICE_ROLE_KEY` no GitHub, para o vigia olhar o banco.
+- Colar a migration 059 (depois de 056, 057 e 058).
+- Colar `docs/calibracao/recall-2026-10.sql` (linha de base), depois as migrations 056 e 057, rodar `fetch-news` com reclassificação de 2026-10 e colar o SQL de novo.
 - Conferir `SELECT count(*) FROM delivered_report_items;` (545); se faltar, colar 052b partes 1–3.
 - Colar a migration 053.
 - Rodar `fetch-news` manual com `reclassify_archive` para 2026-10 e 2026-11 (novas regras de setor).
@@ -93,7 +143,7 @@ Fase 18 (04/11):
 - Conferir em Actions se `fetch-news` roda 3x/dia e o passo da agenda.
 - Chaves `PEXELS_API_KEY` e `UNSPLASH_ACCESS_KEY`.
 - Login, antes da `ANTHROPIC_API_KEY`.
-- `RESEND_API_KEY` se quiser alertas e envio por e-mail.
+- E-mail (`docs/email.md`): conta no Resend com domínio verificado; `RESEND_API_KEY`, `ALERTS_EMAIL_FROM` e `ALERTS_EMAIL_TO` na Vercel; colar a 058; cadastrar destinatários; rodar `Daily clipping email` em `review` e depois em `send`. Dizer se prefere envio diário ou semanal.
 
 ## Variáveis
 Nunca coloque valores neste arquivo.

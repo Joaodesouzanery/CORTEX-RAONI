@@ -105,6 +105,18 @@ export default function ClippingPage() {
             {clients.map((client) => <option key={client.id} value={client.id}>{client.name}</option>)}
           </select>
           <input type="date" aria-label="Dia" value={date} max={todayInSaoPaulo()} onChange={(event) => setDate(event.target.value)} className="h-10 rounded border border-white/30 bg-white px-3 text-sm text-black" />
+          {clientId && (
+            // Prévia do e-mail do dia no nosso formato. Não envia nada
+            // (o envio é pelo workflow daily-clipping-email.yml).
+            <a
+              href={`/api/clipping-email/preview?client_id=${encodeURIComponent(clientId)}&date=${encodeURIComponent(date)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex h-10 items-center rounded border border-white/60 px-3 text-sm text-white hover:bg-white hover:text-black"
+            >
+              Ver e-mail do dia
+            </a>
+          )}
         </div>
       </Band>
       {error && (

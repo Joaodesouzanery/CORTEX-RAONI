@@ -20,14 +20,18 @@
  */
 export const SOURCE_FRESHNESS_MS = 24 * 60 * 60 * 1000
 
-/** Intervalo do cron em .github/workflows/fetch-news.yml (`0 *\/6 * * *`). */
-export const COLLECTION_CYCLE_MS = 6 * 60 * 60 * 1000
+/**
+ * Maior intervalo entre disparos do cron em .github/workflows/fetch-news.yml
+ * (`0 10,15,21 * * *` UTC): 21h → 10h = 13 h. O valor antigo (6 h, de um cron
+ * que não existe mais) fazia o Painel acusar "coleta parada" toda manhã.
+ */
+export const COLLECTION_CYCLE_MS = 13 * 60 * 60 * 1000
 
 /**
- * A partir de quando a ausência de execução é o problema principal.
- * Dois ciclos: um pode falhar por azar, dois seguidos é padrão.
+ * A partir de quando a ausência de execução é o problema principal: o maior
+ * intervalo do cron mais 1 h de folga. Mesmo limiar de src/lib/health-check.ts.
  */
-export const STALLED_RUN_MS = 2 * COLLECTION_CYCLE_MS
+export const STALLED_RUN_MS = COLLECTION_CYCLE_MS + 60 * 60 * 1000
 
 export interface CollectionHealthInput {
   active_sources: number

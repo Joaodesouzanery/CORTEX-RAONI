@@ -18,6 +18,7 @@ describe('buildPanelThemes', () => {
     const out = buildPanelThemes('2026-09', templates, [row('1', 'Lula sanciona Redata'), row('2', 'Outra pauta')])
     expect(out.total_tagged).toBe(2)
     expect(out.unthemed).toBe(1)
+    expect(out.others.map((a) => a.id)).toEqual(['2'])
     expect(out.themes[1].articles).toEqual([])
   })
 

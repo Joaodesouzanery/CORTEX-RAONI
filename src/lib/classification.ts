@@ -1,10 +1,11 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type { Article, ArticleTag, Client, ClientRelevanceRule } from '@/types'
-import { evaluateClientArticle, mergeAutomatedEvaluation } from '@/lib/client-relevance'
+import { evaluateClientArticle, evaluateThemeOnly, mergeAutomatedEvaluation } from '@/lib/client-relevance'
 
 type ClientForClassification = Client & {
   client_relevance_rules: ClientRelevanceRule[]
   client_sources: Array<{ source_id: string; is_thematic: boolean }>
+  client_report_topic_templates?: Array<{ title: string; inclusion_terms: string[]; exclusion_terms: string[]; active: boolean }>
 }
 
 export interface ClassificationBatchResult {
@@ -22,7 +23,7 @@ export async function classifyArticleBatch(
   const { data: clientRows, error: clientsError } = await supabase
     .from('clients')
     .select(
-      '*, client_relevance_rules(*), client_sources(source_id, is_thematic)'
+      '*, client_relevance_rules(*), client_sources(source_id, is_thematic), client_report_topic_templates(title, inclusion_terms, exclusion_terms, active)'
     )
     .eq('active', true)
   if (clientsError) throw new Error(clientsError.message)
@@ -73,12 +74,12 @@ export async function classifyArticleBatch(
     for (const article of articles) {
       const sources = sourceIdsByArticle.get(article.id) || new Set<string>()
       const fromThematic = Array.from(sources).some((sourceId) => thematic.has(sourceId))
-      const evaluation = evaluateClientArticle(
-        client,
-        client.client_relevance_rules || [],
-        article,
-        fromThematic
-      )
+      // Regras primeiro; sem regra, o tema do cliente marca como revisão. É o
+      // que faz o Painel ("Temas do mês") ter conteúdo logo após a coleta:
+      // antes, tema sem regra-espelho (os 27 da 057) não marcava nada.
+      const evaluation =
+        evaluateClientArticle(client, client.client_relevance_rules || [], article, fromThematic) ??
+        evaluateThemeOnly(client, (client.client_report_topic_templates || []).filter((theme) => theme.active !== false), article)
       if (!evaluation) continue
 
       const key = `${article.id}:${client.id}`
@@ -114,6 +115,7 @@ export async function classifyArticleBatch(
         return (
           existing &&
           existing.classification_source !== 'humano' &&
+          existing.classification_source !== 'ia' &&
           existing.editorial_review_state !== 'revisado' &&
           !editorialAssignments.has(key) &&
           !matchedKeys.has(key)
@@ -126,7 +128,7 @@ export async function classifyArticleBatch(
       .delete({ count: 'exact' })
       .eq('client_id', client.id)
       .in('article_id', staleIds)
-      .or('classification_source.neq.humano,classification_source.is.null')
+      .or('classification_source.is.null,classification_source.eq.regra') // safe-filter-ok: constante
     if (error) throw new Error(error.message)
     removed += count || 0
   }

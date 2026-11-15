@@ -16,27 +16,58 @@ export interface SendResult {
   error?: string
 }
 
+/** Destinatários do dono (alertas e modo revisão do clipping). */
+export function ownerRecipients(): string[] {
+  return (process.env.ALERTS_EMAIL_TO || '')
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean)
+}
+
+/** Endereço do remetente, sem o nome ("CORTEX <a@b>" → "a@b"). */
+export function senderAddress(): string {
+  const from = process.env.ALERTS_EMAIL_FROM?.trim() || 'CORTEX <onboarding@resend.dev>'
+  return from.match(/<([^>]+)>/)?.[1] || from
+}
+
 export async function sendEmail(opts: {
   subject: string
   html: string
   text: string
+  /** Sem `to`, vai para ALERTS_EMAIL_TO (comportamento original dos alertas). */
+  to?: string[]
+  /** Cópia oculta: destinatários do cliente não veem o e-mail uns dos outros (LGPD). */
+  bcc?: string[]
+  replyTo?: string | null
 }): Promise<SendResult> {
   const key = process.env.RESEND_API_KEY
-  const to = (process.env.ALERTS_EMAIL_TO || '')
-    .split(',')
-    .map((s) => s.trim())
-    .filter(Boolean)
+  const to = opts.to ?? ownerRecipients()
   const from = process.env.ALERTS_EMAIL_FROM?.trim() || 'CORTEX <onboarding@resend.dev>'
 
   if (!key || to.length === 0) {
-    return { sent: false, skipped: 'e-mail não configurado (defina RESEND_API_KEY e ALERTS_EMAIL_TO)' }
+    return {
+      sent: false,
+      skipped: !key
+        ? 'e-mail não configurado (defina RESEND_API_KEY)'
+        : opts.to
+          ? 'sem destinatário ativo para este envio'
+          : 'e-mail não configurado (defina ALERTS_EMAIL_TO)',
+    }
   }
 
   try {
     const res = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ from, to, subject: opts.subject, html: opts.html, text: opts.text }),
+      body: JSON.stringify({
+        from,
+        to,
+        subject: opts.subject,
+        html: opts.html,
+        text: opts.text,
+        ...(opts.bcc?.length ? { bcc: opts.bcc } : {}),
+        ...(opts.replyTo ? { reply_to: opts.replyTo } : {}),
+      }),
     })
     const data = (await res.json().catch(() => null)) as { id?: string; message?: string } | null
     if (!res.ok) return { sent: false, error: data?.message || `Resend HTTP ${res.status}` }

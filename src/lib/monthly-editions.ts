@@ -406,13 +406,14 @@ export function buildEditionSummary(
         .slice(0, 20)
         .map((g) => paragraphFor(g, clientName))
         .join('\n\n')
-    : 'Não foram identificadas menções diretas no período.'
+    : // Playbook: nada de "não foram identificadas" (expõe volume em vez de orientar).
+      'A cobertura do período concentrou-se no setor, na seção abaixo.'
   const sectorText = sector.length
     ? sector
         .slice(0, 30)
         .map((g) => paragraphFor(g, clientName))
         .join('\n\n')
-    : 'Não foram identificadas pautas setoriais no período.'
+    : 'A cobertura do período concentrou-se nas menções diretas, na seção acima.'
   const markdown = [
     `# Síntese do clipping — ${clientName}`,
     `**${periodLabel}**`,

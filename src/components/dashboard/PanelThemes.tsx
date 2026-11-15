@@ -11,6 +11,17 @@ type Article = PanelThemesResult['themes'][number]['articles'][number]
 // O carrossel comporta mais que a grade antiga sem ocupar altura.
 const VISIBLE_ARTICLES = 12
 
+function shiftPeriod(period: string, months: number) {
+  const [year, month] = period.split('-').map(Number)
+  const date = new Date(Date.UTC(year, month - 1 + months, 15))
+  return date.toISOString().slice(0, 7)
+}
+
+function currentPeriod() {
+  // Mês de São Paulo: na virada do mês em UTC, o Brasil ainda está no anterior.
+  return new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Sao_Paulo', year: 'numeric', month: '2-digit' }).format(new Date())
+}
+
 function monthLabel(period: string) {
   return `${period.slice(5)}/${period.slice(0, 4)}`
 }
@@ -66,6 +77,8 @@ export function PanelThemes({ refreshKey }: { refreshKey: number }) {
   const [data, setData] = useState<PanelThemesResult | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [copied, setCopied] = useState(false)
+  // Mês atual ou anterior: no começo do mês o atual quase vazio escondia o fechamento.
+  const [period, setPeriod] = useState(currentPeriod)
   const selected = clients.find((client) => client.id === clientId) ?? clients[0]
 
   useEffect(() => {
@@ -83,7 +96,7 @@ export function PanelThemes({ refreshKey }: { refreshKey: number }) {
     let stale = false
     setData(null)
     setError(null)
-    fetch(`/api/panel/themes?client=${selected.id}`)
+    fetch(`/api/panel/themes?client=${selected.id}&period=${period}`)
       .then(async (res) => {
         const body = await res.json().catch(() => null)
         if (!res.ok) throw new Error(body?.error || `Falha ao carregar os temas (HTTP ${res.status}).`)
@@ -91,7 +104,7 @@ export function PanelThemes({ refreshKey }: { refreshKey: number }) {
       })
       .catch((err: Error) => { if (!stale) setError(err.message) })
     return () => { stale = true }
-  }, [selected?.id, refreshKey]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [selected?.id, refreshKey, period]) // eslint-disable-line react-hooks/exhaustive-deps
 
   async function copyPackage() {
     if (!data || !selected) return
@@ -119,6 +132,11 @@ export function PanelThemes({ refreshKey }: { refreshKey: number }) {
         <div className="flex flex-wrap gap-2">
           <select aria-label="Cliente" className="rounded border border-slate-300 bg-white px-3 py-2 text-sm" value={selected?.id ?? ''} onChange={(event) => { setClientId(event.target.value); setCopied(false) }}>
             {clients.map((client) => <option key={client.id} value={client.id}>{client.name}</option>)}
+          </select>
+          <select aria-label="Mês" className="rounded border border-slate-300 bg-white px-3 py-2 text-sm" value={period} onChange={(event) => { setPeriod(event.target.value); setCopied(false) }}>
+            <option value={currentPeriod()}>Mês atual ({monthLabel(currentPeriod())})</option>
+            <option value={shiftPeriod(currentPeriod(), -1)}>Mês anterior ({monthLabel(shiftPeriod(currentPeriod(), -1))})</option>
+            <option value={shiftPeriod(currentPeriod(), -2)}>{monthLabel(shiftPeriod(currentPeriod(), -2))}</option>
           </select>
           <Button variant="outline" onClick={copyPackage} disabled={!data}>{copied ? 'Pacote copiado' : 'Copiar pacote para Claude'}</Button>
         </div>
@@ -151,6 +169,24 @@ export function PanelThemes({ refreshKey }: { refreshKey: number }) {
             {theme.articles.length > VISIBLE_ARTICLES && <p className="mt-2 text-xs text-slate-500">Mostrando {VISIBLE_ARTICLES} de {theme.articles.length}; o pacote leva todas.</p>}
           </div>
         ))}
+        {data && data.others.length > 0 && (
+          // Marcadas para o cliente sem tema: antes sumiam (só a contagem
+          // "sem tema"). Aparecem aqui para nenhuma matéria se perder.
+          <div className="bg-white px-4 py-8 md:px-8">
+            <div className="mb-3 flex items-baseline justify-between gap-3 border-b border-slate-200 pb-2">
+              <h3 className="text-2xl font-light text-slate-900">Outras do cliente</h3>
+              <span className="text-sm text-slate-500">{data.others.length} matérias sem tema</span>
+            </div>
+            <Carousel label="Outras matérias do cliente">
+              {data.others.slice(0, VISIBLE_ARTICLES).map((article) => (
+                <CarouselItem key={article.id}>
+                  <Card article={article} />
+                </CarouselItem>
+              ))}
+            </Carousel>
+            {data.others.length > VISIBLE_ARTICLES && <p className="mt-2 text-xs text-slate-500">Mostrando {VISIBLE_ARTICLES} de {data.others.length}.</p>}
+          </div>
+        )}
       </div>
     </section>
   )

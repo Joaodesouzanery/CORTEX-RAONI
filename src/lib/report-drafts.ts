@@ -190,6 +190,9 @@ function classificationSnapshot(row: TaggedArticleRow) {
   const deterministicFlags = deterministicQualityFlags(article, scope)
   return {
     tom: row.tom,
+    // Diz se o tom foi analisado (humano/ia) ou é o padrão da regra: o texto
+    // de clipping só afirma tom analisado (src/lib/clipping-text.ts).
+    classification_source: row.classification_source ?? null,
     relevancia: row.relevancia,
     cita_cliente: row.cita_cliente,
     tema: row.tema,

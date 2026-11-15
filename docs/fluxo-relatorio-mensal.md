@@ -69,3 +69,15 @@ Coleta (feeds oficiais 053/054 + busca por cliente 051 + setoriais)
 1. Exportar o **pacote para o Claude Design** (botão em "Gerar relatório"), e não o CSV.
 2. Instruir o Claude Design a não trocar nem acrescentar links.
 3. Antes de enviar, abrir "Abrir no template" e conferir os avisos do validador.
+
+## Atualização de 08/11/2026 (Fase 20)
+
+**O que já está no código:**
+- **Classificação:** o setor volta a aparecer, com abas Cliente / Setor / Tudo em Notícias. O setor que casa só no corpo da matéria entra como revisão. Esporte e entretenimento saem pela seção do link (`src/lib/noise.ts`).
+- **Seleção das 20:** é o caminho principal do pacote, não mais um recurso para quando faltam matérias. Usa os termos diretos do cliente para identificar o bloco Cliente, as exclusões das regras de setor (PetroRecôncavo e Brava na PRIO) e o `min_items` do perfil do cliente.
+- **Pacote:** leva o prompt de diagramação (`src/lib/design-prompt.ts`), os destaques do mês (`src/lib/report-highlights.ts`), o clipping das selecionadas no formato do fornecedor da ONS (`src/lib/clipping-text.ts`) e o tom em palavra na base. O prompt de redação vai com o mês preenchido, e só quando as seções não foram escritas.
+- **Boletim da SindInfor:** a variante usa o `format = 'boletim'` do perfil.
+- **Todos os clientes de uma vez:** o workflow manual `monthly-package.yml` gera os pacotes.
+
+**Fluxo de hoje, sem a chave da Anthropic:** coleta → abas em Notícias → "Pacote Claude Design" → o Claude Design redige e diagrama usando só as 20 matérias e os links do pacote.
+**Com a chave:** o Cortex escreve as seções, e o Claude Design só diagrama.

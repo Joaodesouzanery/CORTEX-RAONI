@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { evaluateClientArticle, mergeAutomatedEvaluation } from './client-relevance'
+import { evaluateClientArticle, evaluateThemeOnly, mergeAutomatedEvaluation } from './client-relevance'
+import { topicMatchesArticle } from './monthly-agenda'
 import type { Client, ClientRelevanceRule } from '@/types'
 
 const client = (name: string): Client => ({
@@ -477,5 +478,127 @@ describe('qualificação do bloco Setor (print de 04/11/2026)', () => {
   it('termo de setor no título continua valendo, com o bônus da fonte', () => {
     const result = evaluateClientArticle(ons, [setor], { title: 'Setor elétrico discute nova tarifa', excerpt: null, content: null }, true)
     expect(result?.match_score).toBe(4)
+  })
+})
+
+describe('setor de volta à tela, com ruído cortado pela seção (08/11/2026)', () => {
+  const ons = client('ONS')
+  const setor = rule('ONS', 'setor elétrico', 'setorial', [['setor elétrico', 'transmissão de energia', 'curtailment']], 3)
+  const direta = rule('ONS', 'ONS', 'direta', [['ONS', 'Operador Nacional do Sistema Elétrico']], 5)
+
+  it('setor só no corpo, vindo de fonte temática, entra como revisão', () => {
+    const result = evaluateClientArticle(
+      ons,
+      [setor],
+      { title: 'Governo prepara pacote para a indústria', excerpt: null, content: 'O setor elétrico deve ser afetado.' },
+      true
+    )
+    expect(result).toMatchObject({ monitoring_status: 'revisao', match_score: 2 })
+  })
+
+  it('dois termos de setor distintos no corpo bastam, mesmo sem fonte temática', () => {
+    const result = evaluateClientArticle(ons, [setor], {
+      title: 'Nordeste perde investimentos',
+      excerpt: null,
+      content: 'O curtailment preocupa o setor elétrico e os geradores da região.',
+    })
+    expect(result).toMatchObject({ monitoring_status: 'revisao', match_score: 1 })
+  })
+
+  it('caderno de esporte não vira setor, mesmo com o termo no título', () => {
+    expect(
+      evaluateClientArticle(ons, [setor], {
+        title: 'Clube investe no setor elétrico do estádio',
+        excerpt: null,
+        content: null,
+        url: 'https://ge.globo.com/futebol/times/flamengo/noticia/2026/10/01/estadio.ghtml',
+      })
+    ).toBeNull()
+  })
+
+  it('menção direta ao cliente passa mesmo em pauta esportiva', () => {
+    expect(
+      evaluateClientArticle(ons, [direta], {
+        title: 'ONS corta energia para evitar apagões em jogos do Brasil na Copa',
+        excerpt: null,
+        content: null,
+        url: 'https://www.uol.com.br/esporte/futebol/2026/06/10/ons-jogos.htm',
+      })
+    ).toMatchObject({ cita_cliente: true, monitoring_status: 'confirmado' })
+  })
+})
+
+describe('termos aprendidos da 057 só casam com contexto', () => {
+  const prio = client('PRIO')
+  const magnetita: ClientRelevanceRule = {
+    ...rule('PRIO', 'aprendido: blocos Magnetita e Hematita', 'setorial', [['Magnetita', 'Hematita'], ['pré-sal', 'partilha', 'ANP', 'Oferta Permanente', 'Bacia de Campos']], 5),
+    excluded_terms: ['PetroRecôncavo', 'RECV3', 'Brava Energia', 'BRAV3'],
+  }
+
+  it('Magnetita como minério de ferro não vira PRIO', () => {
+    expect(
+      evaluateClientArticle(prio, [magnetita], { title: 'Vale amplia produção de magnetita em Carajás', excerpt: null, content: null })
+    ).toBeNull()
+  })
+
+  it('Magnetita no leilão de partilha da ANP vira PRIO confirmado', () => {
+    expect(
+      evaluateClientArticle(prio, [magnetita], { title: 'Leilão da ANP: blocos Magnetita e Hematita vão para o pré-sal', excerpt: null, content: null })
+    ).toMatchObject({ monitoring_status: 'confirmado', cita_cliente: false })
+  })
+
+  it('COBRE como metal não vira o modelo de preços', () => {
+    const ons = client('ONS')
+    const cobre = rule('ONS', 'aprendido: COBRE', 'setorial', [['COBRE'], ['Newave', 'Decomp', 'modelo computacional', 'código aberto', 'formação de preços']], 4)
+    expect(evaluateClientArticle(ons, [cobre], { title: 'Preço do cobre sobe na bolsa de Londres', excerpt: null, content: null })).toBeNull()
+    expect(
+      evaluateClientArticle(ons, [cobre], { title: 'COBRE, modelo de código aberto, vai substituir o Newave', excerpt: null, content: null })
+    ).toMatchObject({ monitoring_status: 'candidato' })
+  })
+})
+
+describe('revisão adversarial de 08/11: regra de dois grupos não basta sozinha', () => {
+  const ons = client('ONS')
+  const torres = rule('ONS', 'aprendido: queda de torres', 'setorial', [['torres'], ['tempestades', 'El Niño']], 3)
+  it('uma regra de dois grupos casando só no corpo não marca a matéria', () => {
+    expect(
+      evaluateClientArticle(ons, [torres], { title: 'Igreja reforma a catedral', excerpt: null, content: 'As torres sofreram com tempestades.' })
+    ).toBeNull()
+  })
+})
+
+describe('tema do cliente marca quando nenhuma regra casa (14/11)', () => {
+  const ons = client('ONS')
+  const themes = [{ title: 'Baterias e armazenamento de energia', inclusion_terms: ['armazenamento de energia', 'leilão de baterias'], exclusion_terms: [] }]
+
+  it('título com termo do tema vira revisão com o tema', () => {
+    expect(evaluateThemeOnly(ons, themes, { title: 'Governo marca leilão de baterias para 2027', excerpt: null, content: null }))
+      .toMatchObject({ monitoring_status: 'revisao', tema: 'Baterias e armazenamento de energia', cita_cliente: false })
+  })
+
+  it('palavra solta do tema não marca sozinha; frase ou dois termos marcam', () => {
+    const prio = client('PRIO')
+    const cambio = [{ title: 'Câmbio e proteção cambial', inclusion_terms: ['dólar', 'câmbio', 'proteção cambial'], exclusion_terms: [] }]
+    expect(evaluateThemeOnly(prio, cambio, { title: 'Dólar fecha em alta', excerpt: null, content: null })).toBeNull()
+    expect(evaluateThemeOnly(prio, cambio, { title: 'Dólar e câmbio pressionam importadores', excerpt: null, content: null })).not.toBeNull()
+    expect(evaluateThemeOnly(prio, cambio, { title: 'Exportadoras buscam proteção cambial', excerpt: null, content: null })).not.toBeNull()
+  })
+
+  it('termo só no corpo não marca (termo perdido)', () => {
+    expect(evaluateThemeOnly(ons, themes, { title: 'Senado vota PEC', excerpt: null, content: 'Citou o armazenamento de energia.' })).toBeNull()
+  })
+
+  it('caderno de esporte não marca', () => {
+    expect(
+      evaluateThemeOnly(ons, themes, { title: 'Leilão de baterias do clube', excerpt: null, content: null, url: 'https://ge.globo.com/futebol/x.ghtml' })
+    ).toBeNull()
+  })
+})
+
+describe('tema casa por token, não substring', () => {
+  it('"ESG" não casa em "desgaste"; sigla em caixa alta casa', () => {
+    const topic = { title: 'ESG', inclusion_terms: ['ESG'], exclusion_terms: [] }
+    expect(topicMatchesArticle(topic, { title: 'Desgaste da rede elétrica', excerpt: null, content: null }).matched).toBe(false)
+    expect(topicMatchesArticle(topic, { title: 'Mineradora publica relatório ESG', excerpt: null, content: null }).matched).toBe(true)
   })
 })
