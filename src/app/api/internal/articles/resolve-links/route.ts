@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server'
 import { resolveGoogleNewsUrl } from '@/lib/fetcher/extract'
 import { createAdminClient as createClient } from '@/lib/supabase/server'
+import { classifyArticleBatch } from '@/lib/classification'
+import type { Article } from '@/types'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
@@ -26,6 +28,7 @@ export async function POST() {
 
   let resolved = 0
   let writeErrors = 0
+  const resolvedIds: string[] = []
   for (let index = 0; index < (rows?.length ?? 0); index += CONCURRENCY) {
     await Promise.all(
       (rows ?? []).slice(index, index + CONCURRENCY).map(async (row) => {
@@ -35,10 +38,22 @@ export async function POST() {
           .update({ resolved_url: url, resolve_attempts: row.resolve_attempts + 1 })
           .eq('id', row.id)
         if (writeError) writeErrors++
-        else if (url) resolved++
+        else if (url) {
+          resolved++
+          resolvedIds.push(row.id as string)
+        }
       })
     )
   }
   if (writeErrors) return NextResponse.json({ error: `${writeErrors} gravações falharam.` }, { status: 500 })
-  return NextResponse.json({ processed: rows?.length ?? 0, resolved, done: (rows?.length ?? 0) < LIMIT })
+  // Reclassifica o que acabou de ganhar o link real: na coleta o link era do
+  // Google News e o corte por seção (esporte, famosos — src/lib/noise.ts) não
+  // tinha como agir. Falha aqui é visível (500), não silenciosa.
+  let reclassified = { articles: 0, matches: 0, removed: 0 }
+  if (resolvedIds.length) {
+    const { data: articles, error: articlesError } = await supabase.from('articles').select('*').in('id', resolvedIds)
+    if (articlesError) return NextResponse.json({ error: `Links resolvidos, reclassificação falhou: ${articlesError.message}` }, { status: 500 })
+    reclassified = await classifyArticleBatch(supabase, (articles as Article[]) || [])
+  }
+  return NextResponse.json({ processed: rows?.length ?? 0, resolved, reclassified, done: (rows?.length ?? 0) < LIMIT })
 }

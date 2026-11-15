@@ -120,7 +120,9 @@ export async function processFetchSource(
         .update({
           last_fetch_count: articles.length,
           last_fetched_at: now,
-          last_success_at: now,
+          // Feed que responde 200 sem item não é sucesso: gravar aqui escondia
+          // a fonte "viva mas vazia" do alerta de fonte parada (14/11/2026).
+          ...(articles.length > 0 ? { last_success_at: now } : {}),
           last_fetch_error: null,
           last_fetch_duration_ms: duration,
         })
