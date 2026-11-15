@@ -1,7 +1,11 @@
 import type { SupabaseClient } from '@supabase/supabase-js'
+import { STALLED_RUN_MS } from '@/lib/collection-health'
+import { getAiBudgetStatus } from '@/lib/ai/budget'
 
-/** Coleta roda 3x/dia; mais de 10h sem run concluído é falha, não folga. */
-const MAX_HOURS_SINCE_RUN = 10
+/** Mesmo limiar do Painel: maior intervalo do cron (13 h) + 1 h. Antes 10 h, que disparava toda manhã. */
+const MAX_HOURS_SINCE_RUN = STALLED_RUN_MS / 36e5
+/** Avisa antes do teto, não quando a IA já parou. */
+const AI_BUDGET_WARN_RATIO = 0.8
 /** Telas internas respondem em poucos segundos; 20s já é sintoma do que derrubou o Painel. */
 const PAGE_TIMEOUT_MS = 20_000
 /** Rotas de leitura que sustentam as telas. Falhar aqui é tela em branco para o usuário. */
@@ -41,12 +45,29 @@ export async function runHealthCheck(supabase: SupabaseClient, appUrl: string) {
   const hours = lastRun ? (Date.now() - new Date(lastRun.started_at).getTime()) / 36e5 : Infinity
   if (hours > MAX_HOURS_SINCE_RUN) {
     issues.push({ kind: 'health_collection', severity: 'critical', title: `Última coleta há ${Number.isFinite(hours) ? Math.round(hours) : '∞'}h; o agendamento de 3x/dia não está rodando`, details: { last_run: lastRun?.started_at ?? null } })
+  } else if (lastRun?.status === 'erro') {
+    // Começou na hora mas terminou em erro: antes passava como saudável.
+    issues.push({ kind: 'health_collection_status', severity: 'critical', title: `A última coleta terminou em erro (${lastRun.error_count ?? '?'} de ${lastRun.total_sources ?? '?'} fontes com erro)`, details: { run_id: lastRun.id } })
   }
 
-  const { count: failing, error: failingError } = await supabase
-    .from('sources').select('id', { count: 'exact', head: true }).eq('active', true).not('last_fetch_error', 'is', null)
+  const { data: failingSources, error: failingError } = await supabase
+    .from('sources').select('name').eq('active', true).not('last_fetch_error', 'is', null).order('name').limit(50)
   if (failingError) throw new Error(failingError.message)
-  if ((failing ?? 0) > 0) issues.push({ kind: 'health_sources', severity: 'warning', title: `${failing} fonte(s) ativa(s) com erro na última coleta`, details: { failing } })
+  if (failingSources?.length) {
+    const names = failingSources.map((source) => source.name)
+    issues.push({ kind: 'health_sources', severity: 'warning', title: `${names.length}${names.length === 50 ? '+' : ''} fonte(s) ativa(s) com erro: ${names.slice(0, 5).join(', ')}${names.length > 5 ? '…' : ''}`, details: { failing: names.length, sources: names } })
+  }
+
+  // Teto da IA a 80%: avisa antes de a classificação parar. Sem teto
+  // configurado a IA está desligada — não é alerta.
+  try {
+    const budget = await getAiBudgetStatus()
+    if (budget.monthlyLimitUsd && budget.monthlySpentUsd >= budget.monthlyLimitUsd * AI_BUDGET_WARN_RATIO) {
+      issues.push({ kind: 'health_ai_budget', severity: 'warning', title: `IA usou US$ ${budget.monthlySpentUsd.toFixed(2)} de US$ ${budget.monthlyLimitUsd.toFixed(2)} no mês`, details: { spent: budget.monthlySpentUsd, limit: budget.monthlyLimitUsd } })
+    }
+  } catch (error) {
+    issues.push({ kind: 'health_ai_budget', severity: 'warning', title: 'Não foi possível ler o consumo da IA', details: { error: error instanceof Error ? error.message : String(error) } })
+  }
 
   const { count: pendingLinks, error: linksError } = await supabase
     .from('articles').select('id', { count: 'exact', head: true })
@@ -91,16 +112,28 @@ export async function runHealthCheck(supabase: SupabaseClient, appUrl: string) {
   }
 
   const now = new Date().toISOString()
-  const kinds = ['health_route', 'health_collection', 'health_sources', 'health_links', 'health_agenda', 'health_rpc', 'health_client_silence']
-  // Resolve o que sarou antes de reabrir o que persiste: fingerprint estável por tipo + alvo.
-  const { error: resolveError } = await supabase.from('operational_alerts')
-    .update({ status: 'resolved', resolved_at: now, updated_at: now }).in('kind', kinds).neq('status', 'resolved')
-  if (resolveError) throw new Error(resolveError.message)
+  const kinds = ['health_route', 'health_collection', 'health_collection_status', 'health_sources', 'health_links', 'health_agenda', 'health_rpc', 'health_client_silence', 'health_ai_budget']
+  const fingerprintOf = (issue: HealthIssue) => `${issue.kind}:${String(issue.details.path ?? issue.kind)}`
+  const current = new Set(issues.map(fingerprintOf))
+  // Estado atual: o que sarou é resolvido; o que persiste mantém o
+  // "reconhecido" que o operador deu (antes todo alerta voltava a "aberto").
+  const { data: existing, error: existingError } = await supabase
+    .from('operational_alerts').select('fingerprint, status').in('kind', kinds).neq('status', 'resolved')
+  if (existingError) throw new Error(existingError.message)
+  const healed = (existing || []).filter((row) => !current.has(row.fingerprint)).map((row) => row.fingerprint)
+  if (healed.length) {
+    const { error: resolveError } = await supabase.from('operational_alerts')
+      .update({ status: 'resolved', resolved_at: now, updated_at: now }).in('fingerprint', healed)
+    if (resolveError) throw new Error(resolveError.message)
+  }
+  const acknowledged = new Set((existing || []).filter((row) => row.status === 'acknowledged').map((row) => row.fingerprint))
   if (issues.length) {
     const { error: upsertError } = await supabase.from('operational_alerts').upsert(
       issues.map((issue) => ({
-        fingerprint: `${issue.kind}:${String(issue.details.path ?? issue.kind)}`,
-        kind: issue.kind, severity: issue.severity, status: 'open', title: issue.title, details: issue.details,
+        fingerprint: fingerprintOf(issue),
+        kind: issue.kind, severity: issue.severity,
+        status: acknowledged.has(fingerprintOf(issue)) ? 'acknowledged' : 'open',
+        title: issue.title, details: issue.details,
         last_seen_at: now, resolved_at: null, updated_at: now,
       })),
       { onConflict: 'fingerprint' }

@@ -1,0 +1,42 @@
+name: Watchdog (saúde)
+
+# Vigia independente do app (scripts/watchdog.mjs): olha o GitHub, as URLs e o
+# Supabase direto. Existe porque a coleta ficou parada de 15/09 a 14/11/2026
+# sem nenhum alerta — a checagem antiga rodava dentro do workflow quebrado.
+# Segredos usados: APP_URL; SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY (para
+# olhar o banco); RESEND_API_KEY, ALERTS_EMAIL_FROM e ALERTS_EMAIL_TO (e-mail,
+# opcional). Sem os do Supabase, o vigia avisa que não consegue olhar o banco.
+on:
+  schedule:
+    - cron: '23 */3 * * *' # a cada 3 h, fora do minuto 0 (fila do GitHub)
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  issues: write
+  contents: read
+
+concurrency:
+  group: watchdog
+  cancel-in-progress: false
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Verificar saúde
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          APP_URL: ${{ secrets.APP_URL }}
+          PROD_URL: https://cortexreputacional.vercel.app
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          ALERTS_EMAIL_FROM: ${{ secrets.ALERTS_EMAIL_FROM }}
+          ALERTS_EMAIL_TO: ${{ secrets.ALERTS_EMAIL_TO }}
+        run: node scripts/watchdog.mjs
