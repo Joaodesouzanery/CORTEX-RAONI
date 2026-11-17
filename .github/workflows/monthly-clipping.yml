@@ -36,7 +36,7 @@ jobs:
       - name: Resolve period and edition IDs
         id: editions
         env:
-          APP_URL: ${{ secrets.APP_URL }}
+          APP_URL: ${{ secrets.APP_URL || vars.APP_URL }}
           CRON_SECRET: ${{ secrets.CRON_SECRET }}
           INPUT_IDS: ${{ inputs.edition_ids }}
           INPUT_PERIOD: ${{ inputs.period }}
@@ -67,7 +67,7 @@ jobs:
 
       - name: Render every client independently
         env:
-          APP_URL: ${{ secrets.APP_URL }}
+          APP_URL: ${{ secrets.APP_URL || vars.APP_URL }}
           CRON_SECRET: ${{ secrets.CRON_SECRET }}
           EDITION_IDS: ${{ steps.editions.outputs.ids }}
         run: |

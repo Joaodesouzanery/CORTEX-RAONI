@@ -28,7 +28,7 @@ jobs:
     steps:
       - name: Baixar os pacotes do mês
         env:
-          APP_URL: ${{ secrets.APP_URL }}
+          APP_URL: ${{ secrets.APP_URL || vars.APP_URL }}
           INPUT_PERIOD: ${{ inputs.period }}
         run: |
           if [ -z "${APP_URL}" ]; then

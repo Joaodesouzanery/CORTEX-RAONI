@@ -35,7 +35,7 @@ jobs:
     steps:
       - id: start
         env:
-          APP_URL: ${{ secrets.APP_URL }}
+          APP_URL: ${{ secrets.APP_URL || vars.APP_URL }}
           CRON_SECRET: ${{ secrets.CRON_SECRET }}
           PERIOD: ${{ github.event.inputs.period }}
           MANUAL_TRIGGER: ${{ github.event.inputs.trigger }}
@@ -61,7 +61,7 @@ jobs:
         worker: [1, 2]
     steps:
       - env:
-          APP_URL: ${{ secrets.APP_URL }}
+          APP_URL: ${{ secrets.APP_URL || vars.APP_URL }}
           CRON_SECRET: ${{ secrets.CRON_SECRET }}
         run: |
           for ATTEMPT in $(seq 1 300); do

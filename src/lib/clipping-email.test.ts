@@ -47,3 +47,18 @@ describe('e-mail de clipping', () => {
     expect(review.html).toContain('Prévia para revisão')
   })
 })
+
+describe('e-mail com temas do mês e histórico', () => {
+  it('mostra os temas com contagem e o link do histórico; tema zerado some', () => {
+    const email = buildClippingEmail({
+      clientDisplayName: 'ONS', brand: 'CRT', day, totalItems: 12,
+      monthThemes: [{ title: 'LRCAP e leilões de potência', count: 7 }, { title: 'Tema vazio', count: 0 }],
+      monthTotal: 140,
+      historyUrl: 'https://cortexreputacional.vercel.app/clipping',
+    })
+    expect(email.html).toContain('LRCAP e leilões de potência')
+    expect(email.html).not.toContain('Tema vazio')
+    expect(email.text).toContain('Temas do mês até hoje (140 matérias):')
+    expect(email.html).toContain('href="https://cortexreputacional.vercel.app/clipping"')
+  })
+})

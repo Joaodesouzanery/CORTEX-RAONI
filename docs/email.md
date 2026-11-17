@@ -7,7 +7,33 @@
 
 O código está em `src/lib/clipping-text.ts`, `src/lib/clipping-email.ts` e `src/app/api/internal/clipping-email/route.ts`.
 
-## Por que Resend e não Gmail
+## Gmail com senha de app (escolha do dono, 17/11/2026)
+O Cortex envia pelo seu Gmail, sozinho, sem o Resend e sem domínio novo. O limite é de cerca de 500 destinatários por dia, e 7 clientes com 3 pessoas cada dão 21 por dia.
+
+1. Na conta Google que vai enviar, ligue a **verificação em 2 etapas** (myaccount.google.com → Segurança).
+2. Gere uma **senha de app**: myaccount.google.com/apppasswords → nome "Cortex" → Criar. Copie os 16 caracteres.
+3. Na **Vercel** (projeto cortexintel → Settings → Environment Variables → Production):
+   - `GMAIL_USER`: o endereço do Gmail;
+   - `GMAIL_APP_PASSWORD`: a senha de app (não a senha da conta);
+   - `ALERTS_EMAIL_TO`: o seu e-mail, que recebe a revisão;
+   - `ALERTS_EMAIL_FROM` (opcional): só o nome que aparece, como `Clipping CRT <...>`. O endereço é sempre o da conta Gmail.
+4. Faça um redeploy da produção para as variáveis valerem.
+5. Cole a migration 058 e cadastre os 3 destinatários de cada cliente (modelo no fim da 058).
+
+Com o Gmail configurado, ele tem prioridade sobre o Resend. Login recusado aparece como "use uma senha de app" no resultado do envio.
+
+**O que o e-mail traz, por cliente:**
+1. a marca;
+2. as menções ao cliente do dia, agrupadas por fato, com veículos, link exato e o tom (só quando revisado);
+3. "Em setor", com até 3 itens;
+4. **Temas do mês até hoje**, com a contagem por tema (o mesmo cálculo do Painel);
+5. o link "Ver o clipping do dia e o histórico no Cortex";
+6. o rodapé com o denominador e o descadastro.
+
+## Por que não o conector do Gmail do Claude
+O conector age só enquanto uma sessão do Claude está rodando. Serve para rascunho, não para envio automático todo dia.
+
+## Resend (alternativa)
 - **O conector do Gmail do Claude age na caixa do dono só durante um chat.** Serve para criar um rascunho por dia que o dono revisa e envia (alternativa abaixo), não para envio automático aos clientes.
 - **Gmail API dentro do app** exigiria OAuth do Google, renovação de token e verificação do app para o escopo de envio. O limite é de cerca de 500 e-mails por dia (2.000 no Workspace), e a mensagem sairia da caixa pessoal.
 - **Resend** já estava pronto em `src/lib/email.ts`. É uma chamada HTTP; com domínio verificado (SPF/DKIM) não cai em spam e roda sozinho pelo GitHub Actions.

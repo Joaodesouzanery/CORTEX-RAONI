@@ -14,6 +14,8 @@ import { readFileSync, readdirSync, writeFileSync, mkdirSync } from 'node:fs'
 import { join } from 'node:path'
 
 const period = process.argv[2] || '2026-10'
+// Opcional: um cliente só (SQL menor), ex.: node scripts/build-calibration-sql.mjs 2026-10 ONS
+const clientFilter = (process.argv[3] || '').replace(/[^A-Z]/g, '')
 if (!/^\d{4}-(0[1-9]|1[0-2])$/.test(period)) {
   console.error('Uso: node scripts/build-calibration-sql.mjs YYYY-MM')
   process.exit(2)
@@ -66,7 +68,10 @@ const urlKey = (expr) =>
 const titleKey = (expr) =>
   `array_to_string((regexp_split_to_array(trim(regexp_replace(translate(lower(${expr}), '${ACCENTS[0]}', '${ACCENTS[1]}'), '[^a-z0-9]+', ' ', 'g')), ' '))[1:7], ' ')`
 
-const values = rows.map((row) => `  (${row.map(q).join(', ')})`).join(',\n')
+const values = rows
+  .filter((row) => !clientFilter || row[0] === clientFilter)
+  .map((row) => `  (${row.map(q).join(', ')})`)
+  .join(',\n')
 
 const sql = `-- Calibração ${period}: quanto o Cortex chega do que foi entregue ao cliente.
 -- Gerado por: node scripts/build-calibration-sql.mjs ${period}
@@ -96,18 +101,23 @@ WITH ref(cliente, origem, titulo, url, bloco, tom) AS (
 VALUES
 ${values}
 UNION ALL
-SELECT d.client_name, 'entregue', d.title, d.url, NULL, NULL
+SELECT d.client_name, CASE WHEN d.variant = 'pdf-final' THEN 'entregue-pdf' ELSE 'entregue' END, d.title, d.url, NULL, NULL
 FROM delivered_report_items d
 WHERE d.period_month = DATE '${period}-01' AND d.variant <> 'refeito'
 ),
 r AS (
   SELECT ref.*, c.id AS client_id,
+         row_number() OVER () AS rid,
          ${urlKey('ref.url')} AS uk,
          ${titleKey('ref.titulo')} AS tk
   FROM ref
-  LEFT JOIN clients c ON c.name = ref.cliente OR c.name LIKE ref.cliente || ' %'
+  LEFT JOIN clients c ON c.name = ref.cliente OR c.name LIKE ref.cliente || ' %'${clientFilter ? `\n  WHERE ref.cliente = '${clientFilter}'` : ''}
 ),
-art AS (
+-- MATERIALIZED: as chaves do acervo são calculadas UMA vez. A versão
+-- anterior casava cada referência numa subconsulta correlacionada e
+-- recalculava as regex do acervo inteiro por referência (timeout no SQL
+-- Editor do Supabase, relatado em 17/11/2026).
+art AS MATERIALIZED (
   SELECT a.id,
          ${urlKey('a.url')} AS uk,
          ${urlKey('a.resolved_url')} AS uk_resolved,
@@ -116,13 +126,19 @@ art AS (
   WHERE a.published_at >= TIMESTAMPTZ '${period}-01 00:00-03' - INTERVAL '5 days'
     AND a.published_at <  TIMESTAMPTZ '${nextPeriod}-01 00:00-03' + INTERVAL '7 days'
 ),
+-- Três casamentos por igualdade (hash join), não OR numa subconsulta.
+hits AS (
+  SELECT r.rid, art.id FROM r JOIN art ON r.uk IS NOT NULL AND art.uk = r.uk
+  UNION ALL
+  SELECT r.rid, art.id FROM r JOIN art ON r.uk IS NOT NULL AND art.uk_resolved = r.uk
+  UNION ALL
+  SELECT r.rid, art.id FROM r JOIN art ON array_length(string_to_array(r.tk, ' '), 1) >= 4 AND art.tk = r.tk
+),
+best AS (
+  SELECT DISTINCT ON (rid) rid, id FROM hits ORDER BY rid, id
+),
 m AS (
-  SELECT r.*,
-         (SELECT art.id FROM art
-          WHERE (r.uk IS NOT NULL AND (art.uk = r.uk OR art.uk_resolved = r.uk))
-             OR (array_length(string_to_array(r.tk, ' '), 1) >= 4 AND art.tk = r.tk)
-          LIMIT 1) AS article_id
-  FROM r
+  SELECT r.*, best.id AS article_id FROM r LEFT JOIN best ON best.rid = r.rid
 ),
 t AS (
   SELECT m.*, tag.cita_cliente, tag.tom AS tag_tom, tag.monitoring_status
@@ -150,5 +166,6 @@ ORDER BY cliente, origem;
 `
 
 mkdirSync('docs/calibracao', { recursive: true })
-writeFileSync(`docs/calibracao/recall-${period}.sql`, sql)
-console.log(`docs/calibracao/recall-${period}.sql: ${refeitos} refeitos + ${ons} manchetes da ONS embutidos.`)
+const out = `docs/calibracao/recall-${period}${clientFilter ? `-${clientFilter}` : ''}.sql`
+writeFileSync(out, sql)
+console.log(`${out}: ${refeitos} refeitos + ${ons} manchetes da ONS embutidos.`)

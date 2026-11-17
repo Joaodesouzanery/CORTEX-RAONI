@@ -29,6 +29,11 @@ on:
         required: false
         default: false
         type: boolean
+      backfill_period:
+        description: 'Recuperar um mês passado pelo Google News (AAAA-MM). Vazio = não recupera'
+        required: false
+        default: ''
+        type: string
       reclassify_period:
         description: 'Limitar a reclassificação a um mês (YYYY-MM). Vazio = acervo inteiro'
         required: false
@@ -112,14 +117,42 @@ jobs:
           echo "Fetch run did not finish after 100 batches. Fontes podem estar sendo reenfileiradas em loop — confira fetch_run_sources com attempt_count alto." >&2
           exit 1
         env:
-          APP_URL: ${{ secrets.APP_URL }}
+          APP_URL: ${{ secrets.APP_URL || vars.APP_URL }}
+
+      - name: Backfill month
+        # Recupera um mês que o RSS não devolve mais (src/lib/backfill.ts). Só
+        # roda quando backfill_period é preenchido no disparo manual. Fica antes
+        # do "Resolve Google News links" para os links recuperados serem
+        # trocados pela URL real na mesma execução.
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.backfill_period != '' }}
+        env:
+          APP_URL: ${{ secrets.APP_URL || vars.APP_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+          PERIOD: ${{ inputs.backfill_period }}
+        run: |
+          cursor=0
+          failures=0
+          for n in $(seq 1 120); do
+            body=$(node -e "process.stdout.write(JSON.stringify({period:process.env.PERIOD,cursor:Number(process.argv[1])}))" "${cursor}")
+            code=$(curl -sS -o /tmp/backfill.json -w '%{http_code}' --max-time 90 -X POST \
+              -H "Authorization: Bearer ${CRON_SECRET}" -H "Content-Type: application/json" -d "${body}" \
+              "${APP_URL%/}/api/internal/backfill" || echo '000')
+            cat /tmp/backfill.json; echo
+            if [ "${code}" != "200" ]; then failures=$((failures + 1)); fi
+            # Uma consulta com erro (502) não trava o mês; 5 seguidas, sim.
+            if [ "${failures}" -ge 5 ]; then echo "::error::Backfill com 5 falhas."; exit 1; fi
+            [ "${code}" = "200" ] && failures=0
+            done=$(node -e "try{process.stdout.write(String(!!require('/tmp/backfill.json').done))}catch{process.stdout.write('false')}")
+            [ "${done}" = "true" ] && exit 0
+            cursor=$(node -e "try{process.stdout.write(String(require('/tmp/backfill.json').next_cursor ?? ${cursor}+1))}catch{process.stdout.write(String(${cursor}+1))}")
+          done
 
       - name: Resolve Google News links
         # Logo após a coleta: imagem, texto integral e selo do veículo dependem
         # da URL real, não do redirecionador do Google News.
         if: ${{ always() }}
         env:
-          APP_URL: ${{ secrets.APP_URL }}
+          APP_URL: ${{ secrets.APP_URL || vars.APP_URL }}
           CRON_SECRET: ${{ secrets.CRON_SECRET }}
         run: |
           # 120 lotes de 30 (~3.600 links por coleta): o acervo de outubro tinha
@@ -131,25 +164,6 @@ jobs:
             test "${code}" = "200"
             done=$(node -e "process.stdout.write(String(!!require('/tmp/links.json').done))")
             [ "${done}" = "true" ] && exit 0
-          done
-
-      - name: Classify with master prompt
-        # Prompt mestre de cada cliente revisa o que a regra deixou em revisão
-        # (docs/prompt-mestre.md). Sem ANTHROPIC_API_KEY a rota responde 503
-        # "nao_configurado" e o passo sai sem erro: a regra continua valendo.
-        if: ${{ always() }}
-        env:
-          APP_URL: ${{ secrets.APP_URL }}
-          CRON_SECRET: ${{ secrets.CRON_SECRET }}
-        run: |
-          # 4 rodadas de um lote por cliente (~100 matérias por cliente por coleta).
-          for n in 1 2 3 4; do
-            code=$(curl -sS -o /tmp/classify-ai.json -w '%{http_code}' --max-time 120 -X POST \
-              -H "Authorization: Bearer ${CRON_SECRET}" -H "Content-Type: application/json" -d '{}' \
-              "${APP_URL%/}/api/internal/classify-ai" || echo '000')
-            cat /tmp/classify-ai.json; echo
-            if [ "${code}" = "503" ]; then echo "IA não ligada ou teto atingido: segue só a regra."; exit 0; fi
-            test "${code}" = "200" || test "${code}" = "207"
           done
 
       - name: Backfill article images
@@ -166,7 +180,7 @@ jobs:
             echo "backfill ${n}: HTTP ${code}"; cat /tmp/img.json || true; echo
           done
         env:
-          APP_URL: ${{ secrets.APP_URL }}
+          APP_URL: ${{ secrets.APP_URL || vars.APP_URL }}
 
       - name: Enrich partial article text
         # Best-effort and public pages only. Paid/unavailable content remains
@@ -182,13 +196,13 @@ jobs:
             echo "enrich ${n}: HTTP ${code}"; cat /tmp/enrich.json || true; echo
           done
         env:
-          APP_URL: ${{ secrets.APP_URL }}
+          APP_URL: ${{ secrets.APP_URL || vars.APP_URL }}
 
       - name: Sync ANTAQ regulatory agenda
         # Sem novo boletim é no-op. Falha aqui não pode esconder a coleta, e a coleta não impede a agenda.
         if: ${{ always() }}
         env:
-          APP_URL: ${{ secrets.APP_URL }}
+          APP_URL: ${{ secrets.APP_URL || vars.APP_URL }}
           CRON_SECRET: ${{ secrets.CRON_SECRET }}
         run: |
           code=$(curl -sS -o /tmp/agenda.json -w '%{http_code}' --max-time 120 -X POST \
@@ -200,7 +214,7 @@ jobs:
         # Último passo: o que as etapas acima deixaram é o que o usuário vai ver.
         if: ${{ always() }}
         env:
-          APP_URL: ${{ secrets.APP_URL }}
+          APP_URL: ${{ secrets.APP_URL || vars.APP_URL }}
           CRON_SECRET: ${{ secrets.CRON_SECRET }}
         run: |
           code=$(curl -sS -o /tmp/health.json -w '%{http_code}' --max-time 120 -X POST \
@@ -213,7 +227,7 @@ jobs:
         # — quem pediu reclassificação no disparo manual quer isso de qualquer forma.
         if: ${{ always() && github.event_name == 'workflow_dispatch' && inputs.reclassify_archive }}
         env:
-          APP_URL: ${{ secrets.APP_URL }}
+          APP_URL: ${{ secrets.APP_URL || vars.APP_URL }}
           RECLASSIFY_PERIOD: ${{ inputs.reclassify_period }}
         run: |
           cursor=""

@@ -2,7 +2,7 @@
 
 O SQL `recall-2026-10.sql` mede, por cliente, quantas notícias do que chegou ao cliente o Cortex coletou e etiquetou. Ele é gerado por `node scripts/build-calibration-sql.mjs 2026-10`. Para outro mês, rode o script com o mês: ele precisa de `docs/relatorios-refeitos/<mês>/`.
 
-**Como usar**
+**Como usar** (17/11: reescrito com hash join e acervo calculado uma vez; 1,3 s com 50 mil matérias no teste local. Se ainda estourar, use o arquivo de um cliente só: `recall-2026-10-ONS.sql`, gerado com `node scripts/build-calibration-sql.mjs 2026-10 ONS`.)
 1. Cole `recall-2026-10.sql` no SQL Editor do Supabase. Ele só lê e devolve uma linha por cliente e origem.
 2. Rode **antes** de colar a 056 e a 057, e de novo **depois** da próxima coleta completa com reclassificação do mês. Selecione `reclassify_archive` e o período `2026-10` no `fetch-news`.
 3. Anote os números abaixo, com a data.

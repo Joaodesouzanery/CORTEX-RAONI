@@ -38,7 +38,7 @@ jobs:
     steps:
       - name: Enviar o clipping do dia
         env:
-          APP_URL: ${{ secrets.APP_URL }}
+          APP_URL: ${{ secrets.APP_URL || vars.APP_URL }}
           CRON_SECRET: ${{ secrets.CRON_SECRET }}
           MODE: ${{ inputs.mode || 'review' }}
           DATE: ${{ inputs.date }}
@@ -56,8 +56,8 @@ jobs:
           # 200 = tudo certo; 207 = algum cliente falhou; 503 = e-mail não configurado.
           # Enquanto o Resend não estiver ligado, o agendado só avisa (sem vermelho
           # diário que esconderia falhas reais).
-          if [ "${code}" = "503" ] && grep -q nao_configurado /tmp/email.json; then
-            echo "::warning::E-mail ainda não configurado (docs/email.md)."
+          if [ "${code}" = "503" ] && grep -q nao_configurado /tmp/email.json; then # sem Gmail/Resend ainda
+            echo "::warning::E-mail ainda não configurado: GMAIL_USER e GMAIL_APP_PASSWORD na Vercel (docs/email.md)."
             exit 0
           fi
           if [ "${code}" != "200" ]; then

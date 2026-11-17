@@ -685,18 +685,23 @@ VALUES
   ('ONS', 'clipping-fornecedor', 'Mercado aposta na axia como destaque para o novo leilão de transmissão de energia marcado para a próxima sexta-feira', NULL, NULL, NULL),
   ('ONS', 'clipping-fornecedor', 'Governo planeja leilão de energia elétrica para a região Norte em 2027', NULL, NULL, NULL)
 UNION ALL
-SELECT d.client_name, 'entregue', d.title, d.url, NULL, NULL
+SELECT d.client_name, CASE WHEN d.variant = 'pdf-final' THEN 'entregue-pdf' ELSE 'entregue' END, d.title, d.url, NULL, NULL
 FROM delivered_report_items d
 WHERE d.period_month = DATE '2026-10-01' AND d.variant <> 'refeito'
 ),
 r AS (
   SELECT ref.*, c.id AS client_id,
+         row_number() OVER () AS rid,
          NULLIF(regexp_replace(regexp_replace(lower(ref.url), '^https?://(www\d?\.|m\.)?', ''), '([?#].*$)|(/+$)', '', 'g'), '') AS uk,
          array_to_string((regexp_split_to_array(trim(regexp_replace(translate(lower(ref.titulo), 'áàâãäéèêëíìîïóòôõöúùûüçñ', 'aaaaaeeeeiiiiooooouuuucn'), '[^a-z0-9]+', ' ', 'g')), ' '))[1:7], ' ') AS tk
   FROM ref
   LEFT JOIN clients c ON c.name = ref.cliente OR c.name LIKE ref.cliente || ' %'
 ),
-art AS (
+-- MATERIALIZED: as chaves do acervo são calculadas UMA vez. A versão
+-- anterior casava cada referência numa subconsulta correlacionada e
+-- recalculava as regex do acervo inteiro por referência (timeout no SQL
+-- Editor do Supabase, relatado em 17/11/2026).
+art AS MATERIALIZED (
   SELECT a.id,
          NULLIF(regexp_replace(regexp_replace(lower(a.url), '^https?://(www\d?\.|m\.)?', ''), '([?#].*$)|(/+$)', '', 'g'), '') AS uk,
          NULLIF(regexp_replace(regexp_replace(lower(a.resolved_url), '^https?://(www\d?\.|m\.)?', ''), '([?#].*$)|(/+$)', '', 'g'), '') AS uk_resolved,
@@ -705,13 +710,19 @@ art AS (
   WHERE a.published_at >= TIMESTAMPTZ '2026-10-01 00:00-03' - INTERVAL '5 days'
     AND a.published_at <  TIMESTAMPTZ '2026-11-01 00:00-03' + INTERVAL '7 days'
 ),
+-- Três casamentos por igualdade (hash join), não OR numa subconsulta.
+hits AS (
+  SELECT r.rid, art.id FROM r JOIN art ON r.uk IS NOT NULL AND art.uk = r.uk
+  UNION ALL
+  SELECT r.rid, art.id FROM r JOIN art ON r.uk IS NOT NULL AND art.uk_resolved = r.uk
+  UNION ALL
+  SELECT r.rid, art.id FROM r JOIN art ON array_length(string_to_array(r.tk, ' '), 1) >= 4 AND art.tk = r.tk
+),
+best AS (
+  SELECT DISTINCT ON (rid) rid, id FROM hits ORDER BY rid, id
+),
 m AS (
-  SELECT r.*,
-         (SELECT art.id FROM art
-          WHERE (r.uk IS NOT NULL AND (art.uk = r.uk OR art.uk_resolved = r.uk))
-             OR (array_length(string_to_array(r.tk, ' '), 1) >= 4 AND art.tk = r.tk)
-          LIMIT 1) AS article_id
-  FROM r
+  SELECT r.*, best.id AS article_id FROM r LEFT JOIN best ON best.rid = r.rid
 ),
 t AS (
   SELECT m.*, tag.cita_cliente, tag.tom AS tag_tom, tag.monitoring_status
