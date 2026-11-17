@@ -567,6 +567,62 @@ export default function ReportPreparationPage() {
     if (!res.ok) throw new Error(data?.error || 'Falha ao salvar os dados do mês.')
   }
 
+  // Qualificação pelo prompt mestre (Fase 22): pacote para outro chat do
+  // Claude, importação da resposta e, com a chave ligada, a IA direto.
+  const [qualifyText, setQualifyText] = useState('')
+  const [qualifyOpen, setQualifyOpen] = useState(false)
+  const [qualifyNotice, setQualifyNotice] = useState('')
+
+  async function importQualification() {
+    if (!draft || !qualifyText.trim()) return
+    setBusy('qualify-import')
+    setError('')
+    try {
+      const res = await fetch(`/api/report-drafts/${draft.id}/qualify`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mode: 'import', payload: qualifyText }),
+      })
+      const body = await res.json().catch(() => null)
+      if (!res.ok) throw new Error(body?.error || `Falha ao importar (HTTP ${res.status}).`)
+      setQualifyNotice(`${body.updated} matérias atualizadas de ${body.received} decisões recebidas${body.ignored ? ` (${body.ignored} ignoradas: id fora do pacote ou duplicado)` : ''}.`)
+      setQualifyText('')
+      setQualifyOpen(false)
+      await loadDraft(draft.id)
+    } catch (importError) {
+      setError(importError instanceof Error ? importError.message : 'Falha ao importar a qualificação.')
+    } finally {
+      setBusy('')
+    }
+  }
+
+  async function qualifyWithAi() {
+    if (!draft) return
+    setBusy('qualify-ai')
+    setError('')
+    let total = 0
+    try {
+      // Lotes até acabar; para se uma chamada não atualizar nada (evita laço).
+      for (let round = 0; round < 40; round++) {
+        const res = await fetch(`/api/report-drafts/${draft.id}/qualify`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ mode: 'ai' }),
+        })
+        const body = await res.json().catch(() => null)
+        if (!res.ok) throw new Error(body?.detail || body?.error || `Falha na IA (HTTP ${res.status}).`)
+        total += body.updated
+        setQualifyNotice(`IA: ${total} matérias qualificadas; faltam ${body.remaining}.`)
+        if (!body.remaining || !body.updated) break
+      }
+      await loadDraft(draft.id)
+    } catch (aiError) {
+      setError(aiError instanceof Error ? aiError.message : 'Falha ao qualificar com IA.')
+    } finally {
+      setBusy('')
+    }
+  }
+
   async function saveInputs() {
     if (!draft) return
     setBusy('save-inputs')
@@ -939,7 +995,32 @@ export default function ReportPreparationPage() {
                 Pacote Claude Design
               </a>
             )}
+            {draft && (
+              <a
+                href={`/api/report-drafts/${draft.id}/qualify`}
+                title="Prompt mestre + todas as matérias do mês, para colar num chat do Claude"
+                className="inline-flex h-10 items-center border border-black px-4 text-sm hover:bg-black hover:text-white"
+              >
+                Pacote de qualificação
+              </a>
+            )}
+            {draft && <Button variant="outline" onClick={() => setQualifyOpen((open) => !open)} disabled={!!busy}>Importar qualificação</Button>}
+            {draft && <Button variant="outline" onClick={qualifyWithAi} disabled={!!busy} title="Usa a chave da Anthropic, dentro do teto de gasto">Qualificar com IA</Button>}
           </div>
+          {draft && qualifyOpen && (
+            <div className="mt-3 grid gap-2">
+              <label htmlFor="qualify-json" className="text-sm text-slate-700">Cole aqui a resposta do chat (o JSON com &quot;decisoes&quot;):</label>
+              <textarea
+                id="qualify-json"
+                value={qualifyText}
+                onChange={(event) => setQualifyText(event.target.value)}
+                rows={8}
+                className="w-full border border-slate-300 p-2 font-mono text-xs"
+              />
+              <div><Button onClick={importQualification} disabled={!!busy || !qualifyText.trim()}>Gravar qualificação</Button></div>
+            </div>
+          )}
+          {qualifyNotice && <p className="mt-2 text-sm text-slate-700">{qualifyNotice}</p>}
         </div>
         <div className="mt-4 grid gap-4 md:grid-cols-[1fr_18rem]">
           <div>

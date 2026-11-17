@@ -166,25 +166,6 @@ jobs:
             [ "${done}" = "true" ] && exit 0
           done
 
-      - name: Classify with master prompt
-        # Prompt mestre de cada cliente revisa o que a regra deixou em revisão
-        # (docs/prompt-mestre.md). Sem ANTHROPIC_API_KEY a rota responde 503
-        # "nao_configurado" e o passo sai sem erro: a regra continua valendo.
-        if: ${{ always() }}
-        env:
-          APP_URL: ${{ secrets.APP_URL || vars.APP_URL }}
-          CRON_SECRET: ${{ secrets.CRON_SECRET }}
-        run: |
-          # 4 rodadas de um lote por cliente (~100 matérias por cliente por coleta).
-          for n in 1 2 3 4; do
-            code=$(curl -sS -o /tmp/classify-ai.json -w '%{http_code}' --max-time 120 -X POST \
-              -H "Authorization: Bearer ${CRON_SECRET}" -H "Content-Type: application/json" -d '{}' \
-              "${APP_URL%/}/api/internal/classify-ai" || echo '000')
-            cat /tmp/classify-ai.json; echo
-            if [ "${code}" = "503" ]; then echo "IA não ligada ou teto atingido: segue só a regra."; exit 0; fi
-            test "${code}" = "200" || test "${code}" = "207"
-          done
-
       - name: Backfill article images
         # Best-effort: fills missing images (incl. Google News) in batches.
         # `always()`: coleta parcial ainda merece imagem. Sem isto, uma falha no
