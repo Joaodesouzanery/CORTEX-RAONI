@@ -2,7 +2,7 @@
 
 Ficam em `supabase/migrations/`. Todas são idempotentes. O dono cola cada uma no SQL Editor do Supabase, porque o conector Supabase do Claude não aponta para o projeto CORTEX. **Nunca edite uma migration já aplicada: crie a próxima.**
 
-**Situação em 08/11/2026:** as migrations **001 a 054 estão aplicadas**; 056 a 060 pendentes, incluindo a 052b nas partes 1 a 3 (`delivered_report_items` com 545 linhas). A **055 está pendente** e é opcional.
+**Situação em 08/11/2026:** as migrations **001 a 054 estão aplicadas**; 056 a 061 pendentes, incluindo a 052b nas partes 1 a 3 (`delivered_report_items` com 545 linhas). A **055 está pendente** e é opcional.
 
 | # | O que faz |
 |---|---|
@@ -30,3 +30,4 @@ Ficam em `supabase/migrations/`. Todas são idempotentes. O dono cola cada uma n
 | 058 | **Pendente (para o e-mail).** `client_email_recipients` (destinatários por cliente, dado pessoal, só service role) e `clipping_email_sends` (registro de envio, chave cliente + dia + modo, para re-run ser no-op) |
 | 059 | **Pendente.** Frases mais largas nos temas do mês (ONS, CCEE, PRIO, SIMINERAL, SINDINFOR, DAQ), agora que o tema também marca a matéria na coleta. Só acrescenta termos e não religa tema desligado |
 | 060 | **Pendente.** 117 matérias dos relatórios em PDF que chegaram ao cliente e não estavam no gabarito, quase todas de outubro (`delivered_report_items`, variante `pdf-final`) |
+| 061 | **Pendente.** Fonte técnica, inativa, do backfill de mês (`cortex://backfill-google-news`), usada por `/api/internal/backfill` |

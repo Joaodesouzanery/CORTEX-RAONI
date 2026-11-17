@@ -29,6 +29,11 @@ on:
         required: false
         default: false
         type: boolean
+      backfill_period:
+        description: 'Recuperar um mês passado pelo Google News (AAAA-MM). Vazio = não recupera'
+        required: false
+        default: ''
+        type: string
       reclassify_period:
         description: 'Limitar a reclassificação a um mês (YYYY-MM). Vazio = acervo inteiro'
         required: false
@@ -113,6 +118,34 @@ jobs:
           exit 1
         env:
           APP_URL: ${{ secrets.APP_URL || vars.APP_URL }}
+
+      - name: Backfill month
+        # Recupera um mês que o RSS não devolve mais (src/lib/backfill.ts). Só
+        # roda quando backfill_period é preenchido no disparo manual. Fica antes
+        # do "Resolve Google News links" para os links recuperados serem
+        # trocados pela URL real na mesma execução.
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.backfill_period != '' }}
+        env:
+          APP_URL: ${{ secrets.APP_URL || vars.APP_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+          PERIOD: ${{ inputs.backfill_period }}
+        run: |
+          cursor=0
+          failures=0
+          for n in $(seq 1 120); do
+            body=$(node -e "process.stdout.write(JSON.stringify({period:process.env.PERIOD,cursor:Number(process.argv[1])}))" "${cursor}")
+            code=$(curl -sS -o /tmp/backfill.json -w '%{http_code}' --max-time 90 -X POST \
+              -H "Authorization: Bearer ${CRON_SECRET}" -H "Content-Type: application/json" -d "${body}" \
+              "${APP_URL%/}/api/internal/backfill" || echo '000')
+            cat /tmp/backfill.json; echo
+            if [ "${code}" != "200" ]; then failures=$((failures + 1)); fi
+            # Uma consulta com erro (502) não trava o mês; 5 seguidas, sim.
+            if [ "${failures}" -ge 5 ]; then echo "::error::Backfill com 5 falhas."; exit 1; fi
+            [ "${code}" = "200" ] && failures=0
+            done=$(node -e "try{process.stdout.write(String(!!require('/tmp/backfill.json').done))}catch{process.stdout.write('false')}")
+            [ "${done}" = "true" ] && exit 0
+            cursor=$(node -e "try{process.stdout.write(String(require('/tmp/backfill.json').next_cursor ?? ${cursor}+1))}catch{process.stdout.write(String(${cursor}+1))}")
+          done
 
       - name: Resolve Google News links
         # Logo após a coleta: imagem, texto integral e selo do veículo dependem
