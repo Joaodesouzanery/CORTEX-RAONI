@@ -18,6 +18,12 @@ export interface ClippingEmailInput {
   totalItems: number
   /** Modo revisão: faixa avisando que é prévia para o dono aprovar. */
   review?: boolean
+  /** Temas do mês com a contagem até hoje (Painel). Sem temas, a seção some. */
+  monthThemes?: Array<{ title: string; count: number }>
+  /** Total de matérias do mês marcadas para o cliente (denominador dos temas). */
+  monthTotal?: number
+  /** Endereço do Cortex para "ver histórico" (clipping do dia na tela). */
+  historyUrl?: string | null
 }
 
 export interface ClippingEmail {
@@ -54,6 +60,17 @@ export function buildClippingEmail(input: ClippingEmailInput): ClippingEmail {
   const shown = day.client.length + day.sector.length
   const footer = `${shown} fato${shown === 1 ? '' : 's'} no e-mail, de ${input.totalItems} matéria${input.totalItems === 1 ? '' : 's'} do dia monitorada${input.totalItems === 1 ? '' : 's'} para ${input.clientDisplayName}. Cada item traz título, veículo e link para a matéria original. Para deixar de receber, responda a este e-mail.`
 
+  const themes = (input.monthThemes || []).filter((theme) => theme.count > 0).slice(0, 8)
+  const historyHref = input.historyUrl ? safeExternalUrl(input.historyUrl) : null
+  const themesHtml = themes.length
+    ? `<div style="margin-top:22px;padding:12px 14px;background:#ffffff;border:1px solid ${RULE}">
+<div style="font-size:12px;letter-spacing:1px;text-transform:uppercase;color:${MUTED};margin-bottom:6px">Temas do mês até hoje${input.monthTotal ? ` · ${input.monthTotal} matérias` : ''}</div>
+${themes.map((theme) => `<div style="font-size:14px;line-height:1.6;color:${INK}">${escapeHtml(theme.title)} <span style="color:${MUTED}">(${theme.count})</span></div>`).join('\n')}
+</div>`
+    : ''
+  const historyHtml = historyHref
+    ? `<p style="margin:16px 0 0;font-size:13px"><a href="${escapeHtml(historyHref)}" style="color:#0f5563">Ver o clipping do dia e o histórico no Cortex</a></p>`
+    : ''
   const html = `<!doctype html>
 <html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHtml(subject)}</title></head>
 <body style="margin:0;padding:0;background:#f6f5f1">
@@ -67,6 +84,8 @@ ${input.review ? `<div style="background:#fff4d6;border:1px solid #e8c766;paddin
 ${day.client.map(paragraphHtml).join('\n')}
 ${day.client.length && day.sector.length ? `<hr style="border:0;border-top:1px solid ${RULE};margin:18px 0">` : ''}
 ${day.sector.map(paragraphHtml).join('\n')}
+${themesHtml}
+${historyHtml}
 <p style="margin:24px 0 0;padding-top:12px;border-top:1px solid ${RULE};font-size:12px;line-height:1.5;color:${MUTED}">${escapeHtml(footer)}</p>
 </div></body></html>`
 
@@ -79,6 +98,8 @@ ${day.sector.map(paragraphHtml).join('\n')}
     ...day.client.flatMap((paragraph) => [paragraphText(paragraph), '']),
     ...(day.client.length && day.sector.length ? ['---', ''] : []),
     ...day.sector.flatMap((paragraph) => [paragraphText(paragraph), '']),
+    ...(themes.length ? [`Temas do mês até hoje${input.monthTotal ? ` (${input.monthTotal} matérias)` : ''}:`, ...themes.map((theme) => `- ${theme.title} (${theme.count})`), ''] : []),
+    ...(historyHref ? [`Histórico: ${historyHref}`, ''] : []),
     footer,
   ]
     .filter((line) => line !== null)

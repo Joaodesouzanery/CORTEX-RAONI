@@ -3,8 +3,9 @@ import type { SupabaseClient } from '@supabase/supabase-js'
 import { createAdminClient } from '@/lib/supabase/server'
 import { buildClippingEmail } from '@/lib/clipping-email'
 import { clippingBrand, defaultClippingDay, loadClippingDay } from '@/lib/clipping-email-data'
-import { ownerRecipients, sendEmail, senderAddress } from '@/lib/email'
+import { emailProvider, ownerRecipients, sendEmail, senderAddress, senderReadyForClients } from '@/lib/email'
 import { clippingEmailSendSchema } from '@/lib/validation'
+import { loadPanelThemes } from '@/lib/panel-themes'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60
@@ -39,13 +40,13 @@ export async function POST(req: Request) {
   const day = parsed.data.date || defaultClippingDay()
 
   // Falta de configuração parqueia VISÍVEL, antes de tocar em qualquer cliente.
-  if (!process.env.RESEND_API_KEY) {
-    return NextResponse.json({ day, mode, status: 'nao_configurado', detail: 'Defina RESEND_API_KEY e ALERTS_EMAIL_FROM (docs/email.md).' }, { status: 503 })
+  if (!emailProvider()) {
+    return NextResponse.json({ day, mode, status: 'nao_configurado', detail: 'Defina GMAIL_USER e GMAIL_APP_PASSWORD na Vercel (docs/email.md).' }, { status: 503 })
   }
   // O remetente padrão do Resend (onboarding@resend.dev) só entrega para a
   // própria conta: e-mail ao cliente exige domínio verificado.
-  if (mode === 'send' && !process.env.ALERTS_EMAIL_FROM?.trim()) {
-    return NextResponse.json({ day, mode, status: 'nao_configurado', detail: 'Defina ALERTS_EMAIL_FROM com um domínio verificado no Resend antes de enviar ao cliente.' }, { status: 503 })
+  if (mode === 'send' && !senderReadyForClients()) {
+    return NextResponse.json({ day, mode, status: 'nao_configurado', detail: 'Com o Resend, defina ALERTS_EMAIL_FROM com domínio verificado antes de enviar ao cliente (com o Gmail não precisa).' }, { status: 503 })
   }
   if (mode === 'review' && !ownerRecipients().length) {
     return NextResponse.json({ day, mode, status: 'nao_configurado', detail: 'Defina ALERTS_EMAIL_TO para receber a revisão.' }, { status: 503 })
@@ -134,7 +135,22 @@ async function sendForClient(
 
   let result: Awaited<ReturnType<typeof sendEmail>>
   try {
-    const email = buildClippingEmail({ clientDisplayName: brand.displayName, brand: brand.brand, day: data.day, totalItems: data.total, review: mode === 'review' })
+    // Temas do mês até o dia (o mesmo cálculo do Painel). Falha aqui não
+    // segura o e-mail do dia: a seção some e o resto vai.
+    const monthThemes = await loadPanelThemes(supabase, client.id, day.slice(0, 7))
+      .then((result) => ({ themes: result.themes.map((theme) => ({ title: theme.title, count: theme.articles.length })), total: result.total_tagged }))
+      .catch(() => ({ themes: [], total: 0 }))
+    const appUrl = (process.env.APP_URL || 'https://cortexreputacional.vercel.app').replace(/\/$/, '')
+    const email = buildClippingEmail({
+      clientDisplayName: brand.displayName,
+      brand: brand.brand,
+      day: data.day,
+      totalItems: data.total,
+      review: mode === 'review',
+      monthThemes: monthThemes.themes,
+      monthTotal: monthThemes.total,
+      historyUrl: `${appUrl}/clipping`,
+    })
     result =
       mode === 'review'
         ? await sendEmail({ ...email, to: recipients })
