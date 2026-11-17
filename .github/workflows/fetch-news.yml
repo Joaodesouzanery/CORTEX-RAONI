@@ -112,14 +112,14 @@ jobs:
           echo "Fetch run did not finish after 100 batches. Fontes podem estar sendo reenfileiradas em loop — confira fetch_run_sources com attempt_count alto." >&2
           exit 1
         env:
-          APP_URL: ${{ secrets.APP_URL }}
+          APP_URL: ${{ secrets.APP_URL || vars.APP_URL }}
 
       - name: Resolve Google News links
         # Logo após a coleta: imagem, texto integral e selo do veículo dependem
         # da URL real, não do redirecionador do Google News.
         if: ${{ always() }}
         env:
-          APP_URL: ${{ secrets.APP_URL }}
+          APP_URL: ${{ secrets.APP_URL || vars.APP_URL }}
           CRON_SECRET: ${{ secrets.CRON_SECRET }}
         run: |
           # 120 lotes de 30 (~3.600 links por coleta): o acervo de outubro tinha
@@ -139,7 +139,7 @@ jobs:
         # "nao_configurado" e o passo sai sem erro: a regra continua valendo.
         if: ${{ always() }}
         env:
-          APP_URL: ${{ secrets.APP_URL }}
+          APP_URL: ${{ secrets.APP_URL || vars.APP_URL }}
           CRON_SECRET: ${{ secrets.CRON_SECRET }}
         run: |
           # 4 rodadas de um lote por cliente (~100 matérias por cliente por coleta).
@@ -166,7 +166,7 @@ jobs:
             echo "backfill ${n}: HTTP ${code}"; cat /tmp/img.json || true; echo
           done
         env:
-          APP_URL: ${{ secrets.APP_URL }}
+          APP_URL: ${{ secrets.APP_URL || vars.APP_URL }}
 
       - name: Enrich partial article text
         # Best-effort and public pages only. Paid/unavailable content remains
@@ -182,13 +182,13 @@ jobs:
             echo "enrich ${n}: HTTP ${code}"; cat /tmp/enrich.json || true; echo
           done
         env:
-          APP_URL: ${{ secrets.APP_URL }}
+          APP_URL: ${{ secrets.APP_URL || vars.APP_URL }}
 
       - name: Sync ANTAQ regulatory agenda
         # Sem novo boletim é no-op. Falha aqui não pode esconder a coleta, e a coleta não impede a agenda.
         if: ${{ always() }}
         env:
-          APP_URL: ${{ secrets.APP_URL }}
+          APP_URL: ${{ secrets.APP_URL || vars.APP_URL }}
           CRON_SECRET: ${{ secrets.CRON_SECRET }}
         run: |
           code=$(curl -sS -o /tmp/agenda.json -w '%{http_code}' --max-time 120 -X POST \
@@ -200,7 +200,7 @@ jobs:
         # Último passo: o que as etapas acima deixaram é o que o usuário vai ver.
         if: ${{ always() }}
         env:
-          APP_URL: ${{ secrets.APP_URL }}
+          APP_URL: ${{ secrets.APP_URL || vars.APP_URL }}
           CRON_SECRET: ${{ secrets.CRON_SECRET }}
         run: |
           code=$(curl -sS -o /tmp/health.json -w '%{http_code}' --max-time 120 -X POST \
@@ -213,7 +213,7 @@ jobs:
         # — quem pediu reclassificação no disparo manual quer isso de qualquer forma.
         if: ${{ always() && github.event_name == 'workflow_dispatch' && inputs.reclassify_archive }}
         env:
-          APP_URL: ${{ secrets.APP_URL }}
+          APP_URL: ${{ secrets.APP_URL || vars.APP_URL }}
           RECLASSIFY_PERIOD: ${{ inputs.reclassify_period }}
         run: |
           cursor=""

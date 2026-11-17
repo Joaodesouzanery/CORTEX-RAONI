@@ -65,7 +65,7 @@ async function checkWorkflows() {
 
 async function probe(label, base) {
   if (!base) {
-    add('critical', 'deploy', `${label} não está definido nos segredos do GitHub`)
+    add('critical', 'deploy', `${label} está VAZIO no GitHub`, 'Crie em Settings → Secrets and variables → Actions → aba Secrets → New repository secret (nome exato APP_URL, valor https://cortexreputacional.vercel.app). Valor posto em Environments, Codespaces ou Dependabot não chega ao workflow.')
     return
   }
   try {
@@ -92,7 +92,8 @@ async function sb(path) {
 
 async function checkDatabase() {
   if (!SUPABASE_URL || !SUPABASE_KEY) {
-    add('warning', 'banco', 'Segredos SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY ausentes no GitHub: o vigia não consegue olhar a coleta no banco')
+    const missing = [!SUPABASE_URL && 'SUPABASE_URL', !SUPABASE_KEY && 'SUPABASE_SERVICE_ROLE_KEY'].filter(Boolean).join(' e ')
+    add('warning', 'banco', `${missing} vazio(s) no GitHub: o vigia não consegue olhar a coleta no banco`, 'Settings → Secrets and variables → Actions → aba Secrets → Repository secrets. A chave de serviço precisa estar em Secrets (não em Variables).')
     return
   }
   try {
