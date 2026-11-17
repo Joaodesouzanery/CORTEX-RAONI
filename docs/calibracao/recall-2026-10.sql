@@ -685,7 +685,7 @@ VALUES
   ('ONS', 'clipping-fornecedor', 'Mercado aposta na axia como destaque para o novo leilão de transmissão de energia marcado para a próxima sexta-feira', NULL, NULL, NULL),
   ('ONS', 'clipping-fornecedor', 'Governo planeja leilão de energia elétrica para a região Norte em 2027', NULL, NULL, NULL)
 UNION ALL
-SELECT d.client_name, 'entregue', d.title, d.url, NULL, NULL
+SELECT d.client_name, CASE WHEN d.variant = 'pdf-final' THEN 'entregue-pdf' ELSE 'entregue' END, d.title, d.url, NULL, NULL
 FROM delivered_report_items d
 WHERE d.period_month = DATE '2026-10-01' AND d.variant <> 'refeito'
 ),

@@ -45,7 +45,7 @@ VALUES
   ('SIMINERAL', 'refeito', 'Vale (VALE3) tem queda de 53% no lucro do 3T26; veja os resultados', 'https://euqueroinvestir.com/acoes/vale-vale3-lucro-cai-53-3t26-resultados', 'Setor', 'neutro'),
   ('SIMINERAL', 'refeito', 'Vale (VALE3) lucra US$ 1,25 bilhão no 3T26, tombo de 54%', 'https://investidor10.com.br/noticias/vale-vale3-lucra-us-1-25-bilhao-no-3t26-tombo-de-54-123604/', 'Setor', 'neutro')
 UNION ALL
-SELECT d.client_name, 'entregue', d.title, d.url, NULL, NULL
+SELECT d.client_name, CASE WHEN d.variant = 'pdf-final' THEN 'entregue-pdf' ELSE 'entregue' END, d.title, d.url, NULL, NULL
 FROM delivered_report_items d
 WHERE d.period_month = DATE '2026-10-01' AND d.variant <> 'refeito'
 ),

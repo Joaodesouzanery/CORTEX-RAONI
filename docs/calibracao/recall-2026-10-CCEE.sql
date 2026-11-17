@@ -45,7 +45,7 @@ VALUES
   ('CCEE', 'refeito', 'ONS aponta afluência superior à média no Sul e Sudeste/Centro-Oeste ao final de outubro após setembro histórico', 'https://cenarioenergia.com.br/2026/10/05/ons-aponta-afluencia-superior-media-sul-sudeste-outubro/', 'Setor', 'neutro'),
   ('CCEE', 'refeito', 'Análise: Leilão da PPSA confirma apetite da indústria por gás mais barato', 'https://valor.globo.com/empresas/noticia/2026/10/22/analise-leilao-da-ppsa-confirma-apetite-da-industria-por-gas-mais-barato.ghtml', 'Setor', 'positivo')
 UNION ALL
-SELECT d.client_name, 'entregue', d.title, d.url, NULL, NULL
+SELECT d.client_name, CASE WHEN d.variant = 'pdf-final' THEN 'entregue-pdf' ELSE 'entregue' END, d.title, d.url, NULL, NULL
 FROM delivered_report_items d
 WHERE d.period_month = DATE '2026-10-01' AND d.variant <> 'refeito'
 ),

@@ -45,7 +45,7 @@ VALUES
   ('DAQ', 'refeito', 'Hidrovia do Paraguai cresce 195% enquanto Paraná-Tietê perde 31% no transporte de cargas', 'https://clickpetroleoegas.com.br/hidrovia-do-paraguai-cresce-195-enquanto-parana-tiete-perde-31-no-transporte-de-cargas-ctl01', 'Cliente', 'neutro'),
   ('DAQ', 'refeito', 'DNIT faz dragagem sem licença ambiental e recua após pressão de ribeirinhos', 'https://www.acritica.com/amazonia/dnit-faz-dragagem-sem-licenca-ambiental-e-recua-apos-pressao-de-ribeirinhos/', 'Cliente', 'negativo')
 UNION ALL
-SELECT d.client_name, 'entregue', d.title, d.url, NULL, NULL
+SELECT d.client_name, CASE WHEN d.variant = 'pdf-final' THEN 'entregue-pdf' ELSE 'entregue' END, d.title, d.url, NULL, NULL
 FROM delivered_report_items d
 WHERE d.period_month = DATE '2026-10-01' AND d.variant <> 'refeito'
 ),

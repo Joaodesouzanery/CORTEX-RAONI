@@ -55,7 +55,7 @@ VALUES
   ('SINDINFOR', 'refeito', 'Mercado brasileiro de cibersegurança deve movimentar R$ 127 bi até 2029, aponta estudo da Brasscom', 'https://tiinside.com.br/16/10/2026/mercado-brasileiro-de-ciberseguranca-deve-movimentar-r-127-bi-ate-2029-aponta-estudo-da-brasscom/', 'Setor', 'positivo'),
   ('SINDINFOR', 'refeito', 'ANPD impõe sanções à Prefeitura de Feira de Santana (BA) pelo vazamento de dados médicos de 1.200 pessoas', 'https://convergenciadigital.com.br/governo/anpd-impoe-sancoes-a-prefeitura-de-feira-de-santana-ba-pelo-vazamento-de-dados-medicos-de-1-200-pessoas/', 'Setor', 'negativo')
 UNION ALL
-SELECT d.client_name, 'entregue', d.title, d.url, NULL, NULL
+SELECT d.client_name, CASE WHEN d.variant = 'pdf-final' THEN 'entregue-pdf' ELSE 'entregue' END, d.title, d.url, NULL, NULL
 FROM delivered_report_items d
 WHERE d.period_month = DATE '2026-10-01' AND d.variant <> 'refeito'
 ),

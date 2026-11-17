@@ -139,7 +139,15 @@ for (const file of readdirSync(join(FINAL, 'md-claude-chat')).filter((name) => n
 }
 
 // 5. Links clicáveis dos PDFs finais (Claude Design).
-if (existsSync(join(OUT_DIR, 'pdf-links.json'))) {
+// PDFs entregues com título, data, veículo e tom (scripts/extract-report-pdf.py
+// + build-delivered-pdf-items.py, 17/11/2026). Quando existem, substituem os
+// links soltos de pdf-links.json, que não traziam título.
+const PDF_ITEMS = 'docs/referencia-relatorios/pdf-entregues/itens.json'
+const pdfItems = existsSync(PDF_ITEMS) ? JSON.parse(readFileSync(PDF_ITEMS, 'utf8')) : []
+for (const item of pdfItems) {
+  add({ cliente: item.client, mes: item.period, origem: `pdf-final:${item.file}`, data: item.date, veiculo: item.outlet, titulo: item.title, url: item.url })
+}
+if (!pdfItems.length && existsSync(join(OUT_DIR, 'pdf-links.json'))) {
   for (const item of JSON.parse(readFileSync(join(OUT_DIR, 'pdf-links.json'), 'utf8'))) {
     add({ cliente: item.client, mes: '2026-10', origem: `pdf-final:${item.file}`, data: null, veiculo: null, titulo: null, url: item.url })
   }

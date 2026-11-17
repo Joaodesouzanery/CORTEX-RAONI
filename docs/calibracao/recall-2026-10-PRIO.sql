@@ -45,7 +45,7 @@ VALUES
   ('PRIO', 'refeito', 'Governo prorroga subvenção ao diesel e medida custará R$ 10,5 bi', 'https://valor.globo.com/brasil/noticia/2026/10/28/governo-prorroga-subvencao-ao-diesel-e-medida-custara-r-105-bi.ghtml', 'Setor', 'neutro'),
   ('PRIO', 'refeito', 'PRIO (PRIO3) pode crescer 14%; veja projeções do setor', 'https://www.suno.com.br/noticias/petroleo-gas-prio-prio3-balancos/', 'Cliente', 'positivo')
 UNION ALL
-SELECT d.client_name, 'entregue', d.title, d.url, NULL, NULL
+SELECT d.client_name, CASE WHEN d.variant = 'pdf-final' THEN 'entregue-pdf' ELSE 'entregue' END, d.title, d.url, NULL, NULL
 FROM delivered_report_items d
 WHERE d.period_month = DATE '2026-10-01' AND d.variant <> 'refeito'
 ),

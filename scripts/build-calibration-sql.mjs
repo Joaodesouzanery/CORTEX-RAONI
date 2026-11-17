@@ -101,7 +101,7 @@ WITH ref(cliente, origem, titulo, url, bloco, tom) AS (
 VALUES
 ${values}
 UNION ALL
-SELECT d.client_name, 'entregue', d.title, d.url, NULL, NULL
+SELECT d.client_name, CASE WHEN d.variant = 'pdf-final' THEN 'entregue-pdf' ELSE 'entregue' END, d.title, d.url, NULL, NULL
 FROM delivered_report_items d
 WHERE d.period_month = DATE '${period}-01' AND d.variant <> 'refeito'
 ),

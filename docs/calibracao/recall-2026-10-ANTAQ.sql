@@ -45,7 +45,7 @@ VALUES
   ('ANTAQ', 'refeito', 'Obra de R$ 71,15 milhões vai levar navios de 330 metros e cruzeiros a Cabedelo', 'https://movimentoeconomico.com.br/economia/portos/2026/10/23/obra-de-r-7115-milhoes-vai-levar-navios-de-330-metros-e-cruzeiros-a-cabedelo/', 'Setor', 'positivo'),
   ('ANTAQ', 'refeito', 'Fase final da dragagem do Porto de Natal sai com exigência de ouvir pescadores', 'https://movimentoeconomico.com.br/economia/portos/2026/10/29/fase-final-da-dragagem-do-porto-de-natal-sai-com-exigencia-de-ouvir-pescadores/', 'Setor', 'neutro')
 UNION ALL
-SELECT d.client_name, 'entregue', d.title, d.url, NULL, NULL
+SELECT d.client_name, CASE WHEN d.variant = 'pdf-final' THEN 'entregue-pdf' ELSE 'entregue' END, d.title, d.url, NULL, NULL
 FROM delivered_report_items d
 WHERE d.period_month = DATE '2026-10-01' AND d.variant <> 'refeito'
 ),
