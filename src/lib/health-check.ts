@@ -14,6 +14,9 @@ const PAGE_ROUTES = ['/api/dashboard?days=30', '/api/panel/hero-counts', '/api/a
 const RPC_CHECKS: Array<{ name: string; args: Record<string, unknown> }> = [
   { name: 'dashboard_client_counts', args: { p_start: new Date(0).toISOString(), p_previous_start: new Date(0).toISOString() } },
   { name: 'news_hero_counts', args: { p_start: new Date(0).toISOString() } },
+  // 062: sem esta função, a lista de notícias sem cliente volta ao JOIN que
+  // deu "canceling statement due to statement timeout" em 17/11.
+  { name: 'relevant_article_ids', args: { p_cutoff: new Date(0).toISOString(), p_before: null, p_statuses: ['confirmado'], p_cita_cliente: null, p_limit: 1, p_offset: 0 } },
 ]
 /** Dia útil sem nenhuma matéria citando o cliente indica coleta furada, não silêncio da imprensa. */
 const CLIENT_SILENCE_HOURS = 30
