@@ -204,6 +204,84 @@ export async function GET(req: Request) {
     const provenanceJoin = sourceId
       ? 'article_provenance!inner(source_id, sources(id, name, categoria, is_general))'
       : 'article_provenance(source_id, sources(id, name, categoria, is_general))'
+    const articleColumns = `id, source_id, title, url, resolved_url, image_url, excerpt, published_at, fetched_at, publisher, sources(name, categoria, is_general), ${provenanceJoin}`
+    // Sem cliente e sem janela ("Todos" manda período nenhum), a consulta
+    // varreria o acervo inteiro. 30 dias é o mesmo padrão que a tela usa.
+    if (!cutoff && !publishedBefore) {
+      cutoff = new Date(Date.now() - 30 * 86400000).toISOString()
+    }
+
+    // `relevantOnly`/`directOnly`/`sectorOnly` sem client_id filtram por uma
+    // tabela relacionada (article_client_tags) sem saber o cliente: o
+    // PostgREST monta isso como articles!inner(article_client_tags!inner(...))
+    // — um JOIN que materializa o cruzamento de TODOS os clientes antes do
+    // ORDER BY/LIMIT. Com o catch-up de 17/11 (1627 matérias de uma vez) isso
+    // deu "canceling statement due to statement timeout". A migration 062
+    // reescreve a mesma pergunta como EXISTS, via RPC: o planejador varre
+    // articles por published_at (índice já existente) e só sonda
+    // article_client_tags por artigo (índice article_id-líder, 025) — nested
+    // loop indexado, não JOIN sobre o acervo inteiro. Busca/fonte continuam
+    // pelo caminho antigo: reduzem tanto a linha que não é o caso que estourou.
+    if (relevantOnly && !searchPattern && !sourceId) {
+      const statuses = ['confirmado', 'candidato', 'revisao']
+      const citaCliente = directOnly ? true : sectorOnly ? false : null
+      const { data: ids, error: idsError } = await supabase.rpc('relevant_article_ids', {
+        p_cutoff: cutoff,
+        p_before: publishedBefore || null,
+        p_statuses: statuses,
+        p_cita_cliente: citaCliente,
+        p_limit: limit,
+        p_offset: offset,
+      })
+      if (idsError) return NextResponse.json({ error: idsError.message }, { status: 500 })
+      const orderedIds = ((ids || []) as Array<{ id: string }>).map((row) => row.id)
+      if (!orderedIds.length) {
+        return NextResponse.json({
+          items: [],
+          total: offset,
+          total_estimated: true,
+          next_cursor: null,
+          coverage: { start: cutoff, end: publishedBefore || new Date().toISOString(), complete: true },
+        })
+      }
+      const { data, error } = await supabase
+        .from('articles')
+        .select(
+          articleColumns as 'id, source_id, title, url, resolved_url, image_url, excerpt, published_at, fetched_at, publisher, sources(name, categoria, is_general), article_provenance(source_id, sources(id, name, categoria, is_general))'
+        )
+        .in('id', orderedIds)
+      if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+      const byId = new Map((data || []).map((article) => [article.id as string, article]))
+      const items = orderedIds.flatMap((id) => {
+        const article = byId.get(id)
+        if (!article) return []
+        const provenance = Array.isArray(article.article_provenance) ? article.article_provenance : []
+        return [
+          {
+            ...article,
+            article_provenance: undefined,
+            provenance_sources: provenance.flatMap((item: { sources?: unknown }) =>
+              item.sources ? (Array.isArray(item.sources) ? item.sources : [item.sources]) : []
+            ),
+          },
+        ]
+      })
+      // Sem contagem exata nem estimada do planejador (a RPC só devolve a
+      // página pedida): "≈" honesto, no mesmo padrão que a tela já usa.
+      const hasMore = items.length === limit
+      return NextResponse.json({
+        items,
+        total: offset + items.length + (hasMore ? limit : 0),
+        total_estimated: true,
+        next_cursor: hasMore ? String(offset + items.length) : null,
+        coverage: {
+          start: cutoff,
+          end: publishedBefore || new Date().toISOString(),
+          complete: !hasMore,
+        },
+      })
+    }
+
     // `count: 'estimated'` e não 'exact': sem client_id a contagem exata varre a
     // tabela inteira e é a parte mais cara da requisição. O PostgREST devolve o
     // número exato abaixo de um limiar e a estimativa do planejador acima dele,
@@ -213,17 +291,12 @@ export async function GET(req: Request) {
       .from('articles')
       .select(
         (relevantOnly
-          ? `id, source_id, title, url, resolved_url, image_url, excerpt, published_at, fetched_at, publisher, sources(name, categoria, is_general), ${provenanceJoin}, article_client_tags!inner(article_id, monitoring_status, cita_cliente)`
-          : `id, source_id, title, url, resolved_url, image_url, excerpt, published_at, fetched_at, publisher, sources(name, categoria, is_general), ${provenanceJoin}`) as 'id, source_id, title, url, resolved_url, image_url, excerpt, published_at, fetched_at, publisher, sources(name, categoria, is_general), article_provenance(source_id, sources(id, name, categoria, is_general))',
+          ? `${articleColumns}, article_client_tags!inner(article_id, monitoring_status, cita_cliente)`
+          : articleColumns) as 'id, source_id, title, url, resolved_url, image_url, excerpt, published_at, fetched_at, publisher, sources(name, categoria, is_general), article_provenance(source_id, sources(id, name, categoria, is_general))',
         { count: 'estimated' }
       )
       .order('published_at', { ascending: false, nullsFirst: false })
       .range(offset, offset + limit - 1)
-    // Sem cliente e sem janela ("Todos" manda período nenhum), a consulta
-    // varreria o acervo inteiro. 30 dias é o mesmo padrão que a tela usa.
-    if (!cutoff && !publishedBefore) {
-      cutoff = new Date(Date.now() - 30 * 86400000).toISOString()
-    }
     if (cutoff) query = query.gte('published_at', cutoff)
     // `revisao` volta a aparecer: é onde o setor mora (peso baixo). O que
     // trazia PEC da Segurança e eleição nos EUA era termo perdido no corpo de
