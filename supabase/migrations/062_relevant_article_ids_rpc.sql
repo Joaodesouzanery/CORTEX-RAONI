@@ -72,3 +72,16 @@ GRANT EXECUTE ON FUNCTION relevant_article_ids(TIMESTAMPTZ, TIMESTAMPTZ, TEXT[],
 -- foi o maior já feito.
 ANALYZE articles;
 ANALYZE article_client_tags;
+
+-- O mesmo catch-up derrubou outra consulta: o vigia (scripts/watchdog.mjs,
+-- checkDatabase) conta "links do Google News pendentes" com
+-- `Prefer: count=exact` sobre articles(url LIKE ..., resolved_url IS NULL,
+-- resolve_attempts < 3), sem nenhum índice que apoie esse filtro — virou
+-- HTTP 500 em produção em 18/11 ("Supabase articles: HTTP 500"), o vigia
+-- ficou vermelho e bloqueou o disparo do fetch-news. Um índice parcial nos
+-- dois predicados fixos (resolve_attempts < 3 é o mesmo limiar da query)
+-- cobre o grosso do filtro; o LIKE por prefixo sobra como resíduo sobre um
+-- conjunto já pequeno.
+CREATE INDEX IF NOT EXISTS articles_pending_resolve_idx
+  ON articles (id)
+  WHERE resolved_url IS NULL AND resolve_attempts < 3;
